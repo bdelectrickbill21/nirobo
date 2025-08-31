@@ -6,7 +6,7 @@ import os
 class NiroboSpider(scrapy.Spider):
     name = 'nirobo'
     
-    # Start with some common .bd domains or use a sitemap if available
+    # Start with some common .bd domains
     start_urls = [
         'https://www.thedailystar.net/',
         'https://www.prothomalo.com/',
@@ -20,7 +20,6 @@ class NiroboSpider(scrapy.Spider):
         'prothomalo.com', 
         'dhakatribune.com',
         'bdnews24.com',
-        # Add more .bd domains as needed
     ]
     
     # Keep track of visited URLs to avoid duplicates
@@ -60,12 +59,12 @@ class NiroboSpider(scrapy.Spider):
         }
         
         # Save result to JSON file
-        self.save_result(result)
+        self.save_results(result)
         
-        # Follow links to other pages on the same domain
-        links = response.css('a::attr(href)').getall()
-        for link in links:
-            # Convert relative URLs to absolute
+        # Follow link to other page on the same domain
+        link = response.css('a::attr(href)').getall()
+        for link in link:
+            # Convert relative URL to absolute
             absolute_url = urljoin(current_url, link)
             
             # Check if it's a valid URL and on an allowed domain
@@ -77,7 +76,7 @@ class NiroboSpider(scrapy.Spider):
                 # Skip invalid URLs
                 pass
                 
-    def save_result(self, result):
+    def save_results(self, result):
         # Save result to JSON file
         output_file = 'data/results.json'
         
@@ -96,7 +95,7 @@ class NiroboSpider(scrapy.Spider):
         # Add new result
         data.append(result)
         
-        # Remove duplicates based on URL
+        # Remove duplicate based on URL
         unique_data = []
         seen_urls = set()
         for item in data:
