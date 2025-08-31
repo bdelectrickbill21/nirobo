@@ -366,16 +366,17 @@
 </head>
 <body>
     <script>
-  fetch('https://raw.githubusercontent.com/YOUR_USERNAME/nirobo/main/results.json')
+  fetch('https://raw.githubusercontent.com/bdeleetrickbill21/nirobo/main/results.json')
     .then(res => res.json())
     .then(data => {
       const container = document.getElementById('results');
       data.forEach(item => {
         const card = document.createElement('div');
+        card.className = 'result-card';
         card.innerHTML = `
           <h3>${item.title}</h3>
           <p>${item.summary}</p>
-          <a href="${item.link}" target="_blank">Visit</a>
+          <iframe src="${item.link}" width="100%" height="300" style="border:none;"></iframe>
         `;
         container.appendChild(card);
       });
