@@ -365,6 +365,22 @@
     </style>
 </head>
 <body>
+    <script>
+  fetch('https://raw.githubusercontent.com/YOUR_USERNAME/nirobo/main/results.json')
+    .then(res => res.json())
+    .then(data => {
+      const container = document.getElementById('results');
+      data.forEach(item => {
+        const card = document.createElement('div');
+        card.innerHTML = `
+          <h3>${item.title}</h3>
+          <p>${item.summary}</p>
+          <a href="${item.link}" target="_blank">Visit</a>
+        `;
+        container.appendChild(card);
+      });
+    });
+    </script>
     <div class="flag-bg"></div>
     <div class="red-circle"></div>
     
