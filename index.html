@@ -484,13 +484,14 @@
             const searchResults = document.getElementById('searchResults');
             
             // Function to perform search (opens Yandex in new tab)
-            function performSearch(query) {
-                if(query.trim() !== '') {
-                    // Yandex search URL with site restriction to Bangladesh domains
-                    const yandexUrl = `https://yandex.com/search/?text=${encodeURIComponent(query + ' site:bd')}`;
-                    window.open(yandexUrl, '_blank');
-                }
-            }
+function performSearch(query) {
+    if(query.trim() !== '') {
+        // Simple Yandex search URL - let Yandex handle the query
+        // Using the 'site:bd' operator directly in the URL
+        const yandexUrl = 'https://yandex.com/search/?text=site%3Abd+' + encodeURIComponent(query);
+        window.open(yandexUrl, '_blank');
+    }
+}
             
             searchButton.addEventListener('click', function() {
                 performSearch(searchInput.value);
