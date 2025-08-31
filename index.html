@@ -483,12 +483,12 @@
             const microsoftLogin = document.getElementById('microsoftLogin');
             const searchResults = document.getElementById('searchResults');
             
-            // Function to perform search (now shows no results)
+            // Function to perform search (opens Yandex in new tab)
             function performSearch(query) {
                 if(query.trim() !== '') {
-                    // Show search results section with no results
-                    searchResults.style.display = 'block';
-                    document.querySelector('.no-results p').textContent = `No results found for "${query}". Please try different keywords.`;
+                    // Yandex search URL with site restriction to Bangladesh domains
+                    const yandexUrl = `https://yandex.com/search/?text=${encodeURIComponent(query + ' site:bd')}`;
+                    window.open(yandexUrl, '_blank');
                 }
             }
             
@@ -524,4 +524,3 @@
     </script>
 </body>
 </html>
-```
