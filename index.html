@@ -487,7 +487,7 @@
             function performSearch(query) {
                 if(query.trim() !== '') {
                     // Yandex search URL with site restriction to Bangladesh domains
-                    const yandexUrl = `https://yandex.com/search/?text=${encodeURIComponent(query + ' site:bd')}`;
+        const yandexUrl = `https://yandex.com/search/?text=${encodeURIComponent(query)}`;
                     window.open(yandexUrl, '_blank');
                 }
             }
