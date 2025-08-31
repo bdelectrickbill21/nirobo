@@ -510,35 +510,53 @@
             const microsoftLogin = document.getElementById('microsoftLogin');
             const searchResults = document.getElementById('searchResults');
             
-            // Function to perform search (opens Yandex in new tab)
+            
 function performSearch(query) {
-    if(query.trim() !== '') {
-        // Simple Yandex search URL - let Yandex handle the query
-        // Using the 'site:bd' operator directly in the URL
-        const yandexUrl = 'https://yandex.com/search/?text=site%3Abd+' + encodeURIComponent(query);
-        window.open(yandexUrl, '_blank');
-    }
+  fetch('https://raw.githubusercontent.com/bdeleetrickbill21/nirobo/main/results.json')
+    .then(res => res.json())
+    .then(data => {
+      const container = document.getElementById('results');
+      container.innerHTML = ''; // Clear previous results
+      const matches = data.filter(item =>
+        item.title.toLowerCase().includes(query.toLowerCase()) ||
+        item.summary.toLowerCase().includes(query.toLowerCase())
+      );
+      if (matches.length === 0) {
+        container.innerHTML = '<p>No results found.</p>';
+      } else {
+        matches.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'result-card';
+          card.innerHTML = `
+            <h3>${item.title}</h3>
+            <p>${item.summary}</p>
+            <iframe src="${item.link}" width="100%" height="300" style="border:none;"></iframe>
+          `;
+          container.appendChild(card);
+        });
+      }
+    });
 }
+
             
             searchButton.addEventListener('click', function() {
-                performSearch(searchInput.value);
-            });
-            
-            searchInput.addEventListener('keypress', function(e) {
-                if(e.key === 'Enter') {
-                    performSearch(searchInput.value);
-                }
-            });
-            
-            // Add click events to quick links
-            const linkCards = document.querySelectorAll('.link-card');
-            linkCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    const query = this.getAttribute('data-query');
-                    searchInput.value = query;
-                    performSearch(query);
-                });
-            });
+  performSearch(searchInput.value);
+});
+
+searchInput.addEventListener('keypress', function(e) {
+  if(e.key === 'Enter') {
+    performSearch(searchInput.value);
+  }
+});
+
+const linkCards = document.querySelectorAll('.link-card');
+linkCards.forEach(card => {
+  card.addEventListener('click', function() {
+    const query = this.getAttribute('data-query');
+    searchInput.value = query;
+    performSearch(query);
+  });
+});
             
             // Login button events
             googleLogin.addEventListener('click', function() {
