@@ -1,46 +1,3 @@
-Okay, based on the evidence provided in the knowledge base entries:
-
-1.  **Current Website State:** Both `https://cute-sunflower-4c4589.netlify.app` and `https://nirobo.netlify.app` are displaying only raw markdown text, not the designed search engine interface. This indicates the complete HTML code for the frontend was never successfully uploaded to GitHub.
-2.  **Yandex Integration Failures:**
-    *   Attempting to embed Yandex results in an iframe (`https://yandex.com/search/?text=${encodeURIComponent(query + ' site:bd')}" style="width:100%; height:600px; border:none;"></iframe>`) triggers Yandex's SmartCaptcha bot detection, proving Yandex blocks this method.
-    *   Attempting to open Yandex search URLs in a new tab (`window.open`) resulted in a "No results matching your search" page.
-3.  **Bing API Retirement:** The Bing Search and Bing Custom Search APIs are scheduled to be retired on August 11, 2025, and new deployments are not available.
-
-The core issue is that your website is not displaying the actual search engine interface we designed. You're only seeing raw text content. Therefore, there's no functional search bar or buttons to trigger any search code.
-
-**What you need to do:**
-
-1.  **Fix Your Frontend Deployment First:**
-    *   Go to your GitHub repository (`nirobo`).
-    *   Edit the `index.html` file.
-    *   Delete the current content (which is just markdown text).
-    *   Paste the complete HTML code for the search engine (the large code block with the green background, red circle, NIROBO logo, CSS styles, and JavaScript).
-    *   Save the file (Commit changes).
-    *   Wait for Netlify to redeploy. Your site (`https://nirobo.netlify.app`) should then show the actual search engine interface.
-
-2.  **Regarding the Yandex Code Snippets:**
-    *   The code snippets you've shown (`function performSearch(query) { ... }`) are fragments of JavaScript meant to be part of a larger HTML file.
-    *   They represent two different approaches we discussed:
-        *   Embedding Yandex results in an iframe (which Yandex blocks).
-        *   Opening Yandex in a new tab (which also failed in our tests).
-    *   Since these approaches failed and Yandex actively prevents them, changing these specific lines won't achieve the desired result of showing results directly on your page.
-
-3.  **Focus on the GitHub Actions Crawler:**
-    *   As you've explored with the `crawl.yml` file, setting up a web crawler using GitHub Actions is a viable path to collect data from `.bd` websites.
-    *   You need to write the actual Python Scrapy code (`nirobo.py`) to define what pages to crawl and how to extract information.
-    *   You need to store the crawled results in a structured format (like a JSON file) within your repository or push them to an external database.
-
-4.  **Backend for Displaying Results:**
-    *   After the GitHub Actions crawler collects data, you will need a backend API (deployed on a platform like Vercel, Render, or Heroku) that can:
-        *   Read the crawled data.
-        *   Provide a search endpoint (e.g., `/api/search?q=query`) that filters the crawled data based on the user's query.
-        *   Return the matching results as JSON.
-
-In summary, the immediate change needed is to deploy the correct `index.html` file to your GitHub repository so your website displays the search engine interface. After that, focus on implementing the GitHub Actions crawler to gather data, and then create a separate backend service to serve that data to your frontend. Simply changing the Yandex integration code in the current state won't work because the frontend itself isn't functional.
-
-Here is the complete HTML code you need to put in your `index.html` file:
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,7 +11,7 @@ Here is the complete HTML code you need to put in your `index.html` file:
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
             background: linear-gradient(135deg, #006400, #006400);
             min-height: 100vh;
@@ -64,7 +21,7 @@ Here is the complete HTML code you need to put in your `index.html` file:
             padding: 20px;
             color: white;
         }
-        
+
         .flag-bg {
             position: absolute;
             top: 0;
@@ -74,7 +31,7 @@ Here is the complete HTML code you need to put in your `index.html` file:
             background-color: #006400;
             z-index: -1;
         }
-        
+
         .red-circle {
             position: absolute;
             top: 50%;
@@ -87,7 +44,7 @@ Here is the complete HTML code you need to put in your `index.html` file:
             z-index: -1;
             box-shadow: 0 0 100px rgba(255, 0, 0, 0.5);
         }
-        
+
         .container {
             max-width: 800px;
             width: 100%;
@@ -96,12 +53,12 @@ Here is the complete HTML code you need to put in your `index.html` file:
             position: relative;
             z-index: 1;
         }
-        
+
         .header {
             margin-bottom: 40px;
             padding: 20px;
         }
-        
+
         .logo-container {
             display: flex;
             justify-content: center;
@@ -109,7 +66,7 @@ Here is the complete HTML code you need to put in your `index.html` file:
             margin-bottom: 20px;
             position: relative;
         }
-        
+
         .logo {
             font-size: 3.5rem;
             font-weight: 800;
@@ -119,38 +76,38 @@ Here is the complete HTML code you need to put in your `index.html` file:
             display: inline-block;
             position: relative;
         }
-        
+
         .logo span:nth-child(1) {
             color: #006400;
         }
-        
+
         .logo span:nth-child(2) {
             color: #006400;
         }
-        
+
         .logo span:nth-child(3) {
             color: #006400;
         }
-        
+
         .logo span:nth-child(4) {
             color: #FF0000;
         }
-        
+
         .logo span:nth-child(5) {
             color: #006400;
         }
-        
+
         .logo span:nth-child(6) {
             color: #006400;
         }
-        
+
         .tagline {
             font-size: 1.2rem;
             opacity: 0.9;
             margin-bottom: 30px;
             line-height: 1.5;
         }
-        
+
         .search-container {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
@@ -161,7 +118,7 @@ Here is the complete HTML code you need to put in your `index.html` file:
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.18);
         }
-        
+
         .search-input {
             flex: 1;
             background: transparent;
@@ -171,11 +128,11 @@ Here is the complete HTML code you need to put in your `index.html` file:
             color: white;
             outline: none;
         }
-        
+
         .search-input::placeholder {
             color: rgba(255, 255, 255, 0.7);
         }
-        
+
         .search-button {
             background: #FF0000;
             border: none;
@@ -186,12 +143,12 @@ Here is the complete HTML code you need to put in your `index.html` file:
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        
+
         .search-button:hover {
             background: #CC0000;
             transform: scale(1.05);
         }
-        
+
         .login-section {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
@@ -200,20 +157,20 @@ Here is the complete HTML code you need to put in your `index.html` file:
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
+
         .login-header {
             font-size: 1.3rem;
             margin-bottom: 15px;
             color: #FF0000;
         }
-        
+
         .login-buttons {
             display: flex;
             justify-content: center;
             gap: 20px;
             flex-wrap: wrap;
         }
-        
+
         .login-btn {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -226,19 +183,19 @@ Here is the complete HTML code you need to put in your `index.html` file:
             gap: 10px;
             transition: all 0.3s ease;
         }
-        
+
         .login-btn:hover {
             background: rgba(255, 255, 255, 0.2);
             transform: translateY(-3px);
         }
-        
+
         .quick-links {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
             margin-bottom: 40px;
         }
-        
+
         .link-card {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
@@ -248,28 +205,28 @@ Here is the complete HTML code you need to put in your `index.html` file:
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
+
         .link-card:hover {
             transform: translateY(-5px);
             background: rgba(255, 255, 255, 0.2);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
-        
+
         .link-icon {
             font-size: 2rem;
             margin-bottom: 15px;
         }
-        
+
         .link-title {
             font-weight: 600;
             margin-bottom: 10px;
         }
-        
+
         .link-desc {
             font-size: 0.9rem;
             opacity: 0.8;
         }
-        
+
         .news-section {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
@@ -278,40 +235,40 @@ Here is the complete HTML code you need to put in your `index.html` file:
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
+
         .news-header {
             font-size: 1.5rem;
             margin-bottom: 20px;
             color: #FF0000;
         }
-        
+
         .news-item {
             margin-bottom: 20px;
             padding-bottom: 20px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
+
         .news-item:last-child {
             border-bottom: none;
         }
-        
+
         .news-title {
             font-weight: 600;
             margin-bottom: 10px;
             color: #FF0000;
         }
-        
+
         .news-date {
             font-size: 0.8rem;
             opacity: 0.7;
             margin-bottom: 10px;
         }
-        
+
         .news-excerpt {
             font-size: 0.9rem;
             opacity: 0.9;
         }
-        
+
         .footer-links {
             display: flex;
             justify-content: center;
@@ -319,19 +276,19 @@ Here is the complete HTML code you need to put in your `index.html` file:
             margin-top: 30px;
             flex-wrap: wrap;
         }
-        
+
         .footer-link {
             color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
             font-size: 1rem;
             transition: all 0.3s ease;
         }
-        
+
         .footer-link:hover {
             color: white;
             text-decoration: underline;
         }
-        
+
         .admin-link {
             position: fixed;
             bottom: 20px;
@@ -346,12 +303,12 @@ Here is the complete HTML code you need to put in your `index.html` file:
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
+
         .admin-link:hover {
             background: rgba(0, 0, 0, 0.7);
             transform: scale(1.05);
         }
-        
+
         .search-results {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
@@ -361,19 +318,19 @@ Here is the complete HTML code you need to put in your `index.html` file:
             border: 1px solid rgba(255, 255, 255, 0.1);
             display: none;
         }
-        
+
         .search-results-header {
             font-size: 1.3rem;
             margin-bottom: 15px;
             color: #FF0000;
         }
-        
+
         .no-results {
             text-align: center;
             padding: 30px;
             opacity: 0.8;
         }
-        
+
         .credit {
             text-align: center;
             margin-top: 30px;
@@ -381,25 +338,25 @@ Here is the complete HTML code you need to put in your `index.html` file:
             font-size: 0.9rem;
             opacity: 0.8;
         }
-        
+
         @media (max-width: 600px) {
             .logo {
                 font-size: 2.5rem;
             }
-            
+
             .search-container {
                 flex-direction: column;
                 border-radius: 20px;
             }
-            
+
             .search-button {
                 margin-top: 10px;
             }
-            
+
             .quick-links {
                 grid-template-columns: 1fr;
             }
-            
+
             .login-buttons {
                 flex-direction: column;
                 align-items: center;
@@ -410,7 +367,7 @@ Here is the complete HTML code you need to put in your `index.html` file:
 <body>
     <div class="flag-bg"></div>
     <div class="red-circle"></div>
-    
+
     <div class="container">
         <div class="header">
             <div class="logo-container">
@@ -425,19 +382,19 @@ Here is the complete HTML code you need to put in your `index.html` file:
             </div>
             <p class="tagline">nirobo is a new journey born from invisible sound, shaped by red struggle, echoing the outcry of rights, bound by language, and united in the oneness of silence.</p>
         </div>
-        
+
         <div class="search-container">
             <input type="text" class="search-input" placeholder="Search the web of Bangladesh..." id="searchInput">
             <button class="search-button" id="searchButton">Search</button>
         </div>
-        
+
         <div class="search-results" id="searchResults">
             <h3 class="search-results-header">Search Results</h3>
             <div class="no-results">
                 <p>No results found for your search. Please try different keywords.</p>
             </div>
         </div>
-        
+
         <div class="login-section">
             <h3 class="login-header">Login to Add Your Website</h3>
             <div class="login-buttons">
@@ -449,75 +406,75 @@ Here is the complete HTML code you need to put in your `index.html` file:
                 </button>
             </div>
         </div>
-        
+
         <div class="quick-links">
             <div class="link-card" data-query="Bangladesh news">
                 <div class="link-icon">📰</div>
                 <h3 class="link-title">News Portal</h3>
                 <p class="link-desc">Latest news from Bangladesh</p>
             </div>
-            
+
             <div class="link-card" data-query="Bangladesh education">
                 <div class="link-icon">🎓</div>
                 <h3 class="link-title">Education</h3>
                 <p class="link-desc">University and school resources</p>
             </div>
-            
+
             <div class="link-card" data-query="Bangladesh healthcare">
                 <div class="link-icon">🏥</div>
                 <h3 class="link-title">Healthcare</h3>
                 <p class="link-desc">Medical services and info</p>
             </div>
-            
+
             <div class="link-card" data-query="Bangladesh jobs">
                 <div class="link-icon">💼</div>
                 <h3 class="link-title">Jobs</h3>
                 <p class="link-desc">Employment opportunities</p>
             </div>
         </div>
-        
+
         <div class="news-section">
             <h2 class="news-header">Latest News from Bangladesh</h2>
-            
+
             <div class="news-item">
                 <h3 class="news-title">Government Announces New Economic Reforms</h3>
                 <p class="news-date">May 15, 2023</p>
                 <p class="news-excerpt">The government has announced a series of economic reforms aimed at boosting growth and reducing inflation. The measures include tax incentives for small businesses and increased investment in infrastructure development.</p>
             </div>
-            
+
             <div class="news-item">
                 <h3 class="news-title">Dhaka University Launches AI Research Center</h3>
                 <p class="news-date">May 14, 2023</p>
                 <p class="news-excerpt">Dhaka University has established a new artificial intelligence research center to promote technological innovation in Bangladesh. The center will focus on developing AI applications for agriculture, healthcare, and education.</p>
             </div>
-            
+
             <div class="news-item">
                 <h3 class="news-title">Rains Cause Flooding in Northern Regions</h3>
                 <p class="news-date">May 13, 2023</p>
                 <p class="news-excerpt">Heavy rainfall has caused flooding in several northern districts of Bangladesh, affecting over 50,000 people. Emergency relief operations are underway with assistance from local authorities and international organizations.</p>
             </div>
-            
+
             <div class="news-item">
                 <h3 class="news-title">New Climate Change Policy Introduced</h3>
                 <p class="news-date">May 12, 2023</p>
                 <p class="news-excerpt">The Ministry of Environment has introduced a comprehensive climate change policy focusing on renewable energy development, coastal protection, and sustainable agriculture practices.</p>
             </div>
         </div>
-        
+
         <div class="footer-links">
             <a href="#" class="footer-link">About NIROBO</a>
             <a href="#" class="footer-link">Privacy Policy</a>
             <a href="#" class="footer-link">Terms of Service</a>
             <a href="#" class="footer-link">Contact Us</a>
         </div>
-        
+
         <div class="credit">
             <p>© 2025 Kh. Al Shaif. All rights reserved.</p>
         </div>
     </div>
-    
+
     <a href="admin.html" class="admin-link">Administrator Panel</a>
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const searchButton = document.getElementById('searchButton');
@@ -525,7 +482,7 @@ Here is the complete HTML code you need to put in your `index.html` file:
             const googleLogin = document.getElementById('googleLogin');
             const microsoftLogin = document.getElementById('microsoftLogin');
             const searchResults = document.getElementById('searchResults');
-            
+
             // Function to perform search (opens Yandex in new tab)
             function performSearch(query) {
                 if(query.trim() !== '') {
@@ -534,17 +491,17 @@ Here is the complete HTML code you need to put in your `index.html` file:
                     window.open(yandexUrl, '_blank');
                 }
             }
-            
+
             searchButton.addEventListener('click', function() {
                 performSearch(searchInput.value);
             });
-            
+
             searchInput.addEventListener('keypress', function(e) {
                 if(e.key === 'Enter') {
                     performSearch(searchInput.value);
                 }
             });
-            
+
             // Add click events to quick links
             const linkCards = document.querySelectorAll('.link-card');
             linkCards.forEach(card => {
@@ -554,12 +511,12 @@ Here is the complete HTML code you need to put in your `index.html` file:
                     performSearch(query);
                 });
             });
-            
+
             // Login button events
             googleLogin.addEventListener('click', function() {
                 alert('Google login would open here. In a real implementation, this would connect to Google OAuth.');
             });
-            
+
             microsoftLogin.addEventListener('click', function() {
                 alert('Microsoft login would open here. In a real implementation, this would connect to Microsoft OAuth.');
             });
@@ -567,4 +524,3 @@ Here is the complete HTML code you need to put in your `index.html` file:
     </script>
 </body>
 </html>
-```
