@@ -1,1 +1,1 @@
-
+fetch('https://raw.githubusercontent.com/bdele/nirobo/main/data/result.json')
