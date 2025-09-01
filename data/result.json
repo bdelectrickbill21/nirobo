@@ -1,45 +1,7 @@
-[
-  {
-    "title": "Bangladesh Language Movement Archive",
-    "summary": "A curated collection of articles and documents honoring the 1952 movement.",
-    "link": "https://example.com/language-movement",
-    "source": "example.com",
-    "tags": ["history", "Bangla", "justice"],
-    "date": "2025-09-01",
-    "approved": true
-  },
-  {
-    "title": "Silent Voices of Khulna",
-    "summary": "Exploring the untold stories of cultural resistance in southern Bangladesh.",
-    "link": "https://example.org/khulna-voices",
-    "source": "example.org",
-    "tags": ["culture", "Bangladesh", "activism"],
-    "date": "2025-08-30",
-    "approved": true
-  },
-  {
-    "title": "Justice Through Silence",
-    "summary": "An introspective essay on how quiet resistance shaped Bangladesh’s identity.",
-    "link": "https://nirobo.netlify.app/justice-silence",
-    "source": "nirobo.netlify.app",
-    "tags": ["justice", "identity", "essay"],
-    "date": "2025-08-25",
-    "approved": true
-  },
-  {
-    "title": "Unapproved Sample Entry",
-    "summary": "This entry is not yet approved and should not appear in search results.",
-    "link": "https://example.com/unapproved",
-    "source": "example.com",
-    "tags": ["draft", "pending"],
-    "date": "2025-08-20",
-    "approved": false
-  }
-]
 {
   "title": "Cartoon Network Popcorn",
-  "description": "A blog celebrating classic Cartoon Network shows, trivia, and fan culture.",
+  "description": "A curated tribute to Cartoon Network’s golden era—featuring classic shows, fan insights, and deep dives into animated storytelling.",
   "url": "https://cartoonnetworkpopcorn.blogspot.com",
-  "tags": ["cartoons", "network", "popcorn", "blogspot"],
+  "tags": ["cartoons", "network", "popcorn", "blogspot", "animation", "fan culture"],
   "approved": true
 }
