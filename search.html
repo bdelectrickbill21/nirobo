@@ -76,6 +76,20 @@
     font-size: 0.8rem;
   }
 </style>
+<form id="search-form" style="margin-bottom: 2rem;">
+  <input
+    type="text"
+    id="search-input"
+    placeholder="Search Nirobo"
+    style="padding: 0.5rem; width: 70%; font-size: 1rem;"
+  >
+  <button
+    type="submit"
+    style="padding: 0.5rem 1rem; background-color: #ff0000; color: #fff; border: none; font-size: 1rem;"
+  >
+    Search
+  </button>
+</form>
 <div id="results"></div>
 <script>
 const query = new URLSearchParams(window.location.search).get('q');
