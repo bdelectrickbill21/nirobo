@@ -1,1 +1,30 @@
+name: Python Package using Conda
 
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Miniconda
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        activate-environment: ritudev
+        environment-file: environment.yml
+        python-version: 3.9
+        auto-activate-base: false
+
+    - name: Update environment
+      run: conda env update --file environment.yml --name ritudev
+
+    - name: List packages
+      run: conda list
+
+    - name: Test with pytest
+      run: |
+        conda install pytest
+        pytest
+        
