@@ -1,1 +1,13 @@
-fetch('https://raw.githubusercontent.com/bdele/nirobo/main/data/result.json')
+
+[
+  {
+    "title": "Bangladesh Healthcare Reform",
+    "summary": "An overview of recent policy changes in Bangladesh's health sector.",
+    "link": "https://example.com/article1"
+  },
+  {
+    "title": "Language Movement Legacy",
+    "summary": "Exploring the cultural impact of the 1952 movement.",
+    "link": "https://example.com/article2"
+  }
+]
