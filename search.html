@@ -1,6 +1,6 @@
 <div id="results"></div>
 <script>
-const params = new URLSearchParams(window.location.search);
+const query = new URLSearchParams(window.location.search).get('q');
 const query = params.get('q')?.toLowerCase();
 
 fetch('/result.json')
