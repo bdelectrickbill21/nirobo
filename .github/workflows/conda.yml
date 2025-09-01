@@ -17,7 +17,7 @@ jobs:
           activate-environment: ritudev
           environment-file: environment/python-package-conda.yml
           python-version: 3.9
-          auto-activate-base: false
+          auto_activate_base: false
 
       - name: Update environment
         run: conda env update --file environment/python-package-conda.yml --name ritudev
