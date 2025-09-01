@@ -1,13 +1,20 @@
-
 [
   {
-    "title": "Bangladesh Healthcare Reform",
-    "summary": "An overview of recent policy changes in Bangladesh's health sector.",
-    "link": "https://example.com/article1"
+    "title": "Bangladesh Language Movement Archive",
+    "summary": "A curated collection of articles and documents honoring the 1952 movement.",
+    "link": "https://example.com/language-movement",
+    "source": "example.com",
+    "tags": ["history", "Bangla", "justice"],
+    "date": "2025-09-01",
+    "approved": true
   },
   {
-    "title": "Language Movement Legacy",
-    "summary": "Exploring the cultural impact of the 1952 movement.",
-    "link": "https://example.com/article2"
+    "title": "Silent Voices of Khulna",
+    "summary": "Exploring the untold stories of cultural resistance in southern Bangladesh.",
+    "link": "https://example.org/khulna-voices",
+    "source": "example.org",
+    "tags": ["culture", "Bangladesh", "activism"],
+    "date": "2025-08-30",
+    "approved": false
   }
 ]
