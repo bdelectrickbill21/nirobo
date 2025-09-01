@@ -17,12 +17,12 @@ jobs:
 
       - name: Set up Miniconda
         uses: conda-incubator/setup-miniconda@v2
-        with:
-          miniconda-version: "latest"
-          activate-environment: ritudev
-          environment-file: environment/python-package-conda.yml
-          python-version: 3.9
-          auto_activate_base: false
+      with:
+           miniconda-version: "latest"
+           python-version: ${{ matrix.python-version }}
+           environment-file: environment/python-package-conda.yml
+           activate-environment: nriobo
+           auto_activate_base: false
 
       - name: Update environment
         run: conda env update --file environment/python-package-conda.yml --name ritudev
