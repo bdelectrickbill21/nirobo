@@ -36,3 +36,10 @@
     "approved": false
   }
 ]
+{
+  "title": "Cartoon Network Popcorn",
+  "description": "A nostalgic blog celebrating classic Cartoon Network shows, trivia, and fan culture.",
+  "url": "https://cartoonnetworkpopcorn.blogspot.com",
+  "tags": ["cartoons", "nostalgia", "popcorn", "blogspot"],
+  "approved": true
+}
