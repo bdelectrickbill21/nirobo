@@ -30,10 +30,10 @@ jobs:
       run: |
         scrapy runspider nirobo_spider.py
         
-    - name: Commit and push results
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add data/results.json
-        git commit -m "Update crawled data" || echo "No changes to commit"
-        git push
+    - name: Commit updated results
+  run: |
+    git config --global user.name "Nirobo Bot"
+    git config --global user.email "nirobo@bot.com"
+    git add result.json
+    git commit -m "Auto-update search results"
+    git push
