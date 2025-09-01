@@ -81,7 +81,7 @@
 const query = new URLSearchParams(window.location.search).get('q');
 const query = params.get('q')?.toLowerCase();
 
-fetch('/result.json')
+fetch('/data/result.json')
   .then(res => res.json())
   .then(data => {
     const container = document.getElementById('results');
