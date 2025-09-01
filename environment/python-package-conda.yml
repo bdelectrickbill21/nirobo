@@ -1,30 +1,7 @@
-name: Run tests using Conda
-
-on: [push]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Miniconda
-        uses: conda-incubator/setup-miniconda@v2
-        with:
-          activate-environment: ritudev
-          environment-file: environment/python-package-conda.yml
-          python-version: 3.9
-          auto-activate-base: false
-
-      - name: Update environment
-        run: conda env update --file environment/python-package-conda.yml --name ritudev
-
-      - name: List packages
-        run: conda list
-
-      - name: Test with pytest
-        run: |
-          conda install -y pytest
-          pytest || echo "One or more tests found or failed"
+name: ritudev
+channels:
+  - defaults
+dependencies:
+  - python=3.9
+  - pytest
+  - scapy
