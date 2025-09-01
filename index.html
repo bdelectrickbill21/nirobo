@@ -485,11 +485,10 @@
 
             // Function to perform search (opens Yandex in new tab)
             function performSearch(query) {
-                if(query.trim() !== '') {
-                    // Yandex search URL with site restriction to Bangladesh domains
-        const yandexUrl = `https://yandex.com/search/?text=${encodeURIComponent(query)}`;
-                    window.open(yandexUrl, '_blank');
-                }
+    if (query.trim() !== '') {
+        const localSearchUrl = `/search?q=${encodeURIComponent(query)}`;
+        window.location.href = localSearchUrl;
+    }
             }
 
             searchButton.addEventListener('click', function() {
