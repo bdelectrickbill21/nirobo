@@ -1,7 +1,9 @@
-{
-  "title": "Cartoon Network Popcorn",
-  "description": "A curated tribute to Cartoon Network’s golden era—featuring classic shows, fan insights, and deep dives into animated storytelling.",
-  "url": "https://cartoonnetworkpopcorn.blogspot.com",
-  "tags": ["cartoons", "network", "popcorn", "blogspot", "animation", "fan culture"],
-  "approved": true
-}
+[
+  {
+    "title": "Cartoon Network Popcorn",
+    "description": "A curated tribute to Cartoon Network’s golden era—featuring classic shows, fan insights, and deep dives into animated storytelling.",
+    "url": "https://cartoonnetworkpopcorn.blogspot.com",
+    "tags": ["cartoons", "network", "popcorn", "blogspot", "animation", "fan culture"],
+    "approved": true
+  }
+]
