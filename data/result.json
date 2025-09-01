@@ -15,6 +15,24 @@
     "source": "example.org",
     "tags": ["culture", "Bangladesh", "activism"],
     "date": "2025-08-30",
+    "approved": true
+  },
+  {
+    "title": "Justice Through Silence",
+    "summary": "An introspective essay on how quiet resistance shaped Bangladesh’s identity.",
+    "link": "https://nirobo.netlify.app/justice-silence",
+    "source": "nirobo.netlify.app",
+    "tags": ["justice", "identity", "essay"],
+    "date": "2025-08-25",
+    "approved": true
+  },
+  {
+    "title": "Unapproved Sample Entry",
+    "summary": "This entry is not yet approved and should not appear in search results.",
+    "link": "https://example.com/unapproved",
+    "source": "example.com",
+    "tags": ["draft", "pending"],
+    "date": "2025-08-20",
     "approved": false
   }
 ]
