@@ -1,1 +1,32 @@
+<script>
+const params = new URLSearchParams(window.location.search);
+const query = params.get('q')?.toLowerCase();
 
+fetch('/result.json')
+  .then(res => res.json())
+  .then(data => {
+    const container = document.getElementById('results');
+    const filtered = data.filter(item =>
+      item.approved &&
+      (item.title.toLowerCase().includes(query) ||
+       item.summary.toLowerCase().includes(query) ||
+       item.tags.some(tag => tag.toLowerCase().includes(query)))
+    );
+
+    if (filtered.length === 0) {
+      container.innerHTML = `<p>No results found for "<strong>${query}</strong>".</p>`;
+    } else {
+      filtered.forEach(result => {
+        const card = document.createElement('div');
+        card.className = 'result-card';
+        card.innerHTML = `
+          <h2>${result.title}</h2>
+          <p>${result.summary}</p>
+          <a href="${result.link}" target="_blank">${result.source}</a>
+          <div class="tags">${result.tags.map(tag => `<span>${tag}</span>`).join(' ')}</div>
+        `;
+        container.appendChild(card);
+      });
+    }
+  });
+</script>
