@@ -386,7 +386,7 @@
   // Google Login
   document.getElementById('googleLogin').onclick = () => {
     signInWithPopup(auth, new GoogleAuthProvider())
-      .then(() => window.location.href = "search.html")
+      .then(() => window.location.href = "login.html")
       .catch(err => alert(err.message));
   };
 
