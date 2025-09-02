@@ -365,49 +365,6 @@
     </style>
 </head>
 <body>
-    <!-- Firebase SDKs -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-  import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyCIWC9IMCya9CLNJt4EehMhyjZlVELqf1g",
-    authDomain: "nirobo-c2b7b.firebaseapp.com",
-    projectId: "nirobo-c2b7b",
-    storageBucket: "nirobo-c2b7b.firebasestorage.app",
-    messagingSenderId: "642930152713",
-    appId: "1:642930152713:web:a00c37d5dfb6fe066cefd8",
-    measurementId: "G-M5N9NDF1WT"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  // Google Login
-  document.getElementById('googleLogin').onclick = () => {
-    signInWithPopup(auth, new GoogleAuthProvider())
-      .then(() => window.location.href = "login.html")
-      .catch(err => alert(err.message));
-  };
-
-  // Email Signup
-  document.getElementById('signup').onclick = () => {
-    const email = emailInput.value;
-    const password = passwordInput.value;
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(() => window.location.href = "search.html")
-      .catch(err => alert(err.message));
-  };
-
-  // Email Login
-  document.getElementById('login').onclick = () => {
-    const email = emailInput.value;
-    const password = passwordInput.value;
-    signInWithEmailAndPassword(auth, email, password)
-      .then(() => window.location.href = "search.html")
-      .catch(err => alert(err.message));
-  };
-        </script>
     <div class="flag-bg"></div>
     <div class="red-circle"></div>
 
