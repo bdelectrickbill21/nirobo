@@ -1,125 +1,135 @@
-<h1 style="color: #ff0000; font-size: 1.8rem; border-bottom: 2px solid #ff0000;">
-  Echoes of Your Search
-</h1>
-<a href="/" style="color: #ff0000; text-decoration: underline;">← Back to Nirobo</a>
-<style>
-  
-  body {
-  margin: 0;
-  padding: 2rem;
-  background-color: #006400; /* deep green */
-  color: #f5f5f5;
-  font-family: 'Inter', sans-serif;
-  background-image: url('/path-to-your-red-circle.png'); /* if you use an image */
-  background-repeat: no-repeat;
-  background-position: center top;
-  background-size: 200px;
-  }
-
-  h1 {
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
-    border-bottom: 2px solid #00b894;
-    padding-bottom: 0.5rem;
-  }
-
-.result-card {
-  background: #1a1a1a;
-  border-left: 4px solid #ff0000;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
-}
-.result-card a {
-  color: #ff0000;
-  text-decoration: none;
-}
-.tags span {
-  background: #ff0000;
-  color: #fff;
-  padding: 0.2rem 0.5rem;
-  margin-right: 0.3rem;
-  border-radius: 3px;
-  font-size: 0.8rem;
-}
-  
-  .result-card {
-    background: #1a1a1a;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border-left: 4px solid #00b894;
-    box-shadow: 0 0 10px rgba(0, 184, 148, 0.2);
-  }
-
-  .result-card h2 {
-    margin: 0 0 0.5rem;
-    font-size: 1.2rem;
-  }
-
-  .result-card p {
-    margin: 0 0 0.5rem;
-    font-size: 0.95rem;
-  }
-
-  .result-card a {
-    color: #00b894;
-    text-decoration: none;
-    font-size: 0.9rem;
-  }
-
-  .tags span {
-    background: #00b894;
-    color: #000;
-    padding: 0.2rem 0.5rem;
-    margin-right: 0.3rem;
-    border-radius: 3px;
-    font-size: 0.8rem;
-  }
-</style>
-<form id="search-form" style="margin-bottom: 2rem;">
-  <input
-    type="text"
-    id="search-input"
-    placeholder="Search Nirobo"
-    style="padding: 0.5rem; width: 70%; font-size: 1rem;"
-  >
-  <button
-    type="submit"
-    style="padding: 0.5rem 1rem; background-color: #ff0000; color: #fff; border: none; font-size: 1rem;"
-  >
-    Search
-  </button>
-</form>
-<div id="results"></div>
-<script>
-const query = new URLSearchParams(window.location.search).get('q');
-const query = params.get('q')?.toLowerCase();
-
-fetch('/data/result.json')
-  .then(res => res.json())
-  .then(data => {
-    const container = document.getElementById('results');
-    const filtered = data.filter(item =>
-      item.approved &&
-      (item.title.toLowerCase().includes(query) ||
-       item.summary.toLowerCase().includes(query) ||
-       item.tags.some(tag => tag.toLowerCase().includes(query)))
-    );
-
-    if (filtered.length === 0) {
-      container.innerHTML = `<p>No results found for "<strong>${query}</strong>".</p>`;
-    } else {
-      filtered.forEach(result => {
-        const card = document.createElement('div');
-        card.className = 'result-card';
-        card.innerHTML = `
-          <h2>${result.title}</h2>
-          <p>${result.summary}</p>
-          <a href="${result.link}" target="_blank">${result.source}</a>
-          <div class="tags">${result.tags.map(tag => `<span>${tag}</span>`).join(' ')}</div>
-        `;
-        container.appendChild(card);
-      });
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Echoes of Your Search – Nirobo</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 2rem;
+      background-color: #006400; /* deep green */
+      color: #f5f5f5;
+      font-family: 'Inter', sans-serif;
     }
-  });
-</script>
+
+    h1 {
+      color: #ff0000;
+      font-size: 1.8rem;
+      border-bottom: 2px solid #ff0000;
+      margin-bottom: 1rem;
+    }
+
+    a {
+      color: #ff0000;
+      text-decoration: underline;
+    }
+
+    .result-card {
+      background: #1a1a1a;
+      border-left: 4px solid #ff0000;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
+    }
+
+    .result-card h2 {
+      margin: 0 0 0.5rem;
+      font-size: 1.2rem;
+    }
+
+    .result-card p {
+      margin: 0 0 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .result-card a {
+      color: #ff0000;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .tags span {
+      background: #ff0000;
+      color: #fff;
+      padding: 0.2rem 0.5rem;
+      margin-right: 0.3rem;
+      border-radius: 3px;
+      font-size: 0.8rem;
+    }
+
+    #search-form {
+      margin-bottom: 2rem;
+    }
+
+    #search-input {
+      padding: 0.5rem;
+      width: 70%;
+      font-size: 1rem;
+    }
+
+    #search-form button {
+      padding: 0.5rem 1rem;
+      background-color: #ff0000;
+      color: #fff;
+      border: none;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Echoes of Your Search</h1>
+  <a href="/">← Back to Nirobo</a>
+
+  <form id="search-form">
+    <input type="text" id="search-input" placeholder="Search Nirobo" />
+    <button type="submit">Search</button>
+  </form>
+
+  <div id="results"></div>
+
+  <script>
+    const form = document.getElementById('search-form');
+    const input = document.getElementById('search-input');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const query = input.value.trim().toLowerCase();
+      if (query) {
+        window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+      }
+    });
+
+    const query = new URLSearchParams(window.location.search).get('q')?.toLowerCase() || '';
+
+    fetch('result.json')
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById('results');
+        const filtered = data.filter(item =>
+          item.approved &&
+          (
+            item.title.toLowerCase().includes(query) ||
+            item.description.toLowerCase().includes(query) ||
+            item.tags.some(tag => tag.toLowerCase().includes(query))
+          )
+        );
+
+        if (filtered.length === 0) {
+          container.innerHTML = `<p>No results found for "<strong>${query}</strong>".</p>`;
+        } else {
+          filtered.forEach(result => {
+            const card = document.createElement('div');
+            card.className = 'result-card';
+            card.innerHTML = `
+              <h2><a href="${result.url}" target="_blank">${result.title}</a></h2>
+              <p>${result.description}</p>
+              <div class="tags">${result.tags.map(tag => `<span>${tag}</span>`).join(' ')}</div>
+            `;
+            container.appendChild(card);
+          });
+        }
+      });
+  </script>
+</body>
+</html>
