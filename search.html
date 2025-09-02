@@ -110,12 +110,13 @@ fetch('result.json')
       filtered.forEach(result => {
         const card = document.createElement('div');
         card.className = 'result-card';
-        card.innerHTML = `
-          <h2><a href="${result.url}" target="_blank">${result.title}</a></h2>
-          <p>${result.description}</p>
-          <div class="tags">${result.tags.map(tag => `<span>${tag}</span>`).join(' ')}</div>
-        `;
-        container.appendChild(card);
+card.innerHTML = `
+  <img src="${result.image}" alt="${result.title}" style="width:100%; max-height:200px; object-fit:cover; margin-bottom:1rem; border-radius:6px;" />
+  <h2><a href="${result.url}" target="_blank">${result.title}</a></h2>
+  <p>${result.description}</p>
+  <div class="tags">${result.tags.map(tag => `<span>${tag}</span>`).join(' ')}</div>
+`;
+container.appendChild(card);
       });
     }
   });
