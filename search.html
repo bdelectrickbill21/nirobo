@@ -104,6 +104,7 @@ fetch('result.json')
   .then(res => res.json())
   .then(data => {
     const container = document.getElementById('results');
+
     const filtered = data.filter(item =>
       item.approved &&
       (
