@@ -118,17 +118,21 @@ fetch('result.json')
     } else {
       filtered.forEach(result => {
         const card = document.createElement('div');
- card.className = 'result-card';
-card.innerHTML = `
-  <img src="${result.image || 'fallback.jpg'}" alt="${result.title}" style="width:100%; max-height:200px; object-fit:cover; margin-bottom:1rem; border-radius:6px;" />
-  <h2><a href="${result.url}" target="_blank">${result.title}</a></h2>
-  <p>${result.description}</p>
-  <div class="tags">${result.tags.map(tag => `<span>${tag}</span>`).join(' ')}</div>
-`;
-container.appendChild(card);
+        card.className = 'result-card';
+        card.innerHTML = `
+          <img src="${result.image || 'https://i.imgur.com/ObR8yvE.jpeg'}" alt="${result.title}" style="width:100%; max-height:200px; object-fit:cover; margin-bottom:1rem; border-radius:6px;" />
+          <h2><a href="${result.url}" target="_blank">${result.title}</a></h2>
+          <p>${result.description}</p>
+          <div class="tags">${result.tags.map(tag => `<span>${tag}</span>`).join(' ')}</div>
+        `;
+        container.appendChild(card);
       });
     }
+  })
+  .catch(error => {
+    document.getElementById('results').innerHTML = `<p style="color:red;">Error loading results. Please check your result.json file.</p>`;
+    console.error('Fetch error:', error);
   });
-</script>
+  </script>
 </body>
 </html>
