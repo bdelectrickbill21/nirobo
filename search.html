@@ -106,13 +106,15 @@ fetch('result.json')
     const container = document.getElementById('results');
 
     const filtered = data.filter(item =>
-      item.approved &&
-      (
-        item.title.toLowerCase().includes(query) ||
-        item.description.toLowerCase().includes(query) ||
-        item.tags.some(tag => tag.toLowerCase().includes(query))
-      )
-    );
+  item.approved &&
+  (
+    item.title.toLowerCase().includes(query) ||
+    item.description.toLowerCase().includes(query) ||
+    item.tags.some(tag =>
+      tag.toLowerCase().includes(query) || query.includes(tag.toLowerCase())
+    )
+  )
+);
 
     if (filtered.length === 0) {
       container.innerHTML = `<p>No results found for "<strong>${query}</strong>".</p>`;
