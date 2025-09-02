@@ -1,7 +1,21 @@
-<script type="module">
+<body>
+  <!-- Your login form -->
+  <input id="emailInput" type="email" placeholder="Email">
+  <input id="passwordInput" type="password" placeholder="Password">
+  <button id="signup">Sign Up</button>
+  <button id="login">Log In</button>
+  <button id="googleLogin">Login with Google</button>
+
+  <!-- Firebase Auth Script -->
+  <script type="module">
+    // Your full script goes here
+  </script>
+  <script type="module">
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
   const auth = getAuth();
   onAuthStateChanged(auth, user => {
     if (!user) window.location.href = "index.html";
   });
-</script>
+  </script>
+  
+</body>
