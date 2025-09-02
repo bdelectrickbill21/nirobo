@@ -1,523 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NIROBO - Bangladesh Search Engine</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #006400, #006400);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            color: white;
-        }
-
-        .flag-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #006400;
-            z-index: -1;
-        }
-
-        .red-circle {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 150px;
-            height: 150px;
-            background-color: #FF0000;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            z-index: -1;
-            box-shadow: 0 0 100px rgba(255, 0, 0, 0.5);
-        }
-
-        .container {
-            max-width: 800px;
-            width: 100%;
-            text-align: center;
-            padding: 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .header {
-            margin-bottom: 40px;
-            padding: 20px;
-        }
-
-        .logo-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .logo {
-            font-size: 3.5rem;
-            font-weight: 800;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            letter-spacing: 2px;
-            display: inline-block;
-            position: relative;
-        }
-
-        .logo span:nth-child(1) {
-            color: #006400;
-        }
-
-        .logo span:nth-child(2) {
-            color: #006400;
-        }
-
-        .logo span:nth-child(3) {
-            color: #006400;
-        }
-
-        .logo span:nth-child(4) {
-            color: #FF0000;
-        }
-
-        .logo span:nth-child(5) {
-            color: #006400;
-        }
-
-        .logo span:nth-child(6) {
-            color: #006400;
-        }
-
-        .tagline {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            margin-bottom: 30px;
-            line-height: 1.5;
-        }
-
-        .search-container {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border-radius: 50px;
-            padding: 10px 20px;
-            display: flex;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-        }
-
-        .search-input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            padding: 15px;
-            font-size: 1.1rem;
-            color: white;
-            outline: none;
-        }
-
-        .search-input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .search-button {
-            background: #FF0000;
-            border: none;
-            border-radius: 50px;
-            padding: 15px 30px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .search-button:hover {
-            background: #CC0000;
-            transform: scale(1.05);
-        }
-
-        .login-section {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 30px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .login-header {
-            font-size: 1.3rem;
-            margin-bottom: 15px;
-            color: #FF0000;
-        }
-
-        .login-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .login-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 30px;
-            padding: 10px 20px;
-            color: white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .login-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-3px);
-        }
-
-        .quick-links {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .link-card {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 20px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .link-card:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .link-icon {
-            font-size: 2rem;
-            margin-bottom: 15px;
-        }
-
-        .link-title {
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .link-desc {
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        .news-section {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 40px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .news-header {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            color: #FF0000;
-        }
-
-        .news-item {
-            margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .news-item:last-child {
-            border-bottom: none;
-        }
-
-        .news-title {
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: #FF0000;
-        }
-
-        .news-date {
-            font-size: 0.8rem;
-            opacity: 0.7;
-            margin-bottom: 10px;
-        }
-
-        .news-excerpt {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 30px;
-            flex-wrap: wrap;
-        }
-
-        .footer-link {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .footer-link:hover {
-            color: white;
-            text-decoration: underline;
-        }
-
-        .admin-link {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .admin-link:hover {
-            background: rgba(0, 0, 0, 0.7);
-            transform: scale(1.05);
-        }
-
-        .search-results {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 20px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: none;
-        }
-
-        .search-results-header {
-            font-size: 1.3rem;
-            margin-bottom: 15px;
-            color: #FF0000;
-        }
-
-        .no-results {
-            text-align: center;
-            padding: 30px;
-            opacity: 0.8;
-        }
-
-        .credit {
-            text-align: center;
-            margin-top: 30px;
-            padding: 20px;
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        @media (max-width: 600px) {
-            .logo {
-                font-size: 2.5rem;
-            }
-
-            .search-container {
-                flex-direction: column;
-                border-radius: 20px;
-            }
-
-            .search-button {
-                margin-top: 10px;
-            }
-
-            .quick-links {
-                grid-template-columns: 1fr;
-            }
-
-            .login-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nirobo — Echoes of Your Search</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #e6f2e6;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    .search-section {
+      padding: 30px;
+      background-color: #006400;
+      color: white;
+    }
+    .search-section input {
+      width: 60%;
+      padding: 10px;
+      font-size: 16px;
+    }
+    .search-section button {
+      padding: 10px 20px;
+      background-color: red;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    .card {
+      background-color: #228B22;
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .login-section {
+      padding: 30px;
+      background-color: #f9f9f9;
+    }
+    .login-section input {
+      margin: 5px;
+      padding: 10px;
+      width: 200px;
+    }
+    .login-section button {
+      margin: 5px;
+      padding: 10px 20px;
+      background-color: #006400;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    footer {
+      background-color: #222;
+      color: #ccc;
+      padding: 10px;
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
-    <div class="flag-bg"></div>
-    <div class="red-circle"></div>
 
-    <div class="container">
-        <div class="header">
-            <div class="logo-container">
-                <h1 class="logo">
-                    <span>n</span>
-                    <span>i</span>
-                    <span>r</span>
-                    <span style="color: #FF0000;">o</span>
-                    <span>b</span>
-                    <span>o</span>
-                </h1>
-            </div>
-            <p class="tagline">nirobo is a new journey born from invisible sound, shaped by red struggle, echoing the outcry of rights, bound by language, and united in the oneness of silence.</p>
-        </div>
-
-        <div class="search-container">
-            <input type="text" class="search-input" placeholder="Search the web of Bangladesh..." id="searchInput">
-            <button class="search-button" id="searchButton">Search</button>
-        </div>
-
-        <div class="search-results" id="searchResults">
-            <h3 class="search-results-header">Search Results</h3>
-            <div class="no-results">
-                <p>No results found for your search. Please try different keywords.</p>
-            </div>
-        </div>
-
-        
-
-        <div class="quick-links">
-            <div class="link-card" data-query="Bangladesh news">
-                <div class="link-icon">📰</div>
-                <h3 class="link-title">News Portal</h3>
-                <p class="link-desc">Latest news from Bangladesh</p>
-            </div>
-
-            <div class="link-card" data-query="Bangladesh education">
-                <div class="link-icon">🎓</div>
-                <h3 class="link-title">Education</h3>
-                <p class="link-desc">University and school resources</p>
-            </div>
-
-            <div class="link-card" data-query="<div class="login-section">
-  <h3 class="login-header">Login to Add Your Website</h3>
-  <div class="login-buttons">
-    <button class="login-btn" id="google">Google</button>
-    <button class="login-btn" id="signup">Sign Up</button>
-    <button class="login-btn" id="login">Log In</button>
+  <!-- Search Section -->
+  <div class="search-section">
+    <h1>Search the Web of Bangladesh</h1>
+    <input type="text" placeholder="Type your query..." />
+    <button>Search</button>
   </div>
-  <input type="email" id="emailInput" placeholder="Email">
-  <input type="password" id="passwordInput" placeholder="Password">
-            </div>Bangladesh healthcare">
-                <div class="link-icon">🏥</div>
-                <h3 class="link-title">Healthcare</h3>
-                <p class="link-desc">Medical services and info</p>
-            </div>
 
-            <div class="link-card" data-query="Bangladesh jobs">
-                <div class="link-icon">💼</div>
-                <h3 class="link-title">Jobs</h3>
-                <p class="link-desc">Employment opportunities</p>
-            </div>
-        </div>
+  <!-- Content Cards -->
+  <div class="card-grid">
+    <div class="card">News Portal</div>
+    <div class="card">Business & Finance</div>
+    <div class="card">Healthcare</div>
+    <div class="card">Jobs</div>
+    <div class="card">Education</div>
+    <div class="card">Local AI Chat</div>
+  </div>
 
-        <div class="news-section">
-            <h2 class="news-header">Latest News from Bangladesh</h2>
+  <!-- Login Section -->
+  <div class="login-section">
+    <h3>Login to Add Your Website</h3>
+    <input id="emailInput" type="email" placeholder="Email" />
+    <input id="passwordInput" type="password" placeholder="Password" />
+    <br />
+    <button id="signup" type="button">Sign Up</button>
+    <button id="login" type="button">Log In</button>
+    <button id="googleLogin" type="button">Login with Google</button>
+  </div>
 
-            <div class="news-item">
-                <h3 class="news-title">Government Announces New Economic Reforms</h3>
-                <p class="news-date">May 15, 2023</p>
-                <p class="news-excerpt">The government has announced a series of economic reforms aimed at boosting growth and reducing inflation. The measures include tax incentives for small businesses and increased investment in infrastructure development.</p>
-            </div>
+  <!-- Footer -->
+  <footer>
+    Made in Bangladesh 🇧🇩 | Curated by Nirobo
+  </footer>
 
-            <div class="news-item">
-                <h3 class="news-title">Dhaka University Launches AI Research Center</h3>
-                <p class="news-date">May 14, 2023</p>
-                <p class="news-excerpt">Dhaka University has established a new artificial intelligence research center to promote technological innovation in Bangladesh. The center will focus on developing AI applications for agriculture, healthcare, and education.</p>
-            </div>
+  <!-- Firebase Script -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
-            <div class="news-item">
-                <h3 class="news-title">Rains Cause Flooding in Northern Regions</h3>
-                <p class="news-date">May 13, 2023</p>
-                <p class="news-excerpt">Heavy rainfall has caused flooding in several northern districts of Bangladesh, affecting over 50,000 people. Emergency relief operations are underway with assistance from local authorities and international organizations.</p>
-            </div>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCIWC9IMCya9CLNJt4EehMhyjZlVELqf1g",
+      authDomain: "nirobo-c2b7b.firebaseapp.com",
+      projectId: "nirobo-c2b7b",
+      storageBucket: "nirobo-c2b7b.firebasestorage.app",
+      messagingSenderId: "642930152713",
+      appId: "1:642930152713:web:a00c37d5dfb6fe066cefd8",
+      measurementId: "G-M5N9NDF1WT"
+    };
 
-            <div class="news-item">
-                <h3 class="news-title">New Climate Change Policy Introduced</h3>
-                <p class="news-date">May 12, 2023</p>
-                <p class="news-excerpt">The Ministry of Environment has introduced a comprehensive climate change policy focusing on renewable energy development, coastal protection, and sustainable agriculture practices.</p>
-            </div>
-        </div>
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-        <div class="footer-links">
-            <a href="#" class="footer-link">About NIROBO</a>
-            <a href="#" class="footer-link">Privacy Policy</a>
-            <a href="#" class="footer-link">Terms of Service</a>
-            <a href="#" class="footer-link">Contact Us</a>
-        </div>
+    document.getElementById('googleLogin').onclick = () => {
+      const provider = new GoogleAuthProvider();
+      signInWithPopup(auth, provider)
+        .then(result => {
+          alert("Welcome, " + result.user.email);
+          window.location.href = "dashboard.html";
+        })
+        .catch(err => alert(err.message));
+    };
 
-        <div class="credit">
-            <p>© 2025 Kh. Al Shaif. All rights reserved.</p>
-        </div>
-    </div>
+    document.getElementById('signup').onclick = () => {
+      const email = document.getElementById('emailInput').value;
+      const password = document.getElementById('passwordInput').value;
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(result => {
+          alert("Account created for " + result.user.email);
+          window.location.href = "dashboard.html";
+        })
+        .catch(err => alert(err.message));
+    };
 
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const searchButton = document.getElementById('searchButton');
-            const searchInput = document.getElementById('searchInput');
-            const googleLogin = document.getElementById('googleLogin');
-            const microsoftLogin = document.getElementById('microsoftLogin');
-            const searchResults = document.getElementById('searchResults');
-
-            // Function to perform search (opens Yandex in new tab)
-            function performSearch(query) {
-    if (query.trim() !== '') {
-        const localSearchUrl = `/search?q=${encodeURIComponent(query)}`;
-        window.location.href = localSearchUrl;
-    }
-            }
-
-            searchButton.addEventListener('click', function() {
-                performSearch(searchInput.value);
-            });
-
-            searchInput.addEventListener('keypress', function(e) {
-                if(e.key === 'Enter') {
-                    performSearch(searchInput.value);
-                }
-            });
-
-            // Add click events to quick links
-            const linkCards = document.querySelectorAll('.link-card');
-            linkCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    const query = this.getAttribute('data-query');
-                    searchInput.value = query;
-                    performSearch(query);
-                });
-            });
-
-            // Login button events
-            googleLogin.addEventListener('click', function() {
-                alert('Google login would open here. In a real implementation, this would connect to Google OAuth.');
-            });
-
-            microsoftLogin.addEventListener('click', function() {
-                alert('Microsoft login would open here. In a real implementation, this would connect to Microsoft OAuth.');
-            });
-        });
-    </script>
+    document.getElementById('login').onclick = () => {
+      const email = document.getElementById('emailInput').value;
+      const password = document.getElementById('passwordInput').value;
+      signInWithEmailAndPassword(auth, email, password)
+        .then(result => {
+          alert("Logged in as " + result.user.email);
+          window.location.href = "login.html";
+        })
+        .catch(err => alert(err.message));
+    };
+  </script>
+    <footer>
+  Made in Bangladesh 🇧🇩 | Curated by Nirobo<br>
+  Honoring the Language Movement and the Silent Legacy of Justice<br>
+  Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity
+    </footer>
 </body>
 </html>
