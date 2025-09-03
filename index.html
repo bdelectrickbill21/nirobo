@@ -128,10 +128,9 @@
     <p>A new journey born from invisible sound, shaped by red struggle, echoing the outcry of rights, bound by language, and united in the oneness of silence.</p>
   </div>
 
-  <!-- Search Bar -->
   <div class="search-bar">
-    <input type="text" placeholder="Search the web of Bangladesh..." />
-    <button>Search</button>
+  <input id="searchInput" type="text" placeholder="Search the web of Bangladesh..." />
+  <button id="searchBtn">Search</button>
   </div>
 
   <!-- Category Grid -->
@@ -162,5 +161,15 @@
     Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity
   </footer>
 
+  <script>
+  document.getElementById('searchBtn').onclick = () => {
+    const query = document.getElementById('searchInput').value.trim();
+    if (query) {
+      window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+    } else {
+      alert("Please enter a search term.");
+    }
+  };
+  </script>
 </body>
 </html>
