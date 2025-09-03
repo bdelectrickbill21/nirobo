@@ -65,9 +65,12 @@ class NiroboSpider(scrapy.Spider):
             
         # Create result item
         result = {
-            'title': title.strip() if title else "No Title",
-            'url': current_url,
-            'description': description.strip() if description else "No description available"
+    'title': title.strip() if title else "No Title",
+    'url': current_url,
+    'description': description.strip() if description else "No description available",
+    'image': "https://i.imgur.com/ObR8yvE.jpeg",  # You can replace this with a real image later
+    'tags': tags,  # This comes from the domain_tags logic I gave you earlier
+    'approved': False
         }
         
         # Save result to JSON file
