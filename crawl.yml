@@ -8,32 +8,32 @@ on:
 jobs:
   crawl:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
       with:
-        persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
-        fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
-        
+        persist-credentials: false
+        fetch-depth: 0
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.9'
-        
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install scrapy
-        
+
     - name: Run crawler
       run: |
         scrapy runspider nirobo_spider.py
-        
+
     - name: Commit updated results
-  run: |
-    git config --global user.name "Nirobo Bot"
-    git config --global user.email "nirobo@bot.com"
-    git add result.json
-    git commit -m "Auto-update search results"
-    git push
+      run: |
+        git config --global user.name "Nirobo Bot"
+        git config --global user.email "nirobo@bot.com"
+        git add result.json
+        git commit -m "Auto-update search results"
+        git push
