@@ -7,4 +7,13 @@
     "tags": ["cartoon", "network", "classic", "nostalgia", "animation", "tribute"],
     "approved": true
   }
+  
+  {
+  "title": "BBC Global Headlines",
+  "description": "Latest updates from around the world.",
+  "url": "https://www.bbc.com/news/world",
+  "image": "https://i.imgur.com/ObR8yvE.jpeg",
+  "tags": ["news", "UK"],
+  "approved": true
+  }
 ]
