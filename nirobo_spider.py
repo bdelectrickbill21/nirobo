@@ -8,18 +8,30 @@ class NiroboSpider(scrapy.Spider):
     
     # Start with some common .bd domains
     start_urls = [
-        'https://www.thedailystar.net/',
-        'https://www.prothomalo.com/',
-        'https://www.dhakatribune.com/',
-        'https://www.bdnews24.com/',
+    'https://www.thedailystar.net/',
+    'https://www.prothomalo.com/',
+    'https://www.dhakatribune.com/',
+    'https://www.bdnews24.com/',
+    'https://www.bbc.com/',
+    'https://www.nytimes.com/',
+    'https://www.aljazeera.com/',
+    'https://www.reuters.com/',
+    'https://www.un.org/',
+    'https://www.who.int/'
     ]
     
     # Limit to .bd domains
     allowed_domains = [
-        'thedailystar.net',
-        'prothomalo.com', 
-        'dhakatribune.com',
-        'bdnews24.com',
+    'thedailystar.net',
+    'prothomalo.com',
+    'dhakatribune.com',
+    'bdnews24.com',
+    'bbc.com',
+    'nytimes.com',
+    'aljazeera.com',
+    'reuters.com',
+    'un.org',
+    'who.int'
     ]
     
     # Keep track of visited URLs to avoid duplicates
