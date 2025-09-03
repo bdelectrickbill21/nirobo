@@ -1,62 +1,41 @@
 <body>
-  <!-- Login Form -->
+  <h2>Login to Add Your Website</h2>
+
   <input id="emailInput" type="email" placeholder="Email">
   <input id="passwordInput" type="password" placeholder="Password">
-  <button id="signup" type="button">Sign Up</button>
   <button id="login" type="button">Log In</button>
+
+  <!-- Optional: Sign Up and Google Login -->
+  <button id="signup" type="button">Sign Up</button>
   <button id="googleLogin" type="button">Login with Google</button>
 
   <!-- Firebase Auth Script -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-    import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyCIWC9IMCya9CLNJt4EehMhyjZlVELqf1g",
-      authDomain: "nirobo-c2b7b.firebaseapp.com",
-      projectId: "nirobo-c2b7b",
-      storageBucket: "nirobo-c2b7b.firebasestorage.app",
-      messagingSenderId: "642930152713",
-      appId: "1:642930152713:web:a00c37d5dfb6fe066cefd8",
-      measurementId: "G-M5N9NDF1WT"
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      appId: "YOUR_APP_ID"
     };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Google Login
-    document.getElementById('googleLogin').onclick = () => {
-      const provider = new GoogleAuthProvider();
-      signInWithPopup(auth, provider)
-        .then(result => {
-          alert("Welcome, " + result.user.email);
-          window.location.href = "dashboard.html"; // change to your desired page
-        })
-        .catch(err => alert(err.message));
-    };
-
-    // Email Signup
-    document.getElementById('signup').onclick = () => {
-      const email = document.getElementById('emailInput').value;
-      const password = document.getElementById('passwordInput').value;
-      createUserWithEmailAndPassword(auth, email, password)
-        .then(result => {
-          alert("Account created for " + result.user.email);
-          window.location.href = "dashboard.html"; // change to your desired page
-        })
-        .catch(err => alert(err.message));
-    };
-
-    // Email Login
     document.getElementById('login').onclick = () => {
       const email = document.getElementById('emailInput').value;
       const password = document.getElementById('passwordInput').value;
+
       signInWithEmailAndPassword(auth, email, password)
-        .then(result => {
-          alert("Logged in as " + result.user.email);
-          window.location.href = "dashboard.html"; // change to your desired page
+        .then(user => {
+          alert("Logged in as " + user.user.email);
+          window.location.href = "dashboard.html"; // or wherever you want
         })
-        .catch(err => alert(err.message));
+        .catch(error => {
+          alert("Login failed: " + error.message);
+        });
     };
   </script>
 </body>
