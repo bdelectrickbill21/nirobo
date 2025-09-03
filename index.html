@@ -3,54 +3,98 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nirobo — Echoes of Your Search</title>
+  <title>Nirobo — Curated Search</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #e6f2e6;
       margin: 0;
-      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0fdf4;
+      color: #222;
+    }
+
+    .intro {
+      background-color: #004d00;
+      color: white;
+      padding: 30px 20px;
       text-align: center;
     }
-    .search-section {
-      padding: 30px;
-      background-color: #006400;
-      color: white;
+
+    .intro h1 {
+      font-size: 48px;
+      letter-spacing: 2px;
     }
-    .search-section input {
-      width: 60%;
-      padding: 10px;
+
+    .intro h1 span {
+      color: #ffffff;
+    }
+
+    .intro h1 .green {
+      color: #006400;
+    }
+
+    .intro h1 .red {
+      color: #ff0000;
+    }
+
+    .intro p {
       font-size: 16px;
+      margin-top: 10px;
+      font-style: italic;
     }
-    .search-section button {
-      padding: 10px 20px;
-      background-color: red;
+
+    .search-bar {
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      background-color: #e6ffe6;
+    }
+
+    .search-bar input {
+      width: 60%;
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px 0 0 6px;
+    }
+
+    .search-bar button {
+      padding: 12px 20px;
+      background-color: #d40000;
       color: white;
       border: none;
+      border-radius: 0 6px 6px 0;
       cursor: pointer;
     }
-    .card-grid {
+
+    .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       gap: 20px;
-      padding: 20px;
+      padding: 30px;
     }
+
     .card {
       background-color: #228B22;
       color: white;
       padding: 20px;
       border-radius: 8px;
+      text-align: center;
       cursor: pointer;
+      font-weight: bold;
     }
+
     .login-section {
-      padding: 30px;
       background-color: #f9f9f9;
+      padding: 30px;
+      text-align: center;
     }
+
     .login-section input {
       margin: 5px;
       padding: 10px;
       width: 200px;
     }
+
     .login-section button {
       margin: 5px;
       padding: 10px 20px;
@@ -59,25 +103,39 @@
       border: none;
       cursor: pointer;
     }
+
     footer {
       background-color: #222;
       color: #ccc;
-      padding: 10px;
+      padding: 20px;
+      text-align: center;
       font-size: 14px;
     }
   </style>
 </head>
 <body>
 
-  <!-- Search Section -->
-  <div class="search-section">
-    <h1>Search the Web of Bangladesh</h1>
-    <input type="text" placeholder="Type your query..." />
+  <!-- Cinematic Intro -->
+  <div class="intro">
+    <h1>
+  <span class="green">N</span>
+  <span class="green">I</span>
+  <span class="green">R</span>
+  <span class="red">O</span>
+  <span class="green">B</span>
+  <span class="green">O</span>
+</h1>
+    <p>A new journey born from invisible sound, shaped by red struggle, echoing the outcry of rights, bound by language, and united in the oneness of silence.</p>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="search-bar">
+    <input type="text" placeholder="Search the web of Bangladesh..." />
     <button>Search</button>
   </div>
 
-  <!-- Content Cards -->
-  <div class="card-grid">
+  <!-- Category Grid -->
+  <div class="grid">
     <div class="card">News Portal</div>
     <div class="card">Business & Finance</div>
     <div class="card">Healthcare</div>
@@ -99,63 +157,10 @@
 
   <!-- Footer -->
   <footer>
-    Made in Bangladesh 🇧🇩 | Curated by Nirobo
+    Made in Bangladesh 🇧🇩 | Curated by Nirobo<br>
+    Honoring the Language Movement and the Silent Legacy of Justice<br>
+    Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity
   </footer>
 
-  <!-- Firebase Script -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-    import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyCIWC9IMCya9CLNJt4EehMhyjZlVELqf1g",
-      authDomain: "nirobo-c2b7b.firebaseapp.com",
-      projectId: "nirobo-c2b7b",
-      storageBucket: "nirobo-c2b7b.firebasestorage.app",
-      messagingSenderId: "642930152713",
-      appId: "1:642930152713:web:a00c37d5dfb6fe066cefd8",
-      measurementId: "G-M5N9NDF1WT"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    document.getElementById('googleLogin').onclick = () => {
-      const provider = new GoogleAuthProvider();
-      signInWithPopup(auth, provider)
-        .then(result => {
-          alert("Welcome, " + result.user.email);
-          window.location.href = "dashboard.html";
-        })
-        .catch(err => alert(err.message));
-    };
-
-    document.getElementById('signup').onclick = () => {
-      const email = document.getElementById('emailInput').value;
-      const password = document.getElementById('passwordInput').value;
-      createUserWithEmailAndPassword(auth, email, password)
-        .then(result => {
-          alert("Account created for " + result.user.email);
-          window.location.href = "dashboard.html";
-        })
-        .catch(err => alert(err.message));
-    };
-
-    document.getElementById('login').onclick = () => {
-      const email = document.getElementById('emailInput').value;
-      const password = document.getElementById('passwordInput').value;
-      signInWithEmailAndPassword(auth, email, password)
-        .then(result => {
-          alert("Logged in as " + result.user.email);
-          window.location.href = "login.html";
-        })
-        .catch(err => alert(err.message));
-    };
-  </script>
-    <footer>
-  Made in Bangladesh 🇧🇩 | Curated by Nirobo<br>
-  Honoring the Language Movement and the Silent Legacy of Justice<br>
-  Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity
-    </footer>
 </body>
 </html>
