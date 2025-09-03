@@ -78,7 +78,7 @@ class NiroboSpider(scrapy.Spider):
                 
     def save_results(self, result):
         # Save result to JSON file
-        output_file = 'data/results.json'
+        output_file = 'results.json'
         
         # Create data directory if it doesn't exist
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
