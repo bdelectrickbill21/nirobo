@@ -1,0 +1,40 @@
+name: Crawl and update results
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Runs daily at midnight UTC
+  workflow_dispatch:      # Allows manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        pip install scrapy
+
+    - name: Run crawler
+      run: |
+        scrapy runspider nirbo_spider.py
+
+    - name: Commit result.json
+      run: |
+        git config --global user.name "nirobo-bot"
+        git config --global user.email "nirobo@users.noreply.github.com"
+        git add result.json
+        git commit -m "Auto-update result.json from crawler"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
