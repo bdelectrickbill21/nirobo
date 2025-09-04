@@ -37,6 +37,7 @@ class NiroboSpider(scrapy.Spider):
 
     def parse(self, response):
         current_url = response.url
+        print(f"Parsing: {response.url}")
 
         if current_url in self.visited_urls:
             return
