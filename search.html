@@ -126,6 +126,7 @@ fetch('result.json')
           <img src="${result.image || 'https://i.imgur.com/ObR8yvE.jpeg'}" alt="${result.title}" style="width:100%; max-height:200px; object-fit:cover; margin-bottom:1rem; border-radius:6px;" />
           <h2><a href="${result.url}" target="_blank">${result.title}</a></h2>
           <p>${result.description}</p>
+          <p class="url-subtitle">{{ result.url }}</p>
           <div class="tags">${result.tags.map(tag => `<span>${tag}</span>`).join(' ')}</div>
         `;
         container.appendChild(card);
