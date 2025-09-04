@@ -52,6 +52,9 @@ class NiroboSpider(scrapy.Spider):
         if not description:
             description = response.css('p::text').get() or "No description available"
 
+        if not title and not description:
+    p      rint(f"Skipping: {response.url} — no usable content")
+
         if description and len(description) > 200:
             description = description[:200] + "..."
 
