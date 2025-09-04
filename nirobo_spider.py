@@ -7,6 +7,7 @@ class NiroboSpider(scrapy.Spider):
     name = 'nirobo'
 
     start_urls = [
+        'https://edition.cnn.com/',
         'https://www.thedailystar.net/',
         'https://www.prothomalo.com/',
         'https://www.dhakatribune.com/',
