@@ -6,15 +6,13 @@
     "image": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh1_tboMlWzBzmUWSoGDxPCeX9-R2XErA50Q2IYmiQ_ZPWIlM7DJet-EnS9fK8MVAHFotBGubcwwBQwJENo-rxIAR4Fz6isZNnzH_uuMiaUsxNXuWi-ZFqfdWrESkTpS2cmvDqQ7NzfJSQJAl6WeV42FbpacdblnLspz-DVE9b9YaBBWZxmgcZ2NAIkXAw/s500/CartoonNetworkPopcorn_20240815_233354_000.jpeg",
     "tags": ["cartoon", "network", "classic", "nostalgia", "animation", "tribute"],
     "approved": true
-  }
-]
-[
+  },
   {
-  "title": "BBC Global Headlines",
-  "description": "Latest updates from around the world.",
-  "url": "https://www.bbc.com/news/world",
-  "image": "https://i.imgur.com/ObR8yvE.jpeg",
-  "tags": ["news", "UK"],
-  "approved": true
+    "title": "BBC Global Headlines",
+    "description": "Latest updates from around the world.",
+    "url": "https://www.bbc.com/news/world",
+    "image": "https://i.imgur.com/ObR8yvE.jpeg",
+    "tags": ["news", "UK"],
+    "approved": true
   }
 ]
