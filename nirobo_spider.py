@@ -1,3 +1,4 @@
+from datetime import datetime
 import scrapy
 from urllib.parse import urljoin, urlparse
 import json
@@ -36,28 +37,28 @@ class NiroboSpider(scrapy.Spider):
 
     visited_urls = set()
 
-    def parse(self, response):
-        current_url = response.url
-        print(f"Parsing: {response.url}")
+    def save_results(self, result):
+    output_file = 'result.json'
+    os.makedirs(os.path.dirname(output_file) or '.', exist_ok=True)
 
-        if current_url in self.visited_urls:
-            return
-        self.visited_urls.add(current_url)
+    data = []
+    if os.path.exists(output_file):
+        try:
+            with open(output_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+        except:
+            data = []
 
-        # Extract title and description
-        title = response.css('title::text').get()
-        if not title:
-            title = response.css('h1::text').get() or "No Title"
+    seen_urls = set()
+    unique_data = []
+    for item in data + [result]:
+        if item['url'] not in seen_urls:
+            unique_data.append(item)
+            seen_urls.add(item['url'])
 
-        description = response.css('meta[name="description"]::attr(content)').get()
-        if not description:
-            description = response.css('p::text').get() or "No description available"
-
-        if not title and not description:
-    p      rint(f"Skipping: {response.url} — no usable content")
-
-        if description and len(description) > 200:
-            description = description[:200] + "..."
+    print(f"Saving {len(unique_data)} total entries to result.json")
+    with open(output_file, 'w', encoding='utf-8') as f:
+        json.dump(unique_data, f, ensure_ascii=False, indent=2)
 
         # Define tags based on domain
         domain_tags = {
@@ -77,14 +78,18 @@ class NiroboSpider(scrapy.Spider):
         root_domain = parsed.netloc.split('.')[-2] + '.' + parsed.netloc.split('.')[-1]
         tags = domain_tags.get(root_domain, ['general'])
 
+        
         result = {
-            'title': title.strip() if title else "No Title",
-            'url': current_url,
-            'description': description.strip() if description else "No description available",
-            'image': "https://i.imgur.com/ObR8yvE.jpeg",  # Placeholder image
-            'tags': tags,
-            'approved': False
+          'title': title.strip() if title else "No Title",
+          'url': current_url,
+          'description': description.strip() if description else "No description available",
+          'image': "https://i.imgur.com/ObR8yvE.jpeg",
+          'tags': tags if 'tags' in locals() else [],
+          'approved': False
         }
+
+        result['timestamp'] = datetime.utcnow().isoformat()
+
 
         self.save_results(result)
         print(f"Saved: {result['title']} from {result['url']}")
