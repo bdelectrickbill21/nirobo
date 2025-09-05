@@ -2,7 +2,7 @@ name: Crawl and update results
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Runs every hour
+    - cron: '0 * * * *'  # Runs every hour
   workflow_dispatch:      # Allows manual trigger
 
 permissions:
@@ -26,10 +26,8 @@ jobs:
         pip install scrapy
 
     - name: Run crawler
-      run: |
-         scrapy runspider nirbo_spider.py
-          Force a file change so Git always commits
-   
+      run: scrapy runspider nirbo_spider.py
+
     - name: Force file change
       run: echo "$(date)" >> timestamp.txt
 
@@ -37,7 +35,7 @@ jobs:
       run: |
         git config --global user.name "nirobo-bot"
         git config --global user.email "nirobo@users.noreply.github.com"
-        git add result.json
+        git add result.json timestamp.txt
         git commit -m "Auto-update result.json from crawler"
         git push
       env:
