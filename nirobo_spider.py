@@ -92,6 +92,7 @@ class NiroboSpider(scrapy.Spider):
 
 
         self.save_results(result)
+        print(json.dumps(result, indent=2))
         print(f"Saved: {result['title']} from {result['url']}")
 
         # Follow internal links
