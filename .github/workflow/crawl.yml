@@ -27,7 +27,11 @@ jobs:
 
     - name: Run crawler
       run: |
-        scrapy runspider nirbo_spider.py
+         scrapy runspider nirbo_spider.py
+          Force a file change so Git always commits
+   
+    - name: Force file change
+      run: echo "$(date)" >> timestamp.txt
 
     - name: Commit result.json
       run: |
