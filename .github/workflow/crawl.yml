@@ -26,7 +26,7 @@ jobs:
         pip install scrapy
 
     - name: Run crawler
-      run: scrapy runspider nirbo_spider.py
+      run: scrapy runspider nirobo_spider.py
 
     - name: Force file change
       run: echo "$(date)" >> timestamp.txt
