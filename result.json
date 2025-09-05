@@ -12,5 +12,13 @@
     "url": "https://www.bbc.com/news/world",
     "tags": ["news", "UK"],
     "approved": true
+  },
+  {
+  "title": "Flood threat looms over the north",
+  "url": "https://www.thedailystar.net/news/flood-threat-looms-over-the-north",
+  "description": "At least 140 chars (river islands) and villages on riverbanks across 33 unions in 13 upazilas of Lalmonirhat, Kurigram, Rangpur, Gaibandha and Nilphamari have inundated as the Teesta is flowing above the danger level...",
+  "tags": ["news", "bangladesh"],
+  "approved": true,
+  "timestamp": "2025-08-26T10:30:00Z"
   }
 ]
