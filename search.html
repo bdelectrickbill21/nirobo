@@ -104,182 +104,54 @@
     <button type="submit">Search</button>
   </form>
 
-  <!-- Submit Your Site Button - Break The Silence -->
-<div style="text-align: center; margin: 2rem 0;">
-  <a href="signup.html" style="
-    display: inline-block;
-    background: linear-gradient(135deg, #006400, #004d00);
-    color: white;
-    padding: 16px 32px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.1rem;
-    box-shadow: 0 4px 15px rgba(0, 100, 0, 0.4);
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    letter-spacing: 0.5px;
-    border: 2px solid #d40000;
-    text-transform: uppercase;
-  ">
-    <span style="
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-    ">
-      <span style="
-        background: #d40000;
-        color: white;
-        width: 28px;
-        height: 28px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        font-size: 1rem;
-      ">🇧🇩</span>
-      BREAK THE SILENCE — SUBMIT YOUR URL
-    </span>
-  </a>
-  <p style="
-    margin-top: 12px;
-    color: #ffcccc;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-    font-style: italic;
-  ">
-    “Silence has never protected truth — your voice, your website, your story deserves to be heard.<br>
-    Don’t wait for permission. Don’t fear rejection. Rise. Speak. Submit. The digital soul of Bangladesh is being written — and you hold the pen.”
-  </p>
-</div>
-
   <div id="results"></div>
 
   <script>
-// Get search query from URL
-const query = new URLSearchParams(window.location.search).get('q')?.toLowerCase() || '';
-
-// Handle search form submission
-document.getElementById('search-form').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const newQuery = document.getElementById('search-input').value.trim();
-  if (newQuery) {
-    window.location.href = `?q=${encodeURIComponent(newQuery)}`;
-  }
-});
-
-// Load data with fallback
-async function loadData() {
-  let data;
-
-  try {
-    // Try loading from result.json first
-    const res = await fetch('result.json');
-    if (!res.ok) throw new Error('Failed to load result.json');
-    data = await res.json();
-    console.log('Loaded data from result.json');
-  } catch (error) {
-    console.warn('Failed to load result.json, using localStorage or fallback data...');
-    
-    // Try localStorage fallback
-    const localData = localStorage.getItem('niroboResults');
-    if (localData) {
-      try {
-        data = JSON.parse(localData);
-        console.log('Loaded data from localStorage');
-      } catch (e) {
-        console.error('Failed to parse localStorage data');
-        data = null;
+    // Handle search form
+    document.getElementById('search-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const query = document.getElementById('search-input').value.trim();
+      if (query) {
+        window.location.href = `?q=${encodeURIComponent(query)}`;
       }
+    });
+
+    // Load and display results
+    const query = new URLSearchParams(window.location.search).get('q')?.toLowerCase() || '';
+
+    // Load approved submissions from localStorage
+    function loadApprovedData() {
+      const allSubmissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+      return allSubmissions.filter(sub => sub.status === "approved");
     }
 
-    // If localStorage fails, use hardcoded fallback
-    if (!data) {
-      data = [
-        {
-          title: "Prothom Alo",
-          url: "https://prothomalo.com",
-          description: "Bangladesh's most popular newspaper — delivering news in Bangla since 1998.",
-          tags: ["news", "media", "bangla", "newspaper"],
-          approved: true
-        },
-        {
-          title: "bKash",
-          url: "https://www.bkash.com.bd",
-          description: "Bangladesh's leading mobile financial service — send, receive, pay, anytime.",
-          tags: ["finance", "mobile", "payment", "fintech"],
-          approved: true
-        },
-        {
-          title: "Teletalk Bangladesh",
-          url: "https://www.teletalk.com.bd",
-          description: "State-owned mobile operator providing nationwide coverage and affordable plans.",
-          tags: ["telecom", "mobile", "government", "communication"],
-          approved: true
-        },
-        {
-          title: "Sheikh Hasina Official",
-          url: "https://www.sheikhhasina.gov.bd",
-          description: "Official website of the Honorable Prime Minister of Bangladesh, Sheikh Hasina.",
-          tags: ["government", "politics", "leader", "bangladesh"],
-          approved: true
-        },
-        {
-          title: "Dhaka University",
-          url: "https://www.du.ac.bd",
-          description: "The oldest and largest university in Bangladesh, established in 1921.",
-          tags: ["education", "university", "dhaka", "academic"],
-          approved: true
-        }
-      ];
-      console.log('Using hardcoded fallback data');
-    }
-  }
+    const approvedData = loadApprovedData();
 
-  return data;
-}
-
-// Render results
-async function renderResults() {
-  const container = document.getElementById('results');
-  const data = await loadData();
-
-  const filtered = data.filter(item =>
-    item.approved &&
-    (
+    const filtered = approvedData.filter(item =>
       item.title.toLowerCase().includes(query) ||
       item.description.toLowerCase().includes(query) ||
       item.tags.some(tag =>
         tag.toLowerCase().includes(query) || query.includes(tag.toLowerCase())
       )
-    )
-  );
+    );
 
-  if (filtered.length === 0) {
-    container.innerHTML = `<p>No results found for "<strong>${query}</strong>". Try another term.</p>`;
-  } else {
-    container.innerHTML = ''; // Clear previous results
-    filtered.forEach(result => {
-      const card = document.createElement('div');
-      card.className = 'result-card';
-      card.innerHTML = `
-        <h2>${result.title}</h2>
-        <p class="url-subtitle"><a href="${result.url}" target="_blank">${result.url}</a></p>
-        <p>${result.description}</p>
-        <div class="tags">${result.tags.map(tag => `<span>${tag}</span>`).join(' ')}</div>
-      `;
-      container.appendChild(card);
-    });
-  }
-}
+    const container = document.getElementById('results');
 
-// Initialize
-renderResults();
+    if (filtered.length === 0) {
+      container.innerHTML = `<p>No results found for "<strong>${query}</strong>". Try another term.</p>`;
+    } else {
+      filtered.forEach(result => {
+        const card = document.createElement('div');
+        card.className = 'result-card';
+        card.innerHTML = `
+          <h2>${result.title}</h2>
+          <p class="url-subtitle"><a href="${result.url}" target="_blank">${result.url}</a></p>
+          <p>${result.description}</p>
+          <div class="tags">${result.tags.map(tag => `<span>${tag}</span>`).join(' ')}</div>
+        `;
+        container.appendChild(card);
+      });
+    }
   </script>
 </body>
 </html>
