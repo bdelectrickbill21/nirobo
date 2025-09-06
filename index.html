@@ -192,6 +192,7 @@
     </div>
 
     <form id="submitForm" style="max-width: 500px; margin: 20px auto 0;">
+      <input id="submitterEmail" type="email" placeholder="Your Email (for approval updates)" required style="width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 4px;" />
       <input id="websiteTitle" type="text" placeholder="Website Title" required style="width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 4px;" />
       <input id="websiteUrl" type="url" placeholder="https://yourwebsite.com" required style="width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 4px;" />
       <textarea id="websiteDesc" placeholder="Description of your website" required style="width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 4px; height: 80px;"></textarea>
@@ -320,11 +321,15 @@
             div.style.fontSize = '0.9em';
             div.innerHTML = `
               <strong>${new URL(notif.url).pathname === '/' ? new URL(notif.url).hostname : new URL(notif.url).pathname}</strong> 
-              <span style="color: ${notif.status === 'approved' ? '#00aa00' : '#d40000'}; font-weight: bold;">
-                ${notif.status.toUpperCase()}
-              </span>
-              <div style="font-size: 0.8em; color: #666;">${new Date(notif.timestamp).toLocaleString()}</div>
-            `;
+              <span style="color: ${
+              notif.status === 'approved' ? '#00aa00' : 
+              notif.status === 'rejected' ? '#d40000' : '#ff9900'
+              }; font-weight: bold;">
+              ${notif.status.toUpperCase()}
+        </span>
+          <div style="font-size: 0.8em; color: #666;">${new Date(notif.timestamp).toLocaleString()}</div>
+            ${notif.message ? `<div style="font-size: 0.9em; padding: 5px; background: rgba(255,255,255,0.1); border-radius: 4px;">💬 ${notif.message}</div>` : ''}
+           `;
             notificationsList.appendChild(div);
           });
       } else {
@@ -366,13 +371,16 @@
       }
 
       const submission = {
-        title,
-        url,
-        description: desc,
-        tags: tags.length ? tags : ["general"],
-        submittedAt: new Date().toISOString(),
-        status: "pending"
-      };
+         title,
+         url,
+         description: desc,
+         tags: tags.length ? tags : ["general"],
+         submittedAt: new Date().toISOString(),
+         status: "pending",
+         submitterEmail: document.getElementById('submitterEmail').value.trim(),
+         adminMessage: "",
+         reviewedAt: null
+       };
 
       let submissions = loadPendingSubmissions();
       submissions.push(submission);
