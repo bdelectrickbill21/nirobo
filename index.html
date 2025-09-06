@@ -166,6 +166,40 @@
     <button id="googleLogin" type="button">Login with Google</button>
   </div>
 
+  <!-- Admin Data Editor (Hidden by default) -->
+<div id="adminPanel" style="display:none; margin-top: 30px; padding: 20px; background: #fff; border-radius: 8px; color: #000;">
+  <h3>📝 Manage Search Results</h3>
+  <p>Add or update websites that appear in Nirobo search results.</p>
+  
+  <div style="margin-bottom: 15px;">
+    <label>Title:</label><br>
+    <input type="text" id="entryTitle" placeholder="e.g., Prothom Alo" style="width: 100%; padding: 8px; margin: 5px 0;">
+  </div>
+  
+  <div style="margin-bottom: 15px;">
+    <label>URL:</label><br>
+    <input type="text" id="entryUrl" placeholder="https://example.com" style="width: 100%; padding: 8px; margin: 5px 0;">
+  </div>
+  
+  <div style="margin-bottom: 15px;">
+    <label>Description:</label><br>
+    <textarea id="entryDesc" placeholder="Brief description of the website" style="width: 100%; padding: 8px; margin: 5px 0; height: 60px;"></textarea>
+  </div>
+  
+  <div style="margin-bottom: 15px;">
+    <label>Tags (comma separated):</label><br>
+    <input type="text" id="entryTags" placeholder="news, media, bangla" style="width: 100%; padding: 8px; margin: 5px 0;">
+  </div>
+  
+  <button id="addEntry" style="background: #006400; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Add Entry</button>
+  <button id="saveAll" style="background: #d40000; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin-left: 10px;">Save All Data</button>
+  
+  <div id="currentEntries" style="margin-top: 20px; max-height: 300px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; border-radius: 4px;">
+    <h4>Current Entries:</h4>
+    <div id="entriesList"></div>
+  </div>
+</div>
+
   <!-- Footer -->
   <footer>
     Made in Bangladesh 🇧🇩 | Curated by Nirobo<br>
@@ -182,6 +216,102 @@
       alert("Please enter a search term.");
     }
   };
+  </script>
+  <script>
+// Load and display current data
+function loadCurrentData() {
+  const saved = localStorage.getItem('niroboResults');
+  return saved ? JSON.parse(saved) : [];
+}
+
+function displayEntries() {
+  const entries = loadCurrentData();
+  const list = document.getElementById('entriesList');
+  list.innerHTML = '';
+
+  entries.forEach((entry, index) => {
+    const entryDiv = document.createElement('div');
+    entryDiv.innerHTML = `
+      <div style="padding: 10px; border-bottom: 1px solid #eee; margin-bottom: 10px;">
+        <strong>${entry.title}</strong> - ${entry.url}<br>
+        <small>${entry.description}</small><br>
+        <em>Tags: ${entry.tags.join(', ')}</em><br>
+        <button onclick="deleteEntry(${index})" style="background: #d40000; color: white; border: none; padding: 3px 8px; border-radius: 3px; margin-top: 5px;">Delete</button>
+      </div>
+    `;
+    list.appendChild(entryDiv);
+  });
+}
+
+// Delete entry
+function deleteEntry(index) {
+  let entries = loadCurrentData();
+  entries.splice(index, 1);
+  localStorage.setItem('niroboResults', JSON.stringify(entries));
+  displayEntries();
+  alert('Entry deleted!');
+}
+
+// Save to localStorage
+function saveToLocalStorage(updatedData) {
+  localStorage.setItem('niroboResults', JSON.stringify(updatedData));
+  alert('✅ Data saved to localStorage! This will be used if result.json fails.');
+  displayEntries();
+}
+
+// Handle Add Entry
+document.getElementById('addEntry')?.addEventListener('click', () => {
+  const title = document.getElementById('entryTitle').value.trim();
+  const url = document.getElementById('entryUrl').value.trim();
+  const desc = document.getElementById('entryDesc').value.trim();
+  const tags = document.getElementById('entryTags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
+
+  if (!title || !url) {
+    alert('Please enter at least Title and URL.');
+    return;
+  }
+
+  const newEntry = {
+    title,
+    url,
+    description: desc || "No description provided.",
+    tags: tags.length ? tags : ["general"],
+    approved: true
+  };
+
+  let entries = loadCurrentData();
+  entries.push(newEntry);
+  saveToLocalStorage(entries);
+
+  // Clear form
+  document.getElementById('entryTitle').value = '';
+  document.getElementById('entryUrl').value = '';
+  document.getElementById('entryDesc').value = '';
+  document.getElementById('entryTags').value = '';
+});
+
+// Handle Save All (in case you manually edit the array)
+document.getElementById('saveAll')?.addEventListener('click', () => {
+  const entries = loadCurrentData();
+  saveToLocalStorage(entries);
+});
+
+// Show admin panel on login (for demo, we'll show it on "Log In" click)
+document.getElementById('login')?.addEventListener('click', () => {
+  // In real app, verify credentials first
+  const email = document.getElementById('emailInput').value;
+  if (email.endsWith('@nirobo.admin')) { // Simple "admin check"
+    document.getElementById('adminPanel').style.display = 'block';
+    displayEntries();
+  } else {
+    alert('Only admin emails (@nirobo.admin) can access the data editor.');
+  }
+});
+
+// Also show if localStorage already has data
+if (localStorage.getItem('niroboResults')) {
+  displayEntries();
+}
   </script>
 </body>
 </html>
