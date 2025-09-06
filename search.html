@@ -107,45 +107,125 @@
   <div id="results"></div>
 
   <script>
+// Get search query from URL
 const query = new URLSearchParams(window.location.search).get('q')?.toLowerCase() || '';
 
-fetch('result.json')
-  .then(res => res.json())
-  .then(data => {
-    const container = document.getElementById('results');
+// Handle search form submission
+document.getElementById('search-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const newQuery = document.getElementById('search-input').value.trim();
+  if (newQuery) {
+    window.location.href = `?q=${encodeURIComponent(newQuery)}`;
+  }
+});
 
-    const filtered = data.filter(item =>
-  item.approved &&
-  (
-    item.title.toLowerCase().includes(query) ||
-    item.description.toLowerCase().includes(query) ||
-    item.tags.some(tag =>
-      tag.toLowerCase().includes(query) || query.includes(tag.toLowerCase())
-    )
-  )
-);
+// Load data with fallback
+async function loadData() {
+  let data;
 
-    if (filtered.length === 0) {
-      container.innerHTML = `<p>No results found for "<strong>${query}</strong>".</p>`;
-    } else {
-      filtered.forEach(result => {
-        const domain = new URL(result.url).hostname.replace('www.', '');
-        const card = document.createElement('div');
-        card.className = 'result-card';
-        card.innerHTML = `
-          <h2>${result.title}</h2>
-          <p class="url-subtitle"><a href="${result.url}" target="_blank">${result.url}</a></p>
-          <p>${result.description}</p>
-          <div class="tags">${result.tags.map(tag => `<span>${tag}</span>`).join(' ')}</div>
-          `;
-        container.appendChild(card);
-      });
+  try {
+    // Try loading from result.json first
+    const res = await fetch('result.json');
+    if (!res.ok) throw new Error('Failed to load result.json');
+    data = await res.json();
+    console.log('Loaded data from result.json');
+  } catch (error) {
+    console.warn('Failed to load result.json, using localStorage or fallback data...');
+    
+    // Try localStorage fallback
+    const localData = localStorage.getItem('niroboResults');
+    if (localData) {
+      try {
+        data = JSON.parse(localData);
+        console.log('Loaded data from localStorage');
+      } catch (e) {
+        console.error('Failed to parse localStorage data');
+        data = null;
+      }
     }
-  })
-  .catch(error => {
-    document.getElementById('results').innerHTML = `<p style="color:red;">Error loading results. Please check your result.json file.</p>`;
-    console.error('Fetch error:', error);
-  });
+
+    // If localStorage fails, use hardcoded fallback
+    if (!data) {
+      data = [
+        {
+          title: "Prothom Alo",
+          url: "https://prothomalo.com",
+          description: "Bangladesh's most popular newspaper — delivering news in Bangla since 1998.",
+          tags: ["news", "media", "bangla", "newspaper"],
+          approved: true
+        },
+        {
+          title: "bKash",
+          url: "https://www.bkash.com.bd",
+          description: "Bangladesh's leading mobile financial service — send, receive, pay, anytime.",
+          tags: ["finance", "mobile", "payment", "fintech"],
+          approved: true
+        },
+        {
+          title: "Teletalk Bangladesh",
+          url: "https://www.teletalk.com.bd",
+          description: "State-owned mobile operator providing nationwide coverage and affordable plans.",
+          tags: ["telecom", "mobile", "government", "communication"],
+          approved: true
+        },
+        {
+          title: "Sheikh Hasina Official",
+          url: "https://www.sheikhhasina.gov.bd",
+          description: "Official website of the Honorable Prime Minister of Bangladesh, Sheikh Hasina.",
+          tags: ["government", "politics", "leader", "bangladesh"],
+          approved: true
+        },
+        {
+          title: "Dhaka University",
+          url: "https://www.du.ac.bd",
+          description: "The oldest and largest university in Bangladesh, established in 1921.",
+          tags: ["education", "university", "dhaka", "academic"],
+          approved: true
+        }
+      ];
+      console.log('Using hardcoded fallback data');
+    }
+  }
+
+  return data;
+}
+
+// Render results
+async function renderResults() {
+  const container = document.getElementById('results');
+  const data = await loadData();
+
+  const filtered = data.filter(item =>
+    item.approved &&
+    (
+      item.title.toLowerCase().includes(query) ||
+      item.description.toLowerCase().includes(query) ||
+      item.tags.some(tag =>
+        tag.toLowerCase().includes(query) || query.includes(tag.toLowerCase())
+      )
+    )
+  );
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<p>No results found for "<strong>${query}</strong>". Try another term.</p>`;
+  } else {
+    container.innerHTML = ''; // Clear previous results
+    filtered.forEach(result => {
+      const card = document.createElement('div');
+      card.className = 'result-card';
+      card.innerHTML = `
+        <h2>${result.title}</h2>
+        <p class="url-subtitle"><a href="${result.url}" target="_blank">${result.url}</a></p>
+        <p>${result.description}</p>
+        <div class="tags">${result.tags.map(tag => `<span>${tag}</span>`).join(' ')}</div>
+      `;
+      container.appendChild(card);
+    });
+  }
+}
+
+// Initialize
+renderResults();
   </script>
 </body>
 </html>
