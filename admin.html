@@ -135,14 +135,14 @@
 
     // Load data functions
     function loadPendingSubmissions() {
-      const saved = localStorage.getItem('niroboPendingSubmissions');
-      return saved ? JSON.parse(saved) : [];
-    }
+    const allSubmissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+    return allSubmissions.filter(sub => sub.status === "pending");
+      }
 
     function loadApprovedData() {
-      const saved = localStorage.getItem('niroboResults');
-      return saved ? JSON.parse(saved) : [];
-    }
+    const allSubmissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+    return allSubmissions.filter(sub => sub.status === "approved");
+      }
 
     function savePendingSubmissions(submissions) {
       localStorage.setItem('niroboPendingSubmissions', JSON.stringify(submissions));
