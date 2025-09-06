@@ -305,6 +305,7 @@
       info.country = geoData.country_name || 'Unknown';
       info.city = geoData.city || 'Unknown';
     } catch (e) {
+      console.warn('Failed to get geo data:', e);
       info.country = 'Unknown';
       info.city = 'Unknown';
     }
@@ -323,15 +324,19 @@
       const query = new URLSearchParams(window.location.search).get('q');
       // Find matching results and increment view count
       const allSubmissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+      let updated = false;
       allSubmissions.forEach(sub => {
         if (sub.title.toLowerCase().includes(query) || 
             sub.description.toLowerCase().includes(query) ||
             (sub.tags && sub.tags.some(tag => tag.toLowerCase().includes(query)))) {
           if (!sub.viewCount) sub.viewCount = 0;
           sub.viewCount += 1;
+          updated = true;
         }
       });
-      localStorage.setItem('niroboAllSubmissions', JSON.stringify(allSubmissions));
+      if (updated) {
+        localStorage.setItem('niroboAllSubmissions', JSON.stringify(allSubmissions));
+      }
     }
   };
 
@@ -341,6 +346,6 @@
     sessionStorage.setItem('niroboTracked', 'true');
   }
 })();
-    </script>
+  </script>
 </body>
 </html>
