@@ -133,70 +133,46 @@
       }
     });
 
-    // Load data functions
-    function loadPendingSubmissions() {
-    const allSubmissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
-    return allSubmissions.filter(sub => sub.status === "pending");
-      }
-
-    function loadApprovedData() {
-    const allSubmissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
-    return allSubmissions.filter(sub => sub.status === "approved");
-      }
-
-    function savePendingSubmissions(submissions) {
-      localStorage.setItem('niroboPendingSubmissions', JSON.stringify(submissions));
+    // Load all submissions
+    function loadAllSubmissions() {
+      return JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
     }
 
-    function saveApprovedData(data) {
-      localStorage.setItem('niroboResults', JSON.stringify(data));
-    }
-
-    // Get stats for a user (by email)
-    function getUserStats(email) {
-      const allSubmissions = [...loadPendingSubmissions(), ...loadApprovedData()];
-      const userSubmissions = allSubmissions.filter(item => item.submitterEmail === email);
-      const approved = userSubmissions.filter(item => 
-        loadApprovedData().some(approved => approved.url === item.url)
-      ).length;
-      return {
-        total: userSubmissions.length,
-        approved: approved,
-        pending: userSubmissions.length - approved
-      };
+    function saveAllSubmissions(submissions) {
+      localStorage.setItem('niroboAllSubmissions', JSON.stringify(submissions));
     }
 
     // Display pending submissions
     function displayPending() {
-      const submissions = loadPendingSubmissions();
+      const allSubmissions = loadAllSubmissions();
+      const pending = allSubmissions.filter(sub => sub.status === "pending");
       const container = document.getElementById('pendingList');
       container.innerHTML = '';
 
-      if (submissions.length === 0) {
+      if (pending.length === 0) {
         container.innerHTML = '<p>🎉 No pending submissions.</p>';
         return;
       }
 
-      submissions.forEach((submission, index) => {
-        const stats = getUserStats(submission.submitterEmail);
+      pending.forEach((submission, index) => {
         const div = document.createElement('div');
         div.className = 'entry-item';
         div.innerHTML = `
-        <strong>${submission.title}</strong><br>
-        <a href="${submission.url}" target="_blank" style="color:#ff9999;">${submission.url}</a><br>
-        <em>${submission.description}</em><br>
-        <small>Tags: ${submission.tags.join(', ')}</small><br>
-        <small>Submitted: ${new Date(submission.submittedAt).toLocaleString()}</small><br>
-        <small>Domain: ${new URL(submission.url).hostname}</small><br>
-        <small>📧 Submitter: ${submission.submitterEmail}</small><br>
-  
-        <div style="margin-top: 15px;">
-        <textarea placeholder="Reason for approval (optional)" style="width: 100%; padding: 8px; margin: 5px 0; border-radius: 4px;"></textarea>
-        <button class="btn-approve" onclick="approveSubmission(${index}, this.previousElementSibling.value)">Approve</button>
-    
-        <textarea placeholder="Reason for rejection (optional)" style="width: 100%; padding: 8px; margin: 5px 0; border-radius: 4px;"></textarea>
-        <button class="btn-reject" onclick="rejectSubmission(${index}, this.previousElementSibling.value)">Reject</button>
-        </div>
+          <strong>${submission.title}</strong><br>
+          <a href="${submission.url}" target="_blank" style="color:#ff9999;">${submission.url}</a><br>
+          <em>${submission.description}</em><br>
+          <small>Tags: ${submission.tags.join(', ')}</small><br>
+          <small>Submitted: ${new Date(submission.submittedAt).toLocaleString()}</small><br>
+          <small>Domain: ${new URL(submission.url).hostname}</small><br>
+          <small>📧 Submitter: ${submission.submitterEmail}</small><br>
+          
+          <div style="margin-top: 15px;">
+            <textarea placeholder="Reason for approval (optional)" style="width: 100%; padding: 8px; margin: 5px 0; border-radius: 4px;"></textarea>
+            <button class="btn-approve" onclick="approveByIndex(${index}, this.previousElementSibling.value)">Approve</button>
+            
+            <textarea placeholder="Reason for rejection (optional)" style="width: 100%; padding: 8px; margin: 5px 0; border-radius: 4px;"></textarea>
+            <button class="btn-reject" onclick="rejectByIndex(${index}, this.previousElementSibling.value)">Reject</button>
+          </div>
         `;
         container.appendChild(div);
       });
@@ -204,144 +180,141 @@
 
     // Display approved websites
     function displayApproved() {
-      const data = loadApprovedData();
+      const allSubmissions = loadAllSubmissions();
+      const approved = allSubmissions.filter(sub => sub.status === "approved");
       const container = document.getElementById('approvedList');
       container.innerHTML = '';
 
-      if (data.length === 0) {
+      if (approved.length === 0) {
         container.innerHTML = '<p>📭 No approved websites yet.</p>';
         return;
       }
 
-      data.forEach((item, index) => {
-        const stats = getUserStats(item.submitterEmail);
+      approved.forEach((submission, index) => {
         const div = document.createElement('div');
         div.className = 'entry-item';
         div.innerHTML = `
-          <strong>${item.title}</strong><br>
-          <a href="${item.url}" target="_blank" style="color:#ff9999;">${item.url}</a><br>
-          <em>${item.description}</em><br>
-          <small>Tags: ${item.tags.join(', ')}</small><br>
-          <small>Approved: ${item.reviewedAt ? new Date(item.reviewedAt).toLocaleString() : 'N/A'}</small><br>
-          <small>📧 Submitter: ${item.submitterEmail}</small><br>
-          <div class="stats">User Stats: ${stats.total} submitted (${stats.approved} approved, ${stats.pending} pending)</div>
+          <strong>${submission.title}</strong><br>
+          <a href="${submission.url}" target="_blank" style="color:#ff9999;">${submission.url}</a><br>
+          <em>${submission.description}</em><br>
+          <small>Tags: ${submission.tags.join(', ')}</small><br>
+          <small>Approved: ${submission.reviewedAt ? new Date(submission.reviewedAt).toLocaleString() : 'N/A'}</small><br>
+          <small>📧 Submitter: ${submission.submitterEmail}</small><br>
           
-          ${item.adminMessage ? `<div class="admin-message">💬 Admin Message: ${item.adminMessage}</div>` : ''}
+          ${submission.adminMessage ? `<div class="admin-message">💬 Admin Message: ${submission.adminMessage}</div>` : ''}
           
           <div class="entry-actions">
-            <button class="btn-unapprove" onclick="unapproveSubmission(${index})">Unapprove (Revoke)</button>
+            <button class="btn-unapprove" onclick="unapproveByIndex(${index})">Unapprove (Revoke)</button>
           </div>
         `;
         container.appendChild(div);
       });
     }
 
-    // Approve submission
-    function approveSubmission(index, adminMessage) {
-  // Load ALL submissions
-  const allSubmissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
-  
-  // Get pending submissions (status: "pending")
-  const pending = allSubmissions.filter(sub => sub.status === "pending");
-  const submission = pending[index];
+    // Approve by index in pending list
+    function approveByIndex(pendingIndex, adminMessage) {
+      const allSubmissions = loadAllSubmissions();
+      const pending = allSubmissions.filter(sub => sub.status === "pending");
+      const submission = pending[pendingIndex];
 
-  if (!submission) {
-    alert('Submission not found');
-    return;
-  }
+      if (!submission) {
+        alert('Submission not found');
+        return;
+      }
 
-  // Update this submission's status to "approved"
-  const submissionIndex = allSubmissions.findIndex(sub => sub.id === submission.id);
-  if (submissionIndex !== -1) {
-    allSubmissions[submissionIndex] = {
-      ...allSubmissions[submissionIndex],
-      status: "approved",
-      reviewedAt: new Date().toISOString(),
-      adminMessage: adminMessage || "Your submission has been approved!"
-    };
-  }
+      const submissionIndex = allSubmissions.findIndex(sub => sub.id === submission.id);
+      if (submissionIndex !== -1) {
+        allSubmissions[submissionIndex] = {
+          ...allSubmissions[submissionIndex],
+          status: "approved",
+          reviewedAt: new Date().toISOString(),
+          adminMessage: adminMessage || "Your submission has been approved!"
+        };
+      }
 
-  // Save back to localStorage
-  localStorage.setItem('niroboAllSubmissions', JSON.stringify(allSubmissions));
+      saveAllSubmissions(allSubmissions);
 
-  // Notify user
-  storeUserNotification(submission.url, 'approved', adminMessage || "Your submission has been approved!", submission.submitterEmail);
+      // Notify user
+      storeUserNotification(submission.url, 'approved', adminMessage || "Your submission has been approved!", submission.submitterEmail);
 
-  alert('✅ Approved!');
-  displayPending();
-  displayApproved();
+      alert('✅ Approved!');
+      displayPending();
+      displayApproved();
     }
 
-    // Reject submission
-    function rejectSubmission(index, adminMessage) {
-  const allSubmissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
-  const pending = allSubmissions.filter(sub => sub.status === "pending");
-  const submission = pending[index];
+    // Reject by index in pending list
+    function rejectByIndex(pendingIndex, adminMessage) {
+      const allSubmissions = loadAllSubmissions();
+      const pending = allSubmissions.filter(sub => sub.status === "pending");
+      const submission = pending[pendingIndex];
 
-  if (!submission) {
-    alert('Submission not found');
-    return;
-  }
+      if (!submission) {
+        alert('Submission not found');
+        return;
+      }
 
-  const submissionIndex = allSubmissions.findIndex(sub => sub.id === submission.id);
-  if (submissionIndex !== -1) {
-    allSubmissions[submissionIndex] = {
-      ...allSubmissions[submissionIndex],
-      status: "rejected",
-      reviewedAt: new Date().toISOString(),
-      adminMessage: adminMessage || "Sorry, your submission was not approved."
-    };
-  }
+      const submissionIndex = allSubmissions.findIndex(sub => sub.id === submission.id);
+      if (submissionIndex !== -1) {
+        allSubmissions[submissionIndex] = {
+          ...allSubmissions[submissionIndex],
+          status: "rejected",
+          reviewedAt: new Date().toISOString(),
+          adminMessage: adminMessage || "Sorry, your submission was not approved."
+        };
+      }
 
-  localStorage.setItem('niroboAllSubmissions', JSON.stringify(allSubmissions));
+      saveAllSubmissions(allSubmissions);
 
-  storeUserNotification(submission.url, 'rejected', adminMessage || "Sorry, your submission was not approved.", submission.submitterEmail);
+      // Notify user
+      storeUserNotification(submission.url, 'rejected', adminMessage || "Sorry, your submission was not approved.", submission.submitterEmail);
 
-  alert('❌ Rejected!');
-  displayPending();
-  displayApproved();
+      alert('❌ Rejected!');
+      displayPending();
+      displayApproved();
     }
 
-    // Unapprove (revoke) approved website
-    function unapproveSubmission(index) {
-  const allSubmissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
-  const approved = allSubmissions.filter(sub => sub.status === "approved");
-  const submission = approved[index];
+    // Unapprove by index in approved list
+    function unapproveByIndex(approvedIndex) {
+      const allSubmissions = loadAllSubmissions();
+      const approved = allSubmissions.filter(sub => sub.status === "approved");
+      const submission = approved[approvedIndex];
 
-  if (!submission) {
-    alert('Submission not found');
-    return;
-  }
+      if (!submission) {
+        alert('Submission not found');
+        return;
+      }
 
-  const submissionIndex = allSubmissions.findIndex(sub => sub.id === submission.id);
-  if (submissionIndex !== -1) {
-    allSubmissions[submissionIndex] = {
-      ...allSubmissions[submissionIndex],
-      status: "pending",
-      reviewedAt: null,
-      adminMessage: "This approval was revoked by admin."
-    };
-  }
+      const submissionIndex = allSubmissions.findIndex(sub => sub.id === submission.id);
+      if (submissionIndex !== -1) {
+        allSubmissions[submissionIndex] = {
+          ...allSubmissions[submissionIndex],
+          status: "pending",
+          reviewedAt: null,
+          adminMessage: "This approval was revoked by admin."
+        };
+      }
 
-  localStorage.setItem('niroboAllSubmissions', JSON.stringify(allSubmissions));
+      saveAllSubmissions(allSubmissions);
 
-  storeUserNotification(submission.url, 'revoked', "Your previously approved website has been revoked for review.", submission.submitterEmail);
+      // Notify user
+      storeUserNotification(submission.url, 'revoked', "Your previously approved website has been revoked for review.", submission.submitterEmail);
 
-  alert('⚠️ Unapproved! Moved back to pending.');
-  displayApproved();
-  displayPending();
+      alert('⚠️ Unapproved! Moved back to pending.');
+      displayApproved();
+      displayPending();
     }
 
     // Store notification for user
-    function storeUserNotification(url, status, message) {
-      const domain = new URL(url).hostname;
+    function storeUserNotification(url, status, message, userEmail) {
+      if (!userEmail) return;
+
       let notifications = JSON.parse(localStorage.getItem('niroboUserNotifications') || '{}');
       
-      if (!notifications[domain]) {
-        notifications[domain] = [];
+      if (!notifications[userEmail]) {
+        notifications[userEmail] = [];
       }
       
-      notifications[domain].push({
+      notifications[userEmail].push({
         url,
         status,
         message,
