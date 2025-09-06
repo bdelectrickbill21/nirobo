@@ -211,6 +211,16 @@
       });
     }
 
+
+<!-- Analytics Section -->
+<div class="section">
+  <h2>📊 Visitor Analytics</h2>
+  <button id="refreshAnalytics" style="background: #006400; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; margin-bottom: 15px;">
+    Refresh Stats
+  </button>
+  <div id="analyticsContent"></div>
+</div>
+    
     // Approve by index in pending list
     function approveByIndex(pendingIndex, adminMessage) {
       const allSubmissions = loadAllSubmissions();
@@ -323,6 +333,107 @@
 
       localStorage.setItem('niroboUserNotifications', JSON.stringify(notifications));
     }
+
+    // Display Analytics
+function displayAnalytics() {
+  const analyticsDiv = document.getElementById('analyticsContent');
+  
+  const visits = JSON.parse(localStorage.getItem('niroboVisits') || '[]');
+  
+  if (visits.length === 0) {
+    analyticsDiv.innerHTML = '<p>No visitor data yet.</p>';
+    return;
+  }
+
+  // Unique visitors
+  const uniqueVisitors = new Set(visits.map(v => v.visitorId)).size;
+  
+  // Browser stats
+  const browserStats = {};
+  visits.forEach(v => {
+    browserStats[v.browser] = (browserStats[v.browser] || 0) + 1;
+  });
+  
+  // Country stats
+  const countryStats = {};
+  visits.forEach(v => {
+    countryStats[v.country] = (countryStats[v.country] || 0) + 1;
+  });
+  
+  // Referrer stats
+  const referrerStats = {};
+  visits.forEach(v => {
+    const ref = v.referrer === '' ? 'Direct' : new URL(v.referrer).hostname;
+    referrerStats[ref] = (referrerStats[ref] || 0) + 1;
+  });
+  
+  // Device stats
+  const deviceStats = {};
+  visits.forEach(v => {
+    deviceStats[v.device] = (deviceStats[v.device] || 0) + 1;
+  });
+
+  let html = `
+    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+      <h3>📈 Summary</h3>
+      <p><strong>Total Pageviews:</strong> ${visits.length}</p>
+      <p><strong>Unique Visitors:</strong> ${uniqueVisitors}</p>
+      <p><strong>First Visit:</strong> ${new Date(visits[0].timestamp).toLocaleString()}</p>
+      <p><strong>Last Visit:</strong> ${new Date(visits[visits.length-1].timestamp).toLocaleString()}</p>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+      <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px;">
+        <h4>🌐 Top Countries</h4>
+        ${Object.entries(countryStats).sort((a,b) => b[1] - a[1]).slice(0, 5).map(([country, count]) => 
+          `<p>${country}: ${count} visits</p>`
+        ).join('')}
+      </div>
+      
+      <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px;">
+        <h4>💻 Browsers</h4>
+        ${Object.entries(browserStats).sort((a,b) => b[1] - a[1]).map(([browser, count]) => 
+          `<p>${browser}: ${count} visits</p>`
+        ).join('')}
+      </div>
+      
+      <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px;">
+        <h4>📱 Devices</h4>
+        ${Object.entries(deviceStats).sort((a,b) => b[1] - a[1]).map(([device, count]) => 
+          `<p>${device}: ${count} visits</p>`
+        ).join('')}
+      </div>
+      
+      <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px;">
+        <h4>🔗 Top Referrers</h4>
+        ${Object.entries(referrerStats).sort((a,b) => b[1] - a[1]).slice(0, 5).map(([referrer, count]) => 
+          `<p>${referrer}: ${count} visits</p>`
+        ).join('')}
+      </div>
+    </div>
+    
+    <h4 style="margin-top: 30px;">📋 Recent Visits</h4>
+    <div style="max-height: 300px; overflow-y: auto; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px;">
+      ${visits.slice(-10).reverse().map(visit => `
+        <div style="padding: 8px; border-bottom: 1px solid #333; font-size: 0.9rem;">
+          <strong>${new Date(visit.timestamp).toLocaleString()}</strong><br>
+          ${visit.country} | ${visit.browser} | ${visit.device}<br>
+          <small>Ref: ${visit.referrer}</small>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  analyticsDiv.innerHTML = html;
+}
+
+// Refresh button
+document.getElementById('refreshAnalytics')?.addEventListener('click', displayAnalytics);
+
+// Also call it when admin panel loads
+if (document.getElementById('adminContent').style.display === 'block') {
+  displayAnalytics();
+}
   </script>
 </body>
 </html>
