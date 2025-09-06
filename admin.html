@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nirobo Admin Panel</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #004d00;
+      color: white;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      color: #ff0000;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .section {
+      background: #003300;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+    }
+
+    .entry-item {
+      background: #004400;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 6px;
+    }
+
+    button {
+      padding: 8px 16px;
+      margin: 5px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .btn-approve { background: #00aa00; color: white; }
+    .btn-reject { background: #ff0000; color: white; }
+    .btn-back { background: #333; color: white; margin-top: 20px; }
+
+    input {
+      padding: 10px;
+      width: 300px;
+      margin-right: 10px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔐 Nirobo Admin Panel</h1>
+    
+    <div style="text-align: center; margin-bottom: 30px;">
+      <input type="password" id="adminPass" placeholder="Enter Admin Password" />
+      <button id="loginBtn">Login</button>
+      <p><small>Hint: password is "nirobo"</small></p>
+    </div>
+
+    <div id="adminContent" style="display:none;">
+      <div class="section">
+        <h2>📬 Pending Submissions</h2>
+        <div id="pendingList">
+          <p>Loading...</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>✅ Approved Websites</h2>
+        <div id="approvedList">
+          <p>Loading...</p>
+        </div>
+      </div>
+
+      <div style="text-align: center;">
+        <button class="btn-back" onclick="window.location.href='index.html'">← Back to Nirobo</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Simple password (for demo)
+    const ADMIN_PASSWORD = "nirobo";
+
+    document.getElementById('loginBtn').addEventListener('click', () => {
+      const pass = document.getElementById('adminPass').value;
+      if (pass === ADMIN_PASSWORD) {
+        document.getElementById('adminContent').style.display = 'block';
+        displayPending();
+        displayApproved();
+      } else {
+        alert('❌ Incorrect password');
+      }
+    });
+
+    // Load data functions
+    function loadPendingSubmissions() {
+      const saved = localStorage.getItem('niroboPendingSubmissions');
+      return saved ? JSON.parse(saved) : [];
+    }
+
+    function loadApprovedData() {
+      const saved = localStorage.getItem('niroboResults');
+      return saved ? JSON.parse(saved) : [];
+    }
+
+    function savePendingSubmissions(submissions) {
+      localStorage.setItem('niroboPendingSubmissions', JSON.stringify(submissions));
+    }
+
+    function saveApprovedData(data) {
+      localStorage.setItem('niroboResults', JSON.stringify(data));
+    }
+
+    // Display functions
+    function displayPending() {
+      const submissions = loadPendingSubmissions();
+      const container = document.getElementById('pendingList');
+      container.innerHTML = '';
+
+      if (submissions.length === 0) {
+        container.innerHTML = '<p>🎉 No pending submissions.</p>';
+        return;
+      }
+
+      submissions.forEach((submission, index) => {
+        const div = document.createElement('div');
+        div.className = 'entry-item';
+        div.innerHTML = `
+          <strong>${submission.title}</strong><br>
+          <a href="${submission.url}" target="_blank" style="color:#ff9999;">${submission.url}</a><br>
+          <em>${submission.description}</em><br>
+          <small>Tags: ${submission.tags.join(', ')}</small><br>
+          <small>Submitted: ${new Date(submission.submittedAt).toLocaleString()}</small><br>
+          <small>Domain: ${new URL(submission.url).hostname}</small><br>
+          <button class="btn-approve" onclick="approveSubmission(${index})">Approve</button>
+          <button class="btn-reject" onclick="rejectSubmission(${index})">Reject</button>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function displayApproved() {
+      const data = loadApprovedData();
+      const container = document.getElementById('approvedList');
+      container.innerHTML = '';
+
+      if (data.length === 0) {
+        container.innerHTML = '<p>📭 No approved websites yet.</p>';
+        return;
+      }
+
+      data.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'entry-item';
+        div.innerHTML = `
+          <strong>${item.title}</strong><br>
+          <a href="${item.url}" target="_blank" style="color:#ff9999;">${item.url}</a><br>
+          <em>${item.description}</em><br>
+          <small>Tags: ${item.tags.join(', ')}</small>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // Action functions
+    function approveSubmission(index) {
+      const submissions = loadPendingSubmissions();
+      const submission = submissions[index];
+
+      let approved = loadApprovedData();
+      approved.push({
+        ...submission,
+        approved: true,
+        reviewedAt: new Date().toISOString()
+      });
+
+      submissions.splice(index, 1);
+      savePendingSubmissions(submissions);
+      saveApprovedData(approved);
+
+      // Store user notification
+      storeUserNotification(submission.url, 'approved');
+
+      alert('✅ Approved! User will see notification when they visit.');
+      displayPending();
+      displayApproved();
+    }
+
+    function rejectSubmission(index) {
+      const submissions = loadPendingSubmissions();
+      const submission = submissions[index];
+
+      submissions.splice(index, 1);
+      savePendingSubmissions(submissions);
+
+      // Store user notification
+      storeUserNotification(submission.url, 'rejected');
+
+      alert('❌ Rejected. User will see notification when they visit.');
+      displayPending();
+    }
+
+    // Store notification for user
+    function storeUserNotification(url, status) {
+      const domain = new URL(url).hostname;
+      let notifications = JSON.parse(localStorage.getItem('niroboUserNotifications') || '{}');
+      
+      if (!notifications[domain]) {
+        notifications[domain] = [];
+      }
+      
+      notifications[domain].push({
+        url,
+        status,
+        timestamp: new Date().toISOString()
+      });
+
+      localStorage.setItem('niroboUserNotifications', JSON.stringify(notifications));
+    }
+  </script>
+</body>
+</html>
