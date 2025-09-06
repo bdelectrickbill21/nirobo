@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nirobo — Your URL Analytics</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #004d00, #006400);
+      color: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      padding: 30px 0;
+      border-bottom: 2px solid #d40000;
+      margin-bottom: 30px;
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .stat-card {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 25px;
+      border-radius: 15px;
+      border: 1px solid rgba(212, 0, 0, 0.3);
+    }
+
+    .stat-card h2 {
+      color: #ffcccc;
+      margin-bottom: 20px;
+      font-size: 1.4rem;
+      border-bottom: 1px solid #d40000;
+      padding-bottom: 10px;
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #ff9999;
+      margin: 15px 0;
+    }
+
+    .chart {
+      height: 200px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 20px;
+    }
+
+    .chart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+    }
+
+    .chart-bar {
+      height: 12px;
+      background: #d40000;
+      border-radius: 3px;
+      margin-left: 10px;
+      flex-grow: 1;
+    }
+
+    .url-list {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 25px;
+      border-radius: 15px;
+      margin-bottom: 40px;
+      border: 1px solid rgba(212, 0, 0, 0.3);
+    }
+
+    .url-list h2 {
+      color: #ffcccc;
+      margin-bottom: 20px;
+      font-size: 1.4rem;
+      border-bottom: 1px solid #d40000;
+      padding-bottom: 10px;
+    }
+
+    .url-item {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    .url-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #ff9999;
+    }
+
+    footer {
+      background-color: #1a1a1a;
+      color: #ccc;
+      padding: 20px;
+      text-align: center;
+      font-size: 0.9rem;
+      border-top: 1px solid #333;
+      margin-top: 40px;
+    }
+
+    footer a {
+      color: #ff9999;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📊 YOUR URL ANALYTICS</h1>
+      <p>“Your audience speaks through data — listen to what they’re telling you.”</p>
+    </header>
+
+    <div id="userStatsContent">
+      <p>Loading your analytics...</p>
+    </div>
+
+    <footer>
+      Made in Bangladesh 🇧🇩 | Curated by Nirobo<br>
+      <a href="dashboard.html">← Back to Dashboard</a>
+    </footer>
+  </div>
+
+  <script>
+    // Check if user is logged in
+    const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser') || 'null');
+    if (!currentUser) {
+      alert('Please log in first.');
+      window.location.href = 'signup.html';
+    }
+
+    // Load user's submissions and their analytics
+    function loadUserStats() {
+      const allSubmissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+      const userSubmissions = allSubmissions.filter(sub => sub.userId === currentUser.id);
+      
+      const visits = JSON.parse(localStorage.getItem('niroboVisits') || '[]');
+      
+      const container = document.getElementById('userStatsContent');
+      
+      if (userSubmissions.length === 0) {
+        container.innerHTML = '<p>You haven\'t submitted any URLs yet.</p>';
+        return;
+      }
+
+      // Calculate total views for user's URLs
+      let totalViews = 0;
+      userSubmissions.forEach(sub => {
+        totalViews += sub.viewCount || 0;
+      });
+
+      let html = `
+        <div class="stats-grid">
+          <div class="stat-card">
+            <h2>📈 Total Views</h2>
+            <div class="stat-number">${totalViews}</div>
+            <p>Across all your URLs</p>
+          </div>
+        </div>
+        
+        <div class="url-list">
+          <h2>🚀 Your Submitted URLs</h2>
+      `;
+
+      userSubmissions.forEach(sub => {
+        // Get views for this specific URL
+        const urlViews = sub.viewCount || 0;
+        
+        // Get country stats for visits to search results that matched this URL
+        const countryStats = {};
+        visits.forEach(visit => {
+          if (visit.url.includes('search.html?q=')) {
+            const url = new URL(visit.url);
+            const q = url.searchParams.get('q');
+            if (q && (sub.title.toLowerCase().includes(q) || 
+                     sub.description.toLowerCase().includes(q) ||
+                     (sub.tags && sub.tags.some(tag => tag.toLowerCase().includes(q))))) {
+              countryStats[visit.country] = (countryStats[visit.country] || 0) + 1;
+            }
+          }
+        });
+
+        html += `
+          <div class="url-item">
+            <div class="url-title">${sub.title}</div>
+            <p><strong>URL:</strong> ${sub.url}</p>
+            <p><strong>Views:</strong> ${urlViews}</p>
+            <p><strong>Status:</strong> <span style="color: ${
+              sub.status === 'approved' ? '#00aa00' : 
+              sub.status === 'rejected' ? '#d40000' : '#ff9900'
+            }">${sub.status.toUpperCase()}</span></p>
+        `;
+
+        if (Object.keys(countryStats).length > 0) {
+          html += `<h4>🌍 Top Countries</h4><div class="chart">`;
+          const sortedCountries = Object.entries(countryStats).sort((a,b) => b[1] - a[1]).slice(0, 5);
+          const maxCount = sortedCountries[0][1];
+          
+          sortedCountries.forEach(([country, count]) => {
+            const percentage = (count / maxCount) * 100;
+            html += `
+              <div class="chart-item">
+                <span>${country}</span>
+                <div style="display: flex; align-items: center; width: 100%;">
+                  <span style="width: 60px; text-align: right; margin-right: 10px;">${count}</span>
+                  <div class="chart-bar" style="width: ${percentage}%;"></div>
+                </div>
+              </div>
+            `;
+          });
+          html += `</div>`;
+        }
+
+        html += `</div>`;
+      });
+
+      html += `</div>`;
+      container.innerHTML = html;
+    }
+
+    // Initialize
+    loadUserStats();
+  </script>
+</body>
+</html>
