@@ -11,6 +11,28 @@
       background-color: #006400; /* deep green */
       color: #f5f5f5;
       font-family: 'Inter', sans-serif;
+      position: relative;
+    }
+
+    /* Website Button Top Right */
+    .website-button {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #d40000;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      text-decoration: none;
+      box-shadow: 0 4px 8px rgba(212, 0, 0, 0.3);
+      z-index: 100;
+      transition: transform 0.2s;
+    }
+
+    .website-button:hover {
+      transform: translateY(-2px);
     }
 
     h1 {
@@ -57,15 +79,6 @@
       text-decoration: none;
       font-size: 0.9rem;
     }
-
-    .result-image {
-       width: 100%;
-       max-height: 200px;
-       object-fit: cover;
-       border-radius: 6px;
-       margin-bottom: 1rem;
-       box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
-    }
     
     .tags span {
       background: #ff0000;
@@ -93,9 +106,32 @@
       border: none;
       font-size: 1rem;
     }
+
+    /* Footer Styles */
+    footer {
+      background: #111;
+      color: #aaa;
+      padding: 20px;
+      text-align: center;
+      margin-top: 40px;
+      font-size: 0.9rem;
+      border-top: 1px solid #333;
+    }
+
+    footer a {
+      color: #ff9999;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
+  <!-- Website Button (Top Right) -->
+  <a href="/" class="website-button">🌐 Website</a>
+
   <h1>Echoes of Your Search</h1>
   <a href="/">← Back to Nirobo</a>
 
@@ -105,6 +141,14 @@
   </form>
 
   <div id="results"></div>
+
+  <!-- Footer -->
+  <footer>
+    Made in Bangladesh 🇧🇩 | Curated by Nirobo<br>
+    Honoring the Language Movement and the Silent Legacy of Justice<br>
+    Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity<br>
+    <a href="signup.html">Submit Your Site</a> | <a href="admin.html">Admin</a>
+  </footer>
 
   <script>
     // Handle search form
@@ -125,44 +169,76 @@
       return allSubmissions.filter(sub => sub.status === "approved");
     }
 
-    const approvedData = loadApprovedData();
+    // Merge data from result.json and localStorage
+    async function loadAllResults() {
+      let allResults = [];
 
-    const filtered = approvedData.filter(item =>
-      item.title.toLowerCase().includes(query) ||
-      item.description.toLowerCase().includes(query) ||
-      item.tags.some(tag =>
-        tag.toLowerCase().includes(query) || query.includes(tag.toLowerCase())
-      )
-    );
+      // Try loading from result.json
+      try {
+        const res = await fetch('result.json');
+        if (res.ok) {
+          const jsonData = await res.json();
+          // Add source flag so we know where it came from
+          jsonData.forEach(item => item.source = 'json');
+          allResults = [...allResults, ...jsonData];
+        }
+      } catch (error) {
+        console.warn('Failed to load result.json:', error);
+      }
 
-    const container = document.getElementById('results');
+      // Load from localStorage
+      const localStorageData = loadApprovedData();
+      localStorageData.forEach(item => item.source = 'localStorage');
+      allResults = [...allResults, ...localStorageData];
 
-    if (filtered.length === 0) {
-      container.innerHTML = `<p>No results found for "<strong>${query}</strong>". Try another term.</p>`;
-    } else {
-      filtered.forEach(result => {
-        const card = document.createElement('div');
-        card.className = 'result-card';
-        // Extract domain for favicon
-const domain = new URL(result.url).hostname;
-
-card.innerHTML = `
-  <div style="display: flex; align-items: flex-start; gap: 12px;">
-    <img src="https://www.google.com/s2/favicons?domain=${domain}&sz=32" 
-         alt="Favicon" 
-         style="width: 32px; height: 32px; border-radius: 4px; flex-shrink: 0;"
-         onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 fill=%22%23444%22 rx=%224%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22white%22 font-size=%2216%22 font-family=%22Arial%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>?</text></svg>'">
-    <div style="flex: 1; min-width: 0;">
-      <h2 style="margin: 0 0 8px 0; font-size: 1.2rem;">${result.title}</h2>
-      <p class="url-subtitle"><a href="${result.url}" target="_blank" style="color: #ff9999;">${result.url}</a></p>
-      <p style="margin: 8px 0;">${result.description}</p>
-      <div class="tags" style="margin-top: 8px;">${result.tags.map(tag => `<span>${tag}</span>`).join(' ')}</div>
-    </div>
-  </div>
-`;
-        container.appendChild(card);
-      });
+      return allResults;
     }
+
+    // Render results
+    async function renderResults() {
+      const allResults = await loadAllResults();
+
+      const filtered = allResults.filter(item =>
+        item.title.toLowerCase().includes(query) ||
+        item.description.toLowerCase().includes(query) ||
+        (item.tags && item.tags.some(tag =>
+          tag.toLowerCase().includes(query) || query.includes(tag.toLowerCase())
+        ))
+      );
+
+      const container = document.getElementById('results');
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<p>No results found for "<strong>${query}</strong>". Try another term.</p>`;
+      } else {
+        container.innerHTML = '';
+        filtered.forEach(result => {
+          // Extract domain for favicon
+          const domain = new URL(result.url).hostname;
+
+          const card = document.createElement('div');
+          card.className = 'result-card';
+          card.innerHTML = `
+            <div style="display: flex; align-items: flex-start; gap: 12px;">
+              <img src="https://www.google.com/s2/favicons?domain=${domain}&sz=32" 
+                   alt="Favicon" 
+                   style="width: 32px; height: 32px; border-radius: 4px; flex-shrink: 0;"
+                   onerror="this.src='image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 fill=%22%23444%22 rx=%224%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22white%22 font-size=%2216%22 font-family=%22Arial%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>?</text></svg>'">
+              <div style="flex: 1; min-width: 0;">
+                <h2 style="margin: 0 0 8px 0; font-size: 1.2rem;">${result.title}</h2>
+                <p class="url-subtitle"><a href="${result.url}" target="_blank" style="color: #ff9999;">${result.url}</a></p>
+                <p style="margin: 8px 0;">${result.description}</p>
+                ${result.tags ? `<div class="tags" style="margin-top: 8px;">${result.tags.map(tag => `<span>${tag}</span>`).join(' ')}</div>` : ''}
+              </div>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      }
+    }
+
+    // Initialize
+    renderResults();
   </script>
 </body>
 </html>
