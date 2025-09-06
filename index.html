@@ -84,27 +84,6 @@
       margin: 10px 0;
     }
 
-    .login-section {
-      background-color: #f9f9f9;
-      padding: 30px;
-      text-align: center;
-    }
-
-    .login-section input {
-      margin: 5px;
-      padding: 10px;
-      width: 200px;
-    }
-
-    .login-section button {
-      margin: 5px;
-      padding: 10px 20px;
-      background-color: #006400;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
     footer {
       background-color: #222;
       color: #ccc;
@@ -121,25 +100,6 @@
       border: none;
       border-radius: 6px;
       box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
-    }
-
-    /* Dashboard Styles (blends with your design) */
-    #userDashboard {
-      background: #e6ffe6;
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-      text-align: left;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    #userNotifications {
-      margin-top: 15px;
-      padding: 10px;
-      background: #fff3cd;
-      border-radius: 4px;
     }
   </style>
 </head>
@@ -173,37 +133,13 @@
     <div class="card" onclick="window.location.href='chat.html'">Local AI Chat</div>
   </div>
 
-  <!-- User Submission Form -->
-  <div class="login-section">
-    <h3>Submit Your Website</h3>
-    <p>Help make Nirobo better by adding your website.</p>
-    
-    <!-- User Dashboard -->
-    <div id="userDashboard">
-      <h4>📊 Your Submission Stats</h4>
-      <p><strong>Submitted:</strong> <span id="totalSubmitted">0</span></p>
-      <p><strong>Approved:</strong> <span id="totalApproved">0</span></p>
-      <p><strong>Rejected:</strong> <span id="totalRejected">0</span></p>
-      <p><strong>Remaining Submissions:</strong> <span id="remaining">10</span> (max 10 per domain)</p>
-      <div id="userNotifications" style="display: none;">
-        <h5>🔔 Notifications</h5>
-        <div id="notificationsList"></div>
-      </div>
-    </div>
-
-    <form id="submitForm" style="max-width: 500px; margin: 20px auto 0;">
-      <input id="submitterEmail" type="email" placeholder="Your Email (for approval updates)" required style="width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 4px;" />
-      <input id="websiteTitle" type="text" placeholder="Website Title" required style="width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 4px;" />
-      <input id="websiteUrl" type="url" placeholder="https://yourwebsite.com" required style="width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 4px;" />
-      <textarea id="websiteDesc" placeholder="Description of your website" required style="width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 4px; height: 80px;"></textarea>
-      <input id="websiteTags" type="text" placeholder="Tags (comma separated): news, education, bangla" style="width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 4px;" />
-      
-      <button type="submit" style="background: #006400; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px;">Submit Website</button>
-    </form>
-
-    <p style="margin-top: 20px; font-size: 0.9em; color: #666;">
-      Submitted websites will be reviewed by Nirobo curators before appearing in search.<br>
-      <strong>Limit: 10 URLs per domain.</strong>
+  <!-- User Portal Button -->
+  <div style="text-align: center; padding: 20px;">
+    <a href="signup.html" style="background: #006400; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
+      👤 My Submissions & Account
+    </a>
+    <p style="margin-top: 10px; font-size: 0.9em; color: #666;">
+      Submit your website, track approval status, and manage your submissions.
     </p>
   </div>
 
@@ -211,12 +147,10 @@
   <footer>
     Made in Bangladesh 🇧🇩 | Curated by Nirobo<br>
     Honoring the Language Movement and the Silent Legacy of Justice<br>
-    Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity<br>
-    <a href="admin.html" style="color: #666; font-size: 0.8em; text-decoration: none;">Admin Access</a>
+    Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity
   </footer>
 
   <script>
-    // Search button handler
     document.getElementById('searchBtn').onclick = () => {
       const query = document.getElementById('searchInput').value.trim();
       if (query) {
@@ -225,176 +159,6 @@
         alert("Please enter a search term.");
       }
     };
-
-    // =============================
-    // DATA MANAGEMENT
-    // =============================
-    function loadPendingSubmissions() {
-      const saved = localStorage.getItem('niroboPendingSubmissions');
-      return saved ? JSON.parse(saved) : [];
-    }
-
-    function savePendingSubmissions(submissions) {
-      localStorage.setItem('niroboPendingSubmissions', JSON.stringify(submissions));
-    }
-
-    function loadApprovedData() {
-      const saved = localStorage.getItem('niroboResults');
-      return saved ? JSON.parse(saved) : [];
-    }
-
-    function saveApprovedData(data) {
-      localStorage.setItem('niroboResults', JSON.stringify(data));
-    }
-
-    function getUserDomainStats(url) {
-      try {
-        const domain = new URL(url).hostname;
-        const allSubmissions = [
-          ...loadPendingSubmissions(),
-          ...loadApprovedData()
-        ];
-        
-        const domainSubmissions = allSubmissions.filter(item => 
-          new URL(item.url).hostname === domain
-        );
-        
-        return {
-          domain,
-          total: domainSubmissions.length,
-          remaining: Math.max(0, 10 - domainSubmissions.length)
-        };
-      } catch (e) {
-        return { domain: 'unknown', total: 0, remaining: 10 };
-      }
-    }
-
-    function updateUserDashboard() {
-      const notifications = JSON.parse(localStorage.getItem('niroboUserNotifications') || '{}');
-      let totalSubmitted = 0;
-      let totalApproved = 0;
-      let totalRejected = 0;
-      let domain = 'yourdomain.com';
-      let remaining = 10;
-
-      // Try to get domain from user's submissions
-      const allSubmissions = [...loadPendingSubmissions(), ...loadApprovedData()];
-      if (allSubmissions.length > 0) {
-        try {
-          domain = new URL(allSubmissions[0].url).hostname;
-          const stats = getUserDomainStats(allSubmissions[0].url);
-          totalSubmitted = stats.total;
-          remaining = stats.remaining;
-        } catch (e) {}
-      }
-
-      // Count approved
-      const approvedData = loadApprovedData();
-      totalApproved = allSubmissions.filter(item => 
-        approvedData.some(approved => approved.url === item.url)
-      ).length;
-
-      // Count rejected from notifications
-      if (notifications[domain]) {
-        totalRejected = notifications[domain].filter(n => n.status === 'rejected').length;
-      }
-
-      // Update UI
-      document.getElementById('totalSubmitted').textContent = totalSubmitted;
-      document.getElementById('totalApproved').textContent = totalApproved;
-      document.getElementById('totalRejected').textContent = totalRejected;
-      document.getElementById('remaining').textContent = remaining;
-
-      // Show notifications
-      const notificationsList = document.getElementById('notificationsList');
-      const notificationsContainer = document.getElementById('userNotifications');
-      
-      if (notifications[domain] && notifications[domain].length > 0) {
-        notificationsContainer.style.display = 'block';
-        notificationsList.innerHTML = '';
-        
-        notifications[domain]
-          .sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp))
-          .forEach(notif => {
-            const div = document.createElement('div');
-            div.style.padding = '5px 0';
-            div.style.fontSize = '0.9em';
-            div.innerHTML = `
-              <strong>${new URL(notif.url).pathname === '/' ? new URL(notif.url).hostname : new URL(notif.url).pathname}</strong> 
-              <span style="color: ${
-              notif.status === 'approved' ? '#00aa00' : 
-              notif.status === 'rejected' ? '#d40000' : '#ff9900'
-              }; font-weight: bold;">
-              ${notif.status.toUpperCase()}
-        </span>
-          <div style="font-size: 0.8em; color: #666;">${new Date(notif.timestamp).toLocaleString()}</div>
-            ${notif.message ? `<div style="font-size: 0.9em; padding: 5px; background: rgba(255,255,255,0.1); border-radius: 4px;">💬 ${notif.message}</div>` : ''}
-           `;
-            notificationsList.appendChild(div);
-          });
-      } else {
-        notificationsContainer.style.display = 'none';
-      }
-    }
-
-    // =============================
-    // SUBMISSION HANDLER
-    // =============================
-    document.getElementById('submitForm')?.addEventListener('submit', (e) => {
-      e.preventDefault();
-
-      const title = document.getElementById('websiteTitle').value.trim();
-      const url = document.getElementById('websiteUrl').value.trim();
-      const desc = document.getElementById('websiteDesc').value.trim();
-      const tags = document.getElementById('websiteTags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
-
-      if (!title || !url) {
-        alert('Please enter a title and URL.');
-        return;
-      }
-
-      // Validate URL
-      let domain;
-      try {
-        domain = new URL(url).hostname;
-      } catch (e) {
-        alert('Please enter a valid URL (e.g., https://example.com)');
-        return;
-      }
-
-      // Check domain limit
-      const stats = getUserDomainStats(url);
-      
-      if (stats.total >= 10) {
-        alert(`❌ You've reached the limit of 10 submissions for ${domain}.`);
-        return;
-      }
-
-      const submission = {
-         title,
-         url,
-         description: desc,
-         tags: tags.length ? tags : ["general"],
-         submittedAt: new Date().toISOString(),
-         status: "pending",
-         submitterEmail: document.getElementById('submitterEmail').value.trim(),
-         adminMessage: "",
-         reviewedAt: null
-       };
-
-      let submissions = loadPendingSubmissions();
-      submissions.push(submission);
-      savePendingSubmissions(submissions);
-
-      document.getElementById('submitForm').reset();
-      alert(`✅ Submitted! ${stats.remaining - 1} submissions remaining for ${domain}.`);
-      
-      // Update dashboard
-      setTimeout(updateUserDashboard, 100);
-    });
-
-    // Initialize dashboard on load
-    window.addEventListener('load', updateUserDashboard);
   </script>
 </body>
 </html>
