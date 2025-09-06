@@ -173,5 +173,98 @@
       }
     };
   </script>
+  <script>
+// Visitor Tracking
+(function() {
+  // Get visitor info
+  const getVisitorInfo = () => {
+    return {
+      userAgent: navigator.userAgent,
+      browser: getBrowser(),
+      device: getDevice(),
+      referrer: document.referrer || 'Direct',
+      timestamp: new Date().toISOString(),
+      url: window.location.href,
+      pageTitle: document.title
+    };
+  };
+
+  // Get browser name
+  function getBrowser() {
+    const ua = navigator.userAgent;
+    if (ua.includes('Firefox')) return 'Firefox';
+    if (ua.includes('Chrome') && !ua.includes('Edg')) return 'Chrome';
+    if (ua.includes('Safari') && !ua.includes('Chrome')) return 'Safari';
+    if (ua.includes('Edg')) return 'Edge';
+    if (ua.includes('Opera') || ua.includes('OPR')) return 'Opera';
+    return 'Other';
+  }
+
+  // Get device type
+  function getDevice() {
+    const ua = navigator.userAgent;
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua)) {
+      return 'Mobile';
+    }
+    return 'Desktop';
+  }
+
+  // Get or create visitor ID
+  let visitorId = localStorage.getItem('niroboVisitorId');
+  if (!visitorId) {
+    visitorId = 'v' + Date.now() + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem('niroboVisitorId', visitorId);
+  }
+
+  // Track pageview
+  const trackPageview = async () => {
+    const info = getVisitorInfo();
+    
+    // Get country (free API - limited)
+    try {
+      const ipRes = await fetch('https://api.ipify.org?format=json');
+      const ipData = await ipRes.json();
+      const geoRes = await fetch(`https://ipapi.co/${ipData.ip}/json/`);
+      const geoData = await geoRes.json();
+      info.country = geoData.country_name || 'Unknown';
+      info.city = geoData.city || 'Unknown';
+    } catch (e) {
+      info.country = 'Unknown';
+      info.city = 'Unknown';
+    }
+
+    // Save to localStorage
+    const visits = JSON.parse(localStorage.getItem('niroboVisits') || '[]');
+    visits.push({
+      visitorId,
+      ...info
+    });
+    localStorage.setItem('niroboVisits', JSON.stringify(visits));
+
+    // Also track URL views (for submitters)
+    const url = window.location.href;
+    if (url.includes('search.html?q=')) {
+      const query = new URLSearchParams(window.location.search).get('q');
+      // Find matching results and increment view count
+      const allSubmissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+      allSubmissions.forEach(sub => {
+        if (sub.title.toLowerCase().includes(query) || 
+            sub.description.toLowerCase().includes(query) ||
+            (sub.tags && sub.tags.some(tag => tag.toLowerCase().includes(query)))) {
+          if (!sub.viewCount) sub.viewCount = 0;
+          sub.viewCount += 1;
+        }
+      });
+      localStorage.setItem('niroboAllSubmissions', JSON.stringify(allSubmissions));
+    }
+  };
+
+  // Track only once per session
+  if (!sessionStorage.getItem('niroboTracked')) {
+    trackPageview();
+    sessionStorage.setItem('niroboTracked', 'true');
+  }
+})();
+  </script>
 </body>
 </html>
