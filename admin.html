@@ -182,22 +182,21 @@
         const div = document.createElement('div');
         div.className = 'entry-item';
         div.innerHTML = `
-          <strong>${submission.title}</strong><br>
-          <a href="${submission.url}" target="_blank" style="color:#ff9999;">${submission.url}</a><br>
-          <em>${submission.description}</em><br>
-          <small>Tags: ${submission.tags.join(', ')}</small><br>
-          <small>Submitted: ${new Date(submission.submittedAt).toLocaleString()}</small><br>
-          <small>Domain: ${new URL(submission.url).hostname}</small><br>
-          <small>📧 Submitter: ${submission.submitterEmail}</small><br>
-          <div class="stats">User Stats: ${stats.total} submitted (${stats.approved} approved, ${stats.pending} pending)</div>
-          
-          <div class="entry-actions">
-            <textarea class="message-box" placeholder="Reason for approval (optional)"></textarea>
-            <button class="btn-approve" onclick="approveSubmission(${index}, this.parentElement.querySelector('textarea').value)">Approve</button>
-            
-            <textarea class="message-box" placeholder="Reason for rejection (optional)"></textarea>
-            <button class="btn-reject" onclick="rejectSubmission(${index}, this.parentElement.querySelector('textarea').value)">Reject</button>
-          </div>
+        <strong>${submission.title}</strong><br>
+        <a href="${submission.url}" target="_blank" style="color:#ff9999;">${submission.url}</a><br>
+        <em>${submission.description}</em><br>
+        <small>Tags: ${submission.tags.join(', ')}</small><br>
+        <small>Submitted: ${new Date(submission.submittedAt).toLocaleString()}</small><br>
+        <small>Domain: ${new URL(submission.url).hostname}</small><br>
+        <small>📧 Submitter: ${submission.submitterEmail}</small><br>
+  
+        <div style="margin-top: 15px;">
+        <textarea placeholder="Reason for approval (optional)" style="width: 100%; padding: 8px; margin: 5px 0; border-radius: 4px;"></textarea>
+        <button class="btn-approve" onclick="approveSubmission(${index}, this.previousElementSibling.value)">Approve</button>
+    
+        <textarea placeholder="Reason for rejection (optional)" style="width: 100%; padding: 8px; margin: 5px 0; border-radius: 4px;"></textarea>
+        <button class="btn-reject" onclick="rejectSubmission(${index}, this.previousElementSibling.value)">Reject</button>
+        </div>
         `;
         container.appendChild(div);
       });
