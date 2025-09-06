@@ -155,16 +155,24 @@
     <div class="card" onclick="window.location.href='chat.html'">Local AI Chat</div>
   </div>
 
-  <!-- Login Section -->
-  <div class="login-section">
-    <h3>Login to Add Your Website</h3>
-    <input id="emailInput" type="email" placeholder="Email" />
-    <input id="passwordInput" type="password" placeholder="Password" />
-    <br />
-    <button id="signup" type="button">Sign Up</button>
-    <button id="login" type="button">Log In</button>
-    <button id="googleLogin" type="button">Login with Google</button>
-  </div>
+  <!-- User Submission Form -->
+<div class="login-section">
+  <h3>Submit Your Website</h3>
+  <p>Help make Nirobo better by adding your website.</p>
+  
+  <form id="submitForm">
+    <input id="websiteTitle" type="text" placeholder="Website Title" required style="width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 4px;" />
+    <input id="websiteUrl" type="url" placeholder="https://yourwebsite.com" required style="width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 4px;" />
+    <textarea id="websiteDesc" placeholder="Description of your website" required style="width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 4px; height: 80px;"></textarea>
+    <input id="websiteTags" type="text" placeholder="Tags (comma separated): news, education, bangla" style="width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 4px;" />
+    
+    <button type="submit" style="background: #006400; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px;">Submit Website</button>
+  </form>
+
+  <p style="margin-top: 20px; font-size: 0.9em; color: #666;">
+    Submitted websites will be reviewed by Nirobo curators before appearing in search.
+  </p>
+</div>
 
   <!-- Admin Data Editor (Hidden by default) -->
 <div id="adminPanel" style="display:none; margin-top: 30px; padding: 20px; background: #fff; border-radius: 8px; color: #000;">
@@ -312,6 +320,53 @@ document.getElementById('login')?.addEventListener('click', () => {
 if (localStorage.getItem('niroboResults')) {
   displayEntries();
 }
+  </script>
+  <script>
+// Load pending submissions from localStorage
+function loadPendingSubmissions() {
+  const saved = localStorage.getItem('niroboPendingSubmissions');
+  return saved ? JSON.parse(saved) : [];
+}
+
+// Save pending submissions
+function savePendingSubmissions(submissions) {
+  localStorage.setItem('niroboPendingSubmissions', JSON.stringify(submissions));
+}
+
+// Handle form submission
+document.getElementById('submitForm')?.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const title = document.getElementById('websiteTitle').value.trim();
+  const url = document.getElementById('websiteUrl').value.trim();
+  const desc = document.getElementById('websiteDesc').value.trim();
+  const tags = document.getElementById('websiteTags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
+
+  if (!title || !url) {
+    alert('Please enter a title and URL.');
+    return;
+  }
+
+  // Create submission object
+  const submission = {
+    title,
+    url,
+    description: desc,
+    tags: tags.length ? tags : ["general"],
+    submittedAt: new Date().toISOString(),
+    status: "pending"
+  };
+
+  // Get existing submissions
+  let submissions = loadPendingSubmissions();
+  submissions.push(submission);
+  savePendingSubmissions(submissions);
+
+  // Reset form
+  document.getElementById('submitForm').reset();
+
+  alert('✅ Thank you! Your website has been submitted for review.');
+});
   </script>
 </body>
 </html>
