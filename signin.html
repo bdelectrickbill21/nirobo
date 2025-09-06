@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nirobo — Break The Silence</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #004d00, #006400);
+      color: #f5f5f5;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 500px;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      border: 2px solid #d40000;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .hero h1 {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .hero h1 span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .flag-icon {
+      background: #d40000;
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .hero p {
+      font-style: italic;
+      color: #ffcccc;
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+
+    .form-box {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 30px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+    }
+
+    .form-title {
+      text-align: center;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: #ffcccc;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #ffcccc;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d40000;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #ffcccc;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #d40000;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    button:hover {
+      background: #ff0000;
+    }
+
+    .switch-form {
+      text-align: center;
+      margin-top: 20px;
+      color: #ccc;
+    }
+
+    .switch-form a {
+      color: #ffcccc;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .switch-form a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="hero">
+      <h1><span><span class="flag-icon">🇧🇩</span> BREAK THE SILENCE</span></h1>
+      <p>
+        “Silence has never protected truth — your voice, your website, your story deserves to be heard.<br>
+        Don’t wait for permission. Don’t fear rejection. Rise. Speak. Submit. The digital soul of Bangladesh is being written — and you hold the pen.”
+      </p>
+    </div>
+
+    <!-- Login Form (Default) -->
+    <div id="loginBox" class="form-box">
+      <h2 class="form-title">Log In</h2>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="loginEmail" placeholder="Enter your email" required />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter your password" required />
+      </div>
+      <button id="loginBtn">Log In</button>
+      <div class="switch-form">
+        Don't have an account? <a href="#" id="showSignupLink">Sign Up</a>
+      </div>
+    </div>
+
+    <!-- Signup Form (Hidden by default) -->
+    <div id="signupBox" class="form-box" style="display: none;">
+      <h2 class="form-title">Sign Up</h2>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="signupEmail" placeholder="Enter your email" required />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="signupPassword" placeholder="Create a password" required />
+      </div>
+      <button id="signupBtn">Create Account</button>
+      <div class="switch-form">
+        Already have an account? <a href="#" id="showLoginLink">Log In</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // DOM Elements
+    const loginBox = document.getElementById('loginBox');
+    const signupBox = document.getElementById('signupBox');
+    const showSignupLink = document.getElementById('showSignupLink');
+    const showLoginLink = document.getElementById('showLoginLink');
+
+    // Toggle between forms
+    showSignupLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      loginBox.style.display = 'none';
+      signupBox.style.display = 'block';
+    });
+
+    showLoginLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      signupBox.style.display = 'none';
+      loginBox.style.display = 'block';
+    });
+
+    // Load users from localStorage
+    function loadUsers() {
+      return JSON.parse(localStorage.getItem('niroboUsers') || '[]');
+    }
+
+    function saveUsers(users) {
+      localStorage.setItem('niroboUsers', JSON.stringify(users));
+    }
+
+    // Hash password (simple for demo)
+    function hashPassword(password) {
+      return btoa(password);
+    }
+
+    // Sign Up Handler
+    document.getElementById('signupBtn').addEventListener('click', () => {
+      const email = document.getElementById('signupEmail').value.trim();
+      const password = document.getElementById('signupPassword').value;
+
+      if (!email || !password) {
+        alert('Please fill in all fields');
+        return;
+      }
+
+      const users = loadUsers();
+      if (users.some(user => user.email === email)) {
+        alert('User already exists');
+        return;
+      }
+
+      const newUser = {
+        id: Date.now().toString(),
+        email,
+        password: hashPassword(password),
+        createdAt: new Date().toISOString()
+      };
+
+      users.push(newUser);
+      saveUsers(users);
+      alert('Account created! Please log in.');
+
+      // Switch to login form
+      signupBox.style.display = 'none';
+      loginBox.style.display = 'block';
+      document.getElementById('loginEmail').value = email;
+    });
+
+    // Login Handler
+    document.getElementById('loginBtn').addEventListener('click', () => {
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+
+      if (!email || !password) {
+        alert('Please fill in all fields');
+        return;
+      }
+
+      const users = loadUsers();
+      const user = users.find(u => u.email === email && u.password === hashPassword(password));
+
+      if (!user) {
+        alert('Invalid email or password');
+        return;
+      }
+
+      // Save current user
+      localStorage.setItem('niroboCurrentUser', JSON.stringify(user));
+      alert('Welcome back! Redirecting to your dashboard...');
+
+      // Redirect to user dashboard (you can create dashboard.html later)
+      window.location.href = 'index.html';
+    });
+  </script>
+</body>
+</html>
