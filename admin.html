@@ -238,68 +238,98 @@
 
     // Approve submission
     function approveSubmission(index, adminMessage) {
-      const submissions = loadPendingSubmissions();
-      const submission = submissions[index];
+  // Load ALL submissions
+  const allSubmissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+  
+  // Get pending submissions (status: "pending")
+  const pending = allSubmissions.filter(sub => sub.status === "pending");
+  const submission = pending[index];
 
-      let approved = loadApprovedData();
-      approved.push({
-        ...submission,
-        approved: true,
-        reviewedAt: new Date().toISOString(),
-        adminMessage: adminMessage || "Thank you for your submission!"
-      });
+  if (!submission) {
+    alert('Submission not found');
+    return;
+  }
 
-      submissions.splice(index, 1);
-      savePendingSubmissions(submissions);
-      saveApprovedData(approved);
+  // Update this submission's status to "approved"
+  const submissionIndex = allSubmissions.findIndex(sub => sub.id === submission.id);
+  if (submissionIndex !== -1) {
+    allSubmissions[submissionIndex] = {
+      ...allSubmissions[submissionIndex],
+      status: "approved",
+      reviewedAt: new Date().toISOString(),
+      adminMessage: adminMessage || "Your submission has been approved!"
+    };
+  }
 
-      // Store notification for user
-      storeUserNotification(submission.url, 'approved', adminMessage || "Your submission has been approved!");
+  // Save back to localStorage
+  localStorage.setItem('niroboAllSubmissions', JSON.stringify(allSubmissions));
 
-      alert('✅ Approved! User will see your message when they visit.');
-      displayPending();
-      displayApproved();
+  // Notify user
+  storeUserNotification(submission.url, 'approved', adminMessage || "Your submission has been approved!", submission.submitterEmail);
+
+  alert('✅ Approved!');
+  displayPending();
+  displayApproved();
     }
 
     // Reject submission
     function rejectSubmission(index, adminMessage) {
-      const submissions = loadPendingSubmissions();
-      const submission = submissions[index];
+  const allSubmissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+  const pending = allSubmissions.filter(sub => sub.status === "pending");
+  const submission = pending[index];
 
-      submissions.splice(index, 1);
-      savePendingSubmissions(submissions);
+  if (!submission) {
+    alert('Submission not found');
+    return;
+  }
 
-      // Store notification for user
-      storeUserNotification(submission.url, 'rejected', adminMessage || "Sorry, your submission was not approved.");
+  const submissionIndex = allSubmissions.findIndex(sub => sub.id === submission.id);
+  if (submissionIndex !== -1) {
+    allSubmissions[submissionIndex] = {
+      ...allSubmissions[submissionIndex],
+      status: "rejected",
+      reviewedAt: new Date().toISOString(),
+      adminMessage: adminMessage || "Sorry, your submission was not approved."
+    };
+  }
 
-      alert('❌ Rejected. User will see your message when they visit.');
-      displayPending();
+  localStorage.setItem('niroboAllSubmissions', JSON.stringify(allSubmissions));
+
+  storeUserNotification(submission.url, 'rejected', adminMessage || "Sorry, your submission was not approved.", submission.submitterEmail);
+
+  alert('❌ Rejected!');
+  displayPending();
+  displayApproved();
     }
 
     // Unapprove (revoke) approved website
     function unapproveSubmission(index) {
-      const approved = loadApprovedData();
-      const revokedItem = approved[index];
+  const allSubmissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+  const approved = allSubmissions.filter(sub => sub.status === "approved");
+  const submission = approved[index];
 
-      // Move back to pending
-      let pending = loadPendingSubmissions();
-      pending.push({
-        ...revokedItem,
-        status: "pending",
-        reviewedAt: null,
-        adminMessage: "This approval was revoked by admin."
-      });
+  if (!submission) {
+    alert('Submission not found');
+    return;
+  }
 
-      approved.splice(index, 1);
-      saveApprovedData(approved);
-      savePendingSubmissions(pending);
+  const submissionIndex = allSubmissions.findIndex(sub => sub.id === submission.id);
+  if (submissionIndex !== -1) {
+    allSubmissions[submissionIndex] = {
+      ...allSubmissions[submissionIndex],
+      status: "pending",
+      reviewedAt: null,
+      adminMessage: "This approval was revoked by admin."
+    };
+  }
 
-      // Notify user
-      storeUserNotification(revokedItem.url, 'revoked', "Your previously approved website has been revoked for review.");
+  localStorage.setItem('niroboAllSubmissions', JSON.stringify(allSubmissions));
 
-      alert('⚠️ Unapproved! Website moved back to pending.');
-      displayApproved();
-      displayPending();
+  storeUserNotification(submission.url, 'revoked', "Your previously approved website has been revoked for review.", submission.submitterEmail);
+
+  alert('⚠️ Unapproved! Moved back to pending.');
+  displayApproved();
+  displayPending();
     }
 
     // Store notification for user
