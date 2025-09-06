@@ -273,6 +273,7 @@
           <p>${sub.description}</p>
           <p><small>Tags: ${sub.tags.join(', ')}</small></p>
           <p><small>Submitted: ${new Date(sub.submittedAt).toLocaleString()}</small></p>
+          ${sub.viewCount ? `<p><small>👁️ Views: ${sub.viewCount}</small></p>` : ''}
           ${sub.adminMessage ? `<div class="admin-message">💬 Admin Message: ${sub.adminMessage}</div>` : ''}
           <div class="actions">
             <button class="btn-delete" onclick="deleteSubmission('${sub.id}')">🗑️ Remove Submission</button>
