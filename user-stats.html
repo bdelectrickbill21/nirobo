@@ -153,6 +153,127 @@
     </footer>
   </div>
 
+  
+      if (Object.keys(countryStats).length > 0) {
+        html += `<h4>🌍 Top Countries</h4><div class="chart" id="countryChart-${sub.id}"></div>`;
+      }
+      
+      if (Object.keys(browserStats).length > 0) {
+        html += `<h4>💻 Top Browsers</h4><div class="chart" id="browserChart-${sub.id}"></div>`;
+      }
+      
+      if (Object.keys(osStats).length > 0) {
+        html += `<h4>📱 Top Operating Systems</h4><div class="chart" id="osChart-${sub.id}"></div>`;
+      }
+      
+      html += `</div>`;
+    });
+
+    html += `</div>`;
+    container.innerHTML = html;
+
+    // Create time-based chart
+    createViewsChart(userSubmissions, visits);
+    
+    // Create charts for each URL
+    userSubmissions.forEach(sub => {
+      const countryStats = {};
+      const browserStats = {};
+      const osStats = {};
+      
+      visits.forEach(visit => {
+        if (visit.url.includes('search.html?q=')) {
+          const url = new URL(visit.url);
+          const q = url.searchParams.get('q');
+          if (q && (sub.title.toLowerCase().includes(q) || 
+                   sub.description.toLowerCase().includes(q) ||
+                   (sub.tags && sub.tags.some(tag => tag.toLowerCase().includes(q))))) {
+            countryStats[visit.country] = (countryStats[visit.country] || 0) + 1;
+            browserStats[visit.browser] = (browserStats[visit.browser] || 0) + 1;
+            const os = getOS(visit.userAgent);
+            osStats[os] = (osStats[os] || 0) + 1;
+          }
+        }
+      });
+      
+      if (Object.keys(countryStats).length > 0) {
+        createCountryChart(`countryChart-${sub.id}`, countryStats);
+      }
+      
+      if (Object.keys(browserStats).length > 0) {
+        createBrowserChart(`browserChart-${sub.id}`, browserStats);
+      }
+      
+      if (Object.keys(osStats).length > 0) {
+        createOSChart(`osChart-${sub.id}`, osStats);
+      }
+    });
+  } catch (e) {
+    console.error('Error loading analytics:', e);
+    document.getElementById('userStatsContent').innerHTML = `
+      <div style="text-align: center; color: #ff9999; padding: 50px;">
+        <h3>❌ Error Loading Analytics</h3>
+        <p>Please refresh the page or contact support.</p>
+      </div>
+    
+        },
+        scales: {
+          x: {
+            grid: {
+              color: 'rgba(255, 255, 255, 0.1)'
+            },
+            ticks: {
+              color: '#fff'
+            }
+          },
+          y: {
+            beginAtZero: true,
+            grid: {
+              color: 'rgba(255, 255, 255, 0.1)'
+            },
+            ticks: {
+              color: '#fff'
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // Set up filter buttons
+  document.querySelectorAll('.time-filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.time-filter-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      updateChart(this.getAttribute('data-range'));
+    });
+  });
+
+  // Initialize with 24h
+  updateChart('24h');
+}
+
+// Create Country Chart
+function createCountryChart(containerId, data) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  
+  container.innerHTML = '';
+  
+  const sorted = Object.entries(data).sort((a,b) => b[1] - a[1]).slice(0, 5);
+  const maxCount = sorted.length > 0 ? sorted[0][1] : 1;
+
+  sorted.forEach(([label, count]) => {
+    const item = document.createElement('div');
+    item.className = 'chart-item';
+    const percentage = (count / maxCount) * 100;
+    item.innerHTML = `
+      <span>${label}</span>
+      <div style="display: flex; align-items: center; width: 100%;">
+        <span style="width: 60px; text-align: right; margin-right: 10px;">${count}</span>
+        <div class="chart-bar" style="width: ${percentage}%;"></div>
+      </div>
+
   <script>
 // Check if user is logged in
 const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser') || 'null');
