@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nirobo — Analytics Dashboard</title>
+  <title>Nirobo — Admin Analytics Dashboard</title>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -59,28 +61,30 @@
       margin: 15px 0;
     }
 
-    .chart {
-      height: 200px;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 8px;
-      padding: 15px;
-      margin-top: 20px;
+    .chart-container {
+      height: 300px;
+      margin: 20px 0;
     }
 
-    .chart-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-      font-size: 0.95rem;
+    .time-filter-btn {
+      background: #006400;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      margin: 5px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.3s;
     }
 
-    .chart-bar {
-      height: 12px;
+    .time-filter-btn:hover {
+      background: #008000;
+    }
+
+    .time-filter-btn.active {
       background: #d40000;
-      border-radius: 3px;
-      margin-left: 10px;
-      flex-grow: 1;
+      color: white;
     }
 
     .popular-searches, .popular-urls {
@@ -138,73 +142,108 @@
 <body>
   <div class="container">
     <header>
-      <h1>📊 NIROBO ANALYTICS DASHBOARD</h1>
+      <h1>📊 NIROBO ADMIN ANALYTICS DASHBOARD</h1>
       <p>“Data is the silent voice of your audience — listen carefully.”</p>
     </header>
 
-    <!-- Summary Stats -->
-    <div class="stats-grid">
-      <div class="stat-card">
-        <h2>📈 Total Pageviews</h2>
-        <div class="stat-number" id="totalPageviews">0</div>
-        <p>Across all pages</p>
-      </div>
-
-      <div class="stat-card">
-        <h2>👥 Unique Visitors</h2>
-        <div class="stat-number" id="uniqueVisitors">0</div>
-        <p>Individual users</p>
-      </div>
-
-      <div class="stat-card">
-        <h2>🌍 Top Country</h2>
-        <div class="stat-number" id="topCountry">-</div>
-        <p>Most visits from</p>
-      </div>
-
-      <div class="stat-card">
-        <h2>📱 Top Browser</h2>
-        <div class="stat-number" id="topBrowser">-</div>
-        <p>Most used browser</p>
-      </div>
+    <!-- Admin Check -->
+    <div id="adminCheck" style="text-align: center; padding: 50px;">
+      <p>Checking admin access...</p>
     </div>
 
-    <!-- Charts -->
-    <div class="stats-grid">
+    <!-- Main Content (Hidden until admin verified) -->
+    <div id="mainContent" style="display: none;">
+      <!-- Time Filter Buttons -->
+      <div style="text-align: center; margin: 20px 0;">
+        <button class="time-filter-btn active" data-range="24h">Last 24 Hours</button>
+        <button class="time-filter-btn" data-range="7d">Last 7 Days</button>
+        <button class="time-filter-btn" data-range="30d">Last 30 Days</button>
+        <button class="time-filter-btn" data-range="3m">Last 3 Months</button>
+        <button class="time-filter-btn" data-range="6m">Last 6 Months</button>
+        <button class="time-filter-btn" data-range="12m">Last 12 Months</button>
+        <button class="time-filter-btn" data-range="all">Everything</button>
+      </div>
+
+      <!-- Views Over Time Chart -->
       <div class="stat-card">
-        <h2>🌐 Countries</h2>
-        <div class="chart" id="countryChart"></div>
+        <h2>📈 Views Over Time</h2>
+        <div class="chart-container">
+          <canvas id="viewsChart"></canvas>
+        </div>
       </div>
 
-      <div class="stat-card">
-        <h2>💻 Browsers</h2>
-        <div class="chart" id="browserChart"></div>
+      <!-- Summary Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h2>📈 Total Pageviews</h2>
+          <div class="stat-number" id="totalPageviews">0</div>
+          <p>Across all pages</p>
+        </div>
+
+        <div class="stat-card">
+          <h2>👥 Unique Visitors</h2>
+          <div class="stat-number" id="uniqueVisitors">0</div>
+          <p>Individual users</p>
+        </div>
+
+        <div class="stat-card">
+          <h2>🌍 Top Country</h2>
+          <div class="stat-number" id="topCountry">-</div>
+          <p>Most visits from</p>
+        </div>
+
+        <div class="stat-card">
+          <h2>📱 Top Browser</h2>
+          <div class="stat-number" id="topBrowser">-</div>
+          <p>Most used browser</p>
+        </div>
       </div>
 
-      <div class="stat-card">
-        <h2>📲 Devices</h2>
-        <div class="chart" id="deviceChart"></div>
+      <!-- Additional Charts -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h2>🔗 Top Referrers</h2>
+          <div class="chart-container">
+            <canvas id="referrerChart"></canvas>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <h2>💻 Top Browsers</h2>
+          <div class="chart-container">
+            <canvas id="browserChart"></canvas>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <h2>📲 Operating Systems</h2>
+          <div class="chart-container">
+            <canvas id="osChart"></canvas>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <h2>🌐 Top Countries</h2>
+          <div class="chart-container">
+            <canvas id="countryChart"></canvas>
+          </div>
+        </div>
       </div>
 
-      <div class="stat-card">
-        <h2>🔗 Referrers</h2>
-        <div class="chart" id="referrerChart"></div>
+      <!-- Popular Searches -->
+      <div class="popular-searches">
+        <h2>🔥 Popular Search Terms</h2>
+        <div id="popularSearchesList">
+          <p>No search data yet.</p>
+        </div>
       </div>
-    </div>
 
-    <!-- Popular Searches -->
-    <div class="popular-searches">
-      <h2>🔥 Popular Search Terms</h2>
-      <div id="popularSearchesList">
-        <p>No search data yet.</p>
-      </div>
-    </div>
-
-    <!-- Popular URLs -->
-    <div class="popular-urls">
-      <h2>🚀 Popular Submitted URLs</h2>
-      <div id="popularUrlsList">
-        <p>No URL view data yet.</p>
+      <!-- Popular URLs -->
+      <div class="popular-urls">
+        <h2>🚀 Popular Submitted URLs</h2>
+        <div id="popularUrlsList">
+          <p>No URL view data yet.</p>
+        </div>
       </div>
     </div>
 
@@ -212,11 +251,24 @@
       Made in Bangladesh 🇧🇩 | Curated by Nirobo<br>
       Honoring the Language Movement and the Silent Legacy of Justice<br>
       Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity<br>
-      <a href="index.html">← Back to Nirobo</a>
+      <a href="admin.html">← Back to Admin Panel</a>
     </footer>
   </div>
 
   <script>
+    // Check if user is admin
+    function checkAdminAccess() {
+      const adminPass = localStorage.getItem('niroboAdminPass');
+      if (adminPass === 'nirobo') {
+        document.getElementById('adminCheck').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'block';
+        loadAnalytics();
+      } else {
+        alert('⛔ Admin access required. Please log in via admin panel.');
+        window.location.href = 'admin.html';
+      }
+    }
+
     // Load analytics data
     function loadAnalytics() {
       const visits = JSON.parse(localStorage.getItem('niroboVisits') || '[]');
@@ -248,27 +300,14 @@
         document.getElementById('topBrowser').textContent = `${topBrowser[0]} (${topBrowser[1]})`;
       }
 
-      // Render Charts
-      renderChart('countryChart', countryStats, 10);
-      renderChart('browserChart', browserStats, 5);
-      
-      // Device Stats
-      const deviceStats = {};
-      visits.forEach(v => {
-        deviceStats[v.device] = (deviceStats[v.device] || 0) + 1;
-      });
-      renderChart('deviceChart', deviceStats, 3);
-
-      // Referrer Stats
-      const referrerStats = {};
-      visits.forEach(v => {
-        const ref = v.referrer === '' ? 'Direct' : new URL(v.referrer).hostname;
-        referrerStats[ref] = (referrerStats[ref] || 0) + 1;
-      });
-      renderChart('referrerChart', referrerStats, 5);
+      // Create charts
+      createViewsChart(visits);
+      createReferrerChart(visits);
+      createBrowserChart(visits);
+      createOSChart(visits);
+      createCountryChart(visits);
 
       // Popular Searches
-      const searchParams = new URLSearchParams(window.location.search);
       const searchTerms = {};
       visits.forEach(v => {
         if (v.url.includes('search.html?q=')) {
@@ -304,7 +343,6 @@
       if (allSubmissions.length === 0) {
         popularUrlsList.innerHTML = '<p>No URL view data yet.</p>';
       } else {
-        // Sort by viewCount
         const sortedUrls = allSubmissions
           .filter(sub => sub.viewCount > 0)
           .sort((a,b) => (b.viewCount || 0) - (a.viewCount || 0))
@@ -327,36 +365,285 @@
       }
     }
 
-    // Render Chart
-    function renderChart(containerId, data, maxItems) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = '';
+    // Create Views Over Time Chart
+    function createViewsChart(visits) {
+      const ctx = document.getElementById('viewsChart').getContext('2d');
+      let chart = null;
 
-      if (Object.keys(data).length === 0) {
-        container.innerHTML = '<p>No data available</p>';
-        return;
+      function updateChart(range) {
+        const now = new Date();
+        let filteredVisits = visits;
+        
+        if (range !== 'all') {
+          const hours = {
+            '24h': 24,
+            '7d': 7 * 24,
+            '30d': 30 * 24,
+            '3m': 90 * 24,
+            '6m': 180 * 24,
+            '12m': 365 * 24
+          }[range];
+          
+          const cutoff = new Date(now.getTime() - hours * 60 * 60 * 1000);
+          filteredVisits = visits.filter(v => new Date(v.timestamp) >= cutoff);
+        }
+
+        // Group by time period
+        const grouped = {};
+        filteredVisits.forEach(visit => {
+          const date = new Date(visit.timestamp);
+          let key;
+          
+          if (range === '24h') {
+            key = `${date.getHours()}:00`;
+          } else {
+            key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+          }
+          
+          grouped[key] = (grouped[key] || 0) + 1;
+        });
+
+        // Sort keys
+        const sortedKeys = Object.keys(grouped).sort();
+        const data = sortedKeys.map(key => grouped[key]);
+
+        // Destroy previous chart
+        if (chart) {
+          chart.destroy();
+        }
+
+        // Create new chart
+        chart = new Chart(ctx, {
+          type: 'line',
+           {
+            labels: sortedKeys,
+            datasets: [{
+              label: 'Pageviews',
+              data: data,
+              borderColor: '#d40000',
+              backgroundColor: 'rgba(212, 0, 0, 0.1)',
+              borderWidth: 2,
+              fill: true,
+              tension: 0.4
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            scales: {
+              x: {
+                grid: {
+                  color: 'rgba(255, 255, 255, 0.1)'
+                },
+                ticks: {
+                  color: '#fff'
+                }
+              },
+              y: {
+                beginAtZero: true,
+                grid: {
+                  color: 'rgba(255, 255, 255, 0.1)'
+                },
+                ticks: {
+                  color: '#fff'
+                }
+              }
+            }
+          }
+        });
       }
 
-      const sorted = Object.entries(data).sort((a,b) => b[1] - a[1]).slice(0, maxItems);
-      const maxCount = sorted[0][1];
+      // Set up filter buttons
+      document.querySelectorAll('.time-filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.time-filter-btn').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          updateChart(this.getAttribute('data-range'));
+        });
+      });
 
-      sorted.forEach(([label, count]) => {
-        const item = document.createElement('div');
-        item.className = 'chart-item';
-        const percentage = (count / maxCount) * 100;
-        item.innerHTML = `
-          <span>${label}</span>
-          <div style="display: flex; align-items: center; width: 100%;">
-            <span style="width: 60px; text-align: right; margin-right: 10px;">${count}</span>
-            <div class="chart-bar" style="width: ${percentage}%;"></div>
-          </div>
-        `;
-        container.appendChild(item);
+      // Initialize with 24h
+      updateChart('24h');
+    }
+
+    // Create Referrer Chart
+    function createReferrerChart(visits) {
+      const ctx = document.getElementById('referrerChart').getContext('2d');
+      const referrerData = {};
+      visits.forEach(v => {
+        const ref = v.referrer === '' ? 'Direct' : new URL(v.referrer).hostname;
+        referrerData[ref] = (referrerData[ref] || 0) + 1;
+      });
+      
+      new Chart(ctx, {
+        type: 'bar',
+         {
+          labels: Object.keys(referrerData).slice(0, 5),
+          datasets: [{
+             Object.values(referrerData).slice(0, 5),
+            backgroundColor: '#d40000'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            x: {
+              grid: {
+                color: 'rgba(255, 255, 255, 0.1)'
+              },
+              ticks: {
+                color: '#fff'
+              }
+            },
+            y: {
+              beginAtZero: true,
+              grid: {
+                color: 'rgba(255, 255, 255, 0.1)'
+              },
+              ticks: {
+                color: '#fff'
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Create Browser Chart
+    function createBrowserChart(visits) {
+      const ctx = document.getElementById('browserChart').getContext('2d');
+      const browserData = {};
+      visits.forEach(v => {
+        browserData[v.browser] = (browserData[v.browser] || 0) + 1;
+      });
+      
+      new Chart(ctx, {
+        type: 'doughnut',
+         {
+          labels: Object.keys(browserData),
+          datasets: [{
+             Object.values(browserData),
+            backgroundColor: ['#d40000', '#006400', '#0000ff', '#ffa500', '#800080']
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: {
+                color: '#fff'
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Create OS Chart
+    function createOSChart(visits) {
+      const ctx = document.getElementById('osChart').getContext('2d');
+      
+      // OS detection
+      function getOS(userAgent) {
+        if (/Windows/i.test(userAgent)) return 'Windows';
+        if (/Mac/i.test(userAgent)) return 'MacOS';
+        if (/Linux/i.test(userAgent)) return 'Linux';
+        if (/Android/i.test(userAgent)) return 'Android';
+        if (/iPhone|iPad|iPod/i.test(userAgent)) return 'iOS';
+        return 'Other';
+      }
+
+      const osData = {};
+      visits.forEach(v => {
+        const os = getOS(v.userAgent);
+        osData[os] = (osData[os] || 0) + 1;
+      });
+      
+      new Chart(ctx, {
+        type: 'pie',
+         {
+          labels: Object.keys(osData),
+          datasets: [{
+             Object.values(osData),
+            backgroundColor: ['#d40000', '#006400', '#0000ff', '#ffa500', '#800080', '#ff00ff']
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: {
+                color: '#fff'
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Create Country Chart
+    function createCountryChart(visits) {
+      const ctx = document.getElementById('countryChart').getContext('2d');
+      const countryData = {};
+      visits.forEach(v => {
+        countryData[v.country] = (countryData[v.country] || 0) + 1;
+      });
+      
+      new Chart(ctx, {
+        type: 'bar',
+         {
+          labels: Object.keys(countryData).slice(0, 5),
+          datasets: [{
+             Object.values(countryData).slice(0, 5),
+            backgroundColor: '#006400'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            x: {
+              grid: {
+                color: 'rgba(255, 255, 255, 0.1)'
+              },
+              ticks: {
+                color: '#fff'
+              }
+            },
+            y: {
+              beginAtZero: true,
+              grid: {
+                color: 'rgba(255, 255, 255, 0.1)'
+              },
+              ticks: {
+                color: '#fff'
+              }
+            }
+          }
+        }
       });
     }
 
     // Initialize
-    loadAnalytics();
+    checkAdminAccess();
   </script>
 </body>
 </html>
