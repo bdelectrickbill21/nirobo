@@ -256,6 +256,18 @@
   </div>
 
     <script>
+try {
+  // ... all your existing code ...
+} catch (e) {
+  console.error('Error loading analytics:', e);
+  document.getElementById('userStatsContent').innerHTML = `
+    <div style="text-align: center; color: #ff9999; padding: 50px;">
+      <h3>❌ Error Loading Analytics</h3>
+      <p>Please refresh the page or contact support.</p>
+    </div>
+  `;
+}
+      
 // Check if user is logged in
 const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser') || 'null');
 if (!currentUser) {
