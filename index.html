@@ -236,30 +236,5 @@
   });
 })();
 </script>
-  <script>
-// Force login for testing
-function forceLogin() {
-  // Set test user as logged in
-  localStorage.setItem('niroboCurrentUser', JSON.stringify({
-    id: 'test-user',
-    email: 'user@example.com',
-    password: 'test'
-  }));
-
-  // Set admin access
-  localStorage.setItem('niroboAdminPass', 'nirobo');
-
-  alert('✅ Forced login! Go to user-stats.html or admin-stats.html to see analytics.');
-}
-
-// Add button to trigger forced login
-document.body.insertAdjacentHTML('beforeend', `
-  <div style="position: fixed; bottom: 20px; left: 20px; z-index: 1000;">
-    <button onclick="forceLogin()" style="background: #006400; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer;">
-      🔑 Force Login
-    </button>
-  </div>
-`);
-  </script>
 </body>
 </html>
