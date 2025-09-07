@@ -154,6 +154,77 @@
   </div>
 
   <script>
+    // Add test data for user analytics
+function addTestDataForUser() {
+  // Set test user as logged in
+  localStorage.setItem('niroboCurrentUser', JSON.stringify({
+    id: 'test-user',
+    email: 'user@example.com',
+    password: 'test'
+  }));
+
+  // Add test submissions with views
+  const testSubmissions = [
+    {
+      id: '1',
+      userId: 'test-user',
+      title: 'Prothom Alo',
+      url: 'https://prothomalo.com',
+      description: 'Bangladesh\'s most popular newspaper',
+      tags: ['news', 'media', 'bangla'],
+      submittedAt: new Date().toISOString(),
+      status: 'approved',
+      viewCount: 150,
+      submitterEmail: 'user@example.com'
+    },
+    {
+      id: '2',
+      userId: 'test-user',
+      title: 'bKash',
+      url: 'https://www.bkash.com.bd',
+      description: 'Mobile financial service',
+      tags: ['finance', 'mobile', 'payment'],
+      submittedAt: new Date().toISOString(),
+      status: 'approved',
+      viewCount: 89,
+      submitterEmail: 'user@example.com'
+    }
+  ];
+
+  localStorage.setItem('niroboAllSubmissions', JSON.stringify(testSubmissions));
+
+  // Add test visits
+  const testVisits = [
+    {
+      visitorId: 'test1',
+      timestamp: new Date().toISOString(),
+      url: 'https://yoursite.com/search.html?q=prothom',
+      country: 'Bangladesh',
+      browser: 'Chrome',
+      device: 'Desktop',
+      referrer: 'Direct'
+    },
+    {
+      visitorId: 'test2',
+      timestamp: new Date(Date.now() - 86400000).toISOString(), // 24h ago
+      url: 'https://yoursite.com/search.html?q=bkash',
+      country: 'Bangladesh',
+      browser: 'Firefox',
+      device: 'Mobile',
+      referrer: 'https://google.com'
+    }
+  ];
+
+  localStorage.setItem('niroboVisits', JSON.stringify(testVisits));
+
+  alert('✅ Test data added for user analytics!');
+}
+
+// Auto-add test data if no user is logged in
+const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser') || 'null');
+if (!currentUser) {
+  addTestDataForUser();
+}
     // Check if user is logged in
     const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser') || 'null');
     if (!currentUser) {
