@@ -255,395 +255,382 @@
     </footer>
   </div>
 
-  <script>
-    // Check if user is admin
-    function checkAdminAccess() {
-      const adminPass = localStorage.getItem('niroboAdminPass');
-      if (adminPass === 'nirobo') {
-        document.getElementById('adminCheck').style.display = 'none';
-        document.getElementById('mainContent').style.display = 'block';
-        loadAnalytics();
-      } else {
-        alert('⛔ Admin access required. Please log in via admin panel.');
-        window.location.href = 'admin.html';
-      }
+    <script>
+// Check if user is logged in
+const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser') || 'null');
+if (!currentUser) {
+  alert('Please log in first.');
+  window.location.href = 'signup.html';
+}
+
+// Load user's submissions and their analytics
+function loadUserStats() {
+  try {
+    const allSubmissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+    const userSubmissions = allSubmissions.filter(sub => sub.userId === currentUser.id);
+    
+    const visits = JSON.parse(localStorage.getItem('niroboVisits') || '[]');
+    
+    const container = document.getElementById('userStatsContent');
+    
+    if (userSubmissions.length === 0) {
+      container.innerHTML = '<p>You haven\'t submitted any URLs yet.</p>';
+      return;
     }
 
-    // Load analytics data
-    function loadAnalytics() {
-      const visits = JSON.parse(localStorage.getItem('niroboVisits') || '[]');
-      const allSubmissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+    // Calculate total views for user's URLs
+    let totalViews = 0;
+    userSubmissions.forEach(sub => {
+      totalViews += sub.viewCount || 0;
+    });
 
-      // Summary Stats
-      document.getElementById('totalPageviews').textContent = visits.length;
+    let html = `
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h2>📈 Total Views</h2>
+          <div class="stat-number">${totalViews}</div>
+          <p>Across all your URLs</p>
+        </div>
+      </div>
       
-      const uniqueVisitors = new Set(visits.map(v => v.visitorId)).size;
-      document.getElementById('uniqueVisitors').textContent = uniqueVisitors;
+      <!-- Time Filter Buttons -->
+      <div style="text-align: center; margin: 20px 0;">
+        <button class="time-filter-btn active" data-range="24h">Last 24 Hours</button>
+        <button class="time-filter-btn" data-range="7d">Last 7 Days</button>
+        <button class="time-filter-btn" data-range="30d">Last 30 Days</button>
+        <button class="time-filter-btn" data-range="3m">Last 3 Months</button>
+        <button class="time-filter-btn" data-range="6m">Last 6 Months</button>
+        <button class="time-filter-btn" data-range="12m">Last 12 Months</button>
+        <button class="time-filter-btn" data-range="all">Everything</button>
+      </div>
 
-      // Top Country
+      <!-- Views Over Time Chart -->
+      <div class="stat-card">
+        <h2>📈 Views Over Time</h2>
+        <div class="chart-container">
+          <canvas id="viewsChart"></canvas>
+        </div>
+      </div>
+      
+      <div class="url-list">
+        <h2>🚀 Your Submitted URLs</h2>
+    `;
+
+    userSubmissions.forEach(sub => {
+      // Get views for this specific URL
+      const urlViews = sub.viewCount || 0;
+      
+      // Get country stats for visits to search results that matched this URL
       const countryStats = {};
-      visits.forEach(v => {
-        countryStats[v.country] = (countryStats[v.country] || 0) + 1;
-      });
-      const topCountry = Object.entries(countryStats).sort((a,b) => b[1] - a[1])[0];
-      if (topCountry) {
-        document.getElementById('topCountry').textContent = `${topCountry[0]} (${topCountry[1]})`;
-      }
-
-      // Top Browser
       const browserStats = {};
-      visits.forEach(v => {
-        browserStats[v.browser] = (browserStats[v.browser] || 0) + 1;
-      });
-      const topBrowser = Object.entries(browserStats).sort((a,b) => b[1] - a[1])[0];
-      if (topBrowser) {
-        document.getElementById('topBrowser').textContent = `${topBrowser[0]} (${topBrowser[1]})`;
-      }
-
-      // Create charts
-      createViewsChart(visits);
-      createReferrerChart(visits);
-      createBrowserChart(visits);
-      createOSChart(visits);
-      createCountryChart(visits);
-
-      // Popular Searches
-      const searchTerms = {};
-      visits.forEach(v => {
-        if (v.url.includes('search.html?q=')) {
-          const url = new URL(v.url);
+      const osStats = {};
+      
+      visits.forEach(visit => {
+        if (visit.url.includes('search.html?q=')) {
+          const url = new URL(visit.url);
           const q = url.searchParams.get('q');
-          if (q) {
-            searchTerms[q] = (searchTerms[q] || 0) + 1;
+          if (q && (sub.title.toLowerCase().includes(q) || 
+                   sub.description.toLowerCase().includes(q) ||
+                   (sub.tags && sub.tags.some(tag => tag.toLowerCase().includes(q))))) {
+            countryStats[visit.country] = (countryStats[visit.country] || 0) + 1;
+            browserStats[visit.browser] = (browserStats[visit.browser] || 0) + 1;
+            
+            // OS detection
+            const os = getOS(visit.userAgent);
+            osStats[os] = (osStats[os] || 0) + 1;
           }
         }
       });
 
-      const popularSearchesList = document.getElementById('popularSearchesList');
-      if (Object.keys(searchTerms).length === 0) {
-        popularSearchesList.innerHTML = '<p>No search data yet.</p>';
+      html += `
+        <div class="url-item">
+          <div class="url-title">${sub.title}</div>
+          <p><strong>URL:</strong> ${sub.url}</p>
+          <p><strong>Views:</strong> ${urlViews}</p>
+          <p><strong>Status:</strong> <span style="color: ${
+            sub.status === 'approved' ? '#00aa00' : 
+            sub.status === 'rejected' ? '#d40000' : '#ff9900'
+          }">${sub.status.toUpperCase()}</span></p>
+      `;
+
+      if (Object.keys(countryStats).length > 0) {
+        html += `<h4>🌍 Top Countries</h4><div class="chart" id="countryChart-${sub.id}"></div>`;
+      }
+      
+      if (Object.keys(browserStats).length > 0) {
+        html += `<h4>💻 Top Browsers</h4><div class="chart" id="browserChart-${sub.id}"></div>`;
+      }
+      
+      if (Object.keys(osStats).length > 0) {
+        html += `<h4>📱 Top Operating Systems</h4><div class="chart" id="osChart-${sub.id}"></div>`;
+      }
+      
+      html += `</div>`;
+    });
+
+    html += `</div>`;
+    container.innerHTML = html;
+
+    // Create time-based chart
+    createViewsChart(userSubmissions, visits);
+    
+    // Create charts for each URL
+    userSubmissions.forEach(sub => {
+      const countryStats = {};
+      const browserStats = {};
+      const osStats = {};
+      
+      visits.forEach(visit => {
+        if (visit.url.includes('search.html?q=')) {
+          const url = new URL(visit.url);
+          const q = url.searchParams.get('q');
+          if (q && (sub.title.toLowerCase().includes(q) || 
+                   sub.description.toLowerCase().includes(q) ||
+                   (sub.tags && sub.tags.some(tag => tag.toLowerCase().includes(q))))) {
+            countryStats[visit.country] = (countryStats[visit.country] || 0) + 1;
+            browserStats[visit.browser] = (browserStats[visit.browser] || 0) + 1;
+            const os = getOS(visit.userAgent);
+            osStats[os] = (osStats[os] || 0) + 1;
+          }
+        }
+      });
+      
+      if (Object.keys(countryStats).length > 0) {
+        createCountryChart(`countryChart-${sub.id}`, countryStats);
+      }
+      
+      if (Object.keys(browserStats).length > 0) {
+        createBrowserChart(`browserChart-${sub.id}`, browserStats);
+      }
+      
+      if (Object.keys(osStats).length > 0) {
+        createOSChart(`osChart-${sub.id}`, osStats);
+      }
+    });
+  } catch (e) {
+    console.error('Error loading analytics:', e);
+    document.getElementById('userStatsContent').innerHTML = `
+      <div style="text-align: center; color: #ff9999; padding: 50px;">
+        <h3>❌ Error Loading Analytics</h3>
+        <p>Please refresh the page or contact support.</p>
+      </div>
+    `;
+  }
+}
+
+// Create Views Over Time Chart
+function createViewsChart(userSubmissions, allVisits) {
+  const ctx = document.getElementById('viewsChart').getContext('2d');
+  let chart = null;
+
+  function updateChart(range) {
+    const now = new Date();
+    let filteredVisits = [];
+    
+    // Get all visits that matched any of the user's URLs
+    allVisits.forEach(visit => {
+      if (visit.url.includes('search.html?q=')) {
+        const url = new URL(visit.url);
+        const q = url.searchParams.get('q');
+        if (q) {
+          // Check if this search matched any of the user's URLs
+          const matched = userSubmissions.some(sub => 
+            sub.title.toLowerCase().includes(q) || 
+            sub.description.toLowerCase().includes(q) ||
+            (sub.tags && sub.tags.some(tag => tag.toLowerCase().includes(q)))
+          );
+          if (matched) {
+            filteredVisits.push(visit);
+          }
+        }
+      }
+    });
+    
+    // Filter by time range
+    if (range !== 'all') {
+      const hours = {
+        '24h': 24,
+        '7d': 7 * 24,
+        '30d': 30 * 24,
+        '3m': 90 * 24,
+        '6m': 180 * 24,
+        '12m': 365 * 24
+      }[range];
+      
+      const cutoff = new Date(now.getTime() - hours * 60 * 60 * 1000);
+      filteredVisits = filteredVisits.filter(v => new Date(v.timestamp) >= cutoff);
+    }
+
+    // Group by time period
+    const grouped = {};
+    filteredVisits.forEach(visit => {
+      const date = new Date(visit.timestamp);
+      let key;
+      
+      if (range === '24h') {
+        key = `${date.getHours()}:00`;
       } else {
-        popularSearchesList.innerHTML = '';
-        Object.entries(searchTerms)
-          .sort((a,b) => b[1] - a[1])
-          .slice(0, 10)
-          .forEach(([term, count]) => {
-            const div = document.createElement('div');
-            div.className = 'search-item';
-            div.innerHTML = `
-              <span class="search-term">${term}</span>
-              <span class="search-count">${count} views</span>
-            `;
-            popularSearchesList.appendChild(div);
-          });
+        key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
       }
-
-      // Popular URLs
-      const popularUrlsList = document.getElementById('popularUrlsList');
-      if (allSubmissions.length === 0) {
-        popularUrlsList.innerHTML = '<p>No URL view data yet.</p>';
-      } else {
-        const sortedUrls = allSubmissions
-          .filter(sub => sub.viewCount > 0)
-          .sort((a,b) => (b.viewCount || 0) - (a.viewCount || 0))
-          .slice(0, 10);
-
-        if (sortedUrls.length === 0) {
-          popularUrlsList.innerHTML = '<p>No URL views recorded yet.</p>';
-        } else {
-          popularUrlsList.innerHTML = '';
-          sortedUrls.forEach(sub => {
-            const div = document.createElement('div');
-            div.className = 'url-item';
-            div.innerHTML = `
-              <span class="url-title">${sub.title}</span>
-              <span class="url-views">${sub.viewCount} views</span>
-            `;
-            popularUrlsList.appendChild(div);
-          });
-        }
-      }
-    }
-
-    // Create Views Over Time Chart
-    function createViewsChart(visits) {
-      const ctx = document.getElementById('viewsChart').getContext('2d');
-      let chart = null;
-
-      function updateChart(range) {
-        const now = new Date();
-        let filteredVisits = visits;
-        
-        if (range !== 'all') {
-          const hours = {
-            '24h': 24,
-            '7d': 7 * 24,
-            '30d': 30 * 24,
-            '3m': 90 * 24,
-            '6m': 180 * 24,
-            '12m': 365 * 24
-          }[range];
-          
-          const cutoff = new Date(now.getTime() - hours * 60 * 60 * 1000);
-          filteredVisits = visits.filter(v => new Date(v.timestamp) >= cutoff);
-        }
-
-        // Group by time period
-        const grouped = {};
-        filteredVisits.forEach(visit => {
-          const date = new Date(visit.timestamp);
-          let key;
-          
-          if (range === '24h') {
-            key = `${date.getHours()}:00`;
-          } else {
-            key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-          }
-          
-          grouped[key] = (grouped[key] || 0) + 1;
-        });
-
-        // Sort keys
-        const sortedKeys = Object.keys(grouped).sort();
-        const data = sortedKeys.map(key => grouped[key]);
-
-        // Destroy previous chart
-        if (chart) {
-          chart.destroy();
-        }
-
-        // Create new chart
-        chart = new Chart(ctx, {
-          type: 'line',
-           {
-            labels: sortedKeys,
-            datasets: [{
-              label: 'Pageviews',
-              data: data,
-              borderColor: '#d40000',
-              backgroundColor: 'rgba(212, 0, 0, 0.1)',
-              borderWidth: 2,
-              fill: true,
-              tension: 0.4
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                display: false
-              }
-            },
-            scales: {
-              x: {
-                grid: {
-                  color: 'rgba(255, 255, 255, 0.1)'
-                },
-                ticks: {
-                  color: '#fff'
-                }
-              },
-              y: {
-                beginAtZero: true,
-                grid: {
-                  color: 'rgba(255, 255, 255, 0.1)'
-                },
-                ticks: {
-                  color: '#fff'
-                }
-              }
-            }
-          }
-        });
-      }
-
-      // Set up filter buttons
-      document.querySelectorAll('.time-filter-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-          document.querySelectorAll('.time-filter-btn').forEach(b => b.classList.remove('active'));
-          this.classList.add('active');
-          updateChart(this.getAttribute('data-range'));
-        });
-      });
-
-      // Initialize with 24h
-      updateChart('24h');
-    }
-
-    // Create Referrer Chart
-    function createReferrerChart(visits) {
-      const ctx = document.getElementById('referrerChart').getContext('2d');
-      const referrerData = {};
-      visits.forEach(v => {
-        const ref = v.referrer === '' ? 'Direct' : new URL(v.referrer).hostname;
-        referrerData[ref] = (referrerData[ref] || 0) + 1;
-      });
       
-      new Chart(ctx, {
-        type: 'bar',
-         {
-          labels: Object.keys(referrerData).slice(0, 5),
-          datasets: [{
-             Object.values(referrerData).slice(0, 5),
-            backgroundColor: '#d40000'
-          }]
+      grouped[key] = (grouped[key] || 0) + 1;
+    });
+
+    // Sort keys
+    const sortedKeys = Object.keys(grouped).sort();
+    const data = sortedKeys.map(key => grouped[key]);
+
+    // Destroy previous chart
+    if (chart) {
+      chart.destroy();
+    }
+
+    // Create new chart
+    chart = new Chart(ctx, {
+      type: 'line',
+       {
+        labels: sortedKeys,
+        datasets: [{
+          label: 'Views',
+           data,
+          borderColor: '#d40000',
+          backgroundColor: 'rgba(212, 0, 0, 0.1)',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          }
         },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              display: false
+        scales: {
+          x: {
+            grid: {
+              color: 'rgba(255, 255, 255, 0.1)'
+            },
+            ticks: {
+              color: '#fff'
             }
           },
-          scales: {
-            x: {
-              grid: {
-                color: 'rgba(255, 255, 255, 0.1)'
-              },
-              ticks: {
-                color: '#fff'
-              }
+          y: {
+            beginAtZero: true,
+            grid: {
+              color: 'rgba(255, 255, 255, 0.1)'
             },
-            y: {
-              beginAtZero: true,
-              grid: {
-                color: 'rgba(255, 255, 255, 0.1)'
-              },
-              ticks: {
-                color: '#fff'
-              }
+            ticks: {
+              color: '#fff'
             }
           }
         }
-      });
-    }
-
-    // Create Browser Chart
-    function createBrowserChart(visits) {
-      const ctx = document.getElementById('browserChart').getContext('2d');
-      const browserData = {};
-      visits.forEach(v => {
-        browserData[v.browser] = (browserData[v.browser] || 0) + 1;
-      });
-      
-      new Chart(ctx, {
-        type: 'doughnut',
-         {
-          labels: Object.keys(browserData),
-          datasets: [{
-             Object.values(browserData),
-            backgroundColor: ['#d40000', '#006400', '#0000ff', '#ffa500', '#800080']
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              labels: {
-                color: '#fff'
-              }
-            }
-          }
-        }
-      });
-    }
-
-    // Create OS Chart
-    function createOSChart(visits) {
-      const ctx = document.getElementById('osChart').getContext('2d');
-      
-      // OS detection
-      function getOS(userAgent) {
-        if (/Windows/i.test(userAgent)) return 'Windows';
-        if (/Mac/i.test(userAgent)) return 'MacOS';
-        if (/Linux/i.test(userAgent)) return 'Linux';
-        if (/Android/i.test(userAgent)) return 'Android';
-        if (/iPhone|iPad|iPod/i.test(userAgent)) return 'iOS';
-        return 'Other';
       }
+    });
+  }
 
-      const osData = {};
-      visits.forEach(v => {
-        const os = getOS(v.userAgent);
-        osData[os] = (osData[os] || 0) + 1;
-      });
-      
-      new Chart(ctx, {
-        type: 'pie',
-         {
-          labels: Object.keys(osData),
-          datasets: [{
-             Object.values(osData),
-            backgroundColor: ['#d40000', '#006400', '#0000ff', '#ffa500', '#800080', '#ff00ff']
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              labels: {
-                color: '#fff'
-              }
-            }
-          }
-        }
-      });
-    }
+  // Set up filter buttons
+  document.querySelectorAll('.time-filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.time-filter-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      updateChart(this.getAttribute('data-range'));
+    });
+  });
 
-    // Create Country Chart
-    function createCountryChart(visits) {
-      const ctx = document.getElementById('countryChart').getContext('2d');
-      const countryData = {};
-      visits.forEach(v => {
-        countryData[v.country] = (countryData[v.country] || 0) + 1;
-      });
-      
-      new Chart(ctx, {
-        type: 'bar',
-         {
-          labels: Object.keys(countryData).slice(0, 5),
-          datasets: [{
-             Object.values(countryData).slice(0, 5),
-            backgroundColor: '#006400'
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              display: false
-            }
-          },
-          scales: {
-            x: {
-              grid: {
-                color: 'rgba(255, 255, 255, 0.1)'
-              },
-              ticks: {
-                color: '#fff'
-              }
-            },
-            y: {
-              beginAtZero: true,
-              grid: {
-                color: 'rgba(255, 255, 255, 0.1)'
-              },
-              ticks: {
-                color: '#fff'
-              }
-            }
-          }
-        }
-      });
-    }
+  // Initialize with 24h
+  updateChart('24h');
+}
 
-    // Initialize
-    checkAdminAccess();
-  </script>
+// Create Country Chart
+function createCountryChart(containerId, data) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  
+  container.innerHTML = '';
+  
+  const sorted = Object.entries(data).sort((a,b) => b[1] - a[1]).slice(0, 5);
+  const maxCount = sorted.length > 0 ? sorted[0][1] : 1;
+
+  sorted.forEach(([label, count]) => {
+    const item = document.createElement('div');
+    item.className = 'chart-item';
+    const percentage = (count / maxCount) * 100;
+    item.innerHTML = `
+      <span>${label}</span>
+      <div style="display: flex; align-items: center; width: 100%;">
+        <span style="width: 60px; text-align: right; margin-right: 10px;">${count}</span>
+        <div class="chart-bar" style="width: ${percentage}%;"></div>
+      </div>
+    `;
+    container.appendChild(item);
+  });
+}
+
+// Create Browser Chart
+function createBrowserChart(containerId, data) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  
+  container.innerHTML = '';
+  
+  const sorted = Object.entries(data).sort((a,b) => b[1] - a[1]).slice(0, 5);
+  const maxCount = sorted.length > 0 ? sorted[0][1] : 1;
+
+  sorted.forEach(([label, count]) => {
+    const item = document.createElement('div');
+    item.className = 'chart-item';
+    const percentage = (count / maxCount) * 100;
+    item.innerHTML = `
+      <span>${label}</span>
+      <div style="display: flex; align-items: center; width: 100%;">
+        <span style="width: 60px; text-align: right; margin-right: 10px;">${count}</span>
+        <div class="chart-bar" style="width: ${percentage}%;"></div>
+      </div>
+    `;
+    container.appendChild(item);
+  });
+}
+
+// Create OS Chart
+function createOSChart(containerId, data) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  
+  container.innerHTML = '';
+  
+  const sorted = Object.entries(data).sort((a,b) => b[1] - a[1]).slice(0, 5);
+  const maxCount = sorted.length > 0 ? sorted[0][1] : 1;
+
+  sorted.forEach(([label, count]) => {
+    const item = document.createElement('div');
+    item.className = 'chart-item';
+    const percentage = (count / maxCount) * 100;
+    item.innerHTML = `
+      <span>${label}</span>
+      <div style="display: flex; align-items: center; width: 100%;">
+        <span style="width: 60px; text-align: right; margin-right: 10px;">${count}</span>
+        <div class="chart-bar" style="width: ${percentage}%;"></div>
+      </div>
+    `;
+    container.appendChild(item);
+  });
+}
+
+// OS detection
+function getOS(userAgent) {
+  if (/Windows/i.test(userAgent)) return 'Windows';
+  if (/Mac/i.test(userAgent)) return 'MacOS';
+  if (/Linux/i.test(userAgent)) return 'Linux';
+  if (/Android/i.test(userAgent)) return 'Android';
+  if (/iPhone|iPad|iPod/i.test(userAgent)) return 'iOS';
+  return 'Other';
+}
+
+// Initialize
+loadUserStats();
+</script>
 </body>
 </html>
