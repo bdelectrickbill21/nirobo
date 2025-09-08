@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nirobo — Your Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
       margin: 0;
@@ -182,6 +183,48 @@
       margin: 30px auto 0;
       text-align: center;
     }
+
+    .chart-container {
+      height: 300px;
+      margin: 20px 0;
+    }
+
+    .time-filter-btn {
+      background: #006400;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      margin: 5px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.3s;
+    }
+
+    .time-filter-btn:hover {
+      background: #008000;
+    }
+
+    .time-filter-btn.active {
+      background: #d40000;
+      color: white;
+    }
+
+    .chart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+    }
+
+    .chart-bar {
+      height: 12px;
+      background: #d40000;
+      border-radius: 3px;
+      margin-left: 10px;
+      flex-grow: 1;
+    }
   </style>
 </head>
 <body>
@@ -225,18 +268,31 @@
       </div>
     </div>
 
-    <a href="user-stats.html" style="
-  display: block;
-  background: #006400;
-  color: white;
-  padding: 12px 24px;
-  text-decoration: none;
-  border-radius: 6px;
-  font-weight: bold;
-  text-align: center;
-  margin: 20px auto;
-  width: fit-content;
-">📊 View Your URL Analytics</a>
+    <!-- Your URL Analytics -->
+    <div class="section">
+      <h2>📈 YOUR URL ANALYTICS</h2>
+      
+      <!-- Time Filter Buttons -->
+      <div style="text-align: center; margin: 20px 0;">
+        <button class="time-filter-btn active" data-range="24h">Last 24 Hours</button>
+        <button class="time-filter-btn" data-range="7d">Last 7 Days</button>
+        <button class="time-filter-btn" data-range="30d">Last 30 Days</button>
+        <button class="time-filter-btn" data-range="3m">Last 3 Months</button>
+        <button class="time-filter-btn" data-range="6m">Last 6 Months</button>
+        <button class="time-filter-btn" data-range="12m">Last 12 Months</button>
+        <button class="time-filter-btn" data-range="all">Everything</button>
+      </div>
+
+      <!-- Views Over Time Chart -->
+      <div class="chart-container">
+        <canvas id="viewsChart"></canvas>
+      </div>
+
+      <!-- URL Stats -->
+      <div id="urlStats">
+        <p>Loading your URL analytics...</p>
+      </div>
+    </div>
 
     <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
   </div>
@@ -251,6 +307,44 @@
 
     // Display user email
     document.getElementById('userEmail').textContent = currentUser.email;
+
+    // Add test data if none exists
+    function addTestData() {
+      const submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+      if (submissions.length === 0) {
+        const testSubmissions = [
+          {
+            id: '1',
+            userId: currentUser.id,
+            title: 'My Test Blog',
+            url: 'https://example.com',
+            description: 'A test blog about Bangladesh',
+            tags: ['blog', 'bangladesh', 'test'],
+            submittedAt: new Date().toISOString(),
+            status: 'approved',
+            viewCount: 45,
+            submitterEmail: currentUser.email
+          }
+        ];
+        localStorage.setItem('niroboAllSubmissions', JSON.stringify(testSubmissions));
+      }
+
+      const visits = JSON.parse(localStorage.getItem('niroboVisits') || '[]');
+      if (visits.length === 0) {
+        const testVisits = [
+          {
+            visitorId: 'v1',
+            timestamp: new Date().toISOString(),
+            url: 'https://yoursite.com/search.html?q=test',
+            country: 'Bangladesh',
+            browser: 'Chrome',
+            device: 'Desktop',
+            referrer: 'Direct'
+          }
+        ];
+        localStorage.setItem('niroboVisits', JSON.stringify(testVisits));
+      }
+    }
 
     // Load submissions
     function loadSubmissions() {
@@ -286,7 +380,7 @@
           <p>${sub.description}</p>
           <p><small>Tags: ${sub.tags.join(', ')}</small></p>
           <p><small>Submitted: ${new Date(sub.submittedAt).toLocaleString()}</small></p>
-          ${sub.viewCount ? `<p><small>👁️ Views: ${sub.viewCount}</small></p>` : ''}
+          <p><small>👀 Views: ${sub.viewCount || 0}</small></p>
           ${sub.adminMessage ? `<div class="admin-message">💬 Admin Message: ${sub.adminMessage}</div>` : ''}
           <div class="actions">
             <button class="btn-delete" onclick="deleteSubmission('${sub.id}')">🗑️ Remove Submission</button>
@@ -294,6 +388,237 @@
         `;
         container.appendChild(div);
       });
+    }
+
+    // Display URL analytics
+    function displayURLAnalytics() {
+      const submissions = loadSubmissions();
+      const userSubmissions = submissions.filter(sub => sub.userId === currentUser.id);
+      const visits = JSON.parse(localStorage.getItem('niroboVisits') || '[]');
+      
+      const container = document.getElementById('urlStats');
+      
+      if (userSubmissions.length === 0) {
+        container.innerHTML = '<p>You haven\'t submitted any URLs yet.</p>';
+        return;
+      }
+
+      // Calculate total views
+      let totalViews = 0;
+      userSubmissions.forEach(sub => {
+        totalViews += sub.viewCount || 0;
+      });
+
+      let html = `
+        <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+          <h3>📈 Summary</h3>
+          <p><strong>Total Views:</strong> ${totalViews}</p>
+          <p><strong>URLs Submitted:</strong> ${userSubmissions.length}</p>
+        </div>
+      `;
+
+      userSubmissions.forEach(sub => {
+        // Get country stats for visits to search results that matched this URL
+        const countryStats = {};
+        const browserStats = {};
+        const osStats = {};
+        
+        visits.forEach(visit => {
+          if (visit.url.includes('search.html?q=')) {
+            const url = new URL(visit.url);
+            const q = url.searchParams.get('q');
+            if (q && (sub.title.toLowerCase().includes(q) || 
+                     sub.description.toLowerCase().includes(q) ||
+                     (sub.tags && sub.tags.some(tag => tag.toLowerCase().includes(q))))) {
+              countryStats[visit.country] = (countryStats[visit.country] || 0) + 1;
+              browserStats[visit.browser] = (browserStats[visit.browser] || 0) + 1;
+              const os = getOS(visit.userAgent);
+              osStats[os] = (osStats[os] || 0) + 1;
+            }
+          }
+        });
+
+        html += `
+          <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+            <h4>🚀 ${sub.title}</h4>
+            <p><strong>Views:</strong> ${sub.viewCount || 0}</p>
+            <p><strong>Status:</strong> <span style="color: ${
+              sub.status === 'approved' ? '#00aa00' : 
+              sub.status === 'rejected' ? '#d40000' : '#ff9900'
+            }">${sub.status.toUpperCase()}</span></p>
+        `;
+
+        if (Object.keys(countryStats).length > 0) {
+          html += `<h5>🌍 Top Countries</h5>`;
+          const sortedCountries = Object.entries(countryStats).sort((a,b) => b[1] - a[1]).slice(0, 5);
+          const maxCount = sortedCountries.length > 0 ? sortedCountries[0][1] : 1;
+          
+          sortedCountries.forEach(([country, count]) => {
+            const percentage = (count / maxCount) * 100;
+            html += `
+              <div class="chart-item">
+                <span>${country}</span>
+                <div style="display: flex; align-items: center; width: 100%;">
+                  <span style="width: 60px; text-align: right; margin-right: 10px;">${count}</span>
+                  <div class="chart-bar" style="width: ${percentage}%;"></div>
+                </div>
+              </div>
+            `;
+          });
+        }
+
+        if (Object.keys(browserStats).length > 0) {
+          html += `<h5>💻 Top Browsers</h5>`;
+          const sortedBrowsers = Object.entries(browserStats).sort((a,b) => b[1] - a[1]).slice(0, 5);
+          const maxCount = sortedBrowsers.length > 0 ? sortedBrowsers[0][1] : 1;
+          
+          sortedBrowsers.forEach(([browser, count]) => {
+            const percentage = (count / maxCount) * 100;
+            html += `
+              <div class="chart-item">
+                <span>${browser}</span>
+                <div style="display: flex; align-items: center; width: 100%;">
+                  <span style="width: 60px; text-align: right; margin-right: 10px;">${count}</span>
+                  <div class="chart-bar" style="width: ${percentage}%;"></div>
+                </div>
+              </div>
+            `;
+          });
+        }
+
+        html += `</div>`;
+      });
+
+      container.innerHTML = html;
+
+      // Create time-based chart
+      createViewsChart(userSubmissions, visits);
+    }
+
+    // Create Views Over Time Chart
+    function createViewsChart(userSubmissions, allVisits) {
+      const ctx = document.getElementById('viewsChart').getContext('2d');
+      let chart = null;
+
+      function updateChart(range) {
+        const now = new Date();
+        let filteredVisits = [];
+        
+        // Get all visits that matched any of the user's URLs
+        allVisits.forEach(visit => {
+          if (visit.url.includes('search.html?q=')) {
+            const url = new URL(visit.url);
+            const q = url.searchParams.get('q');
+            if (q) {
+              // Check if this search matched any of the user's URLs
+              const matched = userSubmissions.some(sub => 
+                sub.title.toLowerCase().includes(q) || 
+                sub.description.toLowerCase().includes(q) ||
+                (sub.tags && sub.tags.some(tag => tag.toLowerCase().includes(q)))
+              );
+              if (matched) {
+                filteredVisits.push(visit);
+              }
+            }
+          }
+        });
+        
+        // Filter by time range
+        if (range !== 'all') {
+          const hours = {
+            '24h': 24,
+            '7d': 7 * 24,
+            '30d': 30 * 24,
+            '3m': 90 * 24,
+            '6m': 180 * 24,
+            '12m': 365 * 24
+          }[range];
+          
+          const cutoff = new Date(now.getTime() - hours * 60 * 60 * 1000);
+          filteredVisits = filteredVisits.filter(v => new Date(v.timestamp) >= cutoff);
+        }
+
+        // Group by time period
+        const grouped = {};
+        filteredVisits.forEach(visit => {
+          const date = new Date(visit.timestamp);
+          let key;
+          
+          if (range === '24h') {
+            key = `${date.getHours()}:00`;
+          } else {
+            key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+          }
+          
+          grouped[key] = (grouped[key] || 0) + 1;
+        });
+
+        // Sort keys
+        const sortedKeys = Object.keys(grouped).sort();
+        const data = sortedKeys.map(key => grouped[key]);
+
+        // Destroy previous chart
+        if (chart) {
+          chart.destroy();
+        }
+
+        // Create new chart
+        chart = new Chart(ctx, {
+          type: 'line',
+           {
+            labels: sortedKeys,
+            datasets: [{
+              label: 'Views',
+               data,
+              borderColor: '#d40000',
+              backgroundColor: 'rgba(212, 0, 0, 0.1)',
+              borderWidth: 2,
+              fill: true,
+              tension: 0.4
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            scales: {
+              x: {
+                grid: {
+                  color: 'rgba(255, 255, 255, 0.1)'
+                },
+                ticks: {
+                  color: '#fff'
+                }
+              },
+              y: {
+                beginAtZero: true,
+                grid: {
+                  color: 'rgba(255, 255, 255, 0.1)'
+                },
+                ticks: {
+                  color: '#fff'
+                }
+              }
+            }
+          }
+        });
+      }
+
+      // Set up filter buttons
+      document.querySelectorAll('.time-filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.time-filter-btn').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          updateChart(this.getAttribute('data-range'));
+        });
+      });
+
+      // Initialize with 24h
+      updateChart('24h');
     }
 
     // Submit new website
@@ -342,6 +667,7 @@
       document.getElementById('websiteTags').value = '';
 
       displayUserSubmissions();
+      displayURLAnalytics();
     });
 
     // Delete submission
@@ -364,6 +690,7 @@
         
         alert('🗑️ Submission removed.');
         displayUserSubmissions();
+        displayURLAnalytics();
       }
     };
 
@@ -374,23 +701,20 @@
       window.location.href = 'signup.html';
     });
 
+    // OS detection
+    function getOS(userAgent) {
+      if (/Windows/i.test(userAgent)) return 'Windows';
+      if (/Mac/i.test(userAgent)) return 'MacOS';
+      if (/Linux/i.test(userAgent)) return 'Linux';
+      if (/Android/i.test(userAgent)) return 'Android';
+      if (/iPhone|iPad|iPod/i.test(userAgent)) return 'iOS';
+      return 'Other';
+    }
+
     // Initialize
+    addTestData();
     displayUserSubmissions();
+    displayURLAnalytics();
   </script>
-  <!-- Footer -->
-<footer style="
-  background-color: #1a1a1a;
-  color: #ccc;
-  padding: 20px;
-  text-align: center;
-  font-size: 0.9rem;
-  border-top: 1px solid #333;
-  margin-top: 40px; /* Add space between content and footer */
-">
-  <p>Made in Bangladesh 🇧🇩 | Curated by Nirobo</p>
-  <p>Honoring the Language Movement and the Silent Legacy of Justice</p>
-  <p>Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity</p>
-  <p><a href="signup.html" style="color: #ff9999;">Submit Your Site</a> | <a href="admin.html" style="color: #ff9999;">Admin</a></p>
-</footer>
 </body>
-  </html>
+</html>
