@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nirobo — Your Dashboard</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
       margin: 0;
@@ -30,24 +29,6 @@
     .header h1 {
       font-size: 2.5rem;
       margin-bottom: 10px;
-    }
-
-    .header h1 span {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .flag-icon {
-      background: #d40000;
-      color: white;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
     }
 
     .user-info {
@@ -184,186 +165,121 @@
       text-align: center;
     }
 
-    .chart-container {
-      height: 300px;
-      margin: 20px 0;
+    .empty-state {
+      text-align: center;
+      padding: 50px;
+      color: #ff9999;
     }
 
-    .time-filter-btn {
+    .login-btn {
       background: #006400;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      margin: 5px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: background 0.3s;
-    }
-
-    .time-filter-btn:hover {
-      background: #008000;
-    }
-
-    .time-filter-btn.active {
-      background: #d40000;
-      color: white;
-    }
-
-    .chart-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-      font-size: 0.95rem;
-    }
-
-    .chart-bar {
-      height: 12px;
-      background: #d40000;
-      border-radius: 3px;
-      margin-left: 10px;
-      flex-grow: 1;
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      margin: 20px auto;
+      display: block;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1><span><span class="flag-icon">🇧🇩</span> YOUR NIROBO DASHBOARD</span></h1>
+      <h1>🇧🇩 YOUR NIROBO DASHBOARD</h1>
       <p>“You hold the pen — write your truth into Bangladesh’s digital soul.”</p>
     </div>
 
-    <div class="user-info">
-      Logged in as: <strong id="userEmail">loading...</strong>
+    <div id="loginSection" style="text-align: center; padding: 50px;">
+      <h2>🔐 Please Log In</h2>
+      <p>Submit and manage your website in Nirobo's curated search engine</p>
+      <button class="login-btn" onclick="loginAsTestUser()">Login as Test User</button>
     </div>
 
-    <!-- Submit New Website -->
-    <div class="section">
-      <h2>➕ SUBMIT A NEW WEBSITE</h2>
-      <div class="form-group">
-        <label>Website Title</label>
-        <input type="text" id="websiteTitle" placeholder="e.g., My Blog" />
+    <div id="dashboardContent" style="display: none;">
+      <div class="user-info">
+        Logged in as: <strong id="userEmail">user@example.com</strong>
       </div>
-      <div class="form-group">
-        <label>URL</label>
-        <input type="url" id="websiteUrl" placeholder="https://yourwebsite.com" />
+
+      <!-- Submit New Website -->
+      <div class="section">
+        <h2>➕ SUBMIT A NEW WEBSITE</h2>
+        <div class="form-group">
+          <label>Website Title</label>
+          <input type="text" id="websiteTitle" placeholder="e.g., My Blog" />
+        </div>
+        <div class="form-group">
+          <label>URL</label>
+          <input type="url" id="websiteUrl" placeholder="https://yourwebsite.com" />
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="websiteDesc" placeholder="Brief description of your website" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Tags (comma separated)</label>
+          <input type="text" id="websiteTags" placeholder="news, blog, bangla" />
+        </div>
+        <button id="submitWebsiteBtn">Submit Website</button>
       </div>
-      <div class="form-group">
-        <label>Description</label>
-        <textarea id="websiteDesc" placeholder="Brief description of your website" rows="3"></textarea>
+
+      <!-- Your Submissions -->
+      <div class="section">
+        <h2>📊 YOUR SUBMISSIONS</h2>
+        <div id="submissionsList">
+          <div class="empty-state">
+            <h3>📭 No submissions yet</h3>
+            <p>Submit your first website above to get started!</p>
+          </div>
+        </div>
       </div>
-      <div class="form-group">
-        <label>Tags (comma separated)</label>
-        <input type="text" id="websiteTags" placeholder="news, blog, bangla" />
-      </div>
-      <button id="submitWebsiteBtn">Submit Website</button>
+
+      <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
     </div>
-
-    <!-- Your Submissions -->
-    <div class="section">
-      <h2>📊 YOUR SUBMISSIONS</h2>
-      <div id="submissionsList">
-        <p>Loading your submissions...</p>
-      </div>
-    </div>
-
-    <!-- Your URL Analytics -->
-    <div class="section">
-      <h2>📈 YOUR URL ANALYTICS</h2>
-      
-      <!-- Time Filter Buttons -->
-      <div style="text-align: center; margin: 20px 0;">
-        <button class="time-filter-btn active" data-range="24h">Last 24 Hours</button>
-        <button class="time-filter-btn" data-range="7d">Last 7 Days</button>
-        <button class="time-filter-btn" data-range="30d">Last 30 Days</button>
-        <button class="time-filter-btn" data-range="3m">Last 3 Months</button>
-        <button class="time-filter-btn" data-range="6m">Last 6 Months</button>
-        <button class="time-filter-btn" data-range="12m">Last 12 Months</button>
-        <button class="time-filter-btn" data-range="all">Everything</button>
-      </div>
-
-      <!-- Views Over Time Chart -->
-      <div class="chart-container">
-        <canvas id="viewsChart"></canvas>
-      </div>
-
-      <!-- URL Stats -->
-      <div id="urlStats">
-        <p>Loading your URL analytics...</p>
-      </div>
-    </div>
-
-    <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
   </div>
 
   <script>
-    // Check if user is logged in
-    const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser') || 'null');
-    if (!currentUser) {
-      alert('Please log in first.');
-      window.location.href = 'signup.html';
-    }
-
-    // Display user email
-    document.getElementById('userEmail').textContent = currentUser.email;
-
-    // Add test data if none exists
-    function addTestData() {
-      const submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
-      if (submissions.length === 0) {
-        const testSubmissions = [
-          {
-            id: '1',
-            userId: currentUser.id,
-            title: 'My Test Blog',
-            url: 'https://example.com',
-            description: 'A test blog about Bangladesh',
-            tags: ['blog', 'bangladesh', 'test'],
-            submittedAt: new Date().toISOString(),
-            status: 'approved',
-            viewCount: 45,
-            submitterEmail: currentUser.email
-          }
-        ];
-        localStorage.setItem('niroboAllSubmissions', JSON.stringify(testSubmissions));
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser') || 'null');
+      if (currentUser) {
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('dashboardContent').style.display = 'block';
+        document.getElementById('userEmail').textContent = currentUser.email;
+        loadUserSubmissions();
       }
+    });
 
-      const visits = JSON.parse(localStorage.getItem('niroboVisits') || '[]');
-      if (visits.length === 0) {
-        const testVisits = [
-          {
-            visitorId: 'v1',
-            timestamp: new Date().toISOString(),
-            url: 'https://yoursite.com/search.html?q=test',
-            country: 'Bangladesh',
-            browser: 'Chrome',
-            device: 'Desktop',
-            referrer: 'Direct'
-          }
-        ];
-        localStorage.setItem('niroboVisits', JSON.stringify(testVisits));
-      }
-    }
-
-    // Load submissions
-    function loadSubmissions() {
-      return JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
-    }
-
-    function saveSubmissions(submissions) {
-      localStorage.setItem('niroboAllSubmissions', JSON.stringify(submissions));
-    }
-
-    // Display user's submissions
-    function displayUserSubmissions() {
-      const submissions = loadSubmissions();
-      const userSubmissions = submissions.filter(sub => sub.userId === currentUser.id);
+    // Login as test user
+    function loginAsTestUser() {
+      const testUser = {
+        id: 'test-user-' + Date.now(),
+        email: 'user@example.com',
+        password: 'test'
+      };
       
+      localStorage.setItem('niroboCurrentUser', JSON.stringify(testUser));
+      document.getElementById('loginSection').style.display = 'none';
+      document.getElementById('dashboardContent').style.display = 'block';
+      document.getElementById('userEmail').textContent = testUser.email;
+      loadUserSubmissions();
+    }
+
+    // Load user submissions
+    function loadUserSubmissions() {
+      let submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+      const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser') || 'null');
+      
+      if (!currentUser) return;
+
+      // Filter user's submissions
+      const userSubmissions = submissions.filter(sub => sub.userId === currentUser.id);
       const container = document.getElementById('submissionsList');
       
       if (userSubmissions.length === 0) {
-        container.innerHTML = '<p>You haven\'t submitted any websites yet.</p>';
+        container.innerHTML = `
+          <div class="empty-state">
+            <h3>📭 No submissions yet</h3>
+            <p>Submit your first website above to get started!</p>
+          </div>
+        `;
         return;
       }
 
@@ -380,7 +296,7 @@
           <p>${sub.description}</p>
           <p><small>Tags: ${sub.tags.join(', ')}</small></p>
           <p><small>Submitted: ${new Date(sub.submittedAt).toLocaleString()}</small></p>
-          <p><small>👀 Views: ${sub.viewCount || 0}</small></p>
+          <p><small>👁️ Views: ${sub.viewCount || 0}</small></p>
           ${sub.adminMessage ? `<div class="admin-message">💬 Admin Message: ${sub.adminMessage}</div>` : ''}
           <div class="actions">
             <button class="btn-delete" onclick="deleteSubmission('${sub.id}')">🗑️ Remove Submission</button>
@@ -390,239 +306,8 @@
       });
     }
 
-    // Display URL analytics
-    function displayURLAnalytics() {
-      const submissions = loadSubmissions();
-      const userSubmissions = submissions.filter(sub => sub.userId === currentUser.id);
-      const visits = JSON.parse(localStorage.getItem('niroboVisits') || '[]');
-      
-      const container = document.getElementById('urlStats');
-      
-      if (userSubmissions.length === 0) {
-        container.innerHTML = '<p>You haven\'t submitted any URLs yet.</p>';
-        return;
-      }
-
-      // Calculate total views
-      let totalViews = 0;
-      userSubmissions.forEach(sub => {
-        totalViews += sub.viewCount || 0;
-      });
-
-      let html = `
-        <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-          <h3>📈 Summary</h3>
-          <p><strong>Total Views:</strong> ${totalViews}</p>
-          <p><strong>URLs Submitted:</strong> ${userSubmissions.length}</p>
-        </div>
-      `;
-
-      userSubmissions.forEach(sub => {
-        // Get country stats for visits to search results that matched this URL
-        const countryStats = {};
-        const browserStats = {};
-        const osStats = {};
-        
-        visits.forEach(visit => {
-          if (visit.url.includes('search.html?q=')) {
-            const url = new URL(visit.url);
-            const q = url.searchParams.get('q');
-            if (q && (sub.title.toLowerCase().includes(q) || 
-                     sub.description.toLowerCase().includes(q) ||
-                     (sub.tags && sub.tags.some(tag => tag.toLowerCase().includes(q))))) {
-              countryStats[visit.country] = (countryStats[visit.country] || 0) + 1;
-              browserStats[visit.browser] = (browserStats[visit.browser] || 0) + 1;
-              const os = getOS(visit.userAgent);
-              osStats[os] = (osStats[os] || 0) + 1;
-            }
-          }
-        });
-
-        html += `
-          <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-            <h4>🚀 ${sub.title}</h4>
-            <p><strong>Views:</strong> ${sub.viewCount || 0}</p>
-            <p><strong>Status:</strong> <span style="color: ${
-              sub.status === 'approved' ? '#00aa00' : 
-              sub.status === 'rejected' ? '#d40000' : '#ff9900'
-            }">${sub.status.toUpperCase()}</span></p>
-        `;
-
-        if (Object.keys(countryStats).length > 0) {
-          html += `<h5>🌍 Top Countries</h5>`;
-          const sortedCountries = Object.entries(countryStats).sort((a,b) => b[1] - a[1]).slice(0, 5);
-          const maxCount = sortedCountries.length > 0 ? sortedCountries[0][1] : 1;
-          
-          sortedCountries.forEach(([country, count]) => {
-            const percentage = (count / maxCount) * 100;
-            html += `
-              <div class="chart-item">
-                <span>${country}</span>
-                <div style="display: flex; align-items: center; width: 100%;">
-                  <span style="width: 60px; text-align: right; margin-right: 10px;">${count}</span>
-                  <div class="chart-bar" style="width: ${percentage}%;"></div>
-                </div>
-              </div>
-            `;
-          });
-        }
-
-        if (Object.keys(browserStats).length > 0) {
-          html += `<h5>💻 Top Browsers</h5>`;
-          const sortedBrowsers = Object.entries(browserStats).sort((a,b) => b[1] - a[1]).slice(0, 5);
-          const maxCount = sortedBrowsers.length > 0 ? sortedBrowsers[0][1] : 1;
-          
-          sortedBrowsers.forEach(([browser, count]) => {
-            const percentage = (count / maxCount) * 100;
-            html += `
-              <div class="chart-item">
-                <span>${browser}</span>
-                <div style="display: flex; align-items: center; width: 100%;">
-                  <span style="width: 60px; text-align: right; margin-right: 10px;">${count}</span>
-                  <div class="chart-bar" style="width: ${percentage}%;"></div>
-                </div>
-              </div>
-            `;
-          });
-        }
-
-        html += `</div>`;
-      });
-
-      container.innerHTML = html;
-
-      // Create time-based chart
-      createViewsChart(userSubmissions, visits);
-    }
-
-    // Create Views Over Time Chart
-    function createViewsChart(userSubmissions, allVisits) {
-      const ctx = document.getElementById('viewsChart').getContext('2d');
-      let chart = null;
-
-      function updateChart(range) {
-        const now = new Date();
-        let filteredVisits = [];
-        
-        // Get all visits that matched any of the user's URLs
-        allVisits.forEach(visit => {
-          if (visit.url.includes('search.html?q=')) {
-            const url = new URL(visit.url);
-            const q = url.searchParams.get('q');
-            if (q) {
-              // Check if this search matched any of the user's URLs
-              const matched = userSubmissions.some(sub => 
-                sub.title.toLowerCase().includes(q) || 
-                sub.description.toLowerCase().includes(q) ||
-                (sub.tags && sub.tags.some(tag => tag.toLowerCase().includes(q)))
-              );
-              if (matched) {
-                filteredVisits.push(visit);
-              }
-            }
-          }
-        });
-        
-        // Filter by time range
-        if (range !== 'all') {
-          const hours = {
-            '24h': 24,
-            '7d': 7 * 24,
-            '30d': 30 * 24,
-            '3m': 90 * 24,
-            '6m': 180 * 24,
-            '12m': 365 * 24
-          }[range];
-          
-          const cutoff = new Date(now.getTime() - hours * 60 * 60 * 1000);
-          filteredVisits = filteredVisits.filter(v => new Date(v.timestamp) >= cutoff);
-        }
-
-        // Group by time period
-        const grouped = {};
-        filteredVisits.forEach(visit => {
-          const date = new Date(visit.timestamp);
-          let key;
-          
-          if (range === '24h') {
-            key = `${date.getHours()}:00`;
-          } else {
-            key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-          }
-          
-          grouped[key] = (grouped[key] || 0) + 1;
-        });
-
-        // Sort keys
-        const sortedKeys = Object.keys(grouped).sort();
-        const data = sortedKeys.map(key => grouped[key]);
-
-        // Destroy previous chart
-        if (chart) {
-          chart.destroy();
-        }
-
-        // Create new chart
-        chart = new Chart(ctx, {
-          type: 'line',
-           {
-            labels: sortedKeys,
-            datasets: [{
-              label: 'Views',
-               data,
-              borderColor: '#d40000',
-              backgroundColor: 'rgba(212, 0, 0, 0.1)',
-              borderWidth: 2,
-              fill: true,
-              tension: 0.4
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                display: false
-              }
-            },
-            scales: {
-              x: {
-                grid: {
-                  color: 'rgba(255, 255, 255, 0.1)'
-                },
-                ticks: {
-                  color: '#fff'
-                }
-              },
-              y: {
-                beginAtZero: true,
-                grid: {
-                  color: 'rgba(255, 255, 255, 0.1)'
-                },
-                ticks: {
-                  color: '#fff'
-                }
-              }
-            }
-          }
-        });
-      }
-
-      // Set up filter buttons
-      document.querySelectorAll('.time-filter-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-          document.querySelectorAll('.time-filter-btn').forEach(b => b.classList.remove('active'));
-          this.classList.add('active');
-          updateChart(this.getAttribute('data-range'));
-        });
-      });
-
-      // Initialize with 24h
-      updateChart('24h');
-    }
-
     // Submit new website
-    document.getElementById('submitWebsiteBtn').addEventListener('click', () => {
+    document.getElementById('submitWebsiteBtn')?.addEventListener('click', () => {
       const title = document.getElementById('websiteTitle').value.trim();
       const url = document.getElementById('websiteUrl').value.trim();
       const desc = document.getElementById('websiteDesc').value.trim();
@@ -633,9 +318,15 @@
         return;
       }
 
+      const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser') || 'null');
+      if (!currentUser) {
+        alert('Please log in first');
+        return;
+      }
+
       // Check domain limit (10 per domain)
       const domain = new URL(url).hostname;
-      const submissions = loadSubmissions();
+      let submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
       const domainSubmissions = submissions.filter(item => 
         new URL(item.url).hostname === domain && item.userId === currentUser.id
       );
@@ -658,7 +349,7 @@
       };
 
       submissions.push(newSubmission);
-      saveSubmissions(submissions);
+      localStorage.setItem('niroboAllSubmissions', JSON.stringify(submissions));
 
       alert('✅ Website submitted for review!');
       document.getElementById('websiteTitle').value = '';
@@ -666,8 +357,7 @@
       document.getElementById('websiteDesc').value = '';
       document.getElementById('websiteTags').value = '';
 
-      displayUserSubmissions();
-      displayURLAnalytics();
+      loadUserSubmissions();
     });
 
     // Delete submission
@@ -676,103 +366,49 @@
         return;
       }
 
-      let submissions = loadSubmissions();
+      let submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
       const index = submissions.findIndex(sub => sub.id === submissionId);
       
       if (index !== -1) {
         submissions.splice(index, 1);
-        saveSubmissions(submissions);
-        
-        // Also remove from approved list if it was approved
-        let approved = JSON.parse(localStorage.getItem('niroboResults') || '[]');
-        approved = approved.filter(item => item.id !== submissionId);
-        localStorage.setItem('niroboResults', JSON.stringify(approved));
+        localStorage.setItem('niroboAllSubmissions', JSON.stringify(submissions));
         
         alert('🗑️ Submission removed.');
-        displayUserSubmissions();
-        displayURLAnalytics();
+        loadUserSubmissions();
       }
     };
 
     // Logout
-    document.getElementById('logoutBtn').addEventListener('click', () => {
+    document.getElementById('logoutBtn')?.addEventListener('click', () => {
       localStorage.removeItem('niroboCurrentUser');
       alert('Logged out successfully.');
-      window.location.href = 'signup.html';
+      location.reload();
     });
 
-    // OS detection
-    function getOS(userAgent) {
-      if (/Windows/i.test(userAgent)) return 'Windows';
-      if (/Mac/i.test(userAgent)) return 'MacOS';
-      if (/Linux/i.test(userAgent)) return 'Linux';
-      if (/Android/i.test(userAgent)) return 'Android';
-      if (/iPhone|iPad|iPod/i.test(userAgent)) return 'iOS';
-      return 'Other';
+    // Add some initial test data if none exists
+    function addInitialTestData() {
+      const submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+      if (submissions.length === 0) {
+        const testSubmissions = [
+          {
+            id: '1',
+            userId: 'test-user-123',
+            title: 'Prothom Alo',
+            url: 'https://prothomalo.com',
+            description: 'Bangladesh\'s most popular newspaper',
+            tags: ['news', 'media', 'bangla'],
+            submittedAt: new Date().toISOString(),
+            status: 'approved',
+            viewCount: 150,
+            submitterEmail: 'user@example.com'
+          }
+        ];
+        localStorage.setItem('niroboAllSubmissions', JSON.stringify(testSubmissions));
+      }
     }
 
-    // Initialize
-    addTestData();
-    displayUserSubmissions();
-    displayURLAnalytics();
-  </script>
-  <script>
-// Add test data so analytics show something
-function addTestData() {
-  // Set test user as logged in
-  localStorage.setItem('niroboCurrentUser', JSON.stringify({
-    id: 'test-user',
-    email: 'user@example.com',
-    password: 'test'
-  }));
-
-  // Set admin access
-  localStorage.setItem('niroboAdminPass', 'nirobo');
-
-  // Add test submissions with views
-  const testSubmissions = [
-    {
-      id: '1',
-      userId: 'test-user',
-      title: 'Prothom Alo',
-      url: 'https://prothomalo.com',
-      description: 'Bangladesh\'s most popular newspaper',
-      tags: ['news', 'media', 'bangla'],
-      submittedAt: new Date().toISOString(),
-      status: 'approved',
-      viewCount: 150,
-      submitterEmail: 'user@example.com'
-    }
-  ];
-
-  localStorage.setItem('niroboAllSubmissions', JSON.stringify(testSubmissions));
-
-  // Add test visits
-  const testVisits = [
-    {
-      visitorId: 'test1',
-      timestamp: new Date().toISOString(),
-      url: 'https://yoursite.com/search.html?q=prothom',
-      country: 'Bangladesh',
-      browser: 'Chrome',
-      device: 'Desktop',
-      referrer: 'Direct'
-    }
-  ];
-
-  localStorage.setItem('niroboVisits', JSON.stringify(testVisits));
-
-  alert('✅ Test data added! Go to dashboard.html to see analytics.');
-}
-
-// Add button to trigger test data
-document.body.insertAdjacentHTML('beforeend', `
-  <div style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
-    <button onclick="addTestData()" style="background: #d40000; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer;">
-      🧪 Add Test Data
-    </button>
-  </div>
-`);
+    // Initialize test data
+    addInitialTestData();
   </script>
 </body>
 </html>
