@@ -8,93 +8,37 @@
     body {
       margin: 0;
       padding: 2rem;
-      background-color: #006400; /* deep green */
+      background-color: #006400;
       color: #f5f5f5;
       font-family: 'Inter', sans-serif;
     }
 
     h1 {
       color: #ff0000;
-      font-size: 1.8rem;
       border-bottom: 2px solid #ff0000;
       margin-bottom: 1rem;
     }
 
-    a {
-      color: #ff0000;
-      text-decoration: underline;
-    }
-
-    .url-subtitle a {
-      font-size: 0.9em;
-      color: #888;
-      text-decoration: none;
-      display: block;
-      margin-top: -8px;
-      margin-bottom: 8px;
-    }
-    
-    .result-card {
-      background: #1a1a1a;
-      border-left: 4px solid #ff0000;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
-    }
-
-    .result-card h2 {
-      margin: 0 0 0.5rem;
-      font-size: 1.2rem;
-    }
-
-    .result-card p {
-      margin: 0 0 0.5rem;
-      font-size: 0.95rem;
-    }
-
-    .result-card a {
-      color: #ff0000;
-      text-decoration: none;
-      font-size: 0.9rem;
-    }
-
-    .result-image {
-       width: 100%;
-       max-height: 200px;
-       object-fit: cover;
-       border-radius: 6px;
-       margin-bottom: 1rem;
-       box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
-    }
-    
-    .tags span {
-      background: #ff0000;
-      color: #fff;
-      padding: 0.2rem 0.5rem;
-      margin-right: 0.3rem;
-      border-radius: 3px;
-      font-size: 0.8rem;
-    }
-
-    #search-form {
+    .search-form {
+      display: flex;
+      gap: 10px;
       margin-bottom: 2rem;
     }
 
-    #search-input {
+    .search-input {
+      flex: 1;
       padding: 0.5rem;
-      width: 70%;
       font-size: 1rem;
     }
 
-    #search-form button {
+    .search-button {
       padding: 0.5rem 1rem;
       background-color: #ff0000;
-      color: #fff;
+      color: white;
       border: none;
-      font-size: 1rem;
+      cursor: pointer;
     }
 
-    /* Submit Button Styles */
     .submit-button-container {
       text-align: center;
       margin-bottom: 2rem;
@@ -118,47 +62,40 @@
       box-shadow: 0 6px 8px rgba(0, 100, 0, 0.4);
     }
 
-    /* Thumbnail Styles */
-    .result-content {
-      display: flex;
-      align-items: flex-start;
-      gap: 15px;
+    .results {
+      margin-top: 2rem;
     }
 
-    .thumbnail-container {
-      width: 120px;
-      height: 90px;
-      flex-shrink: 0;
-      border-radius: 4px;
-      overflow: hidden;
-      background: #333;
-      position: relative;
+    .result-card {
+      background: #1a1a1a;
+      border-left: 4px solid #ff0000;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
     }
 
-    .thumbnail-container img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .result-card h2 {
+      margin: 0 0 0.5rem;
+      font-size: 1.2rem;
     }
 
-    .platform-icon {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0, 0, 0, 0.7);
-      color: white;
-      font-size: 2rem;
-      font-weight: bold;
+    .result-card p {
+      margin: 0 0 0.5rem;
+      font-size: 0.95rem;
     }
 
-    .result-details {
-      flex: 1;
-      min-width: 0;
+    .result-card a {
+      color: #ff0000;
+      text-decoration: none;
+    }
+
+    .tags span {
+      background: #ff0000;
+      color: #fff;
+      padding: 0.2rem 0.5rem;
+      margin-right: 0.3rem;
+      border-radius: 3px;
+      font-size: 0.8rem;
     }
   </style>
 </head>
@@ -167,8 +104,10 @@
   <a href="/">← Back to Nirobo</a>
 
   <form id="search-form">
-    <input type="text" id="search-input" placeholder="Search Nirobo" />
-    <button type="submit">Search</button>
+    <div class="search-form">
+      <input type="text" id="search-input" placeholder="Search Nirobo" class="search-input" />
+      <button type="submit" class="search-button">Search</button>
+    </div>
   </form>
 
   <!-- Submit Your Site Button -->
@@ -200,103 +139,75 @@
       return allSubmissions.filter(sub => sub.status === "approved");
     }
 
-    const approvedData = loadApprovedData();
-
-    const filtered = approvedData.filter(item =>
-      item.title.toLowerCase().includes(query) ||
-      item.description.toLowerCase().includes(query) ||
-      item.tags.some(tag =>
-        tag.toLowerCase().includes(query) || query.includes(tag.toLowerCase())
-      )
-    );
-
-    const container = document.getElementById('results');
-
-    if (filtered.length === 0) {
-      container.innerHTML = `<p>No results found for "<strong>${query}</strong>". Try another term.</p>`;
-    } else {
-      filtered.forEach((result, index) => {
-        const card = document.createElement('div');
-        card.className = 'result-card';
-        
-        // Create thumbnail URL based on platform
-        let thumbnailUrl = '';
-        let platformIcon = '🌐';
-        let backgroundColor = '#333';
-        
-        try {
-          const url = new URL(result.url);
-          const hostname = url.hostname.toLowerCase();
-          
-          // YouTube
-          if (hostname.includes('youtube.com') || hostname.includes('youtu.be')) {
-            let videoId = '';
-            if (hostname.includes('youtu.be')) {
-              videoId = url.pathname.substring(1);
-            } else {
-              videoId = url.searchParams.get('v') || '';
-            }
-            if (videoId) {
-              thumbnailUrl = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
-              platformIcon = '▶️';
-              backgroundColor = '#ff0000';
-            }
-          }
-          // Facebook
-          else if (hostname.includes('facebook.com') || hostname.includes('fb.com')) {
-            platformIcon = '📘';
-            backgroundColor = '#1877f2';
-          }
-          // Instagram
-          else if (hostname.includes('instagram.com')) {
-            platformIcon = '📸';
-            backgroundColor = '#e4405f';
-          }
-          // Twitter/X
-          else if (hostname.includes('twitter.com') || hostname.includes('x.com')) {
-            platformIcon = '🐦';
-            backgroundColor = '#1da1f2';
-          }
-          // TikTok
-          else if (hostname.includes('tiktok.com')) {
-            platformIcon = '🎵';
-            backgroundColor = '#000000';
-          }
-          // Pinterest
-          else if (hostname.includes('pinterest.com')) {
-            platformIcon = '📌';
-            backgroundColor = '#bd081c';
-          }
-          // LinkedIn
-          else if (hostname.includes('linkedin.com')) {
-            platformIcon = '💼';
-            backgroundColor = '#0077b5';
-          }
-          // Generic website - try to get favicon
-          else {
-            thumbnailUrl = `https://www.google.com/s2/favicons?domain=${hostname}&sz=128`;
-          }
-        } catch (e) {
-          console.warn('Error parsing URL:', e);
+    // Load results from result.json
+    async function loadJSONResults() {
+      try {
+        const res = await fetch('result.json');
+        if (res.ok) {
+          const jsonData = await res.json();
+          return jsonData.map(item => ({
+            ...item,
+            source: 'json'
+          }));
+        } else {
+          console.warn('Failed to load result.json:', res.statusText);
+          return [];
         }
-
-        card.innerHTML = `
-          <div class="result-content">
-            <div class="thumbnail-container">
-              ${thumbnailUrl ? `<img src="${thumbnailUrl}" alt="Thumbnail" onerror="this.style.display='none'; this.parentElement.querySelector('.platform-icon').style.display='flex';">` : ''}
-              <div class="platform-icon" style="background: ${backgroundColor};">${platformIcon}</div>
-            </div>
-            <div class="result-details">
-              <h2>${result.title}</h2>
-              <p class="url-subtitle"><a href="${result.url}" target="_blank">${result.url}</a></p>
-              <p>${result.description}</p>
-              <div class="tags">${result.tags.map(tag => `<span>${tag}</span>`).join(' ')}</div>
-            </div>
-          </div>
-        `;
-        container.appendChild(card);
-      });
+      } catch (error) {
+        console.warn('Failed to load result.json:', error);
+        return [];
+      }
     }
+
+    // Combine both sources
+    async function loadAllResults() {
+      const jsonResults = await loadJSONResults();
+      const localStorageData = loadApprovedData();
+      
+      const allResults = [
+        ...jsonResults,
+        ...localStorageData.map(item => ({
+          ...item,
+          source: 'localStorage'
+        }))
+      ];
+
+      return allResults;
+    }
+
+    // Render results
+    async function renderResults() {
+      const allResults = await loadAllResults();
+
+      const filtered = allResults.filter(item =>
+        item.title.toLowerCase().includes(query) ||
+        item.description.toLowerCase().includes(query) ||
+        item.tags.some(tag =>
+          tag.toLowerCase().includes(query) || query.includes(tag.toLowerCase())
+        )
+      );
+
+      const container = document.getElementById('results');
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<p>No results found for "<strong>${query}</strong>". Try another term.</p>`;
+      } else {
+        filtered.forEach((result, index) => {
+          const card = document.createElement('div');
+          card.className = 'result-card';
+          card.innerHTML = `
+            <h2>${result.title}</h2>
+            <p><a href="${result.url}" target="_blank">${result.url}</a></p>
+            <p>${result.description}</p>
+            <div class="tags">${result.tags.map(tag => `<span>${tag}</span>`).join(' ')}</div>
+          `;
+          container.appendChild(card);
+        });
+      }
+    }
+
+    // Initialize
+    renderResults();
   </script>
 </body>
 </html>
