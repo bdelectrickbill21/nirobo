@@ -716,5 +716,63 @@
     displayUserSubmissions();
     displayURLAnalytics();
   </script>
+  <script>
+// Add test data so analytics show something
+function addTestData() {
+  // Set test user as logged in
+  localStorage.setItem('niroboCurrentUser', JSON.stringify({
+    id: 'test-user',
+    email: 'user@example.com',
+    password: 'test'
+  }));
+
+  // Set admin access
+  localStorage.setItem('niroboAdminPass', 'nirobo');
+
+  // Add test submissions with views
+  const testSubmissions = [
+    {
+      id: '1',
+      userId: 'test-user',
+      title: 'Prothom Alo',
+      url: 'https://prothomalo.com',
+      description: 'Bangladesh\'s most popular newspaper',
+      tags: ['news', 'media', 'bangla'],
+      submittedAt: new Date().toISOString(),
+      status: 'approved',
+      viewCount: 150,
+      submitterEmail: 'user@example.com'
+    }
+  ];
+
+  localStorage.setItem('niroboAllSubmissions', JSON.stringify(testSubmissions));
+
+  // Add test visits
+  const testVisits = [
+    {
+      visitorId: 'test1',
+      timestamp: new Date().toISOString(),
+      url: 'https://yoursite.com/search.html?q=prothom',
+      country: 'Bangladesh',
+      browser: 'Chrome',
+      device: 'Desktop',
+      referrer: 'Direct'
+    }
+  ];
+
+  localStorage.setItem('niroboVisits', JSON.stringify(testVisits));
+
+  alert('✅ Test data added! Go to dashboard.html to see analytics.');
+}
+
+// Add button to trigger test data
+document.body.insertAdjacentHTML('beforeend', `
+  <div style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+    <button onclick="addTestData()" style="background: #d40000; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer;">
+      🧪 Add Test Data
+    </button>
+  </div>
+`);
+  </script>
 </body>
 </html>
