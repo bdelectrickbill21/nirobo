@@ -368,6 +368,7 @@
 
     // Create Views Over Time Chart
     function createViewsChart(allVisits) {
+      console.log("Chart Data:", sortedKeys, data);
       const ctx = document.getElementById('viewsChart').getContext('2d');
       let chart = null;
 
@@ -415,49 +416,40 @@
 
         // Create new chart
         chart = new Chart(ctx, {
-          type: 'line',
-           {
-            labels: sortedKeys,
-            datasets: [{
-              label: 'Pageviews',
-               data,
-              borderColor: '#d40000',
-              backgroundColor: 'rgba(212, 0, 0, 0.1)',
-              borderWidth: 2,
-              fill: true,
-              tension: 0.4
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                display: false
-              }
-            },
-            scales: {
-              x: {
-                grid: {
-                  color: 'rgba(255, 255, 255, 0.1)'
-                },
-                ticks: {
-                  color: '#fff'
-                }
-              },
-              y: {
-                beginAtZero: true,
-                grid: {
-                  color: 'rgba(255, 255, 255, 0.1)'
-                },
-                ticks: {
-                  color: '#fff'
-                }
-              }
-            }
-          }
-        });
+  type: 'line',
+  data: {   // ✅ fixed
+    labels: sortedKeys,
+    datasets: [{
+      label: 'Pageviews',
+      data: data,   // ✅ key:value format
+      borderColor: '#d40000',
+      backgroundColor: 'rgba(212, 0, 0, 0.1)',
+      borderWidth: 2,
+      fill: true,
+      tension: 0.4
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false
       }
+    },
+    scales: {
+      x: {
+        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+        ticks: { color: '#fff' }
+      },
+      y: {
+        beginAtZero: true,
+        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+        ticks: { color: '#fff' }
+      }
+    }
+  }
+});
 
       // Set up filter buttons
       document.querySelectorAll('.time-filter-btn').forEach(btn => {
