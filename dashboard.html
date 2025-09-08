@@ -171,12 +171,12 @@
       color: #ff9999;
     }
 
-    .login-btn {
-      background: #006400;
-      padding: 15px 30px;
-      font-size: 1.2rem;
-      margin: 20px auto;
-      display: block;
+    .login-form {
+      max-width: 400px;
+      margin: 0 auto;
+      background: rgba(255,255,255,0.1);
+      padding: 30px;
+      border-radius: 8px;
     }
   </style>
 </head>
@@ -187,7 +187,26 @@
       <p>“You hold the pen — write your truth into Bangladesh’s digital soul.”</p>
     </div>
 
+    <!-- Login Form (Hidden when logged in) -->
+    <div id="loginSection">
+      <div class="login-form">
+        <h2>🔐 Please Log In</h2>
+        <p>Submit and manage your website in Nirobo's curated search engine</p>
+        
+        <div class="form-group">
+          <input type="email" id="loginEmail" placeholder="Email" />
+        </div>
+        <div class="form-group">
+          <input type="password" id="loginPassword" placeholder="Password" />
+        </div>
+        <button onclick="login()">Login</button>
+        <p style="font-size: 0.9rem; margin-top: 20px;">
+          Don't have an account? <a href="signup.html" style="color: #ff9999;">Sign Up</a>
+        </p>
+      </div>
+    </div>
 
+    <!-- Dashboard Content (Hidden until login) -->
     <div id="dashboardContent" style="display: none;">
       <div class="user-info">
         Logged in as: <strong id="userEmail">user@example.com</strong>
@@ -242,19 +261,30 @@
       }
     });
 
-    // Login as test user
-    function loginAsTestUser() {
-      const testUser = {
-        id: 'test-user-' + Date.now(),
-        email: 'user@example.com',
-        password: 'test'
-      };
+    // Real login function
+    function login() {
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
       
-      localStorage.setItem('niroboCurrentUser', JSON.stringify(testUser));
-      document.getElementById('loginSection').style.display = 'none';
-      document.getElementById('dashboardContent').style.display = 'block';
-      document.getElementById('userEmail').textContent = testUser.email;
-      loadUserSubmissions();
+      if (!email || !password) {
+        alert('Please enter email and password');
+        return;
+      }
+
+      // Get users from localStorage
+      const users = JSON.parse(localStorage.getItem('niroboUsers') || '[]');
+      const user = users.find(u => u.email === email && u.password === password);
+      
+      if (user) {
+        localStorage.setItem('niroboCurrentUser', JSON.stringify(user));
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('dashboardContent').style.display = 'block';
+        document.getElementById('userEmail').textContent = user.email;
+        loadUserSubmissions();
+        alert('✅ Login successful!');
+      } else {
+        alert('❌ Invalid email or password');
+      }
     }
 
     // Load user submissions
@@ -382,6 +412,20 @@
 
     // Add some initial test data if none exists
     function addInitialTestData() {
+      const users = JSON.parse(localStorage.getItem('niroboUsers') || '[]');
+      if (users.length === 0) {
+        // Create a test user
+        const testUser = {
+          id: 'test-user-123',
+          email: 'test@example.com',
+          password: 'test123',
+          createdAt: new Date().toISOString()
+        };
+        
+        users.push(testUser);
+        localStorage.setItem('niroboUsers', JSON.stringify(users));
+      }
+
       const submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
       if (submissions.length === 0) {
         const testSubmissions = [
@@ -395,7 +439,7 @@
             submittedAt: new Date().toISOString(),
             status: 'approved',
             viewCount: 150,
-            submitterEmail: 'user@example.com'
+            submitterEmail: 'test@example.com'
           }
         ];
         localStorage.setItem('niroboAllSubmissions', JSON.stringify(testSubmissions));
