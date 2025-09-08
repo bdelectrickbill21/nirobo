@@ -121,16 +121,6 @@
   <div id="results"></div>
 
   <script>
-    // Extract favicon from URL
-function getFaviconUrl(url) {
-  try {
-    const hostname = new URL(url).hostname;
-    return `https://www.google.com/s2/favicons?domain=${hostname}&sz=32`;
-  } catch (e) {
-    return 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%23444" rx="4"/><text x="50%" y="50%" fill="white" font-size="16" font-family="Arial" text-anchor="middle" dominant-baseline="middle">?</text></svg>';
-  }
-}
-    
     // Handle search form
     document.getElementById('search-form').addEventListener('submit', (e) => {
       e.preventDefault();
@@ -185,6 +175,56 @@ function getFaviconUrl(url) {
       return allResults;
     }
 
+    // Extract favicon from URL
+    function getFaviconUrl(url) {
+      try {
+        const hostname = new URL(url).hostname;
+        return `https://www.google.com/s2/favicons?domain=${hostname}&sz=32`;
+      } catch (e) {
+        return 'image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%23444" rx="4"/><text x="50%" y="50%" fill="white" font-size="16" font-family="Arial" text-anchor="middle" dominant-baseline="middle">?</text></svg>';
+      }
+    }
+
+    // Extract thumbnail from URL
+    function getThumbnailUrl(url) {
+      try {
+        const hostname = new URL(url).hostname.toLowerCase();
+        
+        // YouTube
+        if (hostname.includes('youtube.com') || hostname.includes('youtu.be')) {
+          let videoId = '';
+          if (hostname.includes('youtu.be')) {
+            videoId = url.split('/').pop();
+          } else {
+            videoId = new URL(url).searchParams.get('v');
+          }
+          if (videoId) {
+            return `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+          }
+        }
+        
+        // TikTok
+        if (hostname.includes('tiktok.com')) {
+          return `https://www.tiktok.com/api/share/video?videoId=${url.split('/').pop()}&type=1`;
+        }
+        
+        // Facebook
+        if (hostname.includes('facebook.com')) {
+          return `https://graph.facebook.com/v17.0/${url.split('/').pop()}/picture?type=large`;
+        }
+        
+        // Instagram
+        if (hostname.includes('instagram.com')) {
+          return `https://www.instagram.com/p/${url.split('/').pop()}/media/?size=l`;
+        }
+        
+        // Default fallback
+        return getFaviconUrl(url);
+      } catch (e) {
+        return getFaviconUrl(url);
+      }
+    }
+
     // Render results
     async function renderResults() {
       const allResults = await loadAllResults();
@@ -205,20 +245,23 @@ function getFaviconUrl(url) {
         filtered.forEach((result, index) => {
           const card = document.createElement('div');
           card.className = 'result-card';
+          
+          // Get thumbnail
+          const thumbnailUrl = getThumbnailUrl(result.url);
+          
           card.innerHTML = `
-  <div style="display: flex; align-items: flex-start; gap: 12px;">
-    <img src="${getFaviconUrl(result.url)}" 
-         alt="Favicon" 
-         style="width: 32px; height: 32px; border-radius: 4px; flex-shrink: 0;"
-         onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 fill=%22%23444%22 rx=%224%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22white%22 font-size=%2216%22 font-family=%22Arial%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>?</text></svg>'">
-    <div style="flex: 1; min-width: 0;">
-      <h2 style="margin: 0 0 8px 0; font-size: 1.2rem;">${result.title}</h2>
-      <p class="url-subtitle"><a href="${result.url}" target="_blank" style="color: #ff9999;">${result.url}</a></p>
-      <p style="margin: 8px 0;">${result.description}</p>
-      <div class="tags" style="margin-top: 8px;">${result.tags.map(tag => `<span>${tag}</span>`).join(' ')}</div>
-    </div>
-  </div>
-`;
+            <div class="result-content">
+              <div class="thumbnail-container">
+                <img src="${thumbnailUrl}" alt="Thumbnail" style="width: 100%; height: auto; max-height: 200px; object-fit: cover;" onerror="this.src='${getFaviconUrl(result.url)}'; this.style.width='32px'; this.style.height='32px';">
+              </div>
+              <div class="result-details">
+                <h2>${result.title}</h2>
+                <p><a href="${result.url}" target="_blank">${result.url}</a></p>
+                <p>${result.description}</p>
+                <div class="tags">${result.tags.map(tag => `<span>${tag}</span>`).join(' ')}</div>
+              </div>
+            </div>
+          `;
           container.appendChild(card);
         });
       }
