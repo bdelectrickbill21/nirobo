@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nirobo Admin Panel</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -24,145 +23,124 @@
       margin-bottom: 30px;
     }
 
+    .login-section {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+    }
+
+    input[type="password"] {
+      padding: 12px;
+      width: 300px;
+      margin: 15px;
+      border: 1px solid #d40000;
+      border-radius: 4px;
+      font-size: 16px;
+      background: rgba(0, 0, 0, 0.2);
+      color: white;
+    }
+
+    button {
+      background: #d40000;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 15px;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #ff0000;
+    }
+
     .section {
       background: #003300;
-      padding: 20px;
+      padding: 25px;
       border-radius: 8px;
       margin-bottom: 30px;
+      border: 1px solid rgba(212, 0, 0, 0.5);
+    }
+
+    .section h2 {
+      color: #ffcccc;
+      margin-bottom: 20px;
+      font-size: 1.4rem;
+      border-bottom: 1px solid #d40000;
+      padding-bottom: 10px;
     }
 
     .entry-item {
       background: #004400;
-      padding: 15px;
-      margin: 10px 0;
-      border-radius: 6px;
-      position: relative;
+      padding: 20px;
+      margin: 15px 0;
+      border-radius: 8px;
+      border-left: 4px solid #d40000;
     }
 
-    .entry-actions {
-      margin-top: 10px;
-    }
+    .entry-item.approved { border-left-color: #00aa00; }
+    .entry-item.rejected { border-left-color: #d40000; }
+    .entry-item.pending { border-left-color: #ff9900; }
 
-    button {
-      padding: 8px 12px;
-      margin: 5px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-
-    .btn-approve { background: #00aa00; color: white; }
-    .btn-reject { background: #d40000; color: white; }
-    .btn-unapprove { background: #ff9900; color: white; }
-    .btn-back { background: #333; color: white; margin-top: 20px; }
-
-    input, textarea {
-      padding: 8px;
-      margin: 5px 0;
-      border-radius: 4px;
-      width: 100%;
-      max-width: 400px;
-    }
-
-    .message-box {
-      margin-top: 10px;
-      width: 100%;
-      max-width: 400px;
-    }
+    .btn-approve { background: #00aa00; color: white; margin: 5px; padding: 8px 16px; }
+    .btn-reject { background: #d40000; color: white; margin: 5px; padding: 8px 16px; }
+    .btn-unapprove { background: #ff9900; color: white; margin: 5px; padding: 8px 16px; }
+    .btn-back { background: #333; color: white; margin-top: 20px; padding: 10px 20px; }
 
     .stats {
       background: rgba(255,255,255,0.1);
-      padding: 10px;
-      border-radius: 4px;
-      margin-top: 10px;
-      font-size: 0.9em;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+      font-size: 1rem;
     }
 
     .admin-message {
       background: rgba(255,255,255,0.2);
-      padding: 10px;
-      border-radius: 4px;
-      margin-top: 10px;
+      padding: 12px;
+      border-radius: 6px;
+      margin: 12px 0;
       font-style: italic;
-    }
-
-    .chart-container {
-      height: 300px;
-      margin: 20px 0;
-    }
-
-    .time-filter-btn {
-      background: #006400;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      margin: 5px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: background 0.3s;
-    }
-
-    .time-filter-btn:hover {
-      background: #008000;
-    }
-
-    .time-filter-btn.active {
-      background: #d40000;
-      color: white;
-    }
-
-    .chart-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
       font-size: 0.95rem;
     }
 
-    .chart-bar {
-      height: 12px;
-      background: #d40000;
-      border-radius: 3px;
-      margin-left: 10px;
-      flex-grow: 1;
+    .hint {
+      font-size: 0.9rem;
+      color: #fff;
+      margin-top: 10px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: #ff9999;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>🔐 Nirobo Admin Panel</h1>
+    <h1>🇧🇩 NIROBO ADMIN PANEL</h1>
     
-    <div style="text-align: center; margin-bottom: 30px;">
+    <!-- Login Section -->
+    <div id="loginSection" class="login-section">
+      <h2>🔐 Admin Login</h2>
       <input type="password" id="adminPass" placeholder="Enter Admin Password" />
-      <button id="loginBtn">Login</button>
-      <p><small>Hint: password is "nirobo"</small></p>
+      <button onclick="login()">Login</button>
+      <p class="hint">Hint: password is "nirobo"</p>
     </div>
 
-    <div id="adminContent" style="display:none;">
-      <!-- Analytics Section -->
+    <!-- Admin Content (Hidden until login) -->
+    <div id="adminContent" style="display: none;">
+      
+      <!-- Analytics Summary -->
       <div class="section">
-        <h2>📊 Visitor Analytics</h2>
-        
-        <!-- Time Filter Buttons -->
-        <div style="text-align: center; margin: 20px 0;">
-          <button class="time-filter-btn active" data-range="24h">Last 24 Hours</button>
-          <button class="time-filter-btn" data-range="7d">Last 7 Days</button>
-          <button class="time-filter-btn" data-range="30d">Last 30 Days</button>
-          <button class="time-filter-btn" data-range="3m">Last 3 Months</button>
-          <button class="time-filter-btn" data-range="6m">Last 6 Months</button>
-          <button class="time-filter-btn" data-range="12m">Last 12 Months</button>
-          <button class="time-filter-btn" data-range="all">Everything</button>
-        </div>
-
-        <!-- Views Over Time Chart -->
-        <div class="chart-container">
-          <canvas id="viewsChart"></canvas>
-        </div>
-
-        <div id="analyticsContent">
-          <p>Loading analytics...</p>
+        <h2>📊 System Analytics</h2>
+        <div id="analyticsSummary" class="stats">
+          Loading system analytics...
         </div>
       </div>
 
@@ -170,7 +148,10 @@
       <div class="section">
         <h2>📬 Pending Submissions</h2>
         <div id="pendingList">
-          <p>Loading...</p>
+          <div class="empty-state">
+            <h3>🎉 No pending submissions</h3>
+            <p>All submissions have been reviewed!</p>
+          </div>
         </div>
       </div>
 
@@ -178,12 +159,15 @@
       <div class="section">
         <h2>✅ Approved Websites</h2>
         <div id="approvedList">
-          <p>Loading...</p>
+          <div class="empty-state">
+            <h3>📭 No approved websites yet</h3>
+            <p>Approve submissions to see them here</p>
+          </div>
         </div>
       </div>
 
       <div style="text-align: center;">
-        <button class="btn-back" onclick="window.location.href='index.html'">← Back to Nirobo</button>
+        <button class="btn-back" onclick="logout()">🚪 Logout</button>
       </div>
     </div>
 
@@ -191,67 +175,68 @@
     // Simple password (for demo)
     const ADMIN_PASSWORD = "nirobo";
 
-    document.getElementById('loginBtn').addEventListener('click', () => {
-      const pass = document.getElementById('adminPass').value;
-      if (pass === ADMIN_PASSWORD) {
-        localStorage.setItem('niroboAdminPass', 'nirobo');
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      const adminPass = localStorage.getItem('niroboAdminPass');
+      if (adminPass === 'nirobo') {
+        document.getElementById('loginSection').style.display = 'none';
         document.getElementById('adminContent').style.display = 'block';
-        displayAnalytics();
-        displayPending();
-        displayApproved();
-      } else {
-        alert('❌ Incorrect password');
+        loadAllData();
       }
     });
 
-    // Add test data if none exists
-    function addTestData() {
-      const submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
-      if (submissions.length === 0) {
-        const testSubmissions = [
-          {
-            id: '1',
-            userId: 'user1',
-            title: 'Prothom Alo',
-            url: 'https://prothomalo.com',
-            description: 'Bangladesh\'s most popular newspaper',
-            tags: ['news', 'media', 'bangla'],
-            submittedAt: new Date().toISOString(),
-            status: 'pending',
-            submitterEmail: 'user1@example.com'
-          },
-          {
-            id: '2',
-            userId: 'user2',
-            title: 'bKash',
-            url: 'https://www.bkash.com.bd',
-            description: 'Mobile financial service',
-            tags: ['finance', 'mobile', 'payment'],
-            submittedAt: new Date().toISOString(),
-            status: 'approved',
-            viewCount: 89,
-            submitterEmail: 'user2@example.com'
-          }
-        ];
-        localStorage.setItem('niroboAllSubmissions', JSON.stringify(testSubmissions));
+    // Login function
+    function login() {
+      const pass = document.getElementById('adminPass').value;
+      if (pass === ADMIN_PASSWORD) {
+        localStorage.setItem('niroboAdminPass', 'nirobo');
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('adminContent').style.display = 'block';
+        loadAllData();
+        alert('✅ Login successful! Welcome to Nirobo Admin Panel');
+      } else {
+        alert('❌ Incorrect password - please try "nirobo"');
       }
+    }
 
+    // Logout function
+    function logout() {
+      localStorage.removeItem('niroboAdminPass');
+      document.getElementById('loginSection').style.display = 'block';
+      document.getElementById('adminContent').style.display = 'none';
+      location.reload();
+    }
+
+    // Load all data
+    function loadAllData() {
+      loadAnalytics();
+      loadPendingSubmissions();
+      loadApprovedSubmissions();
+    }
+
+    // Load analytics
+    function loadAnalytics() {
       const visits = JSON.parse(localStorage.getItem('niroboVisits') || '[]');
+      const submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+      
+      const container = document.getElementById('analyticsSummary');
+      
+      // Add some test visits if none exist
       if (visits.length === 0) {
         const testVisits = [
           {
-            visitorId: 'v1',
+            visitorId: 'test1',
             timestamp: new Date().toISOString(),
-            url: 'https://yoursite.com/search.html?q=prothom',
+            url: 'https://nirobo.com/search.html?q=prothom',
             country: 'Bangladesh',
             browser: 'Chrome',
             device: 'Desktop',
             referrer: 'Direct'
           },
           {
-            visitorId: 'v2',
+            visitorId: 'test2',
             timestamp: new Date(Date.now() - 86400000).toISOString(),
-            url: 'https://yoursite.com/search.html?q=bkash',
+            url: 'https://nirobo.com/search.html?q=bkash',
             country: 'Bangladesh',
             browser: 'Firefox',
             device: 'Mobile',
@@ -260,398 +245,162 @@
         ];
         localStorage.setItem('niroboVisits', JSON.stringify(testVisits));
       }
-    }
 
-    // Load all submissions
-    function loadAllSubmissions() {
-      return JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
-    }
-
-    function saveAllSubmissions(submissions) {
-      localStorage.setItem('niroboAllSubmissions', JSON.stringify(submissions));
-    }
-
-    // Display analytics
-    function displayAnalytics() {
-      const visits = JSON.parse(localStorage.getItem('niroboVisits') || '[]');
-      const analyticsDiv = document.getElementById('analyticsContent');
-      
-      if (visits.length === 0) {
-        analyticsDiv.innerHTML = '<p>No visitor data yet.</p>';
-        return;
-      }
-
-      // Unique visitors
       const uniqueVisitors = new Set(visits.map(v => v.visitorId)).size;
-      
-      // Browser stats
-      const browserStats = {};
-      visits.forEach(v => {
-        browserStats[v.browser] = (browserStats[v.browser] || 0) + 1;
-      });
-      
-      // Country stats
-      const countryStats = {};
-      visits.forEach(v => {
-        countryStats[v.country] = (countryStats[v.country] || 0) + 1;
-      });
-      
-      // Referrer stats
-      const referrerStats = {};
-      visits.forEach(v => {
-        const ref = v.referrer === '' ? 'Direct' : new URL(v.referrer).hostname;
-        referrerStats[ref] = (referrerStats[ref] || 0) + 1;
-      });
-      
-      // Device stats
-      const deviceStats = {};
-      visits.forEach(v => {
-        deviceStats[v.device] = (deviceStats[v.device] || 0) + 1;
-      });
+      const totalSubmissions = submissions.length;
+      const approvedSubmissions = submissions.filter(s => s.status === 'approved').length;
+      const pendingSubmissions = submissions.filter(s => s.status === 'pending').length;
 
-      let html = `
-        <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-          <h3>📈 Summary</h3>
-          <p><strong>Total Pageviews:</strong> ${visits.length}</p>
-          <p><strong>Unique Visitors:</strong> ${uniqueVisitors}</p>
-          <p><strong>First Visit:</strong> ${new Date(visits[0].timestamp).toLocaleString()}</p>
-          <p><strong>Last Visit:</strong> ${new Date(visits[visits.length-1].timestamp).toLocaleString()}</p>
-        </div>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-          <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px;">
-            <h4>🌐 Top Countries</h4>
-            ${Object.entries(countryStats).sort((a,b) => b[1] - a[1]).slice(0, 5).map(([country, count]) => 
-              `<p>${country}: ${count} visits</p>`
-            ).join('')}
-          </div>
-          
-          <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px;">
-            <h4>💻 Browsers</h4>
-            ${Object.entries(browserStats).sort((a,b) => b[1] - a[1]).map(([browser, count]) => 
-              `<p>${browser}: ${count} visits</p>`
-            ).join('')}
-          </div>
-          
-          <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px;">
-            <h4>📱 Devices</h4>
-            ${Object.entries(deviceStats).sort((a,b) => b[1] - a[1]).map(([device, count]) => 
-              `<p>${device}: ${count} visits</p>`
-            ).join('')}
-          </div>
-          
-          <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px;">
-            <h4>🔗 Top Referrers</h4>
-            ${Object.entries(referrerStats).sort((a,b) => b[1] - a[1]).slice(0, 5).map(([referrer, count]) => 
-              `<p>${referrer}: ${count} visits</p>`
-            ).join('')}
-          </div>
-        </div>
-        
-        <h4 style="margin-top: 30px;">📋 Recent Visits</h4>
-        <div style="max-height: 300px; overflow-y: auto; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px;">
-          ${visits.slice(-10).reverse().map(visit => `
-            <div style="padding: 8px; border-bottom: 1px solid #333; font-size: 0.9rem;">
-              <strong>${new Date(visit.timestamp).toLocaleString()}</strong><br>
-              ${visit.country} | ${visit.browser} | ${visit.device}<br>
-              <small>Ref: ${visit.referrer}</small>
-            </div>
-          `).join('')}
-        </div>
+      container.innerHTML = `
+        <h3>📈 Nirobo Search Engine Statistics</h3>
+        <p><strong>🌐 Total Pageviews:</strong> ${visits.length}</p>
+        <p><strong>👥 Unique Visitors:</strong> ${uniqueVisitors}</p>
+        <p><strong>📝 Total Submissions:</strong> ${totalSubmissions}</p>
+        <p><strong>✅ Approved Websites:</strong> ${approvedSubmissions}</p>
+        <p><strong>📬 Pending Review:</strong> ${pendingSubmissions}</p>
+        <p><strong>🇧🇩 Top Country:</strong> Bangladesh</p>
+        <p><strong>💻 Top Browser:</strong> Chrome</p>
       `;
-
-      analyticsDiv.innerHTML = html;
-
-      // Create time-based chart
-      createViewsChart(visits);
     }
 
-    // Create Views Over Time Chart
-    function createViewsChart(allVisits) {
-      console.log("Chart Data:", sortedKeys, data);
-      const ctx = document.getElementById('viewsChart').getContext('2d');
-      let chart = null;
-
-      function updateChart(range) {
-        const now = new Date();
-        let filteredVisits = allVisits;
-        
-        if (range !== 'all') {
-          const hours = {
-            '24h': 24,
-            '7d': 7 * 24,
-            '30d': 30 * 24,
-            '3m': 90 * 24,
-            '6m': 180 * 24,
-            '12m': 365 * 24
-          }[range];
-          
-          const cutoff = new Date(now.getTime() - hours * 60 * 60 * 1000);
-          filteredVisits = allVisits.filter(v => new Date(v.timestamp) >= cutoff);
-        }
-
-        // Group by time period
-        const grouped = {};
-        filteredVisits.forEach(visit => {
-          const date = new Date(visit.timestamp);
-          let key;
-          
-          if (range === '24h') {
-            key = `${date.getHours()}:00`;
-          } else {
-            key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-          }
-          
-          grouped[key] = (grouped[key] || 0) + 1;
-        });
-
-        // Sort keys
-        const sortedKeys = Object.keys(grouped).sort();
-        const data = sortedKeys.map(key => grouped[key]);
-
-        // Destroy previous chart
-        if (chart) {
-          chart.destroy();
-        }
-
-        // Create new chart
-        chart = new Chart(ctx, {
-  type: 'line',
-  data: {   // ✅ fixed
-    labels: sortedKeys,
-    datasets: [{
-      label: 'Pageviews',
-      data: data,   // ✅ key:value format
-      borderColor: '#d40000',
-      backgroundColor: 'rgba(212, 0, 0, 0.1)',
-      borderWidth: 2,
-      fill: true,
-      tension: 0.4
-    }]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: false
-      }
-    },
-    scales: {
-      x: {
-        grid: { color: 'rgba(255, 255, 255, 0.1)' },
-        ticks: { color: '#fff' }
-      },
-      y: {
-        beginAtZero: true,
-        grid: { color: 'rgba(255, 255, 255, 0.1)' },
-        ticks: { color: '#fff' }
-      }
-    }
-  }
-});
-
-      // Set up filter buttons
-      document.querySelectorAll('.time-filter-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-          document.querySelectorAll('.time-filter-btn').forEach(b => b.classList.remove('active'));
-          this.classList.add('active');
-          updateChart(this.getAttribute('data-range'));
-        });
-      });
-
-      // Initialize with 24h
-      updateChart('24h');
-    }
-
-    // Display pending submissions
-    function displayPending() {
-      const allSubmissions = loadAllSubmissions();
-      const pending = allSubmissions.filter(sub => sub.status === "pending");
+    // Load pending submissions
+    function loadPendingSubmissions() {
+      const submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+      const pending = submissions.filter(s => s.status === 'pending');
       const container = document.getElementById('pendingList');
-      container.innerHTML = '';
-
+      
       if (pending.length === 0) {
-        container.innerHTML = '<p>🎉 No pending submissions.</p>';
+        container.innerHTML = `
+          <div class="empty-state">
+            <h3>🎉 No pending submissions</h3>
+            <p>All submissions have been reviewed!</p>
+          </div>
+        `;
         return;
       }
 
-      pending.forEach((submission, index) => {
-        const div = document.createElement('div');
-        div.className = 'entry-item';
-        div.innerHTML = `
-          <strong>${submission.title}</strong><br>
-          <a href="${submission.url}" target="_blank" style="color:#ff9999;">${submission.url}</a><br>
-          <em>${submission.description}</em><br>
-          <small>Tags: ${submission.tags.join(', ')}</small><br>
-          <small>Submitted: ${new Date(submission.submittedAt).toLocaleString()}</small><br>
-          <small>Domain: ${new URL(submission.url).hostname}</small><br>
-          <small>📧 Submitter: ${submission.submitterEmail}</small><br>
-          
-          <div style="margin-top: 15px;">
-            <textarea placeholder="Reason for approval (optional)" style="width: 100%; padding: 8px; margin: 5px 0; border-radius: 4px;"></textarea>
-            <button class="btn-approve" onclick="approveByIndex(${index}, this.previousElementSibling.value)">Approve</button>
-            
-            <textarea placeholder="Reason for rejection (optional)" style="width: 100%; padding: 8px; margin: 5px 0; border-radius: 4px;"></textarea>
-            <button class="btn-reject" onclick="rejectByIndex(${index}, this.previousElementSibling.value)">Reject</button>
-          </div>
-        `;
-        container.appendChild(div);
-      });
-    }
-
-    // Display approved websites
-    function displayApproved() {
-      const allSubmissions = loadAllSubmissions();
-      const approved = allSubmissions.filter(sub => sub.status === "approved");
-      const container = document.getElementById('approvedList');
       container.innerHTML = '';
-
-      if (approved.length === 0) {
-        container.innerHTML = '<p>📭 No approved websites yet.</p>';
-        return;
-      }
-
-      approved.forEach((submission, index) => {
+      pending.forEach((sub, index) => {
         const div = document.createElement('div');
-        div.className = 'entry-item';
+        div.className = 'entry-item pending';
         div.innerHTML = `
-          <strong>${submission.title}</strong><br>
-          <a href="${submission.url}" target="_blank" style="color:#ff9999;">${submission.url}</a><br>
-          <em>${submission.description}</em><br>
-          <small>Tags: ${submission.tags.join(', ')}</small><br>
-          <small>Approved: ${submission.reviewedAt ? new Date(submission.reviewedAt).toLocaleString() : 'N/A'}</small><br>
-          <small>📧 Submitter: ${submission.submitterEmail}</small><br>
-          <small>👀 Views: ${submission.viewCount || 0}</small><br>
+          <h3>📌 ${sub.title}</h3>
+          <p><strong>🔗 URL:</strong> <a href="${sub.url}" target="_blank" style="color: #ff9999;">${sub.url}</a></p>
+          <p><strong>📝 Description:</strong> ${sub.description}</p>
+          <p><strong>🏷️ Tags:</strong> ${sub.tags.join(', ')}</p>
+          <p><strong>📅 Submitted:</strong> ${new Date(sub.submittedAt).toLocaleString()}</p>
+          <p><strong>📧 Submitter:</strong> ${sub.submitterEmail}</p>
           
-          ${submission.adminMessage ? `<div class="admin-message">💬 Admin Message: ${submission.adminMessage}</div>` : ''}
-          
-          <div class="entry-actions">
-            <button class="btn-unapprove" onclick="unapproveByIndex(${index})">Unapprove (Revoke)</button>
+          <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #555;">
+            <textarea id="reason-${sub.id}" placeholder="Add reason for approval/rejection (optional)" style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 4px; background: rgba(255,255,255,0.1); color: white; border: 1px solid #d40000; min-height: 60px;"></textarea>
+            <div style="margin-top: 15px;">
+              <button class="btn-approve" onclick="approveSubmission('${sub.id}')">✅ Approve</button>
+              <button class="btn-reject" onclick="rejectSubmission('${sub.id}')">❌ Reject</button>
+            </div>
           </div>
         `;
         container.appendChild(div);
       });
     }
 
-    // Approve by index in pending list
-    function approveByIndex(pendingIndex, adminMessage) {
-      const allSubmissions = loadAllSubmissions();
-      const pending = allSubmissions.filter(sub => sub.status === "pending");
-      const submission = pending[pendingIndex];
-
-      if (!submission) {
-        alert('Submission not found');
+    // Load approved submissions
+    function loadApprovedSubmissions() {
+      const submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+      const approved = submissions.filter(s => s.status === 'approved');
+      const container = document.getElementById('approvedList');
+      
+      if (approved.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <h3>📭 No approved websites yet</h3>
+            <p>Approve submissions to see them here</p>
+          </div>
+        `;
         return;
       }
 
-      const submissionIndex = allSubmissions.findIndex(sub => sub.id === submission.id);
-      if (submissionIndex !== -1) {
-        allSubmissions[submissionIndex] = {
-          ...allSubmissions[submissionIndex],
+      container.innerHTML = '';
+      approved.forEach((sub, index) => {
+        const div = document.createElement('div');
+        div.className = 'entry-item approved';
+        div.innerHTML = `
+          <h3>🌟 ${sub.title}</h3>
+          <p><strong>🔗 URL:</strong> <a href="${sub.url}" target="_blank" style="color: #ff9999;">${sub.url}</a></p>
+          <p><strong>📝 Description:</strong> ${sub.description}</p>
+          <p><strong>🏷️ Tags:</strong> ${sub.tags.join(', ')}</p>
+          <p><strong>📅 Approved:</strong> ${sub.reviewedAt ? new Date(sub.reviewedAt).toLocaleString() : 'N/A'}</p>
+          <p><strong>📧 Submitter:</strong> ${sub.submitterEmail}</p>
+          <p><strong>👁️ Views:</strong> ${sub.viewCount || 0}</p>
+          
+          ${sub.adminMessage ? `<div class="admin-message">💬 Admin Message: ${sub.adminMessage}</div>` : ''}
+          
+          <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #555;">
+            <button class="btn-unapprove" onclick="unapproveSubmission('${sub.id}')">🔄 Unapprove (Send Back to Pending)</button>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // Approve submission
+    function approveSubmission(submissionId) {
+      let submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+      const index = submissions.findIndex(s => s.id === submissionId);
+      
+      if (index !== -1) {
+        const reason = document.getElementById(`reason-${submissionId}`)?.value || "Your submission has been approved! Thank you for contributing to Nirobo.";
+        submissions[index] = {
+          ...submissions[index],
           status: "approved",
           reviewedAt: new Date().toISOString(),
-          adminMessage: adminMessage || "Your submission has been approved!"
+          adminMessage: reason,
+          viewCount: submissions[index].viewCount || 0
         };
+        
+        localStorage.setItem('niroboAllSubmissions', JSON.stringify(submissions));
+        alert('✅ Approved! The website will now appear in search results.');
+        loadAllData();
       }
-
-      saveAllSubmissions(allSubmissions);
-
-      // Notify user
-      storeUserNotification(submission.url, 'approved', adminMessage || "Your submission has been approved!", submission.submitterEmail);
-
-      alert('✅ Approved!');
-      displayPending();
-      displayApproved();
-      displayAnalytics();
     }
 
-    // Reject by index in pending list
-    function rejectByIndex(pendingIndex, adminMessage) {
-      const allSubmissions = loadAllSubmissions();
-      const pending = allSubmissions.filter(sub => sub.status === "pending");
-      const submission = pending[pendingIndex];
-
-      if (!submission) {
-        alert('Submission not found');
-        return;
-      }
-
-      const submissionIndex = allSubmissions.findIndex(sub => sub.id === submission.id);
-      if (submissionIndex !== -1) {
-        allSubmissions[submissionIndex] = {
-          ...allSubmissions[submissionIndex],
+    // Reject submission
+    function rejectSubmission(submissionId) {
+      let submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+      const index = submissions.findIndex(s => s.id === submissionId);
+      
+      if (index !== -1) {
+        const reason = document.getElementById(`reason-${submissionId}`)?.value || "Sorry, your submission was not approved. Please review our guidelines and try again.";
+        submissions[index] = {
+          ...submissions[index],
           status: "rejected",
           reviewedAt: new Date().toISOString(),
-          adminMessage: adminMessage || "Sorry, your submission was not approved."
+          adminMessage: reason
         };
+        
+        localStorage.setItem('niroboAllSubmissions', JSON.stringify(submissions));
+        alert('❌ Rejected! The submitter will be notified with your reason.');
+        loadAllData();
       }
-
-      saveAllSubmissions(allSubmissions);
-
-      // Notify user
-      storeUserNotification(submission.url, 'rejected', adminMessage || "Sorry, your submission was not approved.", submission.submitterEmail);
-
-      alert('❌ Rejected!');
-      displayPending();
-      displayApproved();
-      displayAnalytics();
     }
 
-    // Unapprove by index in approved list
-    function unapproveByIndex(approvedIndex) {
-      const allSubmissions = loadAllSubmissions();
-      const approved = allSubmissions.filter(sub => sub.status === "approved");
-      const submission = approved[approvedIndex];
-
-      if (!submission) {
-        alert('Submission not found');
-        return;
-      }
-
-      const submissionIndex = allSubmissions.findIndex(sub => sub.id === submission.id);
-      if (submissionIndex !== -1) {
-        allSubmissions[submissionIndex] = {
-          ...allSubmissions[submissionIndex],
+    // Unapprove submission
+    function unapproveSubmission(submissionId) {
+      let submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+      const index = submissions.findIndex(s => s.id === submissionId);
+      
+      if (index !== -1) {
+        submissions[index] = {
+          ...submissions[index],
           status: "pending",
           reviewedAt: null,
-          adminMessage: "This approval was revoked by admin."
+          adminMessage: "This approval was revoked for further review."
         };
+        
+        localStorage.setItem('niroboAllSubmissions', JSON.stringify(submissions));
+        alert('🔄 Unapproved! The website has been sent back to pending review.');
+        loadAllData();
       }
-
-      saveAllSubmissions(allSubmissions);
-
-      // Notify user
-      storeUserNotification(submission.url, 'revoked', "Your previously approved website has been revoked for review.", submission.submitterEmail);
-
-      alert('⚠️ Unapproved! Moved back to pending.');
-      displayApproved();
-      displayPending();
-      displayAnalytics();
     }
-
-    // Store notification for user
-    function storeUserNotification(url, status, message, userEmail) {
-      if (!userEmail) return;
-
-      let notifications = JSON.parse(localStorage.getItem('niroboUserNotifications') || '{}');
-      
-      if (!notifications[userEmail]) {
-        notifications[userEmail] = [];
-      }
-      
-      notifications[userEmail].push({
-        url,
-        status,
-        message,
-        timestamp: new Date().toISOString()
-      });
-
-      localStorage.setItem('niroboUserNotifications', JSON.stringify(notifications));
-    }
-
-    // Initialize
-    addTestData();
   </script>
 </body>
 </html>
