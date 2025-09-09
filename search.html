@@ -203,11 +203,6 @@
           }
         }
         
-        // TikTok
-        if (hostname.includes('tiktok.com')) {
-          return `https://www.tiktok.com/api/share/video?videoId=${url.split('/').pop()}&type=1`;
-        }
-        
         // Facebook
         if (hostname.includes('facebook.com')) {
           return `https://graph.facebook.com/v17.0/${url.split('/').pop()}/picture?type=large`;
@@ -216,6 +211,26 @@
         // Instagram
         if (hostname.includes('instagram.com')) {
           return `https://www.instagram.com/p/${url.split('/').pop()}/media/?size=l`;
+        }
+        
+        // TikTok
+        if (hostname.includes('tiktok.com')) {
+          return `https://www.tiktok.com/api/share/video?videoId=${url.split('/').pop()}&type=1`;
+        }
+        
+        // BBC
+        if (hostname.includes('bbc.com')) {
+          return `https://www.bbc.com/news/${url.split('/').pop()}/media/image`;
+        }
+        
+        // CNN
+        if (hostname.includes('cnn.com')) {
+          return `https://www.cnn.com/${url.split('/').pop()}/media/image`;
+        }
+        
+        // Daily Star
+        if (hostname.includes('thedailystar.net')) {
+          return `https://www.thedailystar.net/${url.split('/').pop()}/media/image`;
         }
         
         // Default fallback
@@ -246,13 +261,17 @@
           const card = document.createElement('div');
           card.className = 'result-card';
           
+          // Get favicon
+          const faviconUrl = getFaviconUrl(result.url);
+          
           // Get thumbnail
           const thumbnailUrl = getThumbnailUrl(result.url);
           
           card.innerHTML = `
             <div class="result-content">
               <div class="thumbnail-container">
-                <img src="${thumbnailUrl}" alt="Thumbnail" style="width: 100%; height: auto; max-height: 200px; object-fit: cover;" onerror="this.src='${getFaviconUrl(result.url)}'; this.style.width='32px'; this.style.height='32px';">
+                <img src="${faviconUrl}" alt="Favicon" style="width: 32px; height: 32px; border-radius: 4px; margin-right: 10px; vertical-align: middle;">
+                ${thumbnailUrl !== faviconUrl ? `<img src="${thumbnailUrl}" alt="Thumbnail" style="width: 100%; max-height: 200px; object-fit: cover; margin-top: 10px;">` : ''}
               </div>
               <div class="result-details">
                 <h2>${result.title}</h2>
