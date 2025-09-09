@@ -1,5 +1,306 @@
 [
   {
+    "title": "Prothom Alo",
+    "url": "https://prothomalo.com",
+    "description": "Bangladesh's most popular Bengali newspaper with breaking news, politics, and culture.",
+    "tags": ["news", "bangladesh", "newspaper", "bengali"],
+    "approved": true
+  },
+  {
+    "title": "The Daily Star",
+    "url": "https://www.thedailystar.net",
+    "description": "Leading English-language newspaper in Bangladesh covering politics, business, and sports.",
+    "tags": ["news", "bangladesh", "english", "newspaper"],
+    "approved": true
+  },
+  {
+    "title": "bdnews24.com",
+    "url": "https://bdnews24.com",
+    "description": "24/7 news portal in both Bengali and English, covering Bangladesh and international news.",
+    "tags": ["news", "bangladesh", "24/7", "bengali", "english"],
+    "approved": true
+  },
+  {
+    "title": "Somoy TV",
+    "url": "https://www.somoynews.tv",
+    "description": "Popular Bangladeshi news channel providing live news, politics, and current affairs.",
+    "tags": ["news", "bangladesh", "tv", "live", "channel"],
+    "approved": true
+  },
+  {
+    "title": "Jugantor",
+    "url": "https://www.jugantor.com",
+    "description": "Major Bengali daily newspaper covering national and international news.",
+    "tags": ["news", "bangladesh", "newspaper", "bengali"],
+    "approved": true
+  },
+  {
+    "title": "bKash",
+    "url": "https://www.bkash.com.bd",
+    "description": "Bangladesh's leading mobile financial service for money transfer, bill payment, and more.",
+    "tags": ["finance", "mobile", "payment", "bangladesh", "fintech"],
+    "approved": true
+  },
+  {
+    "title": "Nagad",
+    "url": "https://www.nagad.com.bd",
+    "description": "Government-backed mobile financial service in Bangladesh for secure digital transactions.",
+    "tags": ["finance", "mobile", "payment", "bangladesh", "government"],
+    "approved": true
+  },
+  {
+    "title": "Dhaka Stock Exchange",
+    "url": "https://www.dsebd.org",
+    "description": "Official website of Dhaka Stock Exchange for stock market data, indices, and company information.",
+    "tags": ["finance", "stock", "market", "bangladesh", "investment"],
+    "approved": true
+  },
+  {
+    "title": "Chaldal",
+    "url": "https://chaldal.com",
+    "description": "Online grocery delivery service in Bangladesh, delivering fresh products to your doorstep.",
+    "tags": ["shopping", "grocery", "delivery", "bangladesh", "online"],
+    "approved": true
+  },
+  {
+    "title": "Daraz Bangladesh",
+    "url": "https://www.daraz.com.bd",
+    "description": "Largest e-commerce platform in Bangladesh for electronics, fashion, home goods, and more.",
+    "tags": ["shopping", "ecommerce", "bangladesh", "online", "marketplace"],
+    "approved": true
+  },
+  {
+    "title": "University of Dhaka",
+    "url": "https://www.du.ac.bd",
+    "description": "Oldest and largest university in Bangladesh, established in 1921, offering diverse academic programs.",
+    "tags": ["education", "university", "dhaka", "bangladesh", "academic"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh University of Engineering and Technology",
+    "url": "https://www.buet.ac.bd",
+    "description": "Premier engineering university in Bangladesh, known for excellence in technical education.",
+    "tags": ["education", "university", "engineering", "dhaka", "bangladesh"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Railway",
+    "url": "https://www.railway.gov.bd",
+    "description": "Official website for Bangladesh Railway, providing train schedules, booking, and service information.",
+    "tags": ["transportation", "railway", "train", "bangladesh", "travel"],
+    "approved": true
+  },
+  {
+    "title": "Biman Bangladesh Airlines",
+    "url": "https://www.biman-airlines.com",
+    "description": "National flag carrier of Bangladesh, offering domestic and international flights.",
+    "tags": ["transportation", "airline", "flight", "bangladesh", "travel"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Tourism Board",
+    "url": "https://www.tourismboard.gov.bd",
+    "description": "Official tourism portal of Bangladesh, showcasing destinations, culture, and travel information.",
+    "tags": ["tourism", "travel", "bangladesh", "destinations", "culture"],
+    "approved": true
+  },
+  {
+    "title": "Cox's Bazar Beach",
+    "url": "https://www.coxsbazar.gov.bd",
+    "description": "World's longest natural sea beach located in Bangladesh, a major tourist attraction.",
+    "tags": ["tourism", "beach", "cox's bazar", "bangladesh", "travel"],
+    "approved": true
+  },
+  {
+    "title": "Sundarbans",
+    "url": "https://www.sundarbans.gov.bd",
+    "description": "UNESCO World Heritage Site, the largest mangrove forest in the world, home to the Royal Bengal Tiger.",
+    "tags": ["tourism", "forest", "sundarbans", "bangladesh", "wildlife"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Cricket Board",
+    "url": "https://www.tigercricket.com.bd",
+    "description": "Official website of Bangladesh Cricket Board, featuring news, schedules, and player information.",
+    "tags": ["sports", "cricket", "bangladesh", "national", "team"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Football Federation",
+    "url": "https://www.bff-football.com",
+    "description": "Governing body of football in Bangladesh, managing national teams and domestic leagues.",
+    "tags": ["sports", "football", "bangladesh", "national", "team"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Government Portal",
+    "url": "https://www.portal.gov.bd",
+    "description": "Single Digital Gateway for all government to citizen services in Bangladesh.",
+    "tags": ["government", "portal", "services", "bangladesh", "digital"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh National Portal",
+    "url": "https://www.bangladesh.gov.bd",
+    "description": "Official website of the Government of the People's Republic of Bangladesh.",
+    "tags": ["government", "official", "bangladesh", "portal", "information"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Bank",
+    "url": "https://www.bb.org.bd",
+    "description": "Central bank of Bangladesh, responsible for monetary policy and financial system stability.",
+    "tags": ["finance", "bank", "central", "bangladesh", "monetary"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Meteorological Department",
+    "url": "https://www.bmd.gov.bd",
+    "description": "Official weather forecasting and meteorological services for Bangladesh.",
+    "tags": ["weather", "forecast", "bangladesh", "meteorology", "climate"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Election Commission",
+    "url": "https://www.ecs.gov.bd",
+    "description": "Constitutional body responsible for conducting free and fair elections in Bangladesh.",
+    "tags": ["government", "election", "commission", "bangladesh", "democracy"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Police",
+    "url": "https://www.police.gov.bd",
+    "description": "Law enforcement agency of Bangladesh, maintaining law and order across the country.",
+    "tags": ["government", "police", "law", "enforcement", "bangladesh"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Army",
+    "url": "https://www.army.mil.bd",
+    "description": "Land warfare branch of Bangladesh Armed Forces, defending the sovereignty of the nation.",
+    "tags": ["government", "army", "military", "bangladesh", "defense"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Air Force",
+    "url": "https://www.airforce.mil.bd",
+    "description": "Aerial warfare branch of Bangladesh Armed Forces, securing the skies of the nation.",
+    "tags": ["government", "air", "force", "military", "bangladesh"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Navy",
+    "url": "https://www.navy.mil.bd",
+    "description": "Naval warfare branch of Bangladesh Armed Forces, protecting maritime interests.",
+    "tags": ["government", "navy", "military", "bangladesh", "maritime"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Garments Manufacturers and Exporters Association",
+    "url": "https://www.bgmea.com.bd",
+    "description": "Trade body representing Bangladesh's ready-made garment industry, the country's largest export earner.",
+    "tags": ["business", "garments", "export", "bangladesh", "industry"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Textile Mills Association",
+    "url": "https://www.btma.org.bd",
+    "description": "Representing textile mills in Bangladesh, promoting sustainable growth of the textile industry.",
+    "tags": ["business", "textile", "mills", "bangladesh", "industry"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Association of Software and Information Services",
+    "url": "https://www.basis.org.bd",
+    "description": "Trade body for Bangladesh's IT and software industry, promoting digital innovation.",
+    "tags": ["business", "software", "it", "bangladesh", "technology"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Investment Development Authority",
+    "url": "https://www.investbangladesh.gov.bd",
+    "description": "One-stop service for investors in Bangladesh, facilitating investment and business setup.",
+    "tags": ["business", "investment", "development", "bangladesh", "economy"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Export Processing Zones Authority",
+    "url": "https://www.bepza.gov.bd",
+    "description": "Promoting export-oriented industries in Bangladesh through specialized economic zones.",
+    "tags": ["business", "export", "zones", "bangladesh", "industry"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Standards and Testing Institution",
+    "url": "https://www.bsti.gov.bd",
+    "description": "National standards body of Bangladesh, ensuring quality of products and services.",
+    "tags": ["government", "standards", "testing", "bangladesh", "quality"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Telecommunication Regulatory Commission",
+    "url": "https://www.btrc.gov.bd",
+    "description": "Regulatory body for telecommunications in Bangladesh, ensuring fair competition and service quality.",
+    "tags": ["government", "telecom", "regulation", "bangladesh", "communication"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Power Development Board",
+    "url": "https://www.bpdb.gov.bd",
+    "description": "Responsible for generation, transmission, and distribution of electricity in Bangladesh.",
+    "tags": ["government", "power", "electricity", "bangladesh", "energy"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Water Development Board",
+    "url": "https://www.wbd.gov.bd",
+    "description": "Managing water resources, flood control, and irrigation systems in Bangladesh.",
+    "tags": ["government", "water", "development", "bangladesh", "irrigation"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Road Transport Authority",
+    "url": "https://www.brtauthority.gov.bd",
+    "description": "Regulating road transport and vehicle registration in Bangladesh.",
+    "tags": ["government", "transport", "road", "bangladesh", "authority"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Inland Water Transport Authority",
+    "url": "https://www.biwtauthority.gov.bd",
+    "description": "Managing inland water transport and river routes in Bangladesh.",
+    "tags": ["government", "transport", "water", "bangladesh", "authority"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Land Port Authority",
+    "url": "https://www.blpa.gov.bd",
+    "description": "Managing land ports and border crossings for trade and travel in Bangladesh.",
+    "tags": ["government", "transport", "land", "ports", "bangladesh"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Shipping Corporation",
+    "url": "https://www.shipcorporation.gov.bd",
+    "description": "State-owned shipping company managing cargo and passenger vessels for Bangladesh.",
+    "tags": ["government", "shipping", "corporation", "bangladesh", "maritime"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Post Office",
+    "url": "https://www.postoffice.gov.bd",
+    "description": "National postal service of Bangladesh, providing mail and parcel delivery services.",
+    "tags": ["government", "post", "office", "bangladesh", "mail"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh e-Government Computer Incident Response Team",
+    "url": "https://www.bdcert.gov.bd",
+    "description": "National cybersecurity agency protecting Bangladesh's digital infrastructure from cyber threats.",
+    "tags": ["government", "cybersecurity", "response", "bangladesh", "digital"],
+    "approved": true
+  },
+  {
     "title": "Cartoon Network Popcorn",
     "description": "A curated tribute to Cartoon Network’s golden era—featuring classic shows, fan insights, and deep dives into animated storytelling.",
     "url": "https://cartoonnetworkpopcorn.blogspot.com",
