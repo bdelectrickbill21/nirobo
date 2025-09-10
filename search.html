@@ -215,369 +215,172 @@
     <a href="/">← Back to Nirobo</a>
   </footer>
 
-  <script>
-    // Configuration
-    const RESULTS_PER_PAGE = 10;
-    let currentPage = 1;
-    let currentFilter = 'all';
-    let allResults = [];
-    let filteredResults = [];
-    let query = '';
+    <script>
+  // --- Configuration ---
+  const RESULTS_PER_PAGE = 10;
+  let currentPage = 1;
+  let allResults = []; // Combined results from localStorage and result.json
+  let filteredResults = [];
+  let query = "";
 
-    // DOM Elements
-    const searchForm = document.getElementById('search-form');
-    const searchInput = document.getElementById('search-input');
-    const resultsContainer = document.getElementById('results');
-    const paginationContainer = document.getElementById('pagination');
-    const loadingIndicator = document.getElementById('loading');
-    const noResultsMessage = document.getElementById('no-results');
+  // --- DOM Elements ---
+  const searchForm = document.getElementById("search-form");
+  const searchInput = document.getElementById("search-input");
+  const resultsContainer = document.getElementById("results");
 
-    // Sanitize text function
-    function sanitizeText(text) {
-        return text.replace(/&/g, '&amp;')
-                   .replace(/</g, '<')
-                   .replace(/>/g, '>')
-                   .replace(/"/g, '&quot;')
-                   .replace(/'/g, '&#039;');
+  // --- Helper Functions ---
+
+  // Get favicon URL (simplified)
+  function getFaviconUrl(url) {
+    try {
+      const hostname = new URL(url).hostname;
+      // Using a service that allows favicon fetching
+      return `https://www.google.com/s2/favicons?domain=${hostname}&sz=32`;
+    } catch (e) {
+      // Fallback icon if URL parsing fails
+      return 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%23444" rx="4"/><text x="50%" y="50%" fill="white" font-size="16" font-family="Arial" text-anchor="middle" dominant-baseline="middle">?</text></svg>';
+    }
+  }
+
+  // --- Core Search Logic ---
+
+  // 1. Load approved submissions from localStorage
+  function loadApprovedData() {
+    try {
+      const allSubmissions = JSON.parse(
+        localStorage.getItem("niroboAllSubmissions") || "[]"
+      );
+      // Filter only approved submissions
+      const approvedSubmissions = allSubmissions.filter(
+        (sub) => sub.status === "approved"
+      );
+      console.log("Loaded approved submissions from localStorage:", approvedSubmissions);
+      return approvedSubmissions;
+    } catch (error) {
+      console.error("Error loading data from localStorage:", error);
+      return []; // Return empty array on error
+    }
+  }
+
+  // 2. Load data from result.json (with detailed error handling)
+  async function loadResultJson() {
+    try {
+      console.log("Attempting to load result.json...");
+      const response = await fetch("result.json"); // Relative path
+
+      if (!response.ok) {
+        // Check for HTTP errors (e.g., 404 Not Found, 500 Internal Server Error)
+        console.error(`HTTP Error loading result.json: ${response.status} ${response.statusText}`);
+        // Optionally, alert the user or display a message on the page
+        // alert(`Failed to load result.json: ${response.status} ${response.statusText}`);
+        return []; // Return empty array if HTTP error
+      }
+
+      const jsonData = await response.json();
+      console.log("Successfully loaded result.json:", jsonData);
+      return jsonData;
+    } catch (error) {
+      // Catch network errors, CORS issues, JSON parsing errors, etc.
+      console.error("Network/CORS/Parse Error loading result.json:", error);
+      // Check browser console for specific error messages (e.g., CORS policy)
+      // alert("An error occurred while loading result.json. Please check the browser console for details.");
+      return []; // Return empty array on error
+    }
+  }
+
+
+  // 3. Combine results from both sources
+  async function loadAllResults() {
+    console.log("Starting to load all results...");
+    const localStorageData = loadApprovedData(); // This should work
+    const jsonData = await loadResultJson();   // This is the problematic part
+
+    // Combine arrays
+    const combinedResults = [...jsonData, ...localStorageData];
+    console.log("Combined results:", combinedResults);
+    return combinedResults;
+  }
+
+  // 4. Filter results based on query
+  function filterResults(results, searchTerm) {
+    if (!searchTerm) return results;
+
+    const lowerSearchTerm = searchTerm.toLowerCase();
+    return results.filter((item) =>
+      item.title.toLowerCase().includes(lowerSearchTerm) ||
+      item.description.toLowerCase().includes(lowerSearchTerm) ||
+      (Array.isArray(item.tags) && item.tags.some(tag => tag.toLowerCase().includes(lowerSearchTerm)))
+    );
+  }
+
+  // 5. Render results to the page
+  function renderResults(results) {
+    resultsContainer.innerHTML = ""; // Clear previous results
+
+    if (results.length === 0) {
+      resultsContainer.innerHTML = "<p>No results found.</p>";
+      return;
     }
 
-    // Enhanced search function
-    function enhancedSearch(query, item) {
-        const lowerQuery = query.toLowerCase();
-        const normalizedQuery = lowerQuery.replace(/[-\s]/g, '');
-        
-        // Check title with variations
-        const title = item.title ? item.title.toLowerCase() : '';
-        const normalizedTitle = title.replace(/[-\s]/g, '');
-        
-        if (title.includes(lowerQuery) || normalizedTitle.includes(normalizedQuery)) {
-            return true;
-        }
-        
-        // Check description
-        if (item.description && 
-            (item.description.toLowerCase().includes(lowerQuery) ||
-             item.description.toLowerCase().includes(normalizedQuery))) {
-            return true;
-        }
-        
-        // Check tags
-        if (item.tags && Array.isArray(item.tags)) {
-            for (const tag of item.tags) {
-                const lowerTag = tag.toLowerCase();
-                if (lowerTag.includes(lowerQuery) || lowerTag.includes(normalizedQuery)) {
-                    return true;
-                }
-            }
-        }
-        
-        // Check URL
-        if (item.url) {
-            const hostname = new URL(item.url).hostname;
-            if (hostname.toLowerCase().includes(lowerQuery)) {
-                return true;
-            }
-        }
-        
-        return false;
-    }
+    results.forEach((result) => {
+      const resultElement = document.createElement("div");
+      resultElement.className = "result-card";
 
-    // Get thumbnail URL
-    function getThumbnailUrl(url) {
-        try {
-            const hostname = new URL(url).hostname.toLowerCase();
-            
-            // YouTube
-            if (hostname.includes('youtube.com') || hostname.includes('youtu.be')) {
-                let videoId = '';
-                if (hostname.includes('youtu.be')) {
-                    videoId = url.split('/').pop();
-                } else {
-                    videoId = new URL(url).searchParams.get('v');
-                }
-                if (videoId) {
-                    return `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
-                }
-            }
-            
-            // BitChute
-            if (hostname.includes('bitchute.com')) {
-                const videoId = url.split('/').pop();
-                return `https://www.bitchute.com/api/video/${videoId}/thumbnail`;
-            }
-            
-            // Default fallback
-            return getFaviconUrl(url);
-        } catch (e) {
-            return getFaviconUrl(url);
-        }
-    }
+      const faviconUrl = getFaviconUrl(result.url);
 
-    // Get favicon URL
-    function getFaviconUrl(url) {
-        try {
-            const hostname = new URL(url).hostname;
-            return `https://www.google.com/s2/favicons?domain=${hostname}&sz=32`;
-        } catch (e) {
-            return 'image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%23444" rx="4"/><text x="50%" y="50%" fill="white" font-size="16" font-family="Arial" text-anchor="middle" dominant-baseline="middle">?</text></svg>';
-        }
-    }
-
-    // Initialize
-    document.addEventListener('DOMContentLoaded', () => {
-        // Get query from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        query = urlParams.get('q') || '';
-        searchInput.value = query;
-
-        // Get page from URL
-        const pageParam = urlParams.get('page');
-        currentPage = pageParam ? parseInt(pageParam) : 1;
-
-        // Load results if there's a query
-        if (query) {
-            performSearch(query);
-        }
-
-        // Setup event listeners
-        setupEventListeners();
+      resultElement.innerHTML = `
+        <div style="display: flex; align-items: flex-start; gap: 12px;">
+          <img src="${faviconUrl}" alt="Favicon" style="width: 32px; height: 32px; border-radius: 4px; flex-shrink: 0;" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 fill=%22%23444%22 rx=%224%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22white%22 font-size=%2216%22 font-family=%22Arial%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>?</text></svg>'; this.style.width='32px'; this.style.height='32px';">
+          <div style="flex: 1; min-width: 0;">
+            <h2 style="margin: 0 0 8px 0; font-size: 1.2rem;">${result.title}</h2>
+            <p class="url-subtitle"><a href="${result.url}" target="_blank">${result.url}</a></p>
+            <p style="margin: 8px 0;">${result.description}</p>
+            <div class="tags" style="margin-top: 8px;">
+              ${(Array.isArray(result.tags) ? result.tags : []).map(tag => `<span>${tag}</span>`).join(' ')}
+            </div>
+          </div>
+        </div>
+      `;
+      resultsContainer.appendChild(resultElement);
     });
+  }
 
-    // Setup event listeners
-    function setupEventListeners() {
-        // Search form submission
-        searchForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const newQuery = searchInput.value.trim();
-            if (newQuery) {
-                // Reset to first page
-                currentPage = 1;
-                performSearch(newQuery);
-            }
-        });
+  // --- Main Execution Flow ---
 
-        // Filter tabs
-        filterTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                // Update active tab
-                filterTabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                
-                // Set filter
-                currentFilter = tab.dataset.filter;
-                
-                // Reset to first page and re-render
-                currentPage = 1;
-                applyFiltersAndRender();
-            });
-        });
+  // Handle search form submission
+  searchForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    query = searchInput.value.trim().toLowerCase();
+
+    if (!query) {
+      alert("Please enter a search term.");
+      return;
     }
 
-    // Perform search
-    async function performSearch(searchQuery) {
-        query = searchQuery;
-        
-        // Update URL
-        const url = new URL(window.location);
-        url.searchParams.set('q', query);
-        url.searchParams.set('page', '1');
-        window.history.replaceState({}, '', url);
-        
-        // Show loading
-        showLoading();
-        
-        try {
-            // Load results from both sources
-            const jsonResults = await loadJSONResults();
-            const localStorageData = loadApprovedData();
-            
-            // Combine results
-            allResults = [
-                ...jsonResults.map(item => ({...item, source: 'json'})),
-                ...localStorageData.map(item => ({...item, source: 'localStorage'}))
-            ];
-            
-            // Apply filters and render
-            applyFiltersAndRender();
-        } catch (error) {
-            console.error('Search error:', error);
-            hideLoading();
-            showError('Failed to load search results. Please try again.');
-        }
+    // Show loading state if desired
+    resultsContainer.innerHTML = "<p>Loading results...</p>";
+
+    try {
+      // Load data from both sources
+      allResults = await loadAllResults();
+
+      // Filter the combined results
+      filteredResults = filterResults(allResults, query);
+
+      // Render the filtered results
+      renderResults(filteredResults);
+    } catch (error) {
+      console.error("An unexpected error occurred during search:", error);
+      resultsContainer.innerHTML = "<p>An unexpected error occurred. Please try again.</p>";
     }
+  });
 
-    // Load results from result.json
-    async function loadJSONResults() {
-        try {
-            const res = await fetch('result.json');
-            if (res.ok) {
-                const data = await res.json();
-                return data;
-            }
-            return [];
-        } catch (error) {
-            console.warn('Could not load result.json:', error);
-            return [];
-        }
-    }
-
-    // Load approved submissions from localStorage
-    function loadApprovedData() {
-        try {
-            const allSubmissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
-            return allSubmissions.filter(sub => sub.status === 'approved');
-        } catch (error) {
-            console.warn('Could not load localStorage ', error);
-            return [];
-        }
-    }
-
-    // Apply filters and render results
-    function applyFiltersAndRender() {
-        // Filter results based on query
-        filteredResults = allResults.filter(item => {
-            return enhancedSearch(query, item);
-        });
-
-        // Apply content type filter
-        if (currentFilter !== 'all') {
-            filteredResults = filteredResults.filter(item => {
-                switch(currentFilter) {
-                    case 'images':
-                        return item.url.includes('image') || item.tags.includes('image');
-                    case 'videos':
-                        return item.url.includes('youtube') || item.url.includes('video') || item.tags.includes('video');
-                    case 'websites':
-                        return !item.url.includes('image') && !item.url.includes('youtube') && !item.tags.includes('image') && !item.tags.includes('video');
-                    default:
-                        return true;
-                }
-            });
-        }
-
-        // Render results
-        renderResults();
-    }
-
-    // Render results with pagination
-    function renderResults() {
-        hideLoading();
-        
-        // Calculate pagination
-        const totalPages = Math.ceil(filteredResults.length / RESULTS_PER_PAGE);
-        const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
-        const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, filteredResults.length);
-        const pageResults = filteredResults.slice(startIndex, endIndex);
-
-        // Show/hide no results message
-        if (filteredResults.length === 0) {
-            noResultsMessage.style.display = 'block';
-            resultsContainer.innerHTML = '';
-            paginationContainer.innerHTML = '';
-            return;
-        }
-
-        noResultsMessage.style.display = 'none';
-
-        // Render results
-        resultsContainer.innerHTML = '';
-        pageResults.forEach((result, index) => {
-            const resultElement = document.createElement('div');
-            resultElement.className = 'result-card';
-            
-            // Get favicon
-            const faviconUrl = getFaviconUrl(result.url);
-            
-            // Get thumbnail
-            const thumbnailUrl = getThumbnailUrl(result.url);
-            
-            resultElement.innerHTML = `
-              <div style="display: flex; align-items: flex-start; gap: 12px;">
-                <img src="${faviconUrl}" alt="Favicon" 
-                     style="width: 32px; height: 32px; border-radius: 4px; flex-shrink: 0;"
-                     onerror="this.src='data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"32\" height=\"32\" viewBox=\"0 0 32 32\"><rect width=\"32\" height=\"32\" fill=\"%23444\" rx=\"4\"/><text x=\"50%\" y=\"50%\" fill=\"white\" font-size=\"16\" font-family=\"Arial\" text-anchor=\"middle\" dominant-baseline=\"middle\">?</text></svg>'">
-                ${thumbnailUrl !== faviconUrl ? `<img src="${thumbnailUrl}" alt="Thumbnail" style="width: 100%; max-height: 200px; object-fit: cover; margin-top: 10px;">` : ''}
-                <div style="flex: 1; min-width: 0;">
-                  <h2 style="margin: 0 0 8px 0; font-size: 1.2rem;">${sanitizeText(result.title)}</h2>
-                  <p class="url-subtitle"><a href="${result.url}" target="_blank">${result.url}</a></p>
-                  <p style="margin: 8px 0;">${sanitizeText(result.description)}</p>
-                  <div class="tags" style="margin-top: 8px;">${result.tags.map(tag => `<span>${tag}</span>`).join(' ')}</div>
-                </div>
-              </div>
-            `;
-            resultsContainer.appendChild(resultElement);
-        });
-
-        // Render pagination
-        renderPagination(totalPages);
-    }
-
-    // Render pagination controls
-    function renderPagination(totalPages) {
-        paginationContainer.innerHTML = '';
-        
-        if (totalPages <= 1) return;
-
-        // Previous button
-        const prevButton = document.createElement('button');
-        prevButton.innerHTML = '&laquo; Prev';
-        prevButton.disabled = currentPage === 1;
-        prevButton.addEventListener('click', () => goToPage(currentPage - 1));
-        paginationContainer.appendChild(prevButton);
-
-        // Page numbers
-        const startPage = Math.max(1, currentPage - 2);
-        const endPage = Math.min(totalPages, currentPage + 2);
-        
-        for (let i = startPage; i <= endPage; i++) {
-            const pageButton = document.createElement('button');
-            pageButton.textContent = i;
-            pageButton.classList.toggle('active', i === currentPage);
-            pageButton.addEventListener('click', () => goToPage(i));
-            paginationContainer.appendChild(pageButton);
-        }
-
-        // Next button
-        const nextButton = document.createElement('button');
-        nextButton.innerHTML = 'Next &raquo;';
-        nextButton.disabled = currentPage === totalPages;
-        nextButton.addEventListener('click', () => goToPage(currentPage + 1));
-        paginationContainer.appendChild(nextButton);
-    }
-
-    // Go to specific page
-    function goToPage(page) {
-        currentPage = page;
-        
-        // Update URL
-        const url = new URL(window.location);
-        url.searchParams.set('page', page.toString());
-        window.history.pushState({}, '', url);
-        
-        // Scroll to top
-        window.scrollTo(0, 0);
-        
-        // Render results
-        renderResults();
-    }
-
-    // Show loading indicator
-    function showLoading() {
-        loadingIndicator.style.display = 'block';
-        resultsContainer.innerHTML = '';
-        paginationContainer.innerHTML = '';
-        noResultsMessage.style.display = 'none';
-    }
-
-    // Hide loading indicator
-    function hideLoading() {
-        loadingIndicator.style.display = 'none';
-    }
-
-    // Show error message
-    function showError(message) {
-        resultsContainer.innerHTML = `<p style="color: #ff9999; text-align: center;">${message}</p>`;
-    }
-  </script>
+  // --- Initialize on Page Load ---
+  document.addEventListener("DOMContentLoaded", async () => {
+    // Optional: Pre-load data or handle initial state
+    console.log("DOM fully loaded. Ready for search.");
+    // You could potentially load initial data here if needed
+  });
+</script>
 </body>
 </html>
