@@ -8,64 +8,32 @@
     body {
       margin: 0;
       padding: 2rem;
-      background-color: #006400;
+      background-color: #006400; /* deep green */
       color: #f5f5f5;
       font-family: 'Inter', sans-serif;
     }
 
     h1 {
       color: #ff0000;
+      font-size: 1.8rem;
       border-bottom: 2px solid #ff0000;
       margin-bottom: 1rem;
     }
 
-    .search-form {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 2rem;
+    a {
+      color: #ff0000;
+      text-decoration: underline;
     }
 
-    .search-input {
-      flex: 1;
-      padding: 0.5rem;
-      font-size: 1rem;
-    }
-
-    .search-button {
-      padding: 0.5rem 1rem;
-      background-color: #ff0000;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    .submit-button-container {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    .submit-button {
-      background: #006400;
-      color: white;
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: 6px;
-      font-weight: bold;
+    .url-subtitle a {
+      font-size: 0.9em;
+      color: #888;
       text-decoration: none;
-      display: inline-block;
-      box-shadow: 0 4px 6px rgba(0, 100, 0, 0.3);
-      transition: transform 0.2s, box-shadow 0.2s;
+      display: block;
+      margin-top: -8px;
+      margin-bottom: 8px;
     }
-
-    .submit-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 8px rgba(0, 100, 0, 0.4);
-    }
-
-    .results {
-      margin-top: 2rem;
-    }
-
+    
     .result-card {
       background: #1a1a1a;
       border-left: 4px solid #ff0000;
@@ -87,8 +55,18 @@
     .result-card a {
       color: #ff0000;
       text-decoration: none;
+      font-size: 0.9rem;
     }
 
+    .result-image {
+       width: 100%;
+       max-height: 200px;
+       object-fit: cover;
+       border-radius: 6px;
+       margin-bottom: 1rem;
+       box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+    }
+    
     .tags span {
       background: #ff0000;
       color: #fff;
@@ -97,46 +75,307 @@
       border-radius: 3px;
       font-size: 0.8rem;
     }
+
+    #search-form {
+      margin-bottom: 2rem;
+      display: flex;
+      gap: 10px;
+    }
+
+    #search-input {
+      padding: 0.5rem;
+      width: 70%;
+      font-size: 1rem;
+    }
+
+    #search-form button {
+      padding: 0.5rem 1rem;
+      background-color: #ff0000;
+      color: #fff;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    /* Submit Button Styles */
+    .submit-button {
+      background-color: #d40000; /* Red to match your search button */
+      color: #fff;
+      padding: 10px 20px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+
+    .submit-button:hover {
+      background-color: #ff0000;
+    }
+
+    /* Pagination Styles */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin-top: 2rem;
+      gap: 10px;
+    }
+
+    .pagination button {
+      padding: 8px 16px;
+      background-color: #006400;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .pagination button:disabled {
+      background-color: #555;
+      cursor: not-allowed;
+    }
+
+    .pagination button.active {
+      background-color: #d40000;
+    }
+
+    /* Filter Tabs */
+    .filter-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .filter-tab {
+      padding: 8px 16px;
+      background-color: #006400;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .filter-tab.active {
+      background-color: #d40000;
+    }
+
+    footer {
+      background-color: #1a1a1a;
+      color: #ccc;
+      padding: 20px;
+      text-align: center;
+      font-size: 0.9rem;
+      border-top: 1px solid #333;
+      margin-top: 40px;
+    }
+
+    footer a {
+      color: #ff9999;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Loading indicator */
+    .loading {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #d40000;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* No results message */
+    .no-results {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      #search-input {
+        width: 60%;
+      }
+      
+      .filter-tabs {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .filter-tab {
+        width: 80%;
+        text-align: center;
+      }
+    }
   </style>
 </head>
 <body>
   <h1>Echoes of Your Search</h1>
   <a href="/">← Back to Nirobo</a>
 
-  <form id="search-form">
-    <div class="search-form">
-      <input type="text" id="search-input" placeholder="Search Nirobo" class="search-input" />
-      <button type="submit" class="search-button">Search</button>
-    </div>
-  </form>
-
-  <!-- Submit Your Site Button -->
-  <div class="submit-button-container">
-    <a href="signup.html" class="submit-button">➕ Submit Your Site</a>
-    <p style="margin-top: 0.5rem; font-size: 0.95rem; color: #aaa;">
-      Help grow Nirobo by submitting your website for review.
-    </p>
+  <!-- Submit URL Button (Top Right) -->
+  <div style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
+    <a href="signup.html" class="submit-button">➕ Submit URL</a>
   </div>
 
+  <!-- Filter Tabs -->
+  <div class="filter-tabs">
+    <button class="filter-tab active" data-filter="all">All</button>
+    <button class="filter-tab" data-filter="images">Images</button>
+    <button class="filter-tab" data-filter="videos">Videos</button>
+    <button class="filter-tab" data-filter="websites">Websites</button>
+  </div>
+
+  <!-- Search Form -->
+  <form id="search-form">
+    <input type="text" id="search-input" placeholder="Search Nirobo" value="" />
+    <button type="submit">Search</button>
+  </form>
+
+  <!-- Loading Indicator -->
+  <div id="loading" class="loading" style="display: none;">
+    <div class="spinner"></div>
+    <p>Loading results...</p>
+  </div>
+
+  <!-- Results Container -->
   <div id="results"></div>
 
+  <!-- Pagination -->
+  <div id="pagination" class="pagination"></div>
+
+  <!-- No Results Message -->
+  <div id="no-results" class="no-results" style="display: none;">
+    <h3>No results found</h3>
+    <p>Try different keywords or <a href="signup.html">submit your URL</a></p>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    Made in Bangladesh 🇧🇩 | Curated by Nirobo<br>
+    Honoring the Language Movement and the Silent Legacy of Justice<br>
+    Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity<br>
+    <a href="/">← Back to Nirobo</a>
+  </footer>
+
   <script>
-    // Handle search form
-    document.getElementById('search-form').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const query = document.getElementById('search-input').value.trim();
+    // Configuration
+    const RESULTS_PER_PAGE = 10;
+    let currentPage = 1;
+    let currentFilter = 'all';
+    let allResults = [];
+    let filteredResults = [];
+    let query = '';
+
+    // DOM Elements
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-input');
+    const resultsContainer = document.getElementById('results');
+    const paginationContainer = document.getElementById('pagination');
+    const loadingIndicator = document.getElementById('loading');
+    const noResultsMessage = document.getElementById('no-results');
+    const filterTabs = document.querySelectorAll('.filter-tab');
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      // Get query from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      query = urlParams.get('q') || '';
+      searchInput.value = query;
+
+      // Get page from URL
+      const pageParam = urlParams.get('page');
+      currentPage = pageParam ? parseInt(pageParam) : 1;
+
+      // Load results if there's a query
       if (query) {
-        window.location.href = `?q=${encodeURIComponent(query)}`;
+        performSearch(query);
       }
+
+      // Setup event listeners
+      setupEventListeners();
     });
 
-    // Load and display results
-    const query = new URLSearchParams(window.location.search).get('q')?.toLowerCase() || '';
+    // Setup event listeners
+    function setupEventListeners() {
+      // Search form submission
+      searchForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const newQuery = searchInput.value.trim();
+        if (newQuery) {
+          // Reset to first page
+          currentPage = 1;
+          performSearch(newQuery);
+        }
+      });
 
-    // Load approved submissions from localStorage
-    function loadApprovedData() {
-      const allSubmissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
-      return allSubmissions.filter(sub => sub.status === "approved");
+      // Filter tabs
+      filterTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          // Update active tab
+          filterTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          
+          // Set filter
+          currentFilter = tab.dataset.filter;
+          
+          // Reset to first page and re-render
+          currentPage = 1;
+          applyFiltersAndRender();
+        });
+      });
+    }
+
+    // Perform search
+    async function performSearch(searchQuery) {
+      query = searchQuery;
+      
+      // Update URL
+      const url = new URL(window.location);
+      url.searchParams.set('q', query);
+      url.searchParams.set('page', '1');
+      window.history.replaceState({}, '', url);
+      
+      // Show loading
+      showLoading();
+      
+      try {
+        // Load results from both sources
+        const jsonResults = await loadJSONResults();
+        const localStorageData = loadApprovedData();
+        
+        // Combine results
+        allResults = [
+          ...jsonResults.map(item => ({...item, source: 'json'})),
+          ...localStorageData.map(item => ({...item, source: 'localStorage'}))
+        ];
+        
+        // Apply filters and render
+        applyFiltersAndRender();
+      } catch (error) {
+        console.error('Search error:', error);
+        hideLoading();
+        showError('Failed to load search results. Please try again.');
+      }
     }
 
     // Load results from result.json
@@ -144,150 +383,204 @@
       try {
         const res = await fetch('result.json');
         if (res.ok) {
-          const jsonData = await res.json();
-          return jsonData.map(item => ({
-            ...item,
-            source: 'json'
-          }));
-        } else {
-          console.warn('Failed to load result.json:', res.statusText);
-          return [];
+          const data = await res.json();
+          return data;
         }
+        return [];
       } catch (error) {
-        console.warn('Failed to load result.json:', error);
+        console.warn('Could not load result.json:', error);
         return [];
       }
     }
 
-    // Combine both sources
-    async function loadAllResults() {
-      const jsonResults = await loadJSONResults();
-      const localStorageData = loadApprovedData();
-      
-      const allResults = [
-        ...jsonResults,
-        ...localStorageData.map(item => ({
-          ...item,
-          source: 'localStorage'
-        }))
-      ];
-
-      return allResults;
+    // Load approved submissions from localStorage
+    function loadApprovedData() {
+      try {
+        const allSubmissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+        return allSubmissions.filter(sub => sub.status === 'approved');
+      } catch (error) {
+        console.warn('Could not load localStorage data:', error);
+        return [];
+      }
     }
 
-    // Extract favicon from URL
+    // Apply filters and render results
+    function applyFiltersAndRender() {
+      // Filter results based on query
+      filteredResults = allResults.filter(item => {
+        const lowerQuery = query.toLowerCase();
+        return (
+          item.title.toLowerCase().includes(lowerQuery) ||
+          item.description.toLowerCase().includes(lowerQuery) ||
+          item.tags.some(tag => tag.toLowerCase().includes(lowerQuery))
+        );
+      });
+
+      // Apply content type filter
+      if (currentFilter !== 'all') {
+        filteredResults = filteredResults.filter(item => {
+          // This is a simplified filter - you'd need actual content type detection
+          switch(currentFilter) {
+            case 'images':
+              return item.url.includes('image') || item.tags.includes('image');
+            case 'videos':
+              return item.url.includes('youtube') || item.url.includes('video') || item.tags.includes('video');
+            case 'websites':
+              return !item.url.includes('image') && !item.url.includes('youtube') && !item.tags.includes('image') && !item.tags.includes('video');
+            default:
+              return true;
+          }
+        });
+      }
+
+      // Render results
+      renderResults();
+    }
+
+    // Render results with pagination
+    function renderResults() {
+      hideLoading();
+      
+      // Calculate pagination
+      const totalPages = Math.ceil(filteredResults.length / RESULTS_PER_PAGE);
+      const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
+      const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, filteredResults.length);
+      const pageResults = filteredResults.slice(startIndex, endIndex);
+
+      // Show/hide no results message
+      if (filteredResults.length === 0) {
+        noResultsMessage.style.display = 'block';
+        resultsContainer.innerHTML = '';
+        paginationContainer.innerHTML = '';
+        return;
+      }
+
+      noResultsMessage.style.display = 'none';
+
+      // Render results
+      resultsContainer.innerHTML = '';
+      pageResults.forEach((result, index) => {
+        const resultElement = document.createElement('div');
+        resultElement.className = 'result-card';
+        
+        // Get favicon
+        const faviconUrl = getFaviconUrl(result.url);
+        
+        resultElement.innerHTML = `
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <img src="${faviconUrl}" alt="Favicon" 
+                 style="width: 32px; height: 32px; border-radius: 4px; flex-shrink: 0;"
+                 onerror="this.src='data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"32\" height=\"32\" viewBox=\"0 0 32 32\"><rect width=\"32\" height=\"32\" fill=\"%23444\" rx=\"4\"/><text x=\"50%\" y=\"50%\" fill=\"white\" font-size=\"16\" font-family=\"Arial\" text-anchor=\"middle\" dominant-baseline=\"middle\">?</text></svg>'">
+            <div style="flex: 1; min-width: 0;">
+              <h2 style="margin: 0 0 8px 0; font-size: 1.2rem;">${result.title}</h2>
+              <p class="url-subtitle"><a href="${result.url}" target="_blank">${result.url}</a></p>
+              <p style="margin: 8px 0;">${result.description}</p>
+              <div class="tags" style="margin-top: 8px;">${result.tags.map(tag => `<span>${tag}</span>`).join(' ')}</div>
+            </div>
+          </div>
+        `;
+        resultsContainer.appendChild(resultElement);
+      });
+
+      // Render pagination
+      renderPagination(totalPages);
+    }
+
+    // Render pagination controls
+    function renderPagination(totalPages) {
+      paginationContainer.innerHTML = '';
+      
+      if (totalPages <= 1) return;
+
+      // Previous button
+      const prevButton = document.createElement('button');
+      prevButton.innerHTML = '&laquo; Prev';
+      prevButton.disabled = currentPage === 1;
+      prevButton.addEventListener('click', () => goToPage(currentPage - 1));
+      paginationContainer.appendChild(prevButton);
+
+      // Page numbers
+      const startPage = Math.max(1, currentPage - 2);
+      const endPage = Math.min(totalPages, currentPage + 2);
+      
+      for (let i = startPage; i <= endPage; i++) {
+        const pageButton = document.createElement('button');
+        pageButton.textContent = i;
+        pageButton.classList.toggle('active', i === currentPage);
+        pageButton.addEventListener('click', () => goToPage(i));
+        paginationContainer.appendChild(pageButton);
+      }
+
+      // Next button
+      const nextButton = document.createElement('button');
+      nextButton.innerHTML = 'Next &raquo;';
+      nextButton.disabled = currentPage === totalPages;
+      nextButton.addEventListener('click', () => goToPage(currentPage + 1));
+      paginationContainer.appendChild(nextButton);
+    }
+
+    // Go to specific page
+    function goToPage(page) {
+      currentPage = page;
+      
+      // Update URL
+      const url = new URL(window.location);
+      url.searchParams.set('page', page.toString());
+      window.history.pushState({}, '', url);
+      
+      // Scroll to top
+      window.scrollTo(0, 0);
+      
+      // Render results
+      renderResults();
+    }
+
+    // Get favicon URL
     function getFaviconUrl(url) {
       try {
         const hostname = new URL(url).hostname;
         return `https://www.google.com/s2/favicons?domain=${hostname}&sz=32`;
       } catch (e) {
-        return 'image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%23444" rx="4"/><text x="50%" y="50%" fill="white" font-size="16" font-family="Arial" text-anchor="middle" dominant-baseline="middle">?</text></svg>';
+        return 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%23444" rx="4"/><text x="50%" y="50%" fill="white" font-size="16" font-family="Arial" text-anchor="middle" dominant-baseline="middle">?</text></svg>';
       }
     }
 
-    // Extract thumbnail from URL
-    function getThumbnailUrl(url) {
+    // Show loading indicator
+    function showLoading() {
+      loadingIndicator.style.display = 'block';
+      resultsContainer.innerHTML = '';
+      paginationContainer.innerHTML = '';
+      noResultsMessage.style.display = 'none';
+    }
+
+    // Hide loading indicator
+    function hideLoading() {
+      loadingIndicator.style.display = 'none';
+    }
+
+    // Show error message
+    function showError(message) {
+      resultsContainer.innerHTML = `<p style="color: #ff9999; text-align: center;">${message}</p>`;
+    }
+
+    // Track search (simplified version)
+    function trackSearch() {
+      // In a real implementation, you would send this data to your server
+      console.log('Tracking search:', { query, timestamp: new Date().toISOString() });
+      
+      // For now, we'll just store in localStorage
       try {
-        const hostname = new URL(url).hostname.toLowerCase();
-        
-        // YouTube
-        if (hostname.includes('youtube.com') || hostname.includes('youtu.be')) {
-          let videoId = '';
-          if (hostname.includes('youtu.be')) {
-            videoId = url.split('/').pop();
-          } else {
-            videoId = new URL(url).searchParams.get('v');
-          }
-          if (videoId) {
-            return `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
-          }
-        }
-        
-        // Facebook
-        if (hostname.includes('facebook.com')) {
-          return `https://graph.facebook.com/v17.0/${url.split('/').pop()}/picture?type=large`;
-        }
-        
-        // Instagram
-        if (hostname.includes('instagram.com')) {
-          return `https://www.instagram.com/p/${url.split('/').pop()}/media/?size=l`;
-        }
-        
-        // TikTok
-        if (hostname.includes('tiktok.com')) {
-          return `https://www.tiktok.com/api/share/video?videoId=${url.split('/').pop()}&type=1`;
-        }
-        
-        // BBC
-        if (hostname.includes('bbc.com')) {
-          return `https://www.bbc.com/news/${url.split('/').pop()}/media/image`;
-        }
-        
-        // CNN
-        if (hostname.includes('cnn.com')) {
-          return `https://www.cnn.com/${url.split('/').pop()}/media/image`;
-        }
-        
-        // Daily Star
-        if (hostname.includes('thedailystar.net')) {
-          return `https://www.thedailystar.net/${url.split('/').pop()}/media/image`;
-        }
-        
-        // Default fallback
-        return getFaviconUrl(url);
-      } catch (e) {
-        return getFaviconUrl(url);
-      }
-    }
-
-    // Render results
-    async function renderResults() {
-      const allResults = await loadAllResults();
-
-      const filtered = allResults.filter(item =>
-        item.title.toLowerCase().includes(query) ||
-        item.description.toLowerCase().includes(query) ||
-        item.tags.some(tag =>
-          tag.toLowerCase().includes(query) || query.includes(tag.toLowerCase())
-        )
-      );
-
-      const container = document.getElementById('results');
-
-      if (filtered.length === 0) {
-        container.innerHTML = `<p>No results found for "<strong>${query}</strong>". Try another term.</p>`;
-      } else {
-        filtered.forEach((result, index) => {
-          const card = document.createElement('div');
-          card.className = 'result-card';
-          
-          // Get favicon
-          const faviconUrl = getFaviconUrl(result.url);
-          
-          // Get thumbnail
-          const thumbnailUrl = getThumbnailUrl(result.url);
-          
-          card.innerHTML = `
-            <div class="result-content">
-              <div class="thumbnail-container">
-                <img src="${faviconUrl}" alt="Favicon" style="width: 32px; height: 32px; border-radius: 4px; margin-right: 10px; vertical-align: middle;">
-                ${thumbnailUrl !== faviconUrl ? `<img src="${thumbnailUrl}" alt="Thumbnail" style="width: 100%; max-height: 200px; object-fit: cover; margin-top: 10px;">` : ''}
-              </div>
-              <div class="result-details">
-                <h2>${result.title}</h2>
-                <p><a href="${result.url}" target="_blank">${result.url}</a></p>
-                <p>${result.description}</p>
-                <div class="tags">${result.tags.map(tag => `<span>${tag}</span>`).join(' ')}</div>
-              </div>
-            </div>
-          `;
-          container.appendChild(card);
+        const searches = JSON.parse(localStorage.getItem('niroboSearches') || '[]');
+        searches.push({
+          query,
+          timestamp: new Date().toISOString(),
+          resultsCount: filteredResults.length
         });
+        localStorage.setItem('niroboSearches', JSON.stringify(searches));
+      } catch (e) {
+        console.warn('Could not track search:', e);
       }
     }
-
-    // Initialize
-    renderResults();
   </script>
 </body>
 </html>
