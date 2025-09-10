@@ -225,6 +225,47 @@
         width: 80%;
         text-align: center;
       }
+
+      .filter-tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+      }
+
+      .filter-tab {
+       padding: 8px 16px;
+       background-color: #006400;
+       color: white;
+       border: none;
+       border-radius: 20px;
+       cursor: pointer;
+       font-size: 0.9rem;
+       min-width: 80px;
+       text-align: center;
+      }
+
+     .filter-tab.active {
+       background-color: #d40000;
+      }
+
+     .submit-button {
+       position: fixed;
+       top: 20px;
+       right: 20px;
+       z-index: 1000;
+      background-color: #d40000; /* Red to match your theme */
+      color: white;
+      padding: 10px 20px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 20px;
+     }
     }
   </style>
 </head>
@@ -237,6 +278,13 @@
     <a href="signup.html" class="submit-button">➕ Submit URL</a>
   </div>
 
+  <!-- Search Form -->
+  <form id="search-form">
+    <input type="text" id="search-input" placeholder="Search Nirobo" value="" 
+       autocomplete="off" spellcheck="false" />
+    <button type="submit">Search</button>
+  </form>
+
   <!-- Filter Tabs -->
   <div class="filter-tabs">
     <button class="filter-tab active" data-filter="all">All</button>
@@ -245,11 +293,6 @@
     <button class="filter-tab" data-filter="websites">Websites</button>
   </div>
 
-  <!-- Search Form -->
-  <form id="search-form">
-    <input type="text" id="search-input" placeholder="Search Nirobo" value="" />
-    <button type="submit">Search</button>
-  </form>
 
   <!-- Loading Indicator -->
   <div id="loading" class="loading" style="display: none;">
@@ -278,6 +321,25 @@
   </footer>
 
   <script>
+    // Add this function to your JavaScript
+function calculateRank(result) {
+  // Base score
+  let score = 100;
+  
+  // Bonus for recent submissions
+  const now = new Date();
+  const submissionDate = new Date(result.submittedAt);
+  const daysAgo = Math.floor((now - submissionDate) / (1000 * 60 * 60 * 24));
+  if (daysAgo < 7) score += (7 - daysAgo) * 10;
+  
+  // Bonus for higher view count
+  if (result.viewCount) {
+    score += result.viewCount / 100;
+  }
+  
+  return score;
+}
+    
     // Configuration
     const RESULTS_PER_PAGE = 10;
     let currentPage = 1;
@@ -580,6 +642,15 @@
       } catch (e) {
         console.warn('Could not track search:', e);
       }
+
+      // Add this function to sanitize text
+       function sanitizeText(text) {
+       return text.replace(/&/g, '&amp;')
+             .replace(/</g, '<')
+             .replace(/>/g, '>')
+             .replace(/"/g, '&quot;')
+             .replace(/'/g, '&#039;');
+     }
     }
   </script>
 </body>
