@@ -5,274 +5,209 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Echoes of Your Search – Nirobo</title>
   <style>
+    /* --- BODY, HEADER, FOOTER STYLES (Keep your existing styles) --- */
     body {
       margin: 0;
       padding: 2rem;
-      background-color: #006400;
-      color: #f5f5f5;
-      font-family: 'Inter', sans-serif;
+      background-color: #006400; /* Deep green background */
+      color: #f5f5f5; /* Light text */
+      font-family: 'Inter', sans-serif; /* Modern font */
     }
 
     h1 {
-      color: #ff0000;
-      font-size: 1.8rem;
-      border-bottom: 2px solid #ff0000;
-      margin-bottom: 1rem;
+      color: #ff0000; /* Red accent for the main heading */
+      font-size: 1.8rem; /* Responsive font size */
+      border-bottom: 2px solid #ff0000; /* Red underline */
+      margin-bottom: 1rem; /* Space below the heading */
     }
 
     a {
-      color: #ff0000;
-      text-decoration: underline;
+      color: #ff0000; /* Red links */
+      text-decoration: underline; /* Underlined links */
     }
 
     .url-subtitle a {
-      font-size: 0.9em;
-      color: #888;
-      text-decoration: none;
-      display: block;
-      margin-top: -8px;
-      margin-bottom: 8px;
+      font-size: 0.9em; /* Smaller font for URLs */
+      color: #888; /* Gray color for less emphasis */
+      text-decoration: none; /* No underline */
+      display: block; /* Block display for spacing */
+      margin-top: -8px; /* Pull up slightly */
+      margin-bottom: 8px; /* Space below */
     }
     
     .result-card {
-      background: #1a1a1a;
-      border-left: 4px solid #ff0000;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
+      background: #1a1a1a; /* Dark card background */
+      border-left: 4px solid #ff0000; /* Red accent border */
+      padding: 1rem; /* Padding inside the card */
+      margin-bottom: 1rem; /* Space between cards */
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.2); /* Subtle red glow */
     }
 
     .result-card h2 {
-      margin: 0 0 0.5rem;
-      font-size: 1.2rem;
+      margin: 0 0 0.5rem; /* Tight margins */
+      font-size: 1.2rem; /* Readable title size */
     }
 
     .result-card p {
-      margin: 0 0 0.5rem;
-      font-size: 0.95rem;
+      margin: 0 0 0.5rem; /* Consistent paragraph spacing */
+      font-size: 0.95rem; /* Slightly smaller text */
     }
 
     .result-card a {
-      color: #ff0000;
-      text-decoration: none;
-      font-size: 0.9rem;
+      color: #ff0000; /* Red links within cards */
+      text-decoration: none; /* No underline */
+      font-size: 0.9rem; /* Smaller link font */
     }
 
     .result-image {
-       width: 100%;
-       max-height: 200px;
-       object-fit: cover;
-       border-radius: 6px;
-       margin-bottom: 1rem;
-       box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+       width: 100%; /* Full width image */
+       max-height: 200px; /* Limit height */
+       object-fit: cover; /* Cover the area */
+       border-radius: 6px; /* Rounded corners */
+       margin-bottom: 1rem; /* Space below image */
+       box-shadow: 0 0 10px rgba(255, 0, 0, 0.3); /* Stronger red glow */
     }
     
     .tags span {
-      background: #ff0000;
-      color: #fff;
-      padding: 0.2rem 0.5rem;
-      margin-right: 0.3rem;
-      border-radius: 3px;
-      font-size: 0.8rem;
+      background: #ff0000; /* Red tag background */
+      color: #fff; /* White text */
+      padding: 0.2rem 0.5rem; /* Padding */
+      margin-right: 0.3rem; /* Space between tags */
+      border-radius: 3px; /* Rounded tag corners */
+      font-size: 0.8rem; /* Small tag font */
     }
 
     #search-form {
-      margin-bottom: 2rem;
-      display: flex;
-      gap: 10px;
+      margin-bottom: 2rem; /* Space below the form */
+      display: flex; /* Flexbox for input/button alignment */
+      gap: 10px; /* Space between input and button */
     }
 
     #search-input {
-      padding: 0.5rem;
-      width: 70%;
-      font-size: 1rem;
+      padding: 0.5rem; /* Padding */
+      width: 70%; /* Take most of the width */
+      font-size: 1rem; /* Readable font size */
     }
 
     #search-form button {
-      padding: 0.5rem 1rem;
-      background-color: #ff0000;
-      color: #fff;
-      border: none;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-
-    /* Submit Button Styles */
-    .submit-button {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 1000;
-      background-color: #d40000;
-      color: white;
-      padding: 10px 20px;
-      font-weight: bold;
-      border: none;
-      border-radius: 6px;
-      box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
-      margin-bottom: 20px;
-    }
-
-    .submit-button:hover {
-      background-color: #ff0000;
-    }
-
-    /* Filter Tabs */
-    .filter-tabs {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-
-    .filter-tab {
-      padding: 8px 16px;
-      background-color: #006400;
-      color: white;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      min-width: 80px;
-      text-align: center;
-    }
-
-    .filter-tab.active {
-      background-color: #d40000;
+      padding: 0.5rem 1rem; /* Padding */
+      background-color: #ff0000; /* Red button */
+      color: #fff; /* White text */
+      border: none; /* No border */
+      font-size: 1rem; /* Font size */
+      cursor: pointer; /* Pointer cursor */
     }
 
     footer {
-      background-color: #1a1a1a;
-      color: #ccc;
-      padding: 20px;
-      text-align: center;
-      font-size: 0.9rem;
-      border-top: 1px solid #333;
-      margin-top: 40px;
+      background-color: #1a1a1a; /* Dark footer background */
+      color: #ccc; /* Light gray text */
+      padding: 20px; /* Padding */
+      text-align: center; /* Centered text */
+      font-size: 0.9rem; /* Smaller font */
+      border-top: 1px solid #333; /* Top border */
+      margin-top: 40px; /* Space above footer */
     }
 
     footer a {
-      color: #ff9999;
-      text-decoration: none;
+      color: #ff9999; /* Lighter red links */
+      text-decoration: none; /* No underline */
     }
 
     footer a:hover {
-      text-decoration: underline;
+      text-decoration: underline; /* Underline on hover */
     }
 
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-      #search-input {
-        width: 60%;
-      }
-      
-      .filter-tabs {
-        flex-direction: column;
-        align-items: center;
-      }
-      
-      .filter-tab {
-        width: 80%;
+    /* --- NEW/UPDATED STYLES FOR FILTER TABS, SUBMIT BUTTON, PAGINATION --- */
+    .filter-tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap; /* Allows wrapping on small screens */
+        justify-content: center; /* Centers the tabs */
+    }
+
+    .filter-tab {
+        padding: 8px 16px;
+        background-color: #006400; /* Dark green */
+        color: white;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        min-width: 80px; /* Minimum width */
         text-align: center;
-      }
-      
-      /* --- Filter Tabs (Side-by-Side on Mobile) --- */
-     .filter-tabs {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-      flex-wrap: wrap; /* Allows wrapping on small screens */
-      justify-content: center; /* Centers the tabs */
-    }
-
-     .filter-tab {
-      padding: 8px 16px;
-      background-color: #006400; /* Dark green */
-      color: white;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      min-width: 80px; /* Minimum width */
-      text-align: center;
-      flex: 1; /* Allows buttons to grow and shrink */
-      max-width: fit-content; /* Prevents overly wide buttons */
+        flex: 1; /* Allows buttons to grow and shrink */
+        max-width: fit-content; /* Prevents overly wide buttons */
     }
 
     .filter-tab:hover {
-     background-color: #008000; /* Lighter green on hover */
+        background-color: #008000; /* Lighter green on hover */
     }
 
     .filter-tab.active {
-    background-color: #d40000; /* Red for active tab */
+        background-color: #d40000; /* Red for active tab */
     }
 
-      /* --- Submit Button (Fixed Position) --- */
     .submit-button {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1000; /* Ensures it stays on top */
-    background-color: #d40000; /* Red */
-    color: white;
-    padding: 10px 20px;
-    font-weight: bold;
-    border: none;
-    border-radius: 6px;
-    box-shadow: 0 0 10px rgba(212, 0, 0, 0.5); /* Red shadow */
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-block;
-    margin-bottom: 20px;
-   }
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000; /* Ensures it stays on top */
+        background-color: #d40000; /* Red */
+        color: white;
+        padding: 10px 20px;
+        font-weight: bold;
+        border: none;
+        border-radius: 6px;
+        box-shadow: 0 0 10px rgba(212, 0, 0, 0.5); /* Red shadow */
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        margin-bottom: 20px;
+    }
 
     .submit-button:hover {
-    background-color: #ff0000; /* Lighter red on hover */
-    box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
-   }
+        background-color: #ff0000; /* Lighter red on hover */
+        box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+    }
 
-/* --- Pagination --- */
-.pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px; /* Space between page buttons */
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-    flex-wrap: wrap; /* Wrap on small screens if needed */
-}
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px; /* Space between page buttons */
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap; /* Wrap on small screens if needed */
+    }
 
-.pagination button {
-    padding: 8px 16px;
-    background-color: #006400; /* Dark green */
-    color: white;
-    border: 1px solid #004d00; /* Slightly darker border */
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s, border-color 0.3s;
-}
+    .pagination button {
+        padding: 8px 16px;
+        background-color: #006400; /* Dark green */
+        color: white;
+        border: 1px solid #004d00; /* Slightly darker border */
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.3s, border-color 0.3s;
+    }
 
-.pagination button:hover:not(:disabled) {
-    background-color: #008000; /* Lighter green on hover */
-    border-color: #006600;
-}
+    .pagination button:hover:not(:disabled) {
+        background-color: #008000; /* Lighter green on hover */
+        border-color: #006600;
+    }
 
-.pagination button:disabled {
-    background-color: #555; /* Gray for disabled */
-    color: #aaa;
-    cursor: not-allowed;
-    border-color: #444;
-}
+    .pagination button:disabled {
+        background-color: #555; /* Gray for disabled */
+        color: #aaa;
+        cursor: not-allowed;
+        border-color: #444;
+    }
 
-  .pagination button.active {
-    background-color: #d40000; /* Red for current page */
-    border-color: #aa0000;
-    font-weight: bold;
-     }
+    .pagination button.active {
+        background-color: #d40000; /* Red for current page */
+        border-color: #aa0000;
+        font-weight: bold;
     }
   </style>
 </head>
@@ -302,6 +237,9 @@
   <!-- Results Container -->
   <div id="results"></div>
 
+  <!-- Pagination Container -->
+  <div id="pagination" class="pagination"></div>
+
   <!-- Footer -->
   <footer>
     Made in Bangladesh 🇧🇩 | Curated by Nirobo<br>
@@ -310,272 +248,225 @@
     <a href="/">← Back to Nirobo</a>
   </footer>
 
-    <script>
-      // --- Configuration ---
-const RESULTS_PER_PAGE = 10;
-let currentPage = 1;
-let currentFilter = 'all';
-let allResults = [];
-let filteredResults = [];
-let query = '';
+  <script>
+    // --- Configuration ---
+    const RESULTS_PER_PAGE = 10;
+    let currentPage = 1;
+    let currentFilter = 'all';
+    let allResults = [];
+    let filteredResults = [];
+    let query = '';
 
-// --- DOM Elements ---
-const searchForm = document.getElementById('search-form');
-const searchInput = document.getElementById('search-input');
-const resultsContainer = document.getElementById('results');
-const paginationContainer = document.getElementById('pagination'); // Ensure this element exists in your HTML
+    // --- DOM Elements ---
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-input');
+    const resultsContainer = document.getElementById('results');
+    const paginationContainer = document.getElementById('pagination');
 
-// --- Helper Functions ---
+    // --- Helper Functions ---
 
-// Get favicon URL
-function getFaviconUrl(url) {
-    try {
-        const hostname = new URL(url).hostname;
-        return `https://www.google.com/s2/favicons?domain=${hostname}&sz=32`;
-    } catch (e) {
-        return 'image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%23444" rx="4"/><text x="50%" y="50%" fill="white" font-size="16" font-family="Arial" text-anchor="middle" dominant-baseline="middle">?</text></svg>';
+    // Get favicon URL
+    function getFaviconUrl(url) {
+        try {
+            const hostname = new URL(url).hostname;
+            return `https://www.google.com/s2/favicons?domain=${hostname}&sz=32`;
+        } catch (e) {
+            return 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%23444" rx="4"/><text x="50%" y="50%" fill="white" font-size="16" font-family="Arial" text-anchor="middle" dominant-baseline="middle">?</text></svg>';
+        }
     }
-}
 
-// --- Core Search Logic ---
+    // --- Core Search Logic ---
 
-// 1. Load approved submissions from localStorage
-function loadApprovedData() {
-    try {
-        const allSubmissions = JSON.parse(
-            localStorage.getItem("niroboAllSubmissions") || "[]"
-        );
-        const approvedSubmissions = allSubmissions.filter(
-            (sub) => sub.status === "approved"
-        );
-        console.log("Loaded approved submissions from localStorage:", approvedSubmissions);
-        return approvedSubmissions;
-    } catch (error) {
-        console.error("Error loading data from localStorage:", error);
-        return [];
-    }
-}
-
-// 2. Load data from result.json (with detailed error handling)
-async function loadResultJson() {
-    try {
-        console.log("Attempting to load result.json...");
-        const response = await fetch("result.json"); // Relative path
-
-        if (!response.ok) {
-            console.error(`HTTP Error loading result.json: ${response.status} ${response.statusText}`);
+    // 1. Load approved submissions from localStorage
+    function loadApprovedData() {
+        try {
+            const allSubmissions = JSON.parse(
+                localStorage.getItem("niroboAllSubmissions") || "[]"
+            );
+            const approvedSubmissions = allSubmissions.filter(
+                (sub) => sub.status === "approved"
+            );
+            console.log("Loaded approved submissions from localStorage:", approvedSubmissions);
+            return approvedSubmissions;
+        } catch (error) {
+            console.error("Error loading data from localStorage:", error);
             return [];
         }
-
-        const jsonData = await response.json();
-        console.log("Successfully loaded result.json:", jsonData);
-        return jsonData;
-    } catch (error) {
-        console.error("Network/CORS/Parse Error loading result.json:", error);
-        return [];
-    }
-}
-
-// 3. Combine results from both sources
-async function loadAllResults() {
-    console.log("Starting to load all results...");
-    const localStorageData = loadApprovedData();
-    const jsonData = await loadResultJson();
-    const combinedResults = [...jsonData, ...localStorageData];
-    console.log("Combined results:", combinedResults);
-    return combinedResults;
-}
-
-// 4. Filter results based on query and currentFilter
-function applyFilters(results, searchTerm, filterType) {
-    let filtered = results;
-
-    // Apply search term filter
-    if (searchTerm) {
-        const lowerSearchTerm = searchTerm.toLowerCase();
-        filtered = filtered.filter((item) =>
-            (item.title && item.title.toLowerCase().includes(lowerSearchTerm)) ||
-            (item.description && item.description.toLowerCase().includes(lowerSearchTerm)) ||
-            (Array.isArray(item.tags) && item.tags.some(tag => tag.toLowerCase().includes(lowerSearchTerm)))
-        );
     }
 
-    // Apply type filter (basic)
-    if (filterType !== 'all') {
-        filtered = filtered.filter(item => {
-            const urlLower = item.url ? item.url.toLowerCase() : '';
-            const tagsLower = Array.isArray(item.tags) ? item.tags.map(t => t.toLowerCase()) : [];
+    // 2. Load data from result.json (with detailed error handling)
+    async function loadResultJson() {
+        try {
+            console.log("Attempting to load result.json...");
+            const response = await fetch("result.json"); // Relative path
 
-            switch(filterType) {
-                case 'images':
-                    return urlLower.includes('image') || tagsLower.includes('image');
-                case 'videos':
-                    return urlLower.includes('youtube') || urlLower.includes('youtu.be') || tagsLower.includes('video');
-                case 'websites':
-                    return !(urlLower.includes('image') || tagsLower.includes('image') || urlLower.includes('youtube') || urlLower.includes('youtu.be') || tagsLower.includes('video'));
-                default:
-                    return true;
+            if (!response.ok) {
+                console.error(`HTTP Error loading result.json: ${response.status} ${response.statusText}`);
+                return [];
             }
-        });
+
+            const jsonData = await response.json();
+            console.log("Successfully loaded result.json:", jsonData);
+            return jsonData;
+        } catch (error) {
+            console.error("Network/CORS/Parse Error loading result.json:", error);
+            return [];
+        }
     }
 
-    return filtered;
-}
-
-// 5. Render results to the page (for the current page)
-function renderResults(results) {
-    resultsContainer.innerHTML = "";
-
-    if (results.length === 0) {
-        resultsContainer.innerHTML = "<p>No results found.</p>";
-        return;
+    // 3. Combine results from both sources
+    async function loadAllResults() {
+        console.log("Starting to load all results...");
+        const localStorageData = loadApprovedData();
+        const jsonData = await loadResultJson();
+        const combinedResults = [...jsonData, ...localStorageData];
+        console.log("Combined results:", combinedResults);
+        return combinedResults;
     }
 
-    results.forEach((result) => {
-        const resultElement = document.createElement("div");
-        resultElement.className = "result-card";
+    // 4. Filter results based on query and currentFilter
+    function applyFilters(results, searchTerm, filterType) {
+        let filtered = results;
 
-        const faviconUrl = getFaviconUrl(result.url);
+        // Apply search term filter
+        if (searchTerm) {
+            const lowerSearchTerm = searchTerm.toLowerCase();
+            filtered = filtered.filter((item) =>
+                (item.title && item.title.toLowerCase().includes(lowerSearchTerm)) ||
+                (item.description && item.description.toLowerCase().includes(lowerSearchTerm)) ||
+                (Array.isArray(item.tags) && item.tags.some(tag => tag.toLowerCase().includes(lowerSearchTerm)))
+            );
+        }
 
-        resultElement.innerHTML = `
-            <div style="display: flex; align-items: flex-start; gap: 12px;">
-                <img src="${faviconUrl}" alt="Favicon" style="width: 32px; height: 32px; border-radius: 4px; flex-shrink: 0;" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 fill=%22%23444%22 rx=%224%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22white%22 font-size=%2216%22 font-family=%22Arial%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>?</text></svg>'; this.style.width='32px'; this.style.height='32px';">
-                <div style="flex: 1; min-width: 0;">
-                    <h2 style="margin: 0 0 8px 0; font-size: 1.2rem;">${result.title || 'Untitled'}</h2>
-                    <p class="url-subtitle"><a href="${result.url}" target="_blank">${result.url}</a></p>
-                    <p style="margin: 8px 0;">${result.description || 'No description available.'}</p>
-                    <div class="tags" style="margin-top: 8px;">
-                        ${(Array.isArray(result.tags) ? result.tags : []).map(tag => `<span>${tag}</span>`).join(' ')}
+        // Apply type filter (basic)
+        if (filterType !== 'all') {
+            filtered = filtered.filter(item => {
+                const urlLower = item.url ? item.url.toLowerCase() : '';
+                const tagsLower = Array.isArray(item.tags) ? item.tags.map(t => t.toLowerCase()) : [];
+
+                switch(filterType) {
+                    case 'images':
+                        return urlLower.includes('image') || tagsLower.includes('image');
+                    case 'videos':
+                        return urlLower.includes('youtube') || urlLower.includes('youtu.be') || tagsLower.includes('video');
+                    case 'websites':
+                        return !(urlLower.includes('image') || tagsLower.includes('image') || urlLower.includes('youtube') || urlLower.includes('youtu.be') || tagsLower.includes('video'));
+                    default:
+                        return true;
+                }
+            });
+        }
+
+        return filtered;
+    }
+
+    // 5. Render results to the page (for the current page)
+    function renderResults(results) {
+        resultsContainer.innerHTML = "";
+
+        if (results.length === 0) {
+            resultsContainer.innerHTML = "<p>No results found.</p>";
+            return;
+        }
+
+        results.forEach((result) => {
+            const resultElement = document.createElement("div");
+            resultElement.className = "result-card";
+
+            const faviconUrl = getFaviconUrl(result.url);
+
+            resultElement.innerHTML = `
+                <div style="display: flex; align-items: flex-start; gap: 12px;">
+                    <img src="${faviconUrl}" alt="Favicon" style="width: 32px; height: 32px; border-radius: 4px; flex-shrink: 0;" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 fill=%22%23444%22 rx=%224%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22white%22 font-size=%2216%22 font-family=%22Arial%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>?</text></svg>'; this.style.width='32px'; this.style.height='32px';">
+                    <div style="flex: 1; min-width: 0;">
+                        <h2 style="margin: 0 0 8px 0; font-size: 1.2rem;">${result.title || 'Untitled'}</h2>
+                        <p class="url-subtitle"><a href="${result.url}" target="_blank">${result.url}</a></p>
+                        <p style="margin: 8px 0;">${result.description || 'No description available.'}</p>
+                        <div class="tags" style="margin-top: 8px;">
+                            ${(Array.isArray(result.tags) ? result.tags : []).map(tag => `<span>${tag}</span>`).join(' ')}
+                        </div>
                     </div>
                 </div>
-            </div>
-        `;
-        resultsContainer.appendChild(resultElement);
-    });
-}
-
-// 6. Render pagination controls
-function renderPagination(totalPages) {
-    paginationContainer.innerHTML = ''; // Clear previous pagination
-
-    if (totalPages <= 1) {
-        return;
-    }
-
-    const fragment = document.createDocumentFragment();
-
-    // Previous button
-    const prevButton = document.createElement('button');
-    prevButton.innerHTML = '&laquo;';
-    prevButton.disabled = currentPage === 1;
-    prevButton.addEventListener('click', () => goToPage(currentPage - 1));
-    fragment.appendChild(prevButton);
-
-    // Page number buttons
-    const startPage = Math.max(1, currentPage - 2);
-    const endPage = Math.min(totalPages, currentPage + 2);
-
-    if (startPage > 1) {
-        const firstButton = document.createElement('button');
-        firstButton.textContent = '1';
-        firstButton.addEventListener('click', () => goToPage(1));
-        fragment.appendChild(firstButton);
-
-        if (startPage > 2) {
-            const ellipsis = document.createElement('span');
-            ellipsis.textContent = '...';
-            ellipsis.style.padding = '0 5px';
-            fragment.appendChild(ellipsis);
-        }
-    }
-
-    for (let i = startPage; i <= endPage; i++) {
-        const pageButton = document.createElement('button');
-        pageButton.textContent = i;
-        if (i === currentPage) {
-            pageButton.classList.add('active');
-        }
-        pageButton.addEventListener('click', () => goToPage(i));
-        fragment.appendChild(pageButton);
-    }
-
-    if (endPage < totalPages) {
-        if (endPage < totalPages - 1) {
-            const ellipsis = document.createElement('span');
-            ellipsis.textContent = '...';
-            ellipsis.style.padding = '0 5px';
-            fragment.appendChild(ellipsis);
-        }
-        const lastButton = document.createElement('button');
-        lastButton.textContent = totalPages;
-        lastButton.addEventListener('click', () => goToPage(totalPages));
-        fragment.appendChild(lastButton);
-    }
-
-    // Next button
-    const nextButton = document.createElement('button');
-    nextButton.innerHTML = '&raquo;';
-    nextButton.disabled = currentPage === totalPages;
-    nextButton.addEventListener('click', () => goToPage(currentPage + 1));
-    fragment.appendChild(nextButton);
-
-    paginationContainer.appendChild(fragment);
-}
-
-// 7. Go to a specific page
-function goToPage(page) {
-    currentPage = page;
-    const url = new URL(window.location);
-    url.searchParams.set('page', page);
-    window.history.pushState({ page }, '', url);
-
-    filteredResults = applyFilters(allResults, query, currentFilter);
-    const totalPages = Math.ceil(filteredResults.length / RESULTS_PER_PAGE);
-    const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
-    const endIndex = startIndex + RESULTS_PER_PAGE;
-    const pageResults = filteredResults.slice(startIndex, endIndex);
-
-    renderResults(pageResults);
-    renderPagination(totalPages);
-}
-
-// 8. Set up event listeners for filter tabs
-function setupFilterTabs() {
-    const filterTabs = document.querySelectorAll('.filter-tab');
-    filterTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            filterTabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            currentFilter = tab.dataset.filter || 'all';
-            currentPage = 1;
-            filteredResults = applyFilters(allResults, query, currentFilter);
-            const totalPages = Math.ceil(filteredResults.length / RESULTS_PER_PAGE);
-            const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
-            const endIndex = startIndex + RESULTS_PER_PAGE;
-            const pageResults = filteredResults.slice(startIndex, endIndex);
-            renderResults(pageResults);
-            renderPagination(totalPages);
+            `;
+            resultsContainer.appendChild(resultElement);
         });
-    });
-}
-
-// --- Main Execution Flow ---
-
-// Handle search form submission
-searchForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const newQuery = searchInput.value.trim();
-
-    if (!newQuery) {
-        alert("Please enter a search term.");
-        return;
     }
 
-    query = newQuery;
-    currentPage = 1;
+    // 6. Render pagination controls
+    function renderPagination(totalPages) {
+        paginationContainer.innerHTML = ''; // Clear previous pagination
 
-    try {
-        allResults = await loadAllResults();
+        if (totalPages <= 1) {
+            return;
+        }
+
+        const fragment = document.createDocumentFragment();
+
+        // Previous button
+        const prevButton = document.createElement('button');
+        prevButton.innerHTML = '&laquo;';
+        prevButton.disabled = currentPage === 1;
+        prevButton.addEventListener('click', () => goToPage(currentPage - 1));
+        fragment.appendChild(prevButton);
+
+        // Page number buttons
+        const startPage = Math.max(1, currentPage - 2);
+        const endPage = Math.min(totalPages, currentPage + 2);
+
+        if (startPage > 1) {
+            const firstButton = document.createElement('button');
+            firstButton.textContent = '1';
+            firstButton.addEventListener('click', () => goToPage(1));
+            fragment.appendChild(firstButton);
+
+            if (startPage > 2) {
+                const ellipsis = document.createElement('span');
+                ellipsis.textContent = '...';
+                ellipsis.style.padding = '0 5px';
+                fragment.appendChild(ellipsis);
+            }
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.textContent = i;
+            if (i === currentPage) {
+                pageButton.classList.add('active');
+            }
+            pageButton.addEventListener('click', () => goToPage(i));
+            fragment.appendChild(pageButton);
+        }
+
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) {
+                const ellipsis = document.createElement('span');
+                ellipsis.textContent = '...';
+                ellipsis.style.padding = '0 5px';
+                fragment.appendChild(ellipsis);
+            }
+            const lastButton = document.createElement('button');
+            lastButton.textContent = totalPages;
+            lastButton.addEventListener('click', () => goToPage(totalPages));
+            fragment.appendChild(lastButton);
+        }
+
+        // Next button
+        const nextButton = document.createElement('button');
+        nextButton.innerHTML = '&raquo;';
+        nextButton.disabled = currentPage === totalPages;
+        nextButton.addEventListener('click', () => goToPage(currentPage + 1));
+        fragment.appendChild(nextButton);
+
+        paginationContainer.appendChild(fragment);
+    }
+
+    // 7. Go to a specific page
+    function goToPage(page) {
+        currentPage = page;
+        const url = new URL(window.location);
+        url.searchParams.set('page', page);
+        window.history.pushState({ page }, '', url);
+
         filteredResults = applyFilters(allResults, query, currentFilter);
         const totalPages = Math.ceil(filteredResults.length / RESULTS_PER_PAGE);
         const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
@@ -584,197 +475,79 @@ searchForm.addEventListener("submit", async (e) => {
 
         renderResults(pageResults);
         renderPagination(totalPages);
-
-    } catch (error) {
-        console.error("An unexpected error occurred during search:", error);
-        resultsContainer.innerHTML = "<p>An unexpected error occurred. Please try again.</p>";
-        paginationContainer.innerHTML = '';
-    }
-});
-
-// --- Initialize on Page Load ---
-document.addEventListener("DOMContentLoaded", async () => {
-    console.log("DOM fully loaded. Setting up search engine...");
-    setupFilterTabs(); // Setup filter tab event listeners
-
-    // Check URL parameters on initial load
-    const urlParams = new URLSearchParams(window.location.search);
-    const initialQuery = urlParams.get('q');
-    const initialPage = parseInt(urlParams.get('page'), 10) || 1;
-
-    if (initialQuery) {
-        searchInput.value = initialQuery;
-        currentPage = initialPage;
-        searchForm.dispatchEvent(new Event('submit'));
-    } else {
-        resultsContainer.innerHTML = "<p>Welcome to Nirobo Search. Enter a term above to begin searching.</p>";
-    }
-});
-  // --- Configuration ---
-  const RESULTS_PER_PAGE = 10;
-  let currentPage = 1;
-  let allResults = []; // Combined results from localStorage and result.json
-  let filteredResults = [];
-  let query = "";
-
-  // --- DOM Elements ---
-  const searchForm = document.getElementById("search-form");
-  const searchInput = document.getElementById("search-input");
-  const resultsContainer = document.getElementById("results");
-
-  // --- Helper Functions ---
-
-  // Get favicon URL (simplified)
-  function getFaviconUrl(url) {
-    try {
-      const hostname = new URL(url).hostname;
-      // Using a service that allows favicon fetching
-      return `https://www.google.com/s2/favicons?domain=${hostname}&sz=32`;
-    } catch (e) {
-      // Fallback icon if URL parsing fails
-      return 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%23444" rx="4"/><text x="50%" y="50%" fill="white" font-size="16" font-family="Arial" text-anchor="middle" dominant-baseline="middle">?</text></svg>';
-    }
-  }
-
-  // --- Core Search Logic ---
-
-  // 1. Load approved submissions from localStorage
-  function loadApprovedData() {
-    try {
-      const allSubmissions = JSON.parse(
-        localStorage.getItem("niroboAllSubmissions") || "[]"
-      );
-      // Filter only approved submissions
-      const approvedSubmissions = allSubmissions.filter(
-        (sub) => sub.status === "approved"
-      );
-      console.log("Loaded approved submissions from localStorage:", approvedSubmissions);
-      return approvedSubmissions;
-    } catch (error) {
-      console.error("Error loading data from localStorage:", error);
-      return []; // Return empty array on error
-    }
-  }
-
-  // 2. Load data from result.json (with detailed error handling)
-  async function loadResultJson() {
-    try {
-      console.log("Attempting to load result.json...");
-      const response = await fetch("result.json"); // Relative path
-
-      if (!response.ok) {
-        // Check for HTTP errors (e.g., 404 Not Found, 500 Internal Server Error)
-        console.error(`HTTP Error loading result.json: ${response.status} ${response.statusText}`);
-        // Optionally, alert the user or display a message on the page
-        // alert(`Failed to load result.json: ${response.status} ${response.statusText}`);
-        return []; // Return empty array if HTTP error
-      }
-
-      const jsonData = await response.json();
-      console.log("Successfully loaded result.json:", jsonData);
-      return jsonData;
-    } catch (error) {
-      // Catch network errors, CORS issues, JSON parsing errors, etc.
-      console.error("Network/CORS/Parse Error loading result.json:", error);
-      // Check browser console for specific error messages (e.g., CORS policy)
-      // alert("An error occurred while loading result.json. Please check the browser console for details.");
-      return []; // Return empty array on error
-    }
-  }
-
-
-  // 3. Combine results from both sources
-  async function loadAllResults() {
-    console.log("Starting to load all results...");
-    const localStorageData = loadApprovedData(); // This should work
-    const jsonData = await loadResultJson();   // This is the problematic part
-
-    // Combine arrays
-    const combinedResults = [...jsonData, ...localStorageData];
-    console.log("Combined results:", combinedResults);
-    return combinedResults;
-  }
-
-  // 4. Filter results based on query
-  function filterResults(results, searchTerm) {
-    if (!searchTerm) return results;
-
-    const lowerSearchTerm = searchTerm.toLowerCase();
-    return results.filter((item) =>
-      item.title.toLowerCase().includes(lowerSearchTerm) ||
-      item.description.toLowerCase().includes(lowerSearchTerm) ||
-      (Array.isArray(item.tags) && item.tags.some(tag => tag.toLowerCase().includes(lowerSearchTerm)))
-    );
-  }
-
-  // 5. Render results to the page
-  function renderResults(results) {
-    resultsContainer.innerHTML = ""; // Clear previous results
-
-    if (results.length === 0) {
-      resultsContainer.innerHTML = "<p>No results found.</p>";
-      return;
     }
 
-    results.forEach((result) => {
-      const resultElement = document.createElement("div");
-      resultElement.className = "result-card";
+    // 8. Set up event listeners for filter tabs
+    function setupFilterTabs() {
+        const filterTabs = document.querySelectorAll('.filter-tab');
+        filterTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                filterTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentFilter = tab.dataset.filter || 'all';
+                currentPage = 1;
+                filteredResults = applyFilters(allResults, query, currentFilter);
+                const totalPages = Math.ceil(filteredResults.length / RESULTS_PER_PAGE);
+                const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
+                const endIndex = startIndex + RESULTS_PER_PAGE;
+                const pageResults = filteredResults.slice(startIndex, endIndex);
+                renderResults(pageResults);
+                renderPagination(totalPages);
+            });
+        });
+    }
 
-      const faviconUrl = getFaviconUrl(result.url);
+    // --- Main Execution Flow ---
 
-      resultElement.innerHTML = `
-        <div style="display: flex; align-items: flex-start; gap: 12px;">
-          <img src="${faviconUrl}" alt="Favicon" style="width: 32px; height: 32px; border-radius: 4px; flex-shrink: 0;" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 fill=%22%23444%22 rx=%224%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22white%22 font-size=%2216%22 font-family=%22Arial%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>?</text></svg>'; this.style.width='32px'; this.style.height='32px';">
-          <div style="flex: 1; min-width: 0;">
-            <h2 style="margin: 0 0 8px 0; font-size: 1.2rem;">${result.title}</h2>
-            <p class="url-subtitle"><a href="${result.url}" target="_blank">${result.url}</a></p>
-            <p style="margin: 8px 0;">${result.description}</p>
-            <div class="tags" style="margin-top: 8px;">
-              ${(Array.isArray(result.tags) ? result.tags : []).map(tag => `<span>${tag}</span>`).join(' ')}
-            </div>
-          </div>
-        </div>
-      `;
-      resultsContainer.appendChild(resultElement);
+    // Handle search form submission
+    searchForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const newQuery = searchInput.value.trim();
+
+        if (!newQuery) {
+            alert("Please enter a search term.");
+            return;
+        }
+
+        query = newQuery;
+        currentPage = 1;
+
+        try {
+            allResults = await loadAllResults();
+            filteredResults = applyFilters(allResults, query, currentFilter);
+            const totalPages = Math.ceil(filteredResults.length / RESULTS_PER_PAGE);
+            const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
+            const endIndex = startIndex + RESULTS_PER_PAGE;
+            const pageResults = filteredResults.slice(startIndex, endIndex);
+
+            renderResults(pageResults);
+            renderPagination(totalPages);
+
+        } catch (error) {
+            console.error("An unexpected error occurred during search:", error);
+            resultsContainer.innerHTML = "<p>An unexpected error occurred. Please try again.</p>";
+            paginationContainer.innerHTML = '';
+        }
     });
-  }
 
-  // --- Main Execution Flow ---
+    // --- Initialize on Page Load ---
+    document.addEventListener("DOMContentLoaded", async () => {
+        console.log("DOM fully loaded. Setting up search engine...");
+        setupFilterTabs(); // Setup filter tab event listeners
 
-  // Handle search form submission
-  searchForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    query = searchInput.value.trim().toLowerCase();
+        // Check URL parameters on initial load
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialQuery = urlParams.get('q');
+        const initialPage = parseInt(urlParams.get('page'), 10) || 1;
 
-    if (!query) {
-      alert("Please enter a search term.");
-      return;
-    }
-
-    // Show loading state if desired
-    resultsContainer.innerHTML = "<p>Loading results...</p>";
-
-    try {
-      // Load data from both sources
-      allResults = await loadAllResults();
-
-      // Filter the combined results
-      filteredResults = filterResults(allResults, query);
-
-      // Render the filtered results
-      renderResults(filteredResults);
-    } catch (error) {
-      console.error("An unexpected error occurred during search:", error);
-      resultsContainer.innerHTML = "<p>An unexpected error occurred. Please try again.</p>";
-    }
-  });
-
-  // --- Initialize on Page Load ---
-  document.addEventListener("DOMContentLoaded", async () => {
-    // Optional: Pre-load data or handle initial state
-    console.log("DOM fully loaded. Ready for search.");
-    // You could potentially load initial data here if needed
-  });
-</script>
+        if (initialQuery) {
+            searchInput.value = initialQuery;
+            currentPage = initialPage;
+            searchForm.dispatchEvent(new Event('submit'));
+        } else {
+            resultsContainer.innerHTML = "<p>Welcome to Nirobo Search. Enter a term above to begin searching.</p>";
+        }
+    });
+  </script>
 </body>
 </html>
