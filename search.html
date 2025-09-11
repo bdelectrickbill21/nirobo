@@ -178,6 +178,101 @@
         width: 80%;
         text-align: center;
       }
+      
+      /* --- Filter Tabs (Side-by-Side on Mobile) --- */
+     .filter-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap; /* Allows wrapping on small screens */
+      justify-content: center; /* Centers the tabs */
+    }
+
+     .filter-tab {
+      padding: 8px 16px;
+      background-color: #006400; /* Dark green */
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      min-width: 80px; /* Minimum width */
+      text-align: center;
+      flex: 1; /* Allows buttons to grow and shrink */
+      max-width: fit-content; /* Prevents overly wide buttons */
+    }
+
+    .filter-tab:hover {
+     background-color: #008000; /* Lighter green on hover */
+    }
+
+    .filter-tab.active {
+    background-color: #d40000; /* Red for active tab */
+    }
+
+      /* --- Submit Button (Fixed Position) --- */
+    .submit-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000; /* Ensures it stays on top */
+    background-color: #d40000; /* Red */
+    color: white;
+    padding: 10px 20px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgba(212, 0, 0, 0.5); /* Red shadow */
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 20px;
+   }
+
+    .submit-button:hover {
+    background-color: #ff0000; /* Lighter red on hover */
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+   }
+
+/* --- Pagination --- */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* Space between page buttons */
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap; /* Wrap on small screens if needed */
+}
+
+.pagination button {
+    padding: 8px 16px;
+    background-color: #006400; /* Dark green */
+    color: white;
+    border: 1px solid #004d00; /* Slightly darker border */
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.pagination button:hover:not(:disabled) {
+    background-color: #008000; /* Lighter green on hover */
+    border-color: #006600;
+}
+
+.pagination button:disabled {
+    background-color: #555; /* Gray for disabled */
+    color: #aaa;
+    cursor: not-allowed;
+    border-color: #444;
+}
+
+  .pagination button.active {
+    background-color: #d40000; /* Red for current page */
+    border-color: #aa0000;
+    font-weight: bold;
+     }
     }
   </style>
 </head>
@@ -216,6 +311,305 @@
   </footer>
 
     <script>
+      // --- Configuration ---
+const RESULTS_PER_PAGE = 10;
+let currentPage = 1;
+let currentFilter = 'all';
+let allResults = [];
+let filteredResults = [];
+let query = '';
+
+// --- DOM Elements ---
+const searchForm = document.getElementById('search-form');
+const searchInput = document.getElementById('search-input');
+const resultsContainer = document.getElementById('results');
+const paginationContainer = document.getElementById('pagination'); // Ensure this element exists in your HTML
+
+// --- Helper Functions ---
+
+// Get favicon URL
+function getFaviconUrl(url) {
+    try {
+        const hostname = new URL(url).hostname;
+        return `https://www.google.com/s2/favicons?domain=${hostname}&sz=32`;
+    } catch (e) {
+        return 'image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%23444" rx="4"/><text x="50%" y="50%" fill="white" font-size="16" font-family="Arial" text-anchor="middle" dominant-baseline="middle">?</text></svg>';
+    }
+}
+
+// --- Core Search Logic ---
+
+// 1. Load approved submissions from localStorage
+function loadApprovedData() {
+    try {
+        const allSubmissions = JSON.parse(
+            localStorage.getItem("niroboAllSubmissions") || "[]"
+        );
+        const approvedSubmissions = allSubmissions.filter(
+            (sub) => sub.status === "approved"
+        );
+        console.log("Loaded approved submissions from localStorage:", approvedSubmissions);
+        return approvedSubmissions;
+    } catch (error) {
+        console.error("Error loading data from localStorage:", error);
+        return [];
+    }
+}
+
+// 2. Load data from result.json (with detailed error handling)
+async function loadResultJson() {
+    try {
+        console.log("Attempting to load result.json...");
+        const response = await fetch("result.json"); // Relative path
+
+        if (!response.ok) {
+            console.error(`HTTP Error loading result.json: ${response.status} ${response.statusText}`);
+            return [];
+        }
+
+        const jsonData = await response.json();
+        console.log("Successfully loaded result.json:", jsonData);
+        return jsonData;
+    } catch (error) {
+        console.error("Network/CORS/Parse Error loading result.json:", error);
+        return [];
+    }
+}
+
+// 3. Combine results from both sources
+async function loadAllResults() {
+    console.log("Starting to load all results...");
+    const localStorageData = loadApprovedData();
+    const jsonData = await loadResultJson();
+    const combinedResults = [...jsonData, ...localStorageData];
+    console.log("Combined results:", combinedResults);
+    return combinedResults;
+}
+
+// 4. Filter results based on query and currentFilter
+function applyFilters(results, searchTerm, filterType) {
+    let filtered = results;
+
+    // Apply search term filter
+    if (searchTerm) {
+        const lowerSearchTerm = searchTerm.toLowerCase();
+        filtered = filtered.filter((item) =>
+            (item.title && item.title.toLowerCase().includes(lowerSearchTerm)) ||
+            (item.description && item.description.toLowerCase().includes(lowerSearchTerm)) ||
+            (Array.isArray(item.tags) && item.tags.some(tag => tag.toLowerCase().includes(lowerSearchTerm)))
+        );
+    }
+
+    // Apply type filter (basic)
+    if (filterType !== 'all') {
+        filtered = filtered.filter(item => {
+            const urlLower = item.url ? item.url.toLowerCase() : '';
+            const tagsLower = Array.isArray(item.tags) ? item.tags.map(t => t.toLowerCase()) : [];
+
+            switch(filterType) {
+                case 'images':
+                    return urlLower.includes('image') || tagsLower.includes('image');
+                case 'videos':
+                    return urlLower.includes('youtube') || urlLower.includes('youtu.be') || tagsLower.includes('video');
+                case 'websites':
+                    return !(urlLower.includes('image') || tagsLower.includes('image') || urlLower.includes('youtube') || urlLower.includes('youtu.be') || tagsLower.includes('video'));
+                default:
+                    return true;
+            }
+        });
+    }
+
+    return filtered;
+}
+
+// 5. Render results to the page (for the current page)
+function renderResults(results) {
+    resultsContainer.innerHTML = "";
+
+    if (results.length === 0) {
+        resultsContainer.innerHTML = "<p>No results found.</p>";
+        return;
+    }
+
+    results.forEach((result) => {
+        const resultElement = document.createElement("div");
+        resultElement.className = "result-card";
+
+        const faviconUrl = getFaviconUrl(result.url);
+
+        resultElement.innerHTML = `
+            <div style="display: flex; align-items: flex-start; gap: 12px;">
+                <img src="${faviconUrl}" alt="Favicon" style="width: 32px; height: 32px; border-radius: 4px; flex-shrink: 0;" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 fill=%22%23444%22 rx=%224%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22white%22 font-size=%2216%22 font-family=%22Arial%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>?</text></svg>'; this.style.width='32px'; this.style.height='32px';">
+                <div style="flex: 1; min-width: 0;">
+                    <h2 style="margin: 0 0 8px 0; font-size: 1.2rem;">${result.title || 'Untitled'}</h2>
+                    <p class="url-subtitle"><a href="${result.url}" target="_blank">${result.url}</a></p>
+                    <p style="margin: 8px 0;">${result.description || 'No description available.'}</p>
+                    <div class="tags" style="margin-top: 8px;">
+                        ${(Array.isArray(result.tags) ? result.tags : []).map(tag => `<span>${tag}</span>`).join(' ')}
+                    </div>
+                </div>
+            </div>
+        `;
+        resultsContainer.appendChild(resultElement);
+    });
+}
+
+// 6. Render pagination controls
+function renderPagination(totalPages) {
+    paginationContainer.innerHTML = ''; // Clear previous pagination
+
+    if (totalPages <= 1) {
+        return;
+    }
+
+    const fragment = document.createDocumentFragment();
+
+    // Previous button
+    const prevButton = document.createElement('button');
+    prevButton.innerHTML = '&laquo;';
+    prevButton.disabled = currentPage === 1;
+    prevButton.addEventListener('click', () => goToPage(currentPage - 1));
+    fragment.appendChild(prevButton);
+
+    // Page number buttons
+    const startPage = Math.max(1, currentPage - 2);
+    const endPage = Math.min(totalPages, currentPage + 2);
+
+    if (startPage > 1) {
+        const firstButton = document.createElement('button');
+        firstButton.textContent = '1';
+        firstButton.addEventListener('click', () => goToPage(1));
+        fragment.appendChild(firstButton);
+
+        if (startPage > 2) {
+            const ellipsis = document.createElement('span');
+            ellipsis.textContent = '...';
+            ellipsis.style.padding = '0 5px';
+            fragment.appendChild(ellipsis);
+        }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+        const pageButton = document.createElement('button');
+        pageButton.textContent = i;
+        if (i === currentPage) {
+            pageButton.classList.add('active');
+        }
+        pageButton.addEventListener('click', () => goToPage(i));
+        fragment.appendChild(pageButton);
+    }
+
+    if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+            const ellipsis = document.createElement('span');
+            ellipsis.textContent = '...';
+            ellipsis.style.padding = '0 5px';
+            fragment.appendChild(ellipsis);
+        }
+        const lastButton = document.createElement('button');
+        lastButton.textContent = totalPages;
+        lastButton.addEventListener('click', () => goToPage(totalPages));
+        fragment.appendChild(lastButton);
+    }
+
+    // Next button
+    const nextButton = document.createElement('button');
+    nextButton.innerHTML = '&raquo;';
+    nextButton.disabled = currentPage === totalPages;
+    nextButton.addEventListener('click', () => goToPage(currentPage + 1));
+    fragment.appendChild(nextButton);
+
+    paginationContainer.appendChild(fragment);
+}
+
+// 7. Go to a specific page
+function goToPage(page) {
+    currentPage = page;
+    const url = new URL(window.location);
+    url.searchParams.set('page', page);
+    window.history.pushState({ page }, '', url);
+
+    filteredResults = applyFilters(allResults, query, currentFilter);
+    const totalPages = Math.ceil(filteredResults.length / RESULTS_PER_PAGE);
+    const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
+    const endIndex = startIndex + RESULTS_PER_PAGE;
+    const pageResults = filteredResults.slice(startIndex, endIndex);
+
+    renderResults(pageResults);
+    renderPagination(totalPages);
+}
+
+// 8. Set up event listeners for filter tabs
+function setupFilterTabs() {
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    filterTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            filterTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            currentFilter = tab.dataset.filter || 'all';
+            currentPage = 1;
+            filteredResults = applyFilters(allResults, query, currentFilter);
+            const totalPages = Math.ceil(filteredResults.length / RESULTS_PER_PAGE);
+            const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
+            const endIndex = startIndex + RESULTS_PER_PAGE;
+            const pageResults = filteredResults.slice(startIndex, endIndex);
+            renderResults(pageResults);
+            renderPagination(totalPages);
+        });
+    });
+}
+
+// --- Main Execution Flow ---
+
+// Handle search form submission
+searchForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const newQuery = searchInput.value.trim();
+
+    if (!newQuery) {
+        alert("Please enter a search term.");
+        return;
+    }
+
+    query = newQuery;
+    currentPage = 1;
+
+    try {
+        allResults = await loadAllResults();
+        filteredResults = applyFilters(allResults, query, currentFilter);
+        const totalPages = Math.ceil(filteredResults.length / RESULTS_PER_PAGE);
+        const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
+        const endIndex = startIndex + RESULTS_PER_PAGE;
+        const pageResults = filteredResults.slice(startIndex, endIndex);
+
+        renderResults(pageResults);
+        renderPagination(totalPages);
+
+    } catch (error) {
+        console.error("An unexpected error occurred during search:", error);
+        resultsContainer.innerHTML = "<p>An unexpected error occurred. Please try again.</p>";
+        paginationContainer.innerHTML = '';
+    }
+});
+
+// --- Initialize on Page Load ---
+document.addEventListener("DOMContentLoaded", async () => {
+    console.log("DOM fully loaded. Setting up search engine...");
+    setupFilterTabs(); // Setup filter tab event listeners
+
+    // Check URL parameters on initial load
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialQuery = urlParams.get('q');
+    const initialPage = parseInt(urlParams.get('page'), 10) || 1;
+
+    if (initialQuery) {
+        searchInput.value = initialQuery;
+        currentPage = initialPage;
+        searchForm.dispatchEvent(new Event('submit'));
+    } else {
+        resultsContainer.innerHTML = "<p>Welcome to Nirobo Search. Enter a term above to begin searching.</p>";
+    }
+});
   // --- Configuration ---
   const RESULTS_PER_PAGE = 10;
   let currentPage = 1;
