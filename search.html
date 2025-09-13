@@ -294,6 +294,194 @@
         }
     }
 
+    // --- Rating and Reporting System ---
+
+// Function to get user's IP (using a free service like ipapi.co)
+async function getUserIP() {
+  try {
+    // Note: ipapi.co/json/ returns detailed info including IP
+    const response = await fetch('https://ipapi.co/json/');
+    const data = await response.json();
+    console.log("Detected User Info:", data);
+    return {
+      ip: data.ip,
+      country: data.country_name || 'Unknown',
+      region: data.region || 'Unknown',
+      city: data.city || 'Unknown'
+    };
+  } catch (error) {
+    console.warn("Could not get user IP:", error);
+    // Fallback if IP service fails
+    return {
+      ip: 'unknown_ip_' + Date.now(), // Generate a temporary ID
+      country: 'Unknown',
+      region: 'Unknown',
+      city: 'Unknown'
+    };
+  }
+}
+
+// Function to load existing ratings/reports from localStorage
+function loadFeedbackData() {
+  try {
+    return JSON.parse(localStorage.getItem('niroboFeedback') || '{}');
+  } catch (e) {
+    console.error("Error loading feedback data:", e);
+    return {};
+  }
+}
+
+// Function to save ratings/reports to localStorage
+function saveFeedbackData(data) {
+  try {
+    localStorage.setItem('niroboFeedback', JSON.stringify(data));
+  } catch (e) {
+    console.error("Error saving feedback data:", e);
+    alert("Could not save your feedback. Please try again later.");
+  }
+}
+
+// Handle Rating Submission
+document.addEventListener('click', async function(e) {
+  if (e.target && e.target.classList.contains('submit-rating-btn')) {
+    const resultId = e.target.getAttribute('data-result-id');
+    const selectElement = document.getElementById(`rating-${resultId}`);
+    const ratingValue = selectElement ? selectElement.value : null;
+
+    if (!ratingValue || isNaN(parseInt(ratingValue)) || parseInt(ratingValue) < 1 || parseInt(ratingValue) > 5) {
+      alert("Please select a rating between 1 and 5 stars.");
+      return;
+    }
+
+    const userLocation = await getUserIP(); // Get IP/location info
+
+    // Load existing data
+    let feedbackData = loadFeedbackData();
+
+    // Initialize if not existing
+    if (!feedbackData.ratings) feedbackData.ratings = {};
+    if (!feedbackData.reports) feedbackData.reports = {};
+
+    // Check if user/IP already rated this result (basic prevention)
+    const existingRatingKey = `${resultId}_${userLocation.ip}`;
+    if (feedbackData.ratings[existingRatingKey]) {
+       alert("You have already rated this result from your current location/network.");
+       return;
+    }
+
+    // Store the rating
+    feedbackData.ratings[existingRatingKey] = {
+      resultId: resultId,
+      rating: parseInt(ratingValue),
+      ip: userLocation.ip,
+      country: userLocation.country,
+      region: userLocation.region,
+      city: userLocation.city,
+      timestamp: new Date().toISOString()
+    };
+
+    saveFeedbackData(feedbackData);
+    alert(`Thank you for rating this result ${ratingValue} stars!`);
+
+    // Reset the dropdown
+    if (selectElement) selectElement.value = "";
+  }
+
+  // Handle Report Submission
+  if (e.target && e.target.classList.contains('report-btn')) {
+    const resultId = e.target.getAttribute('data-result-id');
+    const selectElement = document.getElementById(`report-reason-${resultId}`);
+    const reportReason = selectElement ? selectElement.value : null;
+
+    if (!reportReason) {
+      alert("Please select a reason for reporting.");
+      return;
+    }
+
+    // Find the reported result object from the current search results
+    // This assumes `filteredResults` holds the currently displayed results
+    const reportedResult = filteredResults.find(r => {
+        const uniqueId = btoa(r.url + r.title).substring(0, 20);
+        return uniqueId === resultId;
+    });
+
+    if (!reportedResult) {
+        alert("Could not find the reported result. Please try again.");
+        return;
+    }
+
+    const userLocation = await getUserIP(); // Get IP/location info
+
+    // Load existing data
+    let feedbackData = loadFeedbackData();
+
+    // Initialize if not existing
+    if (!feedbackData.ratings) feedbackData.ratings = {};
+    if (!feedbackData.reports) feedbackData.reports = {};
+
+    // Check if user/IP already reported this result (basic prevention)
+    const existingReportKey = `${resultId}_${userLocation.ip}_${reportReason}`; // Include reason to allow different reasons
+    if (feedbackData.reports[existingReportKey]) {
+       alert("You have already reported this result for this reason from your current location/network.");
+       return;
+    }
+
+    // Prepare report data
+    const reportData = {
+      resultId: resultId,
+      title: reportedResult.title,
+      url: reportedResult.url,
+      description: reportedResult.description || 'No description',
+      tags: Array.isArray(reportedResult.tags) ? reportedResult.tags.join(', ') : 'No tags',
+      reason: reportReason,
+      ip: userLocation.ip,
+      country: userLocation.country,
+      region: userLocation.region,
+      city: userLocation.city,
+      userAgent: navigator.userAgent, // Optional extra info
+      timestamp: new Date().toISOString()
+    };
+
+    // Store the report
+    feedbackData.reports[existingReportKey] = reportData;
+    saveFeedbackData(feedbackData);
+
+    // --- Send Report via Email (Client-Side using mailto) ---
+    const subject = encodeURIComponent(`[Nirobo Report] ${reportData.title}`);
+    const body = encodeURIComponent(`
+Report Details:
+------------------
+Title: ${reportData.title}
+URL: ${reportData.url}
+Description: ${reportData.description}
+Tags: ${reportData.tags}
+Reported Reason: ${reportReason}
+
+User Information:
+------------------
+IP Address: ${reportData.ip}
+Location: ${reportData.city}, ${reportData.region}, ${reportData.country}
+Timestamp: ${reportData.timestamp}
+User Agent: ${reportData.userAgent}
+
+Please investigate this reported content.
+    `);
+
+    const mailtoLink = `mailto:infinite.vast@yendex.com?subject=${subject}&body=${body}`;
+
+    // Open the user's default email client
+    // Note: This requires user interaction to actually send
+    window.open(mailtoLink, '_blank');
+
+    alert(`A report email draft has been opened. Please review and send it to infinite.vast@yendex.com.\n\nThank you for helping keep Nirobo safe.`);
+
+    // Reset the dropdown
+    if (selectElement) selectElement.value = "";
+  }
+});
+
+console.log("Rating and Reporting system initialized.");
+
     // 2. Load data from result.json (with detailed error handling)
     async function loadResultJson() {
         try {
@@ -391,6 +579,41 @@
             resultsContainer.appendChild(resultElement);
         });
     }
+
+    // Inside renderResults loop, after creating the main result HTML
+const uniqueResultId = btoa(result.url + result.title).substring(0, 20); // Simple unique-ish ID
+
+resultElement.innerHTML += `
+  <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #333;">
+    <!-- Rating Section -->
+    <div style="margin-bottom: 10px;">
+      <label for="rating-${uniqueResultId}">Rate this result (1-5 stars):</label>
+      <select id="rating-${uniqueResultId}" data-result-id="${uniqueResultId}">
+        <option value="">-- Select --</option>
+        <option value="1">⭐</option>
+        <option value="2">⭐⭐</option>
+        <option value="3">⭐⭐⭐</option>
+        <option value="4">⭐⭐⭐⭐</option>
+        <option value="5">⭐⭐⭐⭐⭐</option>
+      </select>
+      <button class="submit-rating-btn" data-result-id="${uniqueResultId}" style="margin-left: 10px; padding: 5px 10px; background: #006400; color: white; border: none; border-radius: 4px; cursor: pointer;">Submit Rating</button>
+    </div>
+
+    <!-- Report Section -->
+    <div>
+      <label for="report-reason-${uniqueResultId}">Report this result:</label>
+      <select id="report-reason-${uniqueResultId}" data-result-id="${uniqueResultId}">
+        <option value="">-- Select Reason --</option>
+        <option value="spam">Spam or Scam</option>
+        <option value="inappropriate">Inappropriate Content</option>
+        <option value="broken_link">Broken Link</option>
+        <option value="wrong_category">Wrong Category</option>
+        <option value="other">Other</option>
+      </select>
+      <button class="report-btn" data-result-id="${uniqueResultId}" style="margin-left: 10px; padding: 5px 10px; background: #d40000; color: white; border: none; border-radius: 4px; cursor: pointer;">Report</button>
+    </div>
+  </div>
+`;
 
     // 6. Render pagination controls
     function renderPagination(totalPages) {
