@@ -399,6 +399,16 @@ function renderResults(results) {
           <div class="tags" style="margin-top: 8px;">
             ${(Array.isArray(result.tags) ? result.tags : []).map(tag => `<span>${tag}</span>`).join(' ')}
           </div>
+          
+          <!-- Report Button -->
+          <div style="margin-top: 15px;">
+          <button class="report-illegal-btn" 
+            data-url="${result.url}" 
+            data-title="${result.title}"
+            style="background: #d40000; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem;">
+            ⚠️ Report Illegal Website
+           </button>
+         </div>
         </div>
       </div>
     `;
@@ -555,6 +565,43 @@ document.addEventListener("DOMContentLoaded", async () => {
     searchForm.dispatchEvent(new Event('submit'));
   } else {
     resultsContainer.innerHTML = "<p>Welcome to Nirobo Search. Enter a term above to begin searching.</p>";
+  }
+});
+
+  // --- Reporting System ---
+document.addEventListener('click', function(e) {
+  // Handle "Report Illegal Website" button clicks
+  if (e.target && e.target.classList.contains('report-illegal-btn')) {
+    const url = e.target.getAttribute('data-url');
+    const title = e.target.getAttribute('data-title');
+
+    // Prepare email
+    const subject = encodeURIComponent(`[Nirobo Report] Illegal Website: ${title}`);
+    const body = encodeURIComponent(`
+INFRINGEMENT REPORT
+===================
+
+Website Title: ${title}
+URL: ${url}
+
+Reason for Report:
+[Please describe why you believe this website is illegal]
+
+Additional Details:
+[Any other information that supports your claim]
+
+Reporter Info:
+[Your name/email if you wish to be contacted]
+
+⚠️ NOTE: This report will be sent to Nirobo's admin team for review.
+    `);
+
+    const mailtoLink = `mailto:infinite.vast@yendex.com?subject=${subject}&body=${body}`;
+
+    // Open email client
+    window.open(mailtoLink, '_blank');
+
+    alert('📬 A report email draft has been opened. Please review and send it to infinite.vast@yendex.com');
   }
 });
   </script>
