@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Echoes of Your Search – Nirobo</title>
   <style>
-    /* --- BODY, HEADER, FOOTER STYLES (Keep your existing styles) --- */
+    /* --- Existing Styles (Body, Header, Footer, Cards) --- */
     body {
       margin: 0;
       padding: 2rem;
@@ -59,15 +59,6 @@
       font-size: 0.9rem; /* Smaller link font */
     }
 
-    .result-image {
-       width: 100%; /* Full width image */
-       max-height: 200px; /* Limit height */
-       object-fit: cover; /* Cover the area */
-       border-radius: 6px; /* Rounded corners */
-       margin-bottom: 1rem; /* Space below image */
-       box-shadow: 0 0 10px rgba(255, 0, 0, 0.3); /* Stronger red glow */
-    }
-
     .tags span {
       background: #ff0000; /* Red tag background */
       color: #fff; /* White text */
@@ -117,7 +108,8 @@
       text-decoration: underline; /* Underline on hover */
     }
 
-    /* --- NEW/UPDATED STYLES FOR FILTER TABS, SUBMIT BUTTON, PAGINATION, RATING/REPORTING --- */
+    /* --- NEW/UPDATED STYLES FOR FILTER TABS, SUBMIT BUTTON, PAGINATION, RATING --- */
+    /* --- Filter Tabs (Side-by-Side on Mobile) --- */
     .filter-tabs {
         display: flex;
         gap: 10px;
@@ -217,17 +209,19 @@
         margin-top: 15px;
         padding-top: 10px;
         border-top: 1px solid #333;
+        font-size: 0.9rem;
     }
 
     .rating-report-section label {
         display: inline-block;
         margin-right: 10px;
-        font-size: 0.9rem;
+        margin-bottom: 5px;
     }
 
     .rating-report-section select {
         padding: 5px;
         margin-right: 10px;
+        margin-bottom: 10px;
         border-radius: 4px;
         border: 1px solid #555;
         background-color: #2a2a2a;
@@ -236,7 +230,7 @@
 
     .rating-report-section button {
         padding: 5px 10px;
-        margin: 5px 5px 5px 0;
+        margin: 5px 5px 10px 0;
         border: none;
         border-radius: 4px;
         cursor: pointer;
@@ -255,6 +249,17 @@
 
     .rating-report-section button:hover {
         opacity: 0.9;
+    }
+
+    .avg-rating-display {
+        font-weight: bold;
+        color: #ffcc00; /* Goldish yellow for visibility */
+        margin-right: 10px;
+    }
+
+    .rating-count-display {
+        font-size: 0.85rem;
+        color: #aaa;
     }
   </style>
 </head>
@@ -318,7 +323,7 @@
             const hostname = new URL(url).hostname;
             return `https://www.google.com/s2/favicons?domain=${hostname}&sz=32`;
         } catch (e) {
-            return 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%23444" rx="4"/><text x="50%" y="50%" fill="white" font-size="16" font-family="Arial" text-anchor="middle" dominant-baseline="middle">?</text></svg>';
+            return 'image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%23444" rx="4"/><text x="50%" y="50%" fill="white" font-size="16" font-family="Arial" text-anchor="middle" dominant-baseline="middle">?</text></svg>';
         }
     }
 
@@ -407,6 +412,50 @@
         return filtered;
     }
 
+    // --- Rating System Functions ---
+
+    // Function to load existing ratings/reports from localStorage
+    function loadFeedbackData() {
+        try {
+            return JSON.parse(localStorage.getItem('niroboFeedback') || '{}');
+        } catch (e) {
+            console.error("Error loading feedback ", e);
+            return {};
+        }
+    }
+
+    // Function to save ratings/reports to localStorage
+    function saveFeedbackData(data) {
+        try {
+            localStorage.setItem('niroboFeedback', JSON.stringify(data));
+        } catch (e) {
+            console.error("Error saving feedback data:", e);
+            alert("Could not save your feedback. Please try again later.");
+        }
+    }
+
+    // Function to calculate average rating for a specific URL
+    function calculateAverageRating(url) {
+        const feedbackData = loadFeedbackData();
+        const ratingsForKey = feedbackData.ratings || {};
+
+        // Filter ratings for the specific URL
+        const urlRatings = Object.values(ratingsForKey).filter(r => r.url === url);
+
+        if (urlRatings.length === 0) {
+            return { average: null, count: 0 };
+        }
+
+        const sum = urlRatings.reduce((acc, curr) => acc + curr.rating, 0);
+        const average = sum / urlRatings.length;
+        return {
+            average: parseFloat(average.toFixed(1)), // Round to 1 decimal place
+            count: urlRatings.length
+        };
+    }
+
+    // --- Render Results with Rating UI ---
+
     // 5. Render results to the page (for the current page)
     function renderResults(results) {
         resultsContainer.innerHTML = "";
@@ -423,12 +472,16 @@
             const faviconUrl = getFaviconUrl(result.url);
 
             // Create a unique identifier for the result for rating/reporting
-            // Using a simple hash-like string from URL and title
-            const uniqueResultId = btoa(unescape(encodeURIComponent(result.url + result.title))).substring(0, 20);
+            const uniqueResultId = btoa(unescape(encodeURIComponent(result.url + (result.title || '')))).substring(0, 20);
+
+            // Calculate average rating for this specific result
+            const ratingInfo = calculateAverageRating(result.url);
+            const avgRatingText = ratingInfo.average !== null ? `${ratingInfo.average} ⭐` : 'No ratings yet';
+            const ratingCountText = ratingInfo.count;
 
             resultElement.innerHTML = `
                 <div style="display: flex; align-items: flex-start; gap: 12px;">
-                    <img src="${faviconUrl}" alt="Favicon" style="width: 32px; height: 32px; border-radius: 4px; flex-shrink: 0;" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 fill=%22%23444%22 rx=%224%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22white%22 font-size=%2216%22 font-family=%22Arial%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>?</text></svg>'; this.style.width='32px'; this.style.height='32px';">
+                    <img src="${faviconUrl}" alt="Favicon" style="width: 32px; height: 32px; border-radius: 4px; flex-shrink: 0;" onerror="this.src='image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 fill=%22%23444%22 rx=%224%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22white%22 font-size=%2216%22 font-family=%22Arial%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>?</text></svg>'; this.style.width='32px'; this.style.height='32px';">
                     <div style="flex: 1; min-width: 0;">
                         <h2 style="margin: 0 0 8px 0; font-size: 1.2rem;">${result.title || 'Untitled'}</h2>
                         <p class="url-subtitle"><a href="${result.url}" target="_blank">${result.url}</a></p>
@@ -439,36 +492,52 @@
 
                         <!-- Rating and Reporting Section -->
                         <div class="rating-report-section">
-                            <label for="rating-${uniqueResultId}">Rate (1-5):</label>
-                            <select id="rating-${uniqueResultId}" data-result-id="${uniqueResultId}">
-                                <option value="">--</option>
-                                <option value="1">⭐</option>
-                                <option value="2">⭐⭐</option>
-                                <option value="3">⭐⭐⭐</option>
-                                <option value="4">⭐⭐⭐⭐</option>
-                                <option value="5">⭐⭐⭐⭐⭐</option>
-                            </select>
-                            <button class="submit-rating-btn" data-result-id="${uniqueResultId}">Submit Rating</button>
+                            <!-- Display Average Rating -->
+                            <div style="margin-bottom: 10px;">
+                                <span>Average Rating:</span>
+                                <span class="avg-rating-display" id="avg-rating-${uniqueResultId}">${avgRatingText}</span>
+                                (<span class="rating-count-display" id="rating-count-${uniqueResultId}">${ratingCountText}</span> ratings)
+                            </div>
 
-                            <br> <!-- Line break for better mobile layout -->
+                            <!-- User Rating Input -->
+                            <div style="margin-bottom: 10px;">
+                                <label for="rating-${uniqueResultId}">Your Rating (1-5 stars):</label>
+                                <select id="rating-${uniqueResultId}" data-result-id="${uniqueResultId}">
+                                    <option value="">-- Select --</option>
+                                    <option value="1">⭐</option>
+                                    <option value="2">⭐⭐</option>
+                                    <option value="3">⭐⭐⭐</option>
+                                    <option value="4">⭐⭐⭐⭐</option>
+                                    <option value="5">⭐⭐⭐⭐⭐</option>
+                                </select>
+                                <button class="submit-rating-btn" data-result-id="${uniqueResultId}" data-result-url="${result.url}">Submit Rating</button>
+                            </div>
 
-                            <label for="report-reason-${uniqueResultId}">Report:</label>
-                            <select id="report-reason-${uniqueResultId}" data-result-id="${uniqueResultId}">
-                                <option value="">-- Select --</option>
-                                <option value="spam">Spam/Scam</option>
-                                <option value="inappropriate">Inappropriate</option>
-                                <option value="broken_link">Broken Link</option>
-                                <option value="wrong_category">Wrong Category</option>
-                                <option value="other">Other</option>
-                            </select>
-                            <button class="report-btn" data-result-id="${uniqueResultId}">Report</button>
+                            <!-- Report Section -->
+                            <div>
+                                <label for="report-reason-${uniqueResultId}">Report this result:</label>
+                                <select id="report-reason-${uniqueResultId}" data-result-id="${uniqueResultId}" data-result-url="${result.url}">
+                                    <option value="">-- Select Reason --</option>
+                                    <option value="spam">Spam or Scam</option>
+                                    <option value="inappropriate">Inappropriate Content</option>
+                                    <option value="broken_link">Broken Link</option>
+                                    <option value="wrong_category">Wrong Category</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                <button class="report-btn" data-result-id="${uniqueResultId}" data-result-url="${result.url}">Report</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             `;
             resultsContainer.appendChild(resultElement);
         });
+
+        // Attach event listeners for the newly rendered rating/reporting buttons
+        attachRatingReportingListeners();
     }
+
+    // --- Pagination ---
 
     // 6. Render pagination controls
     function renderPagination(totalPages) {
@@ -553,9 +622,10 @@
 
         renderResults(pageResults);
         renderPagination(totalPages);
-        // Re-attach event listeners after re-rendering
-        attachRatingReportingListeners();
+        // Listeners are re-attached in renderResults
     }
+
+    // --- Filter Tabs ---
 
     // 8. Set up event listeners for filter tabs
     function setupFilterTabs() {
@@ -573,13 +643,11 @@
                 const pageResults = filteredResults.slice(startIndex, endIndex);
                 renderResults(pageResults);
                 renderPagination(totalPages);
-                // Re-attach event listeners after re-rendering
-                attachRatingReportingListeners();
             });
         });
     }
 
-    // --- Rating and Reporting System ---
+    // --- Rating and Reporting Logic ---
 
     // Function to get user's IP (using a free service like ipapi.co)
     async function getUserIP() {
@@ -606,32 +674,14 @@
       }
     }
 
-    // Function to load existing ratings/reports from localStorage
-    function loadFeedbackData() {
-      try {
-        return JSON.parse(localStorage.getItem('niroboFeedback') || '{}');
-      } catch (e) {
-        console.error("Error loading feedback ", e);
-        return {};
-      }
-    }
-
-    // Function to save ratings/reports to localStorage
-    function saveFeedbackData(data) {
-      try {
-        localStorage.setItem('niroboFeedback', JSON.stringify(data));
-      } catch (e) {
-        console.error("Error saving feedback data:", e);
-        alert("Could not save your feedback. Please try again later.");
-      }
-    }
-
-    // Function to attach event listeners to the rating/reporting buttons
+    // Function to attach event listeners to rating/reporting buttons
     function attachRatingReportingListeners() {
+        // --- Rating Submission ---
         document.querySelectorAll('.submit-rating-btn').forEach(button => {
             button.addEventListener('click', async function(e) {
-                e.preventDefault(); // Prevent any default form submission if inside a form
+                e.preventDefault();
                 const resultId = this.getAttribute('data-result-id');
+                const resultUrl = this.getAttribute('data-result-url'); // Get URL from data attribute
                 const selectElement = document.getElementById(`rating-${resultId}`);
                 const ratingValue = selectElement ? selectElement.value : null;
 
@@ -649,16 +699,17 @@
                 if (!feedbackData.ratings) feedbackData.ratings = {};
                 if (!feedbackData.reports) feedbackData.reports = {};
 
-                // Check if user/IP already rated this result (basic prevention)
-                const existingRatingKey = `${resultId}_${userLocation.ip}`;
+                // Check if user/IP already rated this result URL (basic prevention)
+                // We use URL + IP as the key to prevent multiple ratings from the same IP
+                const existingRatingKey = `${resultUrl}_${userLocation.ip}`;
                 if (feedbackData.ratings[existingRatingKey]) {
                    alert("You have already rated this result from your current location/network.");
                    return;
                 }
 
-                // Store the rating
+                // Store the rating using URL as the key
                 feedbackData.ratings[existingRatingKey] = {
-                  resultId: resultId,
+                  url: resultUrl, // Store URL with rating
                   rating: parseInt(ratingValue),
                   ip: userLocation.ip,
                   country: userLocation.country,
@@ -670,15 +721,30 @@
                 saveFeedbackData(feedbackData);
                 alert(`Thank you for rating this result ${ratingValue} stars!`);
 
+                // --- Update displayed average rating immediately ---
+                const newRatingInfo = calculateAverageRating(resultUrl);
+                const avgRatingElement = document.getElementById(`avg-rating-${resultId}`);
+                const ratingCountElement = document.getElementById(`rating-count-${resultId}`);
+
+                if (avgRatingElement) {
+                    avgRatingElement.textContent = newRatingInfo.average !== null ? `${newRatingInfo.average} ⭐` : 'No ratings yet';
+                }
+                if (ratingCountElement) {
+                    ratingCountElement.textContent = newRatingInfo.count;
+                }
+                // --- End of immediate update ---
+
                 // Reset the dropdown
                 if (selectElement) selectElement.value = "";
             });
         });
 
+        // --- Report Submission ---
         document.querySelectorAll('.report-btn').forEach(button => {
             button.addEventListener('click', async function(e) {
-                e.preventDefault(); // Prevent any default form submission if inside a form
+                e.preventDefault();
                 const resultId = this.getAttribute('data-result-id');
+                const resultUrl = this.getAttribute('data-result-url'); // Get URL from data attribute
                 const selectElement = document.getElementById(`report-reason-${resultId}`);
                 const reportReason = selectElement ? selectElement.value : null;
 
@@ -688,13 +754,8 @@
                 }
 
                 // Find the reported result object from the current search results
-                // This assumes `filteredResults` holds the currently displayed results
-                const reportedResultIndex = (currentPage - 1) * RESULTS_PER_PAGE + Array.from(document.querySelectorAll('.result-card')).findIndex(el => el.contains(this));
-                if (reportedResultIndex === -1 || reportedResultIndex >= filteredResults.length) {
-                    alert("Could not find the reported result. Please try again.");
-                    return;
-                }
-                const reportedResult = filteredResults[reportedResultIndex];
+                // This is a bit tricky without a direct reference, but we can use the URL
+                const reportedResult = filteredResults.find(r => r.url === resultUrl);
 
                 if (!reportedResult) {
                     alert("Could not find the reported result. Please try again.");
@@ -710,8 +771,8 @@
                 if (!feedbackData.ratings) feedbackData.ratings = {};
                 if (!feedbackData.reports) feedbackData.reports = {};
 
-                // Check if user/IP already reported this result for this reason (basic prevention)
-                const existingReportKey = `${resultId}_${userLocation.ip}_${reportReason}`; // Include reason to allow different reasons
+                // Check if user/IP already reported this result URL for this reason (basic prevention)
+                const existingReportKey = `${resultUrl}_${userLocation.ip}_${reportReason}`; // Include reason to allow different reasons
                 if (feedbackData.reports[existingReportKey]) {
                    alert("You have already reported this result for this reason from your current location/network.");
                    return;
@@ -719,9 +780,8 @@
 
                 // Prepare report data
                 const reportData = {
-                  resultId: resultId,
+                  url: resultUrl, // Use URL as identifier
                   title: reportedResult.title,
-                  url: reportedResult.url,
                   description: reportedResult.description || 'No description',
                   tags: Array.isArray(reportedResult.tags) ? reportedResult.tags.join(', ') : 'No tags',
                   reason: reportReason,
@@ -798,8 +858,6 @@ Please investigate this reported content.
 
             renderResults(pageResults);
             renderPagination(totalPages);
-            // Attach listeners for the newly rendered results
-            attachRatingReportingListeners();
 
         } catch (error) {
             console.error("An unexpected error occurred during search:", error);
@@ -821,15 +879,10 @@ Please investigate this reported content.
         if (initialQuery) {
             searchInput.value = initialQuery;
             currentPage = initialPage;
-            // Programmatically trigger the search
-            const event = new Event('submit');
-            searchForm.dispatchEvent(event);
-            // searchForm.dispatchEvent(new Event('submit')); // Alternative way
+            searchForm.dispatchEvent(new Event('submit'));
         } else {
             resultsContainer.innerHTML = "<p>Welcome to Nirobo Search. Enter a term above to begin searching.</p>";
         }
-        // Initial attachment of rating/reporting listeners (if there are default results)
-        // attachRatingReportingListeners();
     });
   </script>
 </body>
