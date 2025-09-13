@@ -6,6 +6,7 @@
   <title>Nirobo — Your URL Analytics</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
+    /* --- Body, Header, Footer Styles --- */
     body {
       margin: 0;
       padding: 2rem;
@@ -98,7 +99,7 @@
       cursor: pointer;
     }
 
-    /* Submit Button Styles */
+    /* --- Submit Button (Fixed Position) --- */
     .submit-button {
       position: fixed;
       top: 20px;
@@ -122,7 +123,7 @@
       box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
     }
 
-    /* Filter Tabs */
+    /* --- Filter Tabs (Side-by-Side on Mobile) --- */
     .filter-tabs {
       display: flex;
       gap: 10px;
@@ -153,7 +154,7 @@
       background-color: #d40000;
     }
 
-    /* Pagination */
+    /* --- Pagination --- */
     .pagination {
       display: flex;
       justify-content: center;
@@ -219,56 +220,58 @@
       }
       
       .filter-tabs {
-        flex-direction: row;
+        flex-direction: row; /* Keep side-by-side on mobile */
         align-items: center;
       }
       
       .filter-tab {
-        width: auto;
+        width: auto; /* Let buttons size naturally */
         text-align: center;
       }
     }
   </style>
 </head>
 <body>
-  <h1>📊 YOUR URL ANALYTICS</h1>
-  <a href="/">← Back to Nirobo</a>
-
-  <!-- Submit URL Button (Top Right) -->
-  <div style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
-    <a href="signup.html" class="submit-button">➕ Submit URL</a>
-  </div>
-
-  <!-- Search Form -->
-  <form id="search-form">
-    <input type="text" id="search-input" placeholder="Search Nirobo" value="" autocomplete="off" spellcheck="false" />
-    <button type="submit">Search</button>
-  </form>
-
-  <!-- Filter Tabs -->
-  <div class="filter-tabs">
-    <button class="filter-tab active" data-filter="all">All</button>
-    <button class="filter-tab" data-filter="images">Images</button>
-    <button class="filter-tab" data-filter="videos">Videos</button>
-    <button class="filter-tab" data-filter="websites">Websites</button>
-  </div>
-
-  <!-- Results Container -->
-  <div id="results"></div>
-
-  <!-- Pagination Container -->
-  <div id="pagination" class="pagination"></div>
-
-  <!-- Footer -->
-  <footer>
-    Made in Bangladesh 🇧🇩 | Curated by Nirobo<br>
-    Honoring the Language Movement and the Silent Legacy of Justice<br>
-    Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity<br>
+  <div class="container">
+    <h1>📊 YOUR URL ANALYTICS</h1>
     <a href="/">← Back to Nirobo</a>
-  </footer>
+
+    <!-- Submit URL Button (Top Right) -->
+    <div style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
+      <a href="signup.html" class="submit-button">➕ Submit URL</a>
+    </div>
+
+    <!-- Search Form -->
+    <form id="search-form">
+      <input type="text" id="search-input" placeholder="Search Nirobo" value="" autocomplete="off" spellcheck="false" />
+      <button type="submit">Search</button>
+    </form>
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs">
+      <button class="filter-tab active" data-filter="all">All</button>
+      <button class="filter-tab" data-filter="images">Images</button>
+      <button class="filter-tab" data-filter="videos">Videos</button>
+      <button class="filter-tab" data-filter="websites">Websites</button>
+    </div>
+
+    <!-- Results Container -->
+    <div id="results"></div>
+
+    <!-- Pagination Container -->
+    <div id="pagination" class="pagination"></div>
+
+    <!-- Footer -->
+    <footer>
+      Made in Bangladesh 🇧🇩 | Curated by Nirobo<br>
+      Honoring the Language Movement and the Silent Legacy of Justice<br>
+      Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity<br>
+      <a href="/">← Back to Nirobo</a>
+    </footer>
+  </div>
 
   <script>
-    // Configuration
+    // --- Configuration ---
     const RESULTS_PER_PAGE = 10;
     let currentPage = 1;
     let currentFilter = 'all';
@@ -276,13 +279,15 @@
     let filteredResults = [];
     let query = '';
 
-    // DOM Elements
+    // --- DOM Elements ---
     const searchForm = document.getElementById('search-form');
     const searchInput = document.getElementById('search-input');
     const resultsContainer = document.getElementById('results');
     const paginationContainer = document.getElementById('pagination');
 
-    // Helper Functions
+    // --- Helper Functions ---
+
+    // Get favicon URL
     function getFaviconUrl(url) {
       try {
         const hostname = new URL(url).hostname;
@@ -292,7 +297,9 @@
       }
     }
 
-    // Load approved submissions from localStorage
+    // --- Core Search Logic ---
+
+    // 1. Load approved submissions from localStorage
     function loadApprovedData() {
       try {
         const allSubmissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
@@ -303,34 +310,46 @@
       }
     }
 
-    // Load data from result.json
+    // 2. Load data from result.json (with detailed error handling)
     async function loadResultJson() {
       try {
-        const res = await fetch('result.json');
-        if (res.ok) {
-          const jsonData = await res.json();
-          return jsonData.map(item => ({ ...item, source: 'json' }));
-        } else {
-          console.warn('Failed to load result.json:', res.statusText);
+        console.log("Attempting to load result.json...");
+        const response = await fetch('result.json'); // Relative path
+
+        if (!response.ok) {
+          console.error(`HTTP Error loading result.json: ${response.status} ${response.statusText}`);
           return [];
         }
+
+        const jsonData = await response.json();
+        console.log("Successfully loaded result.json:", jsonData);
+        return jsonData;
       } catch (error) {
         console.warn('Failed to load result.json:', error);
         return [];
       }
     }
 
-    // Combine results from both sources
+    // 3. Combine results from both sources
     async function loadAllResults() {
+      console.log("Starting to load all results...");
       const jsonResults = await loadResultJson();
       const localStorageData = loadApprovedData();
-      return [...jsonResults, ...localStorageData.map(item => ({ ...item, source: 'localStorage' }))];
+      
+      const combinedResults = [
+        ...jsonResults.map(item => ({ ...item, source: 'json' })),
+        ...localStorageData.map(item => ({ ...item, source: 'localStorage' }))
+      ];
+
+      console.log("Combined results:", combinedResults);
+      return combinedResults;
     }
 
-    // Filter results
+    // 4. Filter results based on query and currentFilter
     function applyFilters(results, searchTerm, filterType) {
       let filtered = results;
 
+      // Apply search term filter
       if (searchTerm) {
         const lowerQuery = searchTerm.toLowerCase();
         filtered = filtered.filter(item =>
@@ -342,6 +361,7 @@
         );
       }
 
+      // Apply type filter (basic)
       if (filterType !== 'all') {
         filtered = filtered.filter(item => {
           const urlLower = item.url ? item.url.toLowerCase() : '';
@@ -363,73 +383,43 @@
       return filtered;
     }
 
-    // Render results
+    // 5. Render results to the page (for the current page)
     function renderResults(results) {
-      resultsContainer.innerHTML = '';
+      resultsContainer.innerHTML = "";
 
       if (results.length === 0) {
-        resultsContainer.innerHTML = '<p>No results found.</p>';
+        resultsContainer.innerHTML = `<p>No results found for "<strong>${query}</strong>". Try another term.</p>`;
         return;
       }
 
-      results.forEach((result, index) => {
-        const card = document.createElement('div');
-        card.className = 'result-card';
+      results.forEach((result) => {
+        const resultElement = document.createElement('div');
+        resultElement.className = 'result-card';
         
         const faviconUrl = getFaviconUrl(result.url);
         
-        card.innerHTML = `
+        resultElement.innerHTML = `
           <div style="display: flex; align-items: flex-start; gap: 12px;">
             <img src="${faviconUrl}" alt="Favicon" style="width: 32px; height: 32px; border-radius: 4px; flex-shrink: 0;" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 fill=%22%23444%22 rx=%224%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22white%22 font-size=%2216%22 font-family=%22Arial%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>?</text></svg>'; this.style.width='32px'; this.style.height='32px';">
             <div style="flex: 1; min-width: 0;">
-              <h2 style="margin: 0 0 8px 0; font-size: 1.2rem;">${result.title || 'Untitled'}</h2>
+              <h2 style="margin: 0 0 8px 0; font-size: 1.2rem;">${result.title}</h2>
               <p class="url-subtitle"><a href="${result.url}" target="_blank">${result.url}</a></p>
-              <p style="margin: 8px 0;">${result.description || 'No description available.'}</p>
+              <p style="margin: 8px 0;">${result.description}</p>
               <div class="tags" style="margin-top: 8px;">${Array.isArray(result.tags) ? result.tags.map(tag => `<span>${tag}</span>`).join(' ') : ''}</div>
-              
-              <!-- Rating & Reporting Section -->
-              <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #333;">
-                <div style="margin-bottom: 10px;">
-                  <label for="rating-${index}">Rate this result (1-5 stars):</label>
-                  <select id="rating-${index}" style="margin-left: 10px; padding: 5px; border-radius: 4px;">
-                    <option value="">-- Select --</option>
-                    <option value="1">⭐</option>
-                    <option value="2">⭐⭐</option>
-                    <option value="3">⭐⭐⭐</option>
-                    <option value="4">⭐⭐⭐⭐</option>
-                    <option value="5">⭐⭐⭐⭐⭐</option>
-                  </select>
-                  <button class="submit-rating-btn" data-index="${index}" data-url="${result.url}" style="margin-left: 10px; padding: 5px 10px; background: #006400; color: white; border: none; border-radius: 4px; cursor: pointer;">Submit Rating</button>
-                </div>
-                
-                <div>
-                  <label for="report-reason-${index}">Report this result:</label>
-                  <select id="report-reason-${index}" style="margin-left: 10px; padding: 5px; border-radius: 4px;">
-                    <option value="">-- Select Reason --</option>
-                    <option value="spam">Spam or Scam</option>
-                    <option value="inappropriate">Inappropriate Content</option>
-                    <option value="broken_link">Broken Link</option>
-                    <option value="wrong_category">Wrong Category</option>
-                    <option value="other">Other</option>
-                  </select>
-                  <button class="report-btn" data-index="${index}" data-url="${result.url}" style="margin-left: 10px; padding: 5px 10px; background: #d40000; color: white; border: none; border-radius: 4px; cursor: pointer;">Report</button>
-                </div>
-              </div>
             </div>
           </div>
         `;
-        resultsContainer.appendChild(card);
+        resultsContainer.appendChild(resultElement);
       });
-
-      // Attach event listeners for rating/reporting
-      attachRatingReportingListeners();
     }
 
-    // Render pagination
+    // 6. Render pagination controls
     function renderPagination(totalPages) {
-      paginationContainer.innerHTML = '';
+      paginationContainer.innerHTML = ''; // Clear previous pagination
 
-      if (totalPages <= 1) return;
+      if (totalPages <= 1) {
+        return;
+      }
 
       const fragment = document.createDocumentFragment();
 
@@ -440,7 +430,7 @@
       prevButton.addEventListener('click', () => goToPage(currentPage - 1));
       fragment.appendChild(prevButton);
 
-      // Page numbers
+      // Page number buttons
       const startPage = Math.max(1, currentPage - 2);
       const endPage = Math.min(totalPages, currentPage + 2);
 
@@ -491,13 +481,16 @@
       paginationContainer.appendChild(fragment);
     }
 
-    // Go to specific page
+    // 7. Go to a specific page
     function goToPage(page) {
       currentPage = page;
+      
+      // Update URL
       const url = new URL(window.location);
       url.searchParams.set('page', page.toString());
       window.history.pushState({ page }, '', url);
 
+      // Re-filter and re-render
       filteredResults = applyFilters(allResults, query, currentFilter);
       const totalPages = Math.ceil(filteredResults.length / RESULTS_PER_PAGE);
       const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
@@ -508,114 +501,35 @@
       renderPagination(totalPages);
     }
 
-    // Set up filter tabs
+    // 8. Set up event listeners for filter tabs
     function setupFilterTabs() {
       const filterTabs = document.querySelectorAll('.filter-tab');
       filterTabs.forEach(tab => {
         tab.addEventListener('click', () => {
+          // Update active tab
           filterTabs.forEach(t => t.classList.remove('active'));
           tab.classList.add('active');
+          
+          // Set filter
           currentFilter = tab.dataset.filter || 'all';
+          
+          // Reset to first page
           currentPage = 1;
+          
+          // Re-filter and re-render
           filteredResults = applyFilters(allResults, query, currentFilter);
           const totalPages = Math.ceil(filteredResults.length / RESULTS_PER_PAGE);
           const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
           const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, filteredResults.length);
           const pageResults = filteredResults.slice(startIndex, endIndex);
+
           renderResults(pageResults);
           renderPagination(totalPages);
         });
       });
     }
 
-    // Rating & Reporting System
-    function attachRatingReportingListeners() {
-      // Rating submission
-      document.querySelectorAll('.submit-rating-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-          const index = this.getAttribute('data-index');
-          const url = this.getAttribute('data-url');
-          const selectElement = document.getElementById(`rating-${index}`);
-          const ratingValue = selectElement ? selectElement.value : null;
-
-          if (!ratingValue || isNaN(parseInt(ratingValue)) || parseInt(ratingValue) < 1 || parseInt(ratingValue) > 5) {
-            alert("Please select a rating between 1 and 5 stars.");
-            return;
-          }
-
-          // Prevent duplicate rating
-          const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser') || 'null');
-          if (!currentUser) {
-            alert("Please log in first.");
-            return;
-          }
-
-          let userRatings = JSON.parse(localStorage.getItem(`niroboUserRatings_${currentUser.id}`) || '[]');
-          if (userRatings.includes(url)) {
-            alert("You have already rated this URL.");
-            return;
-          }
-
-          // Save rating
-          userRatings.push(url);
-          localStorage.setItem(`niroboUserRatings_${currentUser.id}`, JSON.stringify(userRatings));
-
-          alert("✅ Thank you for rating this result!");
-          this.disabled = true;
-          selectElement.disabled = true;
-        });
-      });
-
-      // Report submission
-      document.querySelectorAll('.report-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-          const index = this.getAttribute('data-index');
-          const url = this.getAttribute('data-url');
-          const selectElement = document.getElementById(`report-reason-${index}`);
-          const reportReason = selectElement ? selectElement.value : null;
-
-          if (!reportReason) {
-            alert("Please select a reason for reporting.");
-            return;
-          }
-
-          // Prevent duplicate report
-          const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser') || 'null');
-          if (!currentUser) {
-            alert("Please log in first.");
-            return;
-          }
-
-          let userReports = JSON.parse(localStorage.getItem(`niroboUserReports_${currentUser.id}`) || '[]');
-          if (userReports.includes(url)) {
-            alert("You have already reported this URL.");
-            return;
-          }
-
-          // Save report
-          userReports.push(url);
-          localStorage.setItem(`niroboUserReports_${currentUser.id}`, JSON.stringify(userReports));
-
-          // Send email
-          const subject = encodeURIComponent(`[Nirobo Report] ${url}`);
-          const body = encodeURIComponent(`
-Report Details:
-------------------
-URL: ${url}
-Reason: ${reportReason}
-Timestamp: ${new Date().toISOString()}
-
-Please investigate this reported content.
-          `);
-          const mailtoLink = `mailto:infinite.vast@yendex.com?subject=${subject}&body=${body}`;
-          window.open(mailtoLink, '_blank');
-
-          alert("✅ A report email draft has been opened. Please send it to infinite.vast@yendex.com");
-          this.disabled = true;
-          selectElement.disabled = true;
-        });
-      });
-    }
+    // --- Main Execution Flow ---
 
     // Handle search form submission
     searchForm.addEventListener('submit', async (e) => {
@@ -628,33 +542,38 @@ Please investigate this reported content.
       }
 
       try {
+        // Load all results
         allResults = await loadAllResults();
+        
+        // Filter results
         filteredResults = applyFilters(allResults, query, currentFilter);
+        
+        // Calculate pagination
         const totalPages = Math.ceil(filteredResults.length / RESULTS_PER_PAGE);
         const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
         const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, filteredResults.length);
         const pageResults = filteredResults.slice(startIndex, endIndex);
 
+        // Render results and pagination
         renderResults(pageResults);
         renderPagination(totalPages);
+        
+        // Set up filter tabs (only once)
+        if (currentPage === 1) {
+          setupFilterTabs();
+        }
       } catch (error) {
         console.error("Search error:", error);
-        resultsContainer.innerHTML = '<p style="color: #ff9999;">An error occurred. Please try again.</p>';
+        resultsContainer.innerHTML = `<p style="color: #ff9999;">Error loading results. Please check your result.json file.</p>`;
         paginationContainer.innerHTML = '';
       }
     });
 
-    // Initialize
+    // --- Initialize on Page Load ---
     document.addEventListener('DOMContentLoaded', () => {
-      const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser') || 'null');
-      if (!currentUser) {
-        alert("Please log in first.");
-        window.location.href = 'signup.html';
-      }
-
-      setupFilterTabs();
+      console.log("DOM fully loaded. Setting up search engine...");
       
-      // Check URL parameters
+      // Check URL parameters on initial load
       const urlParams = new URLSearchParams(window.location.search);
       const initialQuery = urlParams.get('q');
       const initialPage = parseInt(urlParams.get('page'), 10) || 1;
@@ -664,7 +583,7 @@ Please investigate this reported content.
         currentPage = initialPage;
         searchForm.dispatchEvent(new Event('submit'));
       } else {
-        resultsContainer.innerHTML = '<p>Welcome to Nirobo Search. Enter a term above to begin searching.</p>';
+        resultsContainer.innerHTML = `<p>Welcome to Nirobo Search. Enter a term above to begin searching.</p>`;
       }
     });
   </script>
