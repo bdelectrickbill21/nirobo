@@ -3,11 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Echoes of Your Search – Nirobo</title>
-  <!-- Chart.js for graphs -->
+  <title>Nirobo — Your URL Analytics</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    /* --- Body, Header, Footer Styles --- */
     body {
       margin: 0;
       padding: 2rem;
@@ -100,7 +98,7 @@
       cursor: pointer;
     }
 
-    /* --- Submit Button (Fixed Position) --- */
+    /* Submit Button Styles */
     .submit-button {
       position: fixed;
       top: 20px;
@@ -124,7 +122,7 @@
       box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
     }
 
-    /* --- Filter Tabs (Side-by-Side on Mobile) --- */
+    /* Filter Tabs */
     .filter-tabs {
       display: flex;
       gap: 10px;
@@ -155,7 +153,7 @@
       background-color: #d40000;
     }
 
-    /* --- Pagination --- */
+    /* Pagination */
     .pagination {
       display: flex;
       justify-content: center;
@@ -214,110 +212,63 @@
       text-decoration: underline;
     }
 
-    /* --- Rating and Reporting Styles --- */
-    .rating-report-section {
-      margin-top: 15px;
-      padding-top: 10px;
-      border-top: 1px solid #333;
-    }
-
-    .rating-report-section label {
-      display: inline-block;
-      margin-right: 10px;
-      font-size: 0.9rem;
-    }
-
-    .rating-report-section select {
-      padding: 5px;
-      margin-right: 10px;
-      border-radius: 4px;
-      border: 1px solid #555;
-      background-color: #2a2a2a;
-      color: #f5f5f5;
-    }
-
-    .rating-report-section button {
-      padding: 5px 10px;
-      margin: 5px 5px 5px 0;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-
-    .submit-rating-btn {
-      background: #006400;
-      color: white;
-    }
-
-    .report-btn {
-      background: #d40000;
-      color: white;
-    }
-
-    .rating-report-section button:hover {
-      opacity: 0.9;
-    }
-
-    /* --- Responsive adjustments --- */
+    /* Responsive adjustments */
     @media (max-width: 768px) {
       #search-input {
         width: 60%;
       }
       
       .filter-tabs {
-        flex-direction: row; /* Keep side-by-side on mobile */
+        flex-direction: row;
         align-items: center;
       }
       
       .filter-tab {
-        width: auto; /* Let buttons size naturally */
+        width: auto;
         text-align: center;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Echoes of Your Search</h1>
-    <a href="/">← Back to Nirobo</a>
+  <h1>📊 YOUR URL ANALYTICS</h1>
+  <a href="/">← Back to Nirobo</a>
 
-    <!-- Submit URL Button (Top Right) -->
-    <a href="signup.html" class="submit-button">➕ Submit Your Site</a>
-
-    <!-- Search Form -->
-    <form id="search-form">
-      <input type="text" id="search-input" placeholder="Search Nirobo" value="" />
-      <button type="submit">Search</button>
-    </form>
-
-    <!-- Filter Tabs -->
-    <div class="filter-tabs">
-      <button class="filter-tab active" data-filter="all">All</button>
-      <button class="filter-tab" data-filter="images">Images</button>
-      <button class="filter-tab" data-filter="videos">Videos</button>
-      <button class="filter-tab" data-filter="websites">Websites</button>
-    </div>
-
-    <!-- Results Container -->
-    <div id="results">
-      <p>Welcome to Nirobo Search. Enter a term above to begin searching.</p>
-    </div>
-
-    <!-- Pagination Container -->
-    <div id="pagination" class="pagination"></div>
-
-    <!-- Footer -->
-    <footer>
-      Made in Bangladesh 🇧🇩 | Curated by Nirobo<br>
-      Honoring the Language Movement and the Silent Legacy of Justice<br>
-      Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity<br>
-      <a href="/">← Back to Nirobo</a>
-    </footer>
+  <!-- Submit URL Button (Top Right) -->
+  <div style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
+    <a href="signup.html" class="submit-button">➕ Submit URL</a>
   </div>
 
+  <!-- Search Form -->
+  <form id="search-form">
+    <input type="text" id="search-input" placeholder="Search Nirobo" value="" autocomplete="off" spellcheck="false" />
+    <button type="submit">Search</button>
+  </form>
+
+  <!-- Filter Tabs -->
+  <div class="filter-tabs">
+    <button class="filter-tab active" data-filter="all">All</button>
+    <button class="filter-tab" data-filter="images">Images</button>
+    <button class="filter-tab" data-filter="videos">Videos</button>
+    <button class="filter-tab" data-filter="websites">Websites</button>
+  </div>
+
+  <!-- Results Container -->
+  <div id="results"></div>
+
+  <!-- Pagination Container -->
+  <div id="pagination" class="pagination"></div>
+
+  <!-- Footer -->
+  <footer>
+    Made in Bangladesh 🇧🇩 | Curated by Nirobo<br>
+    Honoring the Language Movement and the Silent Legacy of Justice<br>
+    Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity<br>
+    <a href="/">← Back to Nirobo</a>
+  </footer>
+
   <script>
-    // --- Configuration ---
+    // Configuration
     const RESULTS_PER_PAGE = 10;
     let currentPage = 1;
     let currentFilter = 'all';
@@ -325,15 +276,13 @@
     let filteredResults = [];
     let query = '';
 
-    // --- DOM Elements ---
+    // DOM Elements
     const searchForm = document.getElementById('search-form');
     const searchInput = document.getElementById('search-input');
     const resultsContainer = document.getElementById('results');
     const paginationContainer = document.getElementById('pagination');
 
-    // --- Helper Functions ---
-
-    // Get favicon URL
+    // Helper Functions
     function getFaviconUrl(url) {
       try {
         const hostname = new URL(url).hostname;
@@ -343,9 +292,7 @@
       }
     }
 
-    // --- Core Search Logic ---
-
-    // 1. Load approved submissions from localStorage
+    // Load approved submissions from localStorage
     function loadApprovedData() {
       try {
         const allSubmissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
@@ -356,7 +303,7 @@
       }
     }
 
-    // 2. Load data from result.json
+    // Load data from result.json
     async function loadResultJson() {
       try {
         const res = await fetch('result.json');
@@ -373,14 +320,14 @@
       }
     }
 
-    // 3. Combine results from both sources
+    // Combine results from both sources
     async function loadAllResults() {
       const jsonResults = await loadResultJson();
       const localStorageData = loadApprovedData();
       return [...jsonResults, ...localStorageData.map(item => ({ ...item, source: 'localStorage' }))];
     }
 
-    // 4. Filter results based on query and currentFilter
+    // Filter results
     function applyFilters(results, searchTerm, filterType) {
       let filtered = results;
 
@@ -416,12 +363,12 @@
       return filtered;
     }
 
-    // 5. Render results to the page
+    // Render results
     function renderResults(results) {
       resultsContainer.innerHTML = '';
 
       if (results.length === 0) {
-        resultsContainer.innerHTML = `<p>No results found for "<strong>${query}</strong>".</p>`;
+        resultsContainer.innerHTML = '<p>No results found.</p>';
         return;
       }
 
@@ -435,36 +382,38 @@
           <div style="display: flex; align-items: flex-start; gap: 12px;">
             <img src="${faviconUrl}" alt="Favicon" style="width: 32px; height: 32px; border-radius: 4px; flex-shrink: 0;" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 fill=%22%23444%22 rx=%224%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22white%22 font-size=%2216%22 font-family=%22Arial%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>?</text></svg>'; this.style.width='32px'; this.style.height='32px';">
             <div style="flex: 1; min-width: 0;">
-              <h2 style="margin: 0 0 8px 0; font-size: 1.2rem;">${result.title}</h2>
+              <h2 style="margin: 0 0 8px 0; font-size: 1.2rem;">${result.title || 'Untitled'}</h2>
               <p class="url-subtitle"><a href="${result.url}" target="_blank">${result.url}</a></p>
-              <p>${result.description}</p>
-              <div class="tags">${Array.isArray(result.tags) ? result.tags.map(tag => `<span>${tag}</span>`).join(' ') : ''}</div>
+              <p style="margin: 8px 0;">${result.description || 'No description available.'}</p>
+              <div class="tags" style="margin-top: 8px;">${Array.isArray(result.tags) ? result.tags.map(tag => `<span>${tag}</span>`).join(' ') : ''}</div>
               
-              <!-- Rating and Reporting Section -->
-              <div class="rating-report-section">
-                <label for="rating-${index}">Rate (1-5 stars):</label>
-                <select id="rating-${index}" data-index="${index}">
-                  <option value="">-- Select --</option>
-                  <option value="1">⭐</option>
-                  <option value="2">⭐⭐</option>
-                  <option value="3">⭐⭐⭐</option>
-                  <option value="4">⭐⭐⭐⭐</option>
-                  <option value="5">⭐⭐⭐⭐⭐</option>
-                </select>
-                <button class="submit-rating-btn" data-index="${index}" data-url="${result.url}">Submit Rating</button>
-
-                <br> <!-- Line break for better mobile layout -->
-
-                <label for="report-reason-${index}">Report:</label>
-                <select id="report-reason-${index}" data-index="${index}">
-                  <option value="">-- Select Reason --</option>
-                  <option value="spam">Spam or Scam</option>
-                  <option value="inappropriate">Inappropriate Content</option>
-                  <option value="broken_link">Broken Link</option>
-                  <option value="wrong_category">Wrong Category</option>
-                  <option value="other">Other</option>
-                </select>
-                <button class="report-btn" data-index="${index}" data-url="${result.url}">Report</button>
+              <!-- Rating & Reporting Section -->
+              <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #333;">
+                <div style="margin-bottom: 10px;">
+                  <label for="rating-${index}">Rate this result (1-5 stars):</label>
+                  <select id="rating-${index}" style="margin-left: 10px; padding: 5px; border-radius: 4px;">
+                    <option value="">-- Select --</option>
+                    <option value="1">⭐</option>
+                    <option value="2">⭐⭐</option>
+                    <option value="3">⭐⭐⭐</option>
+                    <option value="4">⭐⭐⭐⭐</option>
+                    <option value="5">⭐⭐⭐⭐⭐</option>
+                  </select>
+                  <button class="submit-rating-btn" data-index="${index}" data-url="${result.url}" style="margin-left: 10px; padding: 5px 10px; background: #006400; color: white; border: none; border-radius: 4px; cursor: pointer;">Submit Rating</button>
+                </div>
+                
+                <div>
+                  <label for="report-reason-${index}">Report this result:</label>
+                  <select id="report-reason-${index}" style="margin-left: 10px; padding: 5px; border-radius: 4px;">
+                    <option value="">-- Select Reason --</option>
+                    <option value="spam">Spam or Scam</option>
+                    <option value="inappropriate">Inappropriate Content</option>
+                    <option value="broken_link">Broken Link</option>
+                    <option value="wrong_category">Wrong Category</option>
+                    <option value="other">Other</option>
+                  </select>
+                  <button class="report-btn" data-index="${index}" data-url="${result.url}" style="margin-left: 10px; padding: 5px 10px; background: #d40000; color: white; border: none; border-radius: 4px; cursor: pointer;">Report</button>
+                </div>
               </div>
             </div>
           </div>
@@ -476,7 +425,7 @@
       attachRatingReportingListeners();
     }
 
-    // 6. Render pagination controls
+    // Render pagination
     function renderPagination(totalPages) {
       paginationContainer.innerHTML = '';
 
@@ -491,7 +440,7 @@
       prevButton.addEventListener('click', () => goToPage(currentPage - 1));
       fragment.appendChild(prevButton);
 
-      // Page number buttons
+      // Page numbers
       const startPage = Math.max(1, currentPage - 2);
       const endPage = Math.min(totalPages, currentPage + 2);
 
@@ -542,16 +491,13 @@
       paginationContainer.appendChild(fragment);
     }
 
-    // 7. Go to a specific page
+    // Go to specific page
     function goToPage(page) {
       currentPage = page;
-      
-      // Update URL
       const url = new URL(window.location);
       url.searchParams.set('page', page.toString());
       window.history.pushState({ page }, '', url);
 
-      // Filter and render
       filteredResults = applyFilters(allResults, query, currentFilter);
       const totalPages = Math.ceil(filteredResults.length / RESULTS_PER_PAGE);
       const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
@@ -562,13 +508,31 @@
       renderPagination(totalPages);
     }
 
-    // --- Rating and Reporting System ---
+    // Set up filter tabs
+    function setupFilterTabs() {
+      const filterTabs = document.querySelectorAll('.filter-tab');
+      filterTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          filterTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          currentFilter = tab.dataset.filter || 'all';
+          currentPage = 1;
+          filteredResults = applyFilters(allResults, query, currentFilter);
+          const totalPages = Math.ceil(filteredResults.length / RESULTS_PER_PAGE);
+          const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
+          const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, filteredResults.length);
+          const pageResults = filteredResults.slice(startIndex, endIndex);
+          renderResults(pageResults);
+          renderPagination(totalPages);
+        });
+      });
+    }
 
-    // Attach event listeners for rating/reporting buttons
+    // Rating & Reporting System
     function attachRatingReportingListeners() {
       // Rating submission
-      document.querySelectorAll('.submit-rating-btn').forEach(button => {
-        button.addEventListener('click', function() {
+      document.querySelectorAll('.submit-rating-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
           const index = this.getAttribute('data-index');
           const url = this.getAttribute('data-url');
           const selectElement = document.getElementById(`rating-${index}`);
@@ -579,19 +543,32 @@
             return;
           }
 
-          // In a real app, you'd send this to your server
-          alert(`Thank you for rating this result ${ratingValue} stars!`);
-          
-          // Disable the button and select
+          // Prevent duplicate rating
+          const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser') || 'null');
+          if (!currentUser) {
+            alert("Please log in first.");
+            return;
+          }
+
+          let userRatings = JSON.parse(localStorage.getItem(`niroboUserRatings_${currentUser.id}`) || '[]');
+          if (userRatings.includes(url)) {
+            alert("You have already rated this URL.");
+            return;
+          }
+
+          // Save rating
+          userRatings.push(url);
+          localStorage.setItem(`niroboUserRatings_${currentUser.id}`, JSON.stringify(userRatings));
+
+          alert("✅ Thank you for rating this result!");
           this.disabled = true;
-          this.textContent = '✅ Rated';
-          if (selectElement) selectElement.disabled = true;
+          selectElement.disabled = true;
         });
       });
 
       // Report submission
-      document.querySelectorAll('.report-btn').forEach(button => {
-        button.addEventListener('click', function() {
+      document.querySelectorAll('.report-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
           const index = this.getAttribute('data-index');
           const url = this.getAttribute('data-url');
           const selectElement = document.getElementById(`report-reason-${index}`);
@@ -602,23 +579,48 @@
             return;
           }
 
-          // In a real app, you'd send this to your server or open a mailto link
-          alert(`A report has been submitted for ${url} with reason: ${reportReason}`);
-          
-          // Disable the button and select
+          // Prevent duplicate report
+          const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser') || 'null');
+          if (!currentUser) {
+            alert("Please log in first.");
+            return;
+          }
+
+          let userReports = JSON.parse(localStorage.getItem(`niroboUserReports_${currentUser.id}`) || '[]');
+          if (userReports.includes(url)) {
+            alert("You have already reported this URL.");
+            return;
+          }
+
+          // Save report
+          userReports.push(url);
+          localStorage.setItem(`niroboUserReports_${currentUser.id}`, JSON.stringify(userReports));
+
+          // Send email
+          const subject = encodeURIComponent(`[Nirobo Report] ${url}`);
+          const body = encodeURIComponent(`
+Report Details:
+------------------
+URL: ${url}
+Reason: ${reportReason}
+Timestamp: ${new Date().toISOString()}
+
+Please investigate this reported content.
+          `);
+          const mailtoLink = `mailto:infinite.vast@yendex.com?subject=${subject}&body=${body}`;
+          window.open(mailtoLink, '_blank');
+
+          alert("✅ A report email draft has been opened. Please send it to infinite.vast@yendex.com");
           this.disabled = true;
-          this.textContent = '✅ Reported';
-          if (selectElement) selectElement.disabled = true;
+          selectElement.disabled = true;
         });
       });
     }
 
-    // --- Main Execution Flow ---
-
     // Handle search form submission
     searchForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      query = searchInput.value.trim();
+      query = searchInput.value.trim().toLowerCase();
       
       if (!query) {
         alert("Please enter a search term.");
@@ -626,17 +628,8 @@
       }
 
       try {
-        // Show loading
-        resultsContainer.innerHTML = '<p>Loading results...</p>';
-        paginationContainer.innerHTML = '';
-
-        // Load all results
         allResults = await loadAllResults();
-        
-        // Filter results
         filteredResults = applyFilters(allResults, query, currentFilter);
-        
-        // Paginate and render
         const totalPages = Math.ceil(filteredResults.length / RESULTS_PER_PAGE);
         const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
         const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, filteredResults.length);
@@ -644,48 +637,34 @@
 
         renderResults(pageResults);
         renderPagination(totalPages);
-
       } catch (error) {
         console.error("Search error:", error);
-        resultsContainer.innerHTML = '<p style="color: #ff9999;">An error occurred while searching. Please try again.</p>';
+        resultsContainer.innerHTML = '<p style="color: #ff9999;">An error occurred. Please try again.</p>';
         paginationContainer.innerHTML = '';
       }
     });
 
-    // Setup filter tabs
-    document.querySelectorAll('.filter-tab').forEach(tab => {
-      tab.addEventListener('click', function() {
-        // Update active tab
-        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-        this.classList.add('active');
-        
-        // Set filter and reset page
-        currentFilter = this.getAttribute('data-filter');
-        currentPage = 1;
-        
-        // Re-filter and re-render
-        filteredResults = applyFilters(allResults, query, currentFilter);
-        const totalPages = Math.ceil(filteredResults.length / RESULTS_PER_PAGE);
-        const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
-        const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, filteredResults.length);
-        const pageResults = filteredResults.slice(startIndex, endIndex);
-
-        renderResults(pageResults);
-        renderPagination(totalPages);
-      });
-    });
-
-    // Initialize on page load
+    // Initialize
     document.addEventListener('DOMContentLoaded', () => {
-      // Check for query in URL
+      const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser') || 'null');
+      if (!currentUser) {
+        alert("Please log in first.");
+        window.location.href = 'signup.html';
+      }
+
+      setupFilterTabs();
+      
+      // Check URL parameters
       const urlParams = new URLSearchParams(window.location.search);
       const initialQuery = urlParams.get('q');
-      const initialPage = parseInt(urlParams.get('page')) || 1;
+      const initialPage = parseInt(urlParams.get('page'), 10) || 1;
       
       if (initialQuery) {
         searchInput.value = initialQuery;
         currentPage = initialPage;
         searchForm.dispatchEvent(new Event('submit'));
+      } else {
+        resultsContainer.innerHTML = '<p>Welcome to Nirobo Search. Enter a term above to begin searching.</p>';
       }
     });
   </script>
