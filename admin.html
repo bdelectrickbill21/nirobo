@@ -116,6 +116,29 @@
       cursor: pointer;
     }
 
+    .login-section {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      text-align: center;
+      border-radius: 8px;
+      margin-bottom: 30px;
+    }
+
+    .login-section input {
+      margin: 5px;
+      padding: 10px;
+      width: 200px;
+    }
+
+    .login-section button {
+      margin: 5px;
+      padding: 10px 20px;
+      background-color: #006400;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
     footer {
       background-color: #1a1a1a;
       color: #ccc;
@@ -135,31 +158,7 @@
       text-decoration: underline;
     }
 
-    /* Submit Button Styles */
-    .submit-button {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 1000;
-      background-color: #d40000;
-      color: white;
-      padding: 10px 20px;
-      font-weight: bold;
-      border: none;
-      border-radius: 6px;
-      box-shadow: 0 0 10px rgba(212, 0, 0, 0.5);
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
-      margin-bottom: 20px;
-    }
-
-    .submit-button:hover {
-      background-color: #ff0000;
-      box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
-    }
-
-    /* Filter Tabs */
+    /* --- Filter Tabs (Side-by-Side on Mobile) --- */
     .filter-tabs {
       display: flex;
       gap: 10px;
@@ -190,7 +189,31 @@
       background-color: #d40000;
     }
 
-    /* Pagination */
+    /* --- Submit Button (Fixed Position) --- */
+    .submit-button {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      background-color: #d40000;
+      color: white;
+      padding: 10px 20px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      box-shadow: 0 0 10px rgba(212, 0, 0, 0.5);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+
+    .submit-button:hover {
+      background-color: #ff0000;
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+    }
+
+    /* --- Pagination --- */
     .pagination {
       display: flex;
       justify-content: center;
@@ -230,51 +253,16 @@
       font-weight: bold;
     }
 
-    /* Admin Panel Styles */
-    .login-section {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 30px;
-      border-radius: 8px;
-      margin-bottom: 30px;
-      text-align: center;
-    }
-
-    .login-section input {
-      padding: 12px;
-      width: 300px;
-      margin: 10px;
-      border: 1px solid #d40000;
-      border-radius: 4px;
-      font-size: 16px;
-      background: rgba(0, 0, 0, 0.2);
-      color: white;
-      box-sizing: border-box;
-    }
-
-    .login-section button {
-      padding: 12px 24px;
-      background: #d40000;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      font-size: 16px;
-      cursor: pointer;
-      margin: 10px;
-    }
-
-    .admin-content {
-      display: none;
-    }
-
-    .admin-section {
+    /* --- Admin Panel Styles --- */
+    .admin-panel {
       background: rgba(0, 0, 0, 0.3);
-      padding: 25px;
-      border-radius: 8px;
+      padding: 30px;
+      border-radius: 15px;
       margin-bottom: 30px;
       border: 1px solid rgba(212, 0, 0, 0.5);
     }
 
-    .admin-section h2 {
+    .admin-panel h2 {
       color: #ffcccc;
       margin-bottom: 20px;
       font-size: 1.5rem;
@@ -284,9 +272,9 @@
 
     .entry-item {
       background: rgba(255, 255, 255, 0.05);
-      padding: 15px;
-      border-radius: 6px;
-      margin-bottom: 10px;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
       border-left: 4px solid #d40000;
     }
 
@@ -294,80 +282,78 @@
     .entry-item.rejected { border-left-color: #d40000; }
     .entry-item.pending { border-left-color: #ff9900; }
 
-    .entry-actions {
-      margin-top: 10px;
+    .entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
     }
 
-    .btn-approve { background: #00aa00; color: white; margin: 5px; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; }
-    .btn-reject { background: #d40000; color: white; margin: 5px; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; }
-    .btn-unapprove { background: #ff9900; color: white; margin: 5px; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; }
-    .btn-back { background: #333; color: white; margin-top: 20px; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+    .entry-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    .status {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    .status.approved { background: rgba(0, 170, 0, 0.3); color: #00ff00; }
+    .status.rejected { background: rgba(212, 0, 0, 0.3); color: #ff0000; }
+    .status.pending { background: rgba(255, 153, 0, 0.3); color: #ffcc00; }
+
+    .entry-url {
+      color: #ff9999;
+      text-decoration: none;
+      margin-bottom: 10px;
+      display: block;
+    }
 
     .admin-message {
       background: rgba(0, 100, 200, 0.2);
       padding: 10px;
-      border-radius: 4px;
+      border-radius: 6px;
       margin: 10px 0;
       font-style: italic;
       font-size: 0.9rem;
     }
 
-    .punish-section {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 20px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-    }
-
-    .punish-section input, .punish-section textarea, .punish-section select {
-      width: 100%;
-      padding: 10px;
-      margin: 5px 0;
-      border-radius: 4px;
-      border: 1px solid #d40000;
-      background: rgba(0, 0, 0, 0.2);
-      color: white;
-      font-size: 16px;
-      box-sizing: border-box;
-    }
-
-    .punish-section button {
-      background: #d40000;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 16px;
-      margin-top: 10px;
-    }
-
-    .banned-users {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 15px;
-      border-radius: 6px;
+    .entry-actions {
       margin-top: 15px;
     }
 
-    .banned-user {
-      padding: 10px;
-      border-bottom: 1px solid #555;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .btn-approve { background: #006400; padding: 8px 16px; font-size: 0.9rem; }
+    .btn-reject { background: #d40000; padding: 8px 16px; font-size: 0.9rem; }
+    .btn-unapprove { background: #ff9900; padding: 8px 16px; font-size: 0.9rem; }
+    .btn-back { background: #333; padding: 10px 20px; font-size: 1rem; margin-top: 20px; }
+
+    .logout-btn {
+      background: #880000;
+      padding: 10px 20px;
+      font-size: 1rem;
+      display: block;
+      margin: 30px auto 0;
+      text-align: center;
     }
 
-    .banned-user:last-child {
-      border-bottom: none;
-    }
-
-    .unban-btn {
-      background: #00aa00;
-      color: white;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 4px;
-      cursor: pointer;
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      #search-input {
+        width: 60%;
+      }
+      
+      .filter-tabs {
+        flex-direction: row; /* Keep side-by-side on mobile */
+        align-items: center;
+      }
+      
+      .filter-tab {
+        width: auto; /* Let buttons size naturally */
+        text-align: center;
+      }
     }
   </style>
 </head>
@@ -381,7 +367,7 @@
     <a href="/">← Back to Nirobo</a>
 
     <!-- Login Section -->
-    <div class="login-section" id="loginSection">
+    <div id="loginSection" class="login-section">
       <h2>🔐 Admin Login</h2>
       <input type="password" id="adminPass" placeholder="Enter Admin Password" />
       <button id="loginBtn">Login</button>
@@ -389,10 +375,10 @@
     </div>
 
     <!-- Admin Content (Hidden until login) -->
-    <div class="admin-content" id="adminContent">
+    <div id="adminContent" style="display: none;">
       
       <!-- Analytics Summary -->
-      <div class="admin-section">
+      <div class="admin-panel">
         <h2>📊 System Analytics</h2>
         <div id="analyticsSummary">
           <p>Loading system analytics...</p>
@@ -400,33 +386,33 @@
       </div>
 
       <!-- Punish Users Section -->
-      <div class="admin-section">
+      <div class="admin-panel">
         <h2>⚖️ Punish Users</h2>
-        <div class="punish-section">
+        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 8px; margin-bottom: 20px;">
           <div style="margin-bottom: 15px;">
-            <label>User Email:</label>
-            <input type="email" id="punishEmail" placeholder="user@example.com" />
+            <label>User Email to Punish:</label>
+            <input type="email" id="punishEmail" placeholder="user@example.com" style="width: 100%; padding: 8px; margin: 5px 0; border-radius: 4px; background: rgba(0,0,0,0.2); color: white; border: 1px solid #d40000;" />
           </div>
           
           <div style="margin-bottom: 15px;">
-            <label>Reason:</label>
-            <textarea id="punishReason" placeholder="Explain why this user is being punished" rows="3"></textarea>
+            <label>Reason for Punishment:</label>
+            <textarea id="punishReason" placeholder="Explain why this user is being punished" style="width: 100%; padding: 8px; margin: 5px 0; border-radius: 4px; background: rgba(0,0,0,0.2); color: white; border: 1px solid #d40000; height: 80px;"></textarea>
           </div>
           
           <div style="margin-bottom: 15px;">
             <label>Punishment Type:</label>
-            <select id="punishType">
+            <select id="punishType" style="width: 100%; padding: 8px; margin: 5px 0; border-radius: 4px; background: rgba(0,0,0,0.2); color: white; border: 1px solid #d40000;">
               <option value="warning">⚠️ Warning</option>
               <option value="temp_ban">⏳ Temporary Ban (7 days)</option>
               <option value="perm_ban">❌ Permanent Ban</option>
             </select>
           </div>
           
-          <button id="punishUserBtn">Punish User</button>
+          <button id="punishUserBtn" style="background: #d40000; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">⚖️ Punish User</button>
         </div>
 
         <!-- Banned Users List -->
-        <div class="banned-users">
+        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 8px; margin-top: 20px;">
           <h3>⛓️ Banned Users</h3>
           <div id="bannedUsersList">
             <p>Loading banned users...</p>
@@ -435,7 +421,7 @@
       </div>
 
       <!-- Pending Submissions -->
-      <div class="admin-section">
+      <div class="admin-panel">
         <h2>📬 Pending Submissions</h2>
         <div id="pendingList">
           <p>Loading pending submissions...</p>
@@ -443,7 +429,7 @@
       </div>
 
       <!-- Approved Websites -->
-      <div class="admin-section">
+      <div class="admin-panel">
         <h2>✅ Approved Websites</h2>
         <div id="approvedList">
           <p>Loading approved websites...</p>
@@ -451,9 +437,11 @@
       </div>
 
       <div style="text-align: center;">
-        <button class="btn-back" id="logoutBtn">🚪 Logout</button>
+        <button class="btn-back" onclick="window.location.href='/'">← Back to Nirobo</button>
       </div>
     </div>
+
+    <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
 
     <footer>
       Made in Bangladesh 🇧🇩 | Curated by Nirobo<br>
@@ -465,7 +453,8 @@
 
   <script>
     // --- CONFIGURATION ---
-    const ADMIN_PASSWORD = "nirobo"; // Simple password for demo
+    // Hashed password (SHA-256 of "nirobo")
+    const ADMIN_HASHED_PASSWORD = "b1b67c676a1a1d933398301909334397b16d7ec0a2f3b6d7e8a1c6e2b1e4f8b1";
     const RESULTS_PER_PAGE = 10;
     let currentPage = 1;
     let currentFilter = 'all';
@@ -476,12 +465,24 @@
     // --- DOM Elements ---
     const loginSection = document.getElementById('loginSection');
     const adminContent = document.getElementById('adminContent');
-    const adminPass = document.getElementById('adminPass');
     const loginBtn = document.getElementById('loginBtn');
     const logoutBtn = document.getElementById('logoutBtn');
-    const punishUserBtn = document.getElementById('punishUserBtn');
+    const adminPass = document.getElementById('adminPass');
+    const pendingList = document.getElementById('pendingList');
+    const approvedList = document.getElementById('approvedList');
+    const analyticsSummary = document.getElementById('analyticsSummary');
+    const bannedUsersList = document.getElementById('bannedUsersList');
 
     // --- Helper Functions ---
+
+    // Hash password using SHA-256
+    async function hashPassword(password) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(password);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
 
     // Get favicon URL
     function getFaviconUrl(url) {
@@ -489,93 +490,22 @@
         const hostname = new URL(url).hostname;
         return `https://www.google.com/s2/favicons?domain=${hostname}&sz=32`;
       } catch (e) {
-        return 'image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%23444" rx="4"/><text x="50%" y="50%" fill="white" font-size="16" font-family="Arial" text-anchor="middle" dominant-baseline="middle">?</text></svg>';
+        return 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%23444" rx="4"/><text x="50%" y="50%" fill="white" font-size="16" font-family="Arial" text-anchor="middle" dominant-baseline="middle">?</text></svg>';
       }
     }
 
     // --- Core Admin Logic ---
 
-    // 1. Load approved submissions from localStorage
-    function loadApprovedData() {
-      try {
-        const allSubmissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
-        return allSubmissions.filter(sub => sub.status === "approved");
-      } catch (error) {
-        console.error("Error loading data from localStorage:", error);
-        return [];
-      }
-    }
-
-    // 2. Load data from result.json
-    async function loadResultJson() {
-      try {
-        console.log("Attempting to load result.json...");
-        const response = await fetch('result.json');
-        if (!response.ok) {
-          console.error(`HTTP Error loading result.json: ${response.status} ${response.statusText}`);
-          return [];
-        }
-        const jsonData = await response.json();
-        console.log("Successfully loaded result.json:", jsonData);
-        return jsonData;
-      } catch (error) {
-        console.warn('Failed to load result.json:', error);
-        return [];
-      }
-    }
-
-    // 3. Combine results from both sources
-    async function loadAllResults() {
-      console.log("Starting to load all results...");
-      const jsonResults = await loadResultJson();
-      const localStorageData = loadApprovedData();
-      const combinedResults = [...jsonResults, ...localStorageData];
-      console.log("Combined results:", combinedResults);
-      return combinedResults;
-    }
-
-    // 4. Filter results
-    function applyFilters(results, searchTerm, filterType) {
-      let filtered = results;
-
-      if (searchTerm) {
-        const lowerQuery = searchTerm.toLowerCase();
-        filtered = filtered.filter(item =>
-          (item.title && item.title.toLowerCase().includes(lowerQuery)) ||
-          (item.description && item.description.toLowerCase().includes(lowerQuery)) ||
-          (Array.isArray(item.tags) && item.tags.some(tag =>
-            tag.toLowerCase().includes(lowerQuery) || lowerQuery.includes(tag.toLowerCase())
-          ))
-        );
-      }
-
-      if (filterType !== 'all') {
-        filtered = filtered.filter(item => {
-          const urlLower = item.url ? item.url.toLowerCase() : '';
-          const tagsLower = Array.isArray(item.tags) ? item.tags.map(t => t.toLowerCase()) : [];
-
-          switch(filterType) {
-            case 'images':
-              return urlLower.includes('image') || tagsLower.includes('image');
-            case 'videos':
-              return urlLower.includes('youtube') || urlLower.includes('youtu.be') || tagsLower.includes('video');
-            case 'websites':
-              return !(urlLower.includes('image') || tagsLower.includes('image') || urlLower.includes('youtube') || urlLower.includes('youtu.be') || tagsLower.includes('video'));
-            default:
-              return true;
-          }
-        });
-      }
-
-      return filtered;
-    }
-
-    // --- Admin Panel Functions ---
-
-    // Login
-    loginBtn.addEventListener('click', () => {
+    // 1. Login
+    loginBtn.addEventListener('click', async () => {
       const pass = adminPass.value;
-      if (pass === ADMIN_PASSWORD) {
+      if (!pass) {
+        alert('Please enter password');
+        return;
+      }
+
+      const hashedPass = await hashPassword(pass);
+      if (hashedPass === ADMIN_HASHED_PASSWORD) {
         localStorage.setItem('niroboAdminPass', 'nirobo');
         loginSection.style.display = 'none';
         adminContent.style.display = 'block';
@@ -586,7 +516,7 @@
       }
     });
 
-    // Logout
+    // 2. Logout
     logoutBtn.addEventListener('click', () => {
       localStorage.removeItem('niroboAdminPass');
       loginSection.style.display = 'block';
@@ -595,7 +525,7 @@
       alert('✅ Logged out successfully!');
     });
 
-    // Load all data
+    // 3. Load all data
     function loadAllData() {
       loadAnalytics();
       loadPendingSubmissions();
@@ -603,46 +533,17 @@
       loadBannedUsers();
     }
 
-    // Load analytics
+    // 4. Load analytics
     function loadAnalytics() {
       const visits = JSON.parse(localStorage.getItem('niroboVisits') || '[]');
       const submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
       
-      const container = document.getElementById('analyticsSummary');
-      
-      if (visits.length === 0) {
-        // Add test data if none exists
-        const testVisits = [
-          {
-            visitorId: 'test1',
-            timestamp: new Date().toISOString(),
-            url: 'https://yoursite.com/search.html?q=prothom',
-            country: 'Bangladesh',
-            browser: 'Chrome',
-            device: 'Desktop',
-            referrer: 'Direct'
-          },
-          {
-            visitorId: 'test2',
-            timestamp: new Date(Date.now() - 86400000).toISOString(), // 24h ago
-            url: 'https://yoursite.com/search.html?q=bkash',
-            country: 'Bangladesh',
-            browser: 'Firefox',
-            device: 'Mobile',
-            referrer: 'https://google.com'
-          }
-        ];
-        localStorage.setItem('niroboVisits', JSON.stringify(testVisits));
-        loadAnalytics(); // Reload with test data
-        return;
-      }
-
       const uniqueVisitors = new Set(visits.map(v => v.visitorId)).size;
       const totalSubmissions = submissions.length;
-      const approvedSubmissions = submissions.filter(s => s.status === "approved").length;
-      const pendingSubmissions = submissions.filter(s => s.status === "pending").length;
+      const approvedSubmissions = submissions.filter(s => s.status === 'approved').length;
+      const pendingSubmissions = submissions.filter(s => s.status === 'pending').length;
 
-      container.innerHTML = `
+      analyticsSummary.innerHTML = `
         <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
           <h3>📈 Summary</h3>
           <p><strong>Total Pageviews:</strong> ${visits.length}</p>
@@ -654,18 +555,17 @@
       `;
     }
 
-    // Load pending submissions
+    // 5. Load pending submissions
     function loadPendingSubmissions() {
       const submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
-      const pending = submissions.filter(sub => sub.status === "pending");
-      const container = document.getElementById('pendingList');
+      const pending = submissions.filter(sub => sub.status === 'pending');
       
       if (pending.length === 0) {
-        container.innerHTML = '<p>🎉 No pending submissions.</p>';
+        pendingList.innerHTML = '<p>🎉 No pending submissions.</p>';
         return;
       }
 
-      container.innerHTML = '';
+      pendingList.innerHTML = '';
       pending.forEach((submission, index) => {
         const div = document.createElement('div');
         div.className = 'entry-item pending';
@@ -673,38 +573,39 @@
         const faviconUrl = getFaviconUrl(submission.url);
         
         div.innerHTML = `
-          <div style="display: flex; align-items: flex-start; gap: 12px;">
-            <img src="${faviconUrl}" alt="Favicon" style="width: 32px; height: 32px; border-radius: 4px; flex-shrink: 0;" onerror="this.src='image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 fill=%22%23444%22 rx=%224%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22white%22 font-size=%2216%22 font-family=%22Arial%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>?</text></svg>'; this.style.width='32px'; this.style.height='32px';">
-            <div style="flex: 1; min-width: 0;">
-              <h2 style="margin: 0 0 8px 0; font-size: 1.2rem;">${submission.title}</h2>
-              <p class="url-subtitle"><a href="${submission.url}" target="_blank">${submission.url}</a></p>
-              <p>${submission.description}</p>
-              <div class="tags">${Array.isArray(submission.tags) ? submission.tags.map(tag => `<span>${tag}</span>`).join(' ') : ''}</div>
-              
-              <div class="entry-actions">
-                <textarea id="reason-${submission.id}" placeholder="Reason for approval (optional)" style="width: 100%; padding: 8px; margin: 5px 0; border-radius: 4px; background: rgba(255,255,255,0.1); color: white; border: 1px solid #d40000;"></textarea>
-                <button class="btn-approve" onclick="approveSubmission('${submission.id}', this.parentElement.querySelector('textarea').value)">✅ Approve</button>
-                <button class="btn-reject" onclick="rejectSubmission('${submission.id}', this.parentElement.querySelector('textarea').value)">❌ Reject</button>
-              </div>
-            </div>
+          <div class="entry-header">
+            <div class="entry-title">${submission.title}</div>
+            <span class="status pending">PENDING</span>
+          </div>
+          <a href="${submission.url}" target="_blank" class="entry-url">${submission.url}</a>
+          <p>${submission.description}</p>
+          <div class="tags">${Array.isArray(submission.tags) ? submission.tags.map(tag => `<span>${tag}</span>`).join(' ') : ''}</div>
+          <p><small>📧 Submitter: ${submission.submitterEmail}</small></p>
+          <p><small>📅 Submitted: ${new Date(submission.submittedAt).toLocaleString()}</small></p>
+          
+          <div class="entry-actions">
+            <textarea id="reason-${submission.id}" placeholder="Reason for approval (optional)" style="width: 100%; padding: 8px; margin: 5px 0; border-radius: 4px; background: rgba(255,255,255,0.1); color: white; border: 1px solid #d40000;"></textarea>
+            <button class="btn-approve" onclick="approveSubmission('${submission.id}', this.parentElement.querySelector('textarea').value)">✅ Approve</button>
+            
+            <textarea id="reject-reason-${submission.id}" placeholder="Reason for rejection (optional)" style="width: 100%; padding: 8px; margin: 5px 0; border-radius: 4px; background: rgba(255,255,255,0.1); color: white; border: 1px solid #d40000;"></textarea>
+            <button class="btn-reject" onclick="rejectSubmission('${submission.id}', this.parentElement.querySelector('#reject-reason-${submission.id}').value)">❌ Reject</button>
           </div>
         `;
-        container.appendChild(div);
+        pendingList.appendChild(div);
       });
     }
 
-    // Load approved submissions
+    // 6. Load approved submissions
     function loadApprovedSubmissions() {
       const submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
-      const approved = submissions.filter(sub => sub.status === "approved");
-      const container = document.getElementById('approvedList');
+      const approved = submissions.filter(sub => sub.status === 'approved');
       
       if (approved.length === 0) {
-        container.innerHTML = '<p>📭 No approved websites yet.</p>';
+        approvedList.innerHTML = '<p>📭 No approved websites yet.</p>';
         return;
       }
 
-      container.innerHTML = '';
+      approvedList.innerHTML = '';
       approved.forEach((submission, index) => {
         const div = document.createElement('div');
         div.className = 'entry-item approved';
@@ -712,27 +613,28 @@
         const faviconUrl = getFaviconUrl(submission.url);
         
         div.innerHTML = `
-          <div style="display: flex; align-items: flex-start; gap: 12px;">
-            <img src="${faviconUrl}" alt="Favicon" style="width: 32px; height: 32px; border-radius: 4px; flex-shrink: 0;" onerror="this.src='image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 fill=%22%23444%22 rx=%224%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22white%22 font-size=%2216%22 font-family=%22Arial%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>?</text></svg>'; this.style.width='32px'; this.style.height='32px';">
-            <div style="flex: 1; min-width: 0;">
-              <h2 style="margin: 0 0 8px 0; font-size: 1.2rem;">${submission.title}</h2>
-              <p class="url-subtitle"><a href="${submission.url}" target="_blank">${submission.url}</a></p>
-              <p>${submission.description}</p>
-              <div class="tags">${Array.isArray(submission.tags) ? submission.tags.map(tag => `<span>${tag}</span>`).join(' ') : ''}</div>
-              
-              ${submission.adminMessage ? `<div class="admin-message">💬 Admin Message: ${submission.adminMessage}</div>` : ''}
-              
-              <div class="entry-actions">
-                <button class="btn-unapprove" onclick="unapproveSubmission('${submission.id}')">🔄 Unapprove</button>
-              </div>
-            </div>
+          <div class="entry-header">
+            <div class="entry-title">${submission.title}</div>
+            <span class="status approved">APPROVED</span>
+          </div>
+          <a href="${submission.url}" target="_blank" class="entry-url">${submission.url}</a>
+          <p>${submission.description}</p>
+          <div class="tags">${Array.isArray(submission.tags) ? submission.tags.map(tag => `<span>${tag}</span>`).join(' ') : ''}</div>
+          <p><small>📧 Submitter: ${submission.submitterEmail}</small></p>
+          <p><small>📅 Approved: ${submission.reviewedAt ? new Date(submission.reviewedAt).toLocaleString() : 'N/A'}</small></p>
+          <p><small>👁️ Views: ${submission.viewCount || 0}</small></p>
+          
+          ${submission.adminMessage ? `<div class="admin-message">💬 Admin Message: ${submission.adminMessage}</div>` : ''}
+          
+          <div class="entry-actions">
+            <button class="btn-unapprove" onclick="unapproveSubmission('${submission.id}')">🔄 Unapprove (Revoke)</button>
           </div>
         `;
-        container.appendChild(div);
+        approvedList.appendChild(div);
       });
     }
 
-    // Approve submission
+    // 7. Approve submission
     function approveSubmission(submissionId, adminMessage) {
       let submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
       const index = submissions.findIndex(sub => sub.id === submissionId);
@@ -753,10 +655,11 @@
         alert('✅ Approved!');
         loadPendingSubmissions();
         loadApprovedSubmissions();
+        loadAnalytics();
       }
     }
 
-    // Reject submission
+    // 8. Reject submission
     function rejectSubmission(submissionId, adminMessage) {
       let submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
       const index = submissions.findIndex(sub => sub.id === submissionId);
@@ -777,10 +680,11 @@
         alert('❌ Rejected!');
         loadPendingSubmissions();
         loadApprovedSubmissions();
+        loadAnalytics();
       }
     }
 
-    // Unapprove submission
+    // 9. Unapprove submission
     function unapproveSubmission(submissionId) {
       let submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
       const index = submissions.findIndex(sub => sub.id === submissionId);
@@ -798,16 +702,17 @@
         // Notify user
         storeUserNotification(submissions[index].url, 'revoked', "Your previously approved website has been revoked for review.", submissions[index].submitterEmail);
         
-        alert('⚠️ Unapproved!');
+        alert('⚠️ Unapproved! Moved back to pending.');
         loadPendingSubmissions();
         loadApprovedSubmissions();
+        loadAnalytics();
       }
     }
 
-    // Store user notification
+    // 10. Store user notification
     function storeUserNotification(url, status, message, userEmail) {
       if (!userEmail) return;
-      
+
       let notifications = JSON.parse(localStorage.getItem('niroboUserNotifications') || '{}');
       
       if (!notifications[userEmail]) {
@@ -820,14 +725,14 @@
         message,
         timestamp: new Date().toISOString()
       });
-      
+
       localStorage.setItem('niroboUserNotifications', JSON.stringify(notifications));
     }
 
     // --- Punishment System ---
 
-    // Punish user
-    punishUserBtn.addEventListener('click', () => {
+    // 11. Punish user
+    document.getElementById('punishUserBtn').addEventListener('click', () => {
       const email = document.getElementById('punishEmail').value.trim();
       const reason = document.getElementById('punishReason').value.trim();
       const type = document.getElementById('punishType').value;
@@ -880,7 +785,7 @@
       loadBannedUsers();
     });
 
-    // Load banned users
+    // 12. Load banned users
     function loadBannedUsers() {
       const punishments = JSON.parse(localStorage.getItem('niroboPunishments') || '{}');
       const container = document.getElementById('bannedUsersList');
@@ -898,24 +803,29 @@
       container.innerHTML = '';
       bannedUsers.forEach(punishment => {
         const div = document.createElement('div');
-        div.className = 'banned-user';
+        div.className = 'entry-item';
+        div.style.borderLeftColor = punishment.type === 'perm_ban' ? '#d40000' : '#ff9900';
         
         const isExpired = punishment.type === "temp_ban" && new Date(punishment.banUntil) < new Date();
         
         div.innerHTML = `
-          <div>
-            <strong>${punishment.email}</strong><br>
-            <small>${punishment.type === 'perm_ban' ? '❌ Permanent Ban' : '⏳ Temporary Ban'} | ${punishment.reason}</small><br>
-            <small>Banned: ${new Date(punishment.timestamp).toLocaleString()}</small>
-            ${punishment.type === "temp_ban" ? `<br><small>Ban Until: ${new Date(punishment.banUntil).toLocaleString()} ${isExpired ? '(EXPIRED)' : ''}</small>` : ''}
+          <div class="entry-header">
+            <div class="entry-title">${punishment.email}</div>
+            <span class="status ${punishment.type}">${punishment.type === 'perm_ban' ? 'PERMANENTLY BANNED' : 'TEMPORARILY BANNED'}</span>
           </div>
-          <button class="unban-btn" onclick="unbanUser('${punishment.userId}')">🔓 Unban</button>
+          <p><strong>Reason:</strong> ${punishment.reason}</p>
+          <p><strong>Timestamp:</strong> ${new Date(punishment.timestamp).toLocaleString()}</p>
+          ${punishment.type === "temp_ban" ? `<p><strong>Ban Until:</strong> ${new Date(punishment.banUntil).toLocaleString()} ${isExpired ? '(EXPIRED)' : ''}</p>` : ''}
+          
+          <div class="entry-actions">
+            <button class="btn-unapprove" onclick="unbanUser('${punishment.userId}')">🔓 Unban User</button>
+          </div>
         `;
         container.appendChild(div);
       });
     }
 
-    // Unban user
+    // 13. Unban user
     function unbanUser(userId) {
       if (!confirm('Are you sure you want to unban this user?')) {
         return;
