@@ -107,8 +107,7 @@
     }
 
     button {
-      width: 100%;
-      padding: 14px;
+      padding: 12px 24px;
       background: #d40000;
       color: white;
       border: none;
@@ -119,6 +118,8 @@
       transition: background 0.3s;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      width: 100%;
+      margin-top: 10px;
     }
 
     button:hover {
@@ -140,6 +141,87 @@
     .switch-form a:hover {
       text-decoration: underline;
     }
+
+    /* --- NEW STYLES FOR RULES & FORGOT PASSWORD --- */
+    .rules-section {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      border-left: 4px solid #ff9900; /* Orange for attention */
+    }
+
+    .rules-section h3 {
+      color: #ffcc00;
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-size: 1.2rem;
+      border-bottom: 1px solid #ff9900;
+      padding-bottom: 5px;
+    }
+
+    .rules-section ul {
+      padding-left: 20px;
+      margin: 10px 0;
+    }
+
+    .rules-section li {
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .rules-section .allowed {
+      color: #00ff00; /* Green for allowed */
+    }
+
+    .rules-section .not-allowed {
+      color: #ff0000; /* Red for not allowed */
+    }
+
+    .rules-section .penalties {
+      color: #ffcc00; /* Yellow for penalties */
+    }
+
+    .agree-checkbox {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .agree-checkbox input {
+      width: auto;
+      margin-top: 5px;
+    }
+
+    .forgot-password-link {
+      display: block;
+      text-align: center;
+      margin-top: 15px;
+      font-size: 0.9rem;
+    }
+
+    .forgot-password-link a {
+      color: #ff9999;
+      text-decoration: none;
+    }
+
+    .forgot-password-link a:hover {
+      text-decoration: underline;
+    }
+
+    /* Forgot Password Form Styles */
+    #forgotPasswordBox {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 30px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      display: none; /* Hidden by default */
+    }
+
+    #forgotPasswordBox .form-title {
+      color: #ff9900; /* Orange title for distinction */
+    }
   </style>
 </head>
 <body>
@@ -150,6 +232,37 @@
         “Silence has never protected truth — your voice, your website, your story deserves to be heard.<br>
         Don’t wait for permission. Don’t fear rejection. Rise. Speak. Submit. The digital soul of Bangladesh is being written — and you hold the pen.”
       </p>
+    </div>
+
+    <!-- Rules & Guidelines Section (NEW) -->
+    <div class="rules-section">
+      <h3>📜 Nirobo Submission Rules</h3>
+      
+      <p><strong class="allowed">✅ ALLOWED:</strong></p>
+      <ul>
+        <li>Educational content (courses, tutorials, research)</li>
+        <li>Cultural & historical content (photos, videos, documentaries)</li>
+        <li>News articles from reputable sources</li>
+        <li>Creative works with context (art, music, literature)</li>
+        <li>Cloud files with educational value (PDFs, docs, spreadsheets)</li>
+        <li>Social media posts with knowledge/informational value</li>
+      </ul>
+      
+      <p><strong class="not-allowed">❌ NOT ALLOWED:</strong></p>
+      <ul>
+        <li>Hate speech, harassment, or personal attacks</li>
+        <li>Random/unrelated content (vlogs, selfies, daily life)</li>
+        <li>Spam, ads, phishing, or illegal content</li>
+        <li>Copyright infringement (pirated movies, songs, books)</li>
+        <li>Misinformation or fake news</li>
+      </ul>
+      
+      <p><strong class="penalties">⚠️ PENALTIES:</strong></p>
+      <ul>
+        <li>Minor violation → Warning + removal</li>
+        <li>Moderate violation → 7-day ban</li>
+        <li>Severe violation → Permanent ban</li>
+      </ul>
     </div>
 
     <!-- Login Form (Default) -->
@@ -164,6 +277,12 @@
         <input type="password" id="loginPassword" placeholder="Enter your password" required />
       </div>
       <button id="loginBtn">Log In</button>
+      
+      <!-- Forgot Password Link (NEW) -->
+      <div class="forgot-password-link">
+        <a href="#" id="showForgotPasswordLink">Forgot Password?</a>
+      </div>
+      
       <div class="switch-form">
         Don't have an account? <a href="#" id="showSignupLink">Sign Up</a>
       </div>
@@ -180,14 +299,39 @@
         <label>Password</label>
         <input type="password" id="signupPassword" placeholder="Create a password" required />
       </div>
+      
+      <!-- Agreement Checkbox (NEW) -->
+      <div class="agree-checkbox">
+        <input type="checkbox" id="agreeToRules" required />
+        <label for="agreeToRules">I agree to follow Nirobo's submission rules</label>
+      </div>
+      
       <button id="signupBtn">Create Account</button>
       <div class="switch-form">
         Already have an account? <a href="#" id="showLoginLink">Log In</a>
       </div>
     </div>
+
+    <!-- Forgot Password Form (NEW - Hidden by default) -->
+    <div id="forgotPasswordBox" class="form-box">
+      <h2 class="form-title">🔐 Forgot Your Password?</h2>
+      <p style="font-size: 0.95rem; margin-bottom: 20px; color: #ffcccc;">
+        Enter your email to reset your password.
+      </p>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="resetEmail" placeholder="Enter your email" required />
+      </div>
+      <button id="sendResetLinkBtn">Send Reset Link</button>
+      <div class="switch-form">
+        <a href="#" id="backToLoginFromForgot">← Back to Login</a>
+      </div>
+    </div>
   </div>
 
   <script>
+    // --- EXISTING CODE (Unchanged) ---
+
     // DOM Elements
     const loginBox = document.getElementById('loginBox');
     const signupBox = document.getElementById('signupBox');
@@ -218,16 +362,23 @@
 
     // Hash password (simple for demo)
     function hashPassword(password) {
-      return btoa(password);
+      return btoa(password); // Not secure, but works for demo
     }
 
     // Sign Up Handler
     document.getElementById('signupBtn').addEventListener('click', () => {
       const email = document.getElementById('signupEmail').value.trim();
       const password = document.getElementById('signupPassword').value;
+      const agreeCheckbox = document.getElementById('agreeToRules');
 
       if (!email || !password) {
         alert('Please fill in all fields');
+        return;
+      }
+
+      // Check if user agreed to rules (NEW)
+      if (!agreeCheckbox.checked) {
+        alert('Please agree to the submission rules');
         return;
       }
 
@@ -272,12 +423,112 @@
         return;
       }
 
+      // --- CHECK FOR BAN STATUS (NEW) ---
+      if (isUserBanned(user.id)) {
+          alert('❌ Your account has been banned due to violations of Nirobo\'s rules.');
+          return; // Prevent login
+      }
+
       // Save current user
       localStorage.setItem('niroboCurrentUser', JSON.stringify(user));
 
-      // Redirect to user dashboard (you can create dashboard.html later)
+      // Redirect to user dashboard
       window.location.href = 'dashboard.html';
     });
+
+    // --- NEW CODE FOR FORGOT PASSWORD FUNCTIONALITY ---
+
+    // DOM Elements for Forgot Password
+    const forgotPasswordBox = document.getElementById('forgotPasswordBox');
+    const showForgotPasswordLink = document.getElementById('showForgotPasswordLink');
+    const backToLoginFromForgot = document.getElementById('backToLoginFromForgot');
+    const sendResetLinkBtn = document.getElementById('sendResetLinkBtn');
+
+    // Show Forgot Password Form
+    showForgotPasswordLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      loginBox.style.display = 'none';
+      forgotPasswordBox.style.display = 'block';
+    });
+
+    // Back to Login from Forgot Password
+    backToLoginFromForgot.addEventListener('click', (e) => {
+      e.preventDefault();
+      forgotPasswordBox.style.display = 'none';
+      loginBox.style.display = 'block';
+    });
+
+    // Send Reset Link Handler
+    sendResetLinkBtn.addEventListener('click', () => {
+      const email = document.getElementById('resetEmail').value.trim();
+
+      if (!email) {
+        alert('Please enter your email');
+        return;
+      }
+
+      const users = loadUsers();
+      const user = users.find(u => u.email === email);
+
+      if (!user) {
+        alert('❌ No account found with that email');
+        return;
+      }
+
+      // --- CHECK FOR BAN STATUS ON RESET ATTEMPT (NEW) ---
+      if (isUserBanned(user.id)) {
+          alert('❌ Your account has been banned. Password reset is not available.');
+          return; // Prevent reset
+      }
+
+      // In a real app, you would send an email here.
+      // For this frontend-only demo, we'll simulate it.
+      alert(`✅ A password reset link has been sent to ${email}!\n\n(Check your inbox or spam folder)`);
+
+      // For demo purposes, we can simulate a reset by allowing them to set a new password.
+      // This is NOT secure for a real app, but works for a demo.
+      const newPassword = prompt(`🔐 Set a new password for ${email}:`);
+      if (newPassword) {
+        user.password = hashPassword(newPassword);
+        saveUsers(users);
+        alert('✅ Password updated successfully! Please log in.');
+        // Switch back to login
+        forgotPasswordBox.style.display = 'none';
+        loginBox.style.display = 'block';
+        document.getElementById('loginEmail').value = email;
+      }
+    });
+
+    // --- NEW CODE FOR BAN CHECK SYSTEM ---
+
+    // Function to check if a user is banned
+    function isUserBanned(userId) {
+        const punishments = JSON.parse(localStorage.getItem('niroboPunishments') || '{}');
+        const userPunishment = punishments[userId];
+
+        if (!userPunishment) return false; // Not punished
+
+        // Check permanent ban
+        if (userPunishment.banStatus === "perm_ban") {
+            return true; // Banned
+        }
+
+        // Check temporary ban
+        if (userPunishment.banStatus === "temp_ban" && userPunishment.banUntil) {
+            const banUntil = new Date(userPunishment.banUntil);
+            if (new Date() < banUntil) {
+                return true; // Still banned
+            } else {
+                // Ban expired - remove it
+                delete punishments[userId];
+                localStorage.setItem('niroboPunishments', JSON.stringify(punishments));
+                return false; // Not banned anymore
+            }
+        }
+
+        return false; // Not banned
+    }
+
   </script>
 </body>
 </html>
