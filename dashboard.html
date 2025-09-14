@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nirobo — Your Dashboard</title>
   <style>
+    /* --- EXISTING STYLES (KEEP YOUR CURRENT DESIGN) --- */
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
@@ -27,9 +28,111 @@
     }
 
     .header h1 {
+      color: #ff0000;
       font-size: 2.5rem;
       margin-bottom: 10px;
     }
+
+    .header h1 span {
+      color: #ffffff;
+    }
+
+    .header h1 .green {
+      color: #006400;
+    }
+
+    .header h1 .red {
+      color: #ff0000;
+    }
+
+    .header p {
+      font-size: 16px;
+      margin-top: 10px;
+      font-style: italic;
+      color: #ffcccc;
+    }
+
+    a {
+      color: #ff0000;
+      text-decoration: underline;
+    }
+
+    .url-subtitle a {
+      font-size: 0.9em;
+      color: #888;
+      text-decoration: none;
+      display: block;
+      margin-top: -8px;
+      margin-bottom: 8px;
+    }
+    
+    .result-card {
+      background: #1a1a1a;
+      border-left: 4px solid #ff0000;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 10px 0;
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
+    }
+
+    .login-section {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      text-align: center;
+      border-radius: 15px;
+      margin-bottom: 30px;
+    }
+
+    .login-section input {
+      margin: 5px;
+      padding: 10px;
+      width: 200px;
+      border: 1px solid #d40000;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+      color: white;
+      font-size: 16px;
+    }
+
+    .login-section button {
+      margin: 5px;
+      padding: 10px 20px;
+      background: #d40000;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .login-section button:hover {
+      background: #ff0000;
+    }
+
+    footer {
+      background: #1a1a1a;
+      color: #ccc;
+      padding: 20px;
+      text-align: center;
+      font-size: 14px;
+      border-top: 1px solid #333;
+      margin-top: 40px;
+    }
+
+    footer a {
+      color: #ff9999;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* --- NEW/UPDATED STYLES FOR DASHBOARD --- */
 
     .user-info {
       background: rgba(255, 255, 255, 0.1);
@@ -37,6 +140,7 @@
       border-radius: 10px;
       display: inline-block;
       margin-bottom: 30px;
+      color: #ffcccc;
     }
 
     .section {
@@ -77,7 +181,7 @@
       box-sizing: border-box;
     }
 
-    button {
+    button.main-btn {
       padding: 12px 24px;
       background: #d40000;
       color: white;
@@ -89,9 +193,11 @@
       transition: background 0.3s;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      width: 100%;
+      margin-top: 10px;
     }
 
-    button:hover {
+    button.main-btn:hover {
       background: #ff0000;
     }
 
@@ -154,6 +260,7 @@
       background: #880000;
       padding: 8px 16px;
       font-size: 0.9rem;
+      width: auto;
     }
 
     .logout-btn {
@@ -163,6 +270,7 @@
       display: block;
       margin: 30px auto 0;
       text-align: center;
+      width: auto;
     }
 
     .empty-state {
@@ -170,46 +278,50 @@
       padding: 50px;
       color: #ff9999;
     }
-
-    .login-form {
-      max-width: 400px;
-      margin: 0 auto;
-      background: rgba(255,255,255,0.1);
-      padding: 30px;
-      border-radius: 8px;
-    }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1>🇧🇩 YOUR NIROBO DASHBOARD</h1>
+      <h1>
+        <span class="green">N</span>
+        <span class="green">I</span>
+        <span class="green">R</span>
+        <span class="red">O</span>
+        <span class="green">B</span>
+        <span class="green">O</span>
+      </h1>
       <p>“You hold the pen — write your truth into Bangladesh’s digital soul.”</p>
     </div>
 
-    <!-- Login Form (Hidden when logged in) -->
-    <div id="loginSection">
-      <div class="login-form">
-        <h2>🔐 Please Log In</h2>
-        <p>Submit and manage your website in Nirobo's curated search engine</p>
-        
-        <div class="form-group">
-          <input type="email" id="loginEmail" placeholder="Email" />
-        </div>
-        <div class="form-group">
-          <input type="password" id="loginPassword" placeholder="Password" />
-        </div>
-        <button onclick="login()">Login</button>
-        <p style="font-size: 0.9rem; margin-top: 20px;">
-          Don't have an account? <a href="signup.html" style="color: #ff9999;">Sign Up</a>
-        </p>
+    <a href="/">← Back to Nirobo</a>
+
+    <!-- Login Section (Hidden when logged in) -->
+    <div id="loginSection" class="login-section">
+      <h2>🔐 Please Log In</h2>
+      <p>Submit and manage your website in Nirobo's curated search engine</p>
+      
+      <div class="form-group">
+        <input type="email" id="loginEmail" placeholder="Email" />
       </div>
+      <div class="form-group">
+        <input type="password" id="loginPassword" placeholder="Password" />
+      </div>
+      <button id="loginBtn">Login</button>
+      
+      <p style="margin-top: 20px; font-size: 0.9rem;">
+        Don't have an account? <a href="signup.html">Sign Up</a> | 
+        <a href="forgot-password.html">Forgot Password?</a>
+      </p>
     </div>
 
     <!-- Dashboard Content (Hidden until login) -->
     <div id="dashboardContent" style="display: none;">
+      
+      <!-- User Info -->
       <div class="user-info">
-        Logged in as: <strong id="userEmail">user@example.com</strong>
+        Logged in as: <strong id="userEmail">loading...</strong>
+        <button id="logoutBtn" class="logout-btn">🚪 Logout</button>
       </div>
 
       <!-- Submit New Website -->
@@ -231,108 +343,145 @@
           <label>Tags (comma separated)</label>
           <input type="text" id="websiteTags" placeholder="news, blog, bangla" />
         </div>
-        <button id="submitWebsiteBtn">Submit Website</button>
+        <button id="submitWebsiteBtn" class="main-btn">Submit Website</button>
       </div>
 
       <!-- Your Submissions -->
       <div class="section">
         <h2>📊 YOUR SUBMISSIONS</h2>
         <div id="submissionsList">
-          <div class="empty-state">
-            <h3>📭 No submissions yet</h3>
-            <p>Submit your first website above to get started!</p>
-          </div>
+          <p>Loading your submissions...</p>
         </div>
       </div>
-
-      <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
     </div>
+
+    <footer>
+      Made in Bangladesh 🇧🇩 | Curated by Nirobo<br>
+      Honoring the Language Movement and the Silent Legacy of Justice<br>
+      Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity<br>
+      <a href="/">← Back to Nirobo</a>
+    </footer>
   </div>
 
   <script>
-    // Initialize on page load
-    document.addEventListener('DOMContentLoaded', function() {
-      const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser') || 'null');
-      if (currentUser) {
-        document.getElementById('loginSection').style.display = 'none';
-        document.getElementById('dashboardContent').style.display = 'block';
-        document.getElementById('userEmail').textContent = currentUser.email;
-        loadUserSubmissions();
-      }
-    });
+    // --- CONFIGURATION ---
+    const MAX_SUBMISSIONS_PER_DOMAIN = 10;
 
-    // Real login function
-    function login() {
-      const email = document.getElementById('loginEmail').value.trim();
-      const password = document.getElementById('loginPassword').value;
-      
+    // --- DOM ELEMENTS ---
+    const loginSection = document.getElementById('loginSection');
+    const dashboardContent = document.getElementById('dashboardContent');
+    const loginEmail = document.getElementById('loginEmail');
+    const loginPassword = document.getElementById('loginPassword');
+    const userEmail = document.getElementById('userEmail');
+    const submissionsList = document.getElementById('submissionsList');
+
+    // --- HELPER FUNCTIONS ---
+
+    // Load users from localStorage
+    function loadUsers() {
+      return JSON.parse(localStorage.getItem('niroboUsers') || '[]');
+    }
+
+    // Save users to localStorage
+    function saveUsers(users) {
+      localStorage.setItem('niroboUsers', JSON.stringify(users));
+    }
+
+    // Hash password (simple for demo)
+    function hashPassword(password) {
+      return btoa(password); // Not secure, but works for demo
+    }
+
+    // Load all submissions from localStorage
+    function loadAllSubmissions() {
+      return JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+    }
+
+    // Save all submissions to localStorage
+    function saveAllSubmissions(submissions) {
+      localStorage.setItem('niroboAllSubmissions', JSON.stringify(submissions));
+    }
+
+    // Check if user is banned
+    function isUserBanned(userId) {
+      const punishments = JSON.parse(localStorage.getItem('niroboPunishments') || '{}');
+      const userPunishment = punishments[userId];
+
+      if (!userPunishment) return false;
+
+      if (userPunishment.banStatus === "perm_ban") {
+        return true;
+      }
+
+      if (userPunishment.banStatus === "temp_ban" && userPunishment.banUntil) {
+        const banUntil = new Date(userPunishment.banUntil);
+        if (new Date() < banUntil) {
+          return true;
+        } else {
+          // Ban expired - remove it
+          delete punishments[userId];
+          localStorage.setItem('niroboPunishments', JSON.stringify(punishments));
+          return false;
+        }
+      }
+
+      return false;
+    }
+
+    // --- LOGIN SYSTEM ---
+
+    // Login button handler
+    document.getElementById('loginBtn').addEventListener('click', () => {
+      const email = loginEmail.value.trim();
+      const password = loginPassword.value;
+
       if (!email || !password) {
         alert('Please enter email and password');
         return;
       }
 
-      // Get users from localStorage
-      const users = JSON.parse(localStorage.getItem('niroboUsers') || '[]');
-      const user = users.find(u => u.email === email && u.password === password);
-      
-      if (user) {
-        localStorage.setItem('niroboCurrentUser', JSON.stringify(user));
-        document.getElementById('loginSection').style.display = 'none';
-        document.getElementById('dashboardContent').style.display = 'block';
-        document.getElementById('userEmail').textContent = user.email;
-        loadUserSubmissions();
-        alert('✅ Login successful!');
-      } else {
+      const users = loadUsers();
+      const user = users.find(u => u.email === email && u.password === hashPassword(password));
+
+      if (!user) {
         alert('❌ Invalid email or password');
-      }
-    }
-
-    // Load user submissions
-    function loadUserSubmissions() {
-      let submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
-      const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser') || 'null');
-      
-      if (!currentUser) return;
-
-      // Filter user's submissions
-      const userSubmissions = submissions.filter(sub => sub.userId === currentUser.id);
-      const container = document.getElementById('submissionsList');
-      
-      if (userSubmissions.length === 0) {
-        container.innerHTML = `
-          <div class="empty-state">
-            <h3>📭 No submissions yet</h3>
-            <p>Submit your first website above to get started!</p>
-          </div>
-        `;
         return;
       }
 
-      container.innerHTML = '';
-      userSubmissions.forEach(sub => {
-        const div = document.createElement('div');
-        div.className = `submission-item ${sub.status}`;
-        div.innerHTML = `
-          <div class="submission-header">
-            <div class="submission-title">${sub.title}</div>
-            <span class="status ${sub.status}">${sub.status.toUpperCase()}</span>
-          </div>
-          <a href="${sub.url}" target="_blank" class="submission-url">${sub.url}</a>
-          <p>${sub.description}</p>
-          <p><small>Tags: ${sub.tags.join(', ')}</small></p>
-          <p><small>Submitted: ${new Date(sub.submittedAt).toLocaleString()}</small></p>
-          <p><small>👁️ Views: ${sub.viewCount || 0}</small></p>
-          ${sub.adminMessage ? `<div class="admin-message">💬 Admin Message: ${sub.adminMessage}</div>` : ''}
-          <div class="actions">
-            <button class="btn-delete" onclick="deleteSubmission('${sub.id}')">🗑️ Remove Submission</button>
-          </div>
-        `;
-        container.appendChild(div);
-      });
-    }
+      // Check ban status
+      if (isUserBanned(user.id)) {
+        alert('❌ Your account has been banned. Please contact support.');
+        return;
+      }
+
+      // Save current user
+      localStorage.setItem('niroboCurrentUser', JSON.stringify(user));
+      
+      // Show dashboard
+      loginSection.style.display = 'none';
+      dashboardContent.style.display = 'block';
+      userEmail.textContent = user.email;
+      
+      // Load user's submissions
+      displayUserSubmissions();
+    });
+
+    // Logout button handler
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('niroboCurrentUser');
+      alert('✅ Logged out successfully.');
+      
+      // Show login form
+      loginSection.style.display = 'block';
+      dashboardContent.style.display = 'none';
+      loginEmail.value = '';
+      loginPassword.value = '';
+    });
+
+    // --- SUBMISSION SYSTEM ---
 
     // Submit new website
-    document.getElementById('submitWebsiteBtn')?.addEventListener('click', () => {
+    document.getElementById('submitWebsiteBtn').addEventListener('click', () => {
       const title = document.getElementById('websiteTitle').value.trim();
       const url = document.getElementById('websiteUrl').value.trim();
       const desc = document.getElementById('websiteDesc').value.trim();
@@ -349,41 +498,96 @@
         return;
       }
 
-      // Check domain limit (10 per domain)
-      const domain = new URL(url).hostname;
-      let submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
-      const domainSubmissions = submissions.filter(item => 
-        new URL(item.url).hostname === domain && item.userId === currentUser.id
-      );
-
-      if (domainSubmissions.length >= 10) {
-        alert(`❌ You've reached the limit of 10 submissions for ${domain}.`);
+      // Check ban status again (paranoid check)
+      if (isUserBanned(currentUser.id)) {
+        alert('❌ Your account has been banned. Please contact support.');
         return;
       }
 
-      const newSubmission = {
-        id: Date.now().toString(),
-        userId: currentUser.id,
-        title,
-        url,
-        description: desc,
-        tags: tags.length ? tags : ["general"],
-        submittedAt: new Date().toISOString(),
-        status: "pending",
-        adminMessage: ""
-      };
+      // Check domain limit
+      try {
+        const domain = new URL(url).hostname;
+        const allSubmissions = loadAllSubmissions();
+        const domainSubmissions = allSubmissions.filter(item => 
+          new URL(item.url).hostname === domain && item.userId === currentUser.id
+        );
 
-      submissions.push(newSubmission);
-      localStorage.setItem('niroboAllSubmissions', JSON.stringify(submissions));
+        if (domainSubmissions.length >= MAX_SUBMISSIONS_PER_DOMAIN) {
+          alert(`❌ You've reached the limit of ${MAX_SUBMISSIONS_PER_DOMAIN} submissions for ${domain}.`);
+          return;
+        }
 
-      alert('✅ Website submitted for review!');
-      document.getElementById('websiteTitle').value = '';
-      document.getElementById('websiteUrl').value = '';
-      document.getElementById('websiteDesc').value = '';
-      document.getElementById('websiteTags').value = '';
+        const newSubmission = {
+          id: Date.now().toString(),
+          userId: currentUser.id,
+          title,
+          url,
+          description: desc,
+          tags: tags.length ? tags : ["general"],
+          submittedAt: new Date().toISOString(),
+          status: "pending",
+          viewCount: 0,
+          adminMessage: "",
+          submitterEmail: currentUser.email // Store for admin reference
+        };
 
-      loadUserSubmissions();
+        allSubmissions.push(newSubmission);
+        saveAllSubmissions(allSubmissions);
+
+        alert('✅ Website submitted for review!');
+        
+        // Clear form
+        document.getElementById('websiteTitle').value = '';
+        document.getElementById('websiteUrl').value = '';
+        document.getElementById('websiteDesc').value = '';
+        document.getElementById('websiteTags').value = '';
+
+        // Refresh submissions list
+        displayUserSubmissions();
+
+      } catch (e) {
+        alert('❌ Please enter a valid URL (e.g., https://example.com)');
+      }
     });
+
+    // Display user's submissions
+    function displayUserSubmissions() {
+      const allSubmissions = loadAllSubmissions();
+      const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser') || 'null');
+      
+      if (!currentUser) return;
+
+      const userSubmissions = allSubmissions.filter(sub => sub.userId === currentUser.id);
+      
+      const container = document.getElementById('submissionsList');
+      
+      if (userSubmissions.length === 0) {
+        container.innerHTML = '<div class="empty-state"><h3>📭 No submissions yet</h3><p>Submit your first website above to get started!</p></div>';
+        return;
+      }
+
+      container.innerHTML = '';
+      userSubmissions.forEach(sub => {
+        const div = document.createElement('div');
+        div.className = `submission-item ${sub.status}`;
+        div.innerHTML = `
+          <div class="submission-header">
+            <div class="submission-title">${sub.title}</div>
+            <span class="status ${sub.status}">${sub.status.toUpperCase()}</span>
+          </div>
+          <a href="${sub.url}" target="_blank" class="submission-url">${sub.url}</a>
+          <p>${sub.description}</p>
+          <p><small>Tags: ${sub.tags.join(', ')}</small></p>
+          <p><small>Submitted: ${new Date(sub.submittedAt).toLocaleString()}</small></p>
+          <p><small>👀 Views: ${sub.viewCount || 0}</small></p>
+          ${sub.adminMessage ? `<div class="admin-message">💬 Admin Message: ${sub.adminMessage}</div>` : ''}
+          <div class="actions">
+            <button class="btn-delete" onclick="deleteSubmission('${sub.id}')">🗑️ Remove Submission</button>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
 
     // Delete submission
     window.deleteSubmission = function(submissionId) {
@@ -391,63 +595,41 @@
         return;
       }
 
-      let submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
-      const index = submissions.findIndex(sub => sub.id === submissionId);
+      let allSubmissions = loadAllSubmissions();
+      const index = allSubmissions.findIndex(sub => sub.id === submissionId);
       
       if (index !== -1) {
-        submissions.splice(index, 1);
-        localStorage.setItem('niroboAllSubmissions', JSON.stringify(submissions));
+        allSubmissions.splice(index, 1);
+        saveAllSubmissions(allSubmissions);
         
         alert('🗑️ Submission removed.');
-        loadUserSubmissions();
+        displayUserSubmissions();
       }
     };
 
-    // Logout
-    document.getElementById('logoutBtn')?.addEventListener('click', () => {
-      localStorage.removeItem('niroboCurrentUser');
-      alert('Logged out successfully.');
-      location.reload();
-    });
+    // --- INITIALIZATION ---
 
-    // Add some initial test data if none exists
-    function addInitialTestData() {
-      const users = JSON.parse(localStorage.getItem('niroboUsers') || '[]');
-      if (users.length === 0) {
-        // Create a test user
-        const testUser = {
-          id: 'test-user-123',
-          email: 'test@example.com',
-          password: 'test123',
-          createdAt: new Date().toISOString()
-        };
+    // Check if user is already logged in
+    document.addEventListener('DOMContentLoaded', () => {
+      const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser') || 'null');
+      
+      if (currentUser) {
+        // Check ban status on page load
+        if (isUserBanned(currentUser.id)) {
+          alert('❌ Your account has been banned. Please contact support.');
+          localStorage.removeItem('niroboCurrentUser');
+          return;
+        }
         
-        users.push(testUser);
-        localStorage.setItem('niroboUsers', JSON.stringify(users));
+        loginSection.style.display = 'none';
+        dashboardContent.style.display = 'block';
+        userEmail.textContent = currentUser.email;
+        displayUserSubmissions();
+      } else {
+        loginSection.style.display = 'block';
+        dashboardContent.style.display = 'none';
       }
-
-      const submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
-      if (submissions.length === 0) {
-        const testSubmissions = [
-          {
-            id: '1',
-            userId: 'test-user-123',
-            title: 'Prothom Alo',
-            url: 'https://prothomalo.com',
-            description: 'Bangladesh\'s most popular newspaper',
-            tags: ['news', 'media', 'bangla'],
-            submittedAt: new Date().toISOString(),
-            status: 'approved',
-            viewCount: 150,
-            submitterEmail: 'test@example.com'
-          }
-        ];
-        localStorage.setItem('niroboAllSubmissions', JSON.stringify(testSubmissions));
-      }
-    }
-
-    // Initialize test data
-    addInitialTestData();
+    });
   </script>
 </body>
 </html>
