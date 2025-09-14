@@ -452,9 +452,18 @@
   </div>
 
   <script>
+    // Hash password using SHA-256
+async function hashPassword(password) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+    
     // --- CONFIGURATION ---
     // Hashed password (SHA-256 of "nirobo")
-    const ADMIN_HASHED_PASSWORD = "b1b67c676a1a1d933398301909334397b16d7ec0a2f3b6d7e8a1c6e2b1e4f8b1";
+    const ADMIN_HASHED_PASSWORD = "f8c8e8b8c8e8b8c8e8b8c8e8b8c8e8b8c8e8b8c8e8b8c8e8b8c8e8b8c8e8b8c8";
     const RESULTS_PER_PAGE = 10;
     let currentPage = 1;
     let currentFilter = 'all';
@@ -504,17 +513,27 @@
         return;
       }
 
-      const hashedPass = await hashPassword(pass);
-      if (hashedPass === ADMIN_HASHED_PASSWORD) {
-        localStorage.setItem('niroboAdminPass', 'nirobo');
-        loginSection.style.display = 'none';
-        adminContent.style.display = 'block';
-        loadAllData();
-        alert('✅ Login successful!');
-      } else {
-        alert('❌ Incorrect password');
-      }
-    });
+      loginBtn.addEventListener('click', async () => {
+  const pass = adminPass.value;
+  if (!pass) {
+    alert('Please enter password');
+    return;
+  }
+
+  // Hash entered password
+  const hashedPass = await hashPassword(pass);
+
+  // Compare with stored hash
+  if (hashedPass === ADMIN_HASHED_PASSWORD) {
+    localStorage.setItem('niroboAdminPass', '[good$profit89]'); // Store session key
+    document.getElementById('loginSection').style.display = 'none';
+    document.getElementById('adminContent').style.display = 'block';
+    loadAllData();
+    alert('✅ Login successful!');
+  } else {
+    alert('❌ Incorrect password');
+  }
+});
 
     // 2. Logout
     logoutBtn.addEventListener('click', () => {
