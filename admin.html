@@ -3,20 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nirobo — Your URL Analytics</title>
+  <title>Nirobo Admin Panel</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
-      margin: 0;
-      padding: 2rem;
+      font-family: 'Segoe UI', sans-serif;
       background: linear-gradient(135deg, #004d00, #006400);
       color: #f5f5f5;
-      font-family: 'Segoe UI', sans-serif;
-      min-height: 100vh;
+      padding: 20px;
+      margin: 0;
     }
 
     .container {
-      max-width: 1000px;
+      max-width: 1200px;
       margin: 0 auto;
     }
 
@@ -29,7 +28,7 @@
 
     header h1 {
       color: #ff0000;
-      font-size: 2.2rem;
+      font-size: 2.5rem;
       margin-bottom: 10px;
     }
 
@@ -78,6 +77,15 @@
       font-size: 0.9rem;
     }
 
+    .result-image {
+       width: 100%;
+       max-height: 200px;
+       object-fit: cover;
+       border-radius: 6px;
+       margin-bottom: 1rem;
+       box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+    }
+    
     .tags span {
       background: #ff0000;
       color: #fff;
@@ -97,21 +105,34 @@
       padding: 0.5rem;
       width: 70%;
       font-size: 1rem;
-      border: 1px solid #d40000;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
-      color: white;
-      box-sizing: border-box;
     }
 
     #search-form button {
       padding: 0.5rem 1rem;
-      background-color: #d40000;
+      background-color: #ff0000;
       color: white;
       border: none;
-      border-radius: 4px;
       font-size: 1rem;
       cursor: pointer;
+    }
+
+    footer {
+      background-color: #1a1a1a;
+      color: #ccc;
+      padding: 20px;
+      text-align: center;
+      font-size: 0.9rem;
+      border-top: 1px solid #333;
+      margin-top: 40px;
+    }
+
+    footer a {
+      color: #ff9999;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
     }
 
     /* Submit Button Styles */
@@ -209,78 +230,231 @@
       font-weight: bold;
     }
 
-    footer {
-      background-color: #1a1a1a;
-      color: #ccc;
-      padding: 20px;
+    /* Admin Panel Styles */
+    .login-section {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 8px;
+      margin-bottom: 30px;
       text-align: center;
+    }
+
+    .login-section input {
+      padding: 12px;
+      width: 300px;
+      margin: 10px;
+      border: 1px solid #d40000;
+      border-radius: 4px;
+      font-size: 16px;
+      background: rgba(0, 0, 0, 0.2);
+      color: white;
+      box-sizing: border-box;
+    }
+
+    .login-section button {
+      padding: 12px 24px;
+      background: #d40000;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 10px;
+    }
+
+    .admin-content {
+      display: none;
+    }
+
+    .admin-section {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 25px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      border: 1px solid rgba(212, 0, 0, 0.5);
+    }
+
+    .admin-section h2 {
+      color: #ffcccc;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+      border-bottom: 1px solid #d40000;
+      padding-bottom: 10px;
+    }
+
+    .entry-item {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      border-left: 4px solid #d40000;
+    }
+
+    .entry-item.approved { border-left-color: #00aa00; }
+    .entry-item.rejected { border-left-color: #d40000; }
+    .entry-item.pending { border-left-color: #ff9900; }
+
+    .entry-actions {
+      margin-top: 10px;
+    }
+
+    .btn-approve { background: #00aa00; color: white; margin: 5px; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; }
+    .btn-reject { background: #d40000; color: white; margin: 5px; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; }
+    .btn-unapprove { background: #ff9900; color: white; margin: 5px; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; }
+    .btn-back { background: #333; color: white; margin-top: 20px; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+
+    .admin-message {
+      background: rgba(0, 100, 200, 0.2);
+      padding: 10px;
+      border-radius: 4px;
+      margin: 10px 0;
+      font-style: italic;
       font-size: 0.9rem;
-      border-top: 1px solid #333;
-      margin-top: 40px;
     }
 
-    footer a {
-      color: #ff9999;
-      text-decoration: none;
+    .punish-section {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
     }
 
-    footer a:hover {
-      text-decoration: underline;
+    .punish-section input, .punish-section textarea, .punish-section select {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 4px;
+      border: 1px solid #d40000;
+      background: rgba(0, 0, 0, 0.2);
+      color: white;
+      font-size: 16px;
+      box-sizing: border-box;
     }
 
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-      #search-input {
-        width: 60%;
-      }
-      
-      .filter-tabs {
-        flex-direction: row;
-        align-items: center;
-      }
-      
-      .filter-tab {
-        width: auto;
-        text-align: center;
-      }
+    .punish-section button {
+      background: #d40000;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
+    .banned-users {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 15px;
+    }
+
+    .banned-user {
+      padding: 10px;
+      border-bottom: 1px solid #555;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .banned-user:last-child {
+      border-bottom: none;
+    }
+
+    .unban-btn {
+      background: #00aa00;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>📊 YOUR URL ANALYTICS</h1>
-      <p>“Your audience speaks through data — listen to what they’re telling you.”</p>
+      <h1>🔐 NIROBO ADMIN PANEL</h1>
+      <p>“Data is the silent voice of your audience — listen carefully.”</p>
     </header>
 
     <a href="/">← Back to Nirobo</a>
 
-    <!-- Submit URL Button (Top Right) -->
-    <a href="signup.html" class="submit-button">➕ Submit URL</a>
-
-    <!-- Search Form -->
-    <form id="search-form">
-      <input type="text" id="search-input" placeholder="Search Nirobo" value="" autocomplete="off" spellcheck="false" />
-      <button type="submit">Search</button>
-    </form>
-
-    <!-- Filter Tabs -->
-    <div class="filter-tabs">
-      <button class="filter-tab active" data-filter="all">All</button>
-      <button class="filter-tab" data-filter="images">Images</button>
-      <button class="filter-tab" data-filter="videos">Videos</button>
-      <button class="filter-tab" data-filter="websites">Websites</button>
+    <!-- Login Section -->
+    <div class="login-section" id="loginSection">
+      <h2>🔐 Admin Login</h2>
+      <input type="password" id="adminPass" placeholder="Enter Admin Password" />
+      <button id="loginBtn">Login</button>
+      <p><small>Hint: password is "nirobo"</small></p>
     </div>
 
-    <!-- Results Container -->
-    <div id="results">
-      <p>Welcome to Nirobo Search. Enter a term above to begin searching.</p>
+    <!-- Admin Content (Hidden until login) -->
+    <div class="admin-content" id="adminContent">
+      
+      <!-- Analytics Summary -->
+      <div class="admin-section">
+        <h2>📊 System Analytics</h2>
+        <div id="analyticsSummary">
+          <p>Loading system analytics...</p>
+        </div>
+      </div>
+
+      <!-- Punish Users Section -->
+      <div class="admin-section">
+        <h2>⚖️ Punish Users</h2>
+        <div class="punish-section">
+          <div style="margin-bottom: 15px;">
+            <label>User Email:</label>
+            <input type="email" id="punishEmail" placeholder="user@example.com" />
+          </div>
+          
+          <div style="margin-bottom: 15px;">
+            <label>Reason:</label>
+            <textarea id="punishReason" placeholder="Explain why this user is being punished" rows="3"></textarea>
+          </div>
+          
+          <div style="margin-bottom: 15px;">
+            <label>Punishment Type:</label>
+            <select id="punishType">
+              <option value="warning">⚠️ Warning</option>
+              <option value="temp_ban">⏳ Temporary Ban (7 days)</option>
+              <option value="perm_ban">❌ Permanent Ban</option>
+            </select>
+          </div>
+          
+          <button id="punishUserBtn">Punish User</button>
+        </div>
+
+        <!-- Banned Users List -->
+        <div class="banned-users">
+          <h3>⛓️ Banned Users</h3>
+          <div id="bannedUsersList">
+            <p>Loading banned users...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pending Submissions -->
+      <div class="admin-section">
+        <h2>📬 Pending Submissions</h2>
+        <div id="pendingList">
+          <p>Loading pending submissions...</p>
+        </div>
+      </div>
+
+      <!-- Approved Websites -->
+      <div class="admin-section">
+        <h2>✅ Approved Websites</h2>
+        <div id="approvedList">
+          <p>Loading approved websites...</p>
+        </div>
+      </div>
+
+      <div style="text-align: center;">
+        <button class="btn-back" id="logoutBtn">🚪 Logout</button>
+      </div>
     </div>
 
-    <!-- Pagination Container -->
-    <div id="pagination" class="pagination"></div>
-
-    <!-- Footer -->
     <footer>
       Made in Bangladesh 🇧🇩 | Curated by Nirobo<br>
       Honoring the Language Movement and the Silent Legacy of Justice<br>
@@ -290,7 +464,8 @@
   </div>
 
   <script>
-    // Configuration
+    // --- CONFIGURATION ---
+    const ADMIN_PASSWORD = "nirobo"; // Simple password for demo
     const RESULTS_PER_PAGE = 10;
     let currentPage = 1;
     let currentFilter = 'all';
@@ -298,23 +473,29 @@
     let filteredResults = [];
     let query = '';
 
-    // DOM Elements
-    const searchForm = document.getElementById('search-form');
-    const searchInput = document.getElementById('search-input');
-    const resultsContainer = document.getElementById('results');
-    const paginationContainer = document.getElementById('pagination');
+    // --- DOM Elements ---
+    const loginSection = document.getElementById('loginSection');
+    const adminContent = document.getElementById('adminContent');
+    const adminPass = document.getElementById('adminPass');
+    const loginBtn = document.getElementById('loginBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const punishUserBtn = document.getElementById('punishUserBtn');
 
-    // Helper Functions
+    // --- Helper Functions ---
+
+    // Get favicon URL
     function getFaviconUrl(url) {
       try {
         const hostname = new URL(url).hostname;
         return `https://www.google.com/s2/favicons?domain=${hostname}&sz=32`;
       } catch (e) {
-        return 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%23444" rx="4"/><text x="50%" y="50%" fill="white" font-size="16" font-family="Arial" text-anchor="middle" dominant-baseline="middle">?</text></svg>';
+        return 'image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%23444" rx="4"/><text x="50%" y="50%" fill="white" font-size="16" font-family="Arial" text-anchor="middle" dominant-baseline="middle">?</text></svg>';
       }
     }
 
-    // Load approved submissions from localStorage
+    // --- Core Admin Logic ---
+
+    // 1. Load approved submissions from localStorage
     function loadApprovedData() {
       try {
         const allSubmissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
@@ -325,31 +506,35 @@
       }
     }
 
-    // Load data from result.json
+    // 2. Load data from result.json
     async function loadResultJson() {
       try {
-        const res = await fetch('result.json');
-        if (res.ok) {
-          const jsonData = await res.json();
-          return jsonData.map(item => ({ ...item, source: 'json' }));
-        } else {
-          console.warn('Failed to load result.json:', res.statusText);
+        console.log("Attempting to load result.json...");
+        const response = await fetch('result.json');
+        if (!response.ok) {
+          console.error(`HTTP Error loading result.json: ${response.status} ${response.statusText}`);
           return [];
         }
+        const jsonData = await response.json();
+        console.log("Successfully loaded result.json:", jsonData);
+        return jsonData;
       } catch (error) {
         console.warn('Failed to load result.json:', error);
         return [];
       }
     }
 
-    // Combine results from both sources
+    // 3. Combine results from both sources
     async function loadAllResults() {
+      console.log("Starting to load all results...");
       const jsonResults = await loadResultJson();
       const localStorageData = loadApprovedData();
-      return [...jsonResults, ...localStorageData.map(item => ({ ...item, source: 'localStorage' }))];
+      const combinedResults = [...jsonResults, ...localStorageData];
+      console.log("Combined results:", combinedResults);
+      return combinedResults;
     }
 
-    // Filter results
+    // 4. Filter results
     function applyFilters(results, searchTerm, filterType) {
       let filtered = results;
 
@@ -385,199 +570,372 @@
       return filtered;
     }
 
-    // Render results
-    function renderResults(results) {
-      resultsContainer.innerHTML = '';
+    // --- Admin Panel Functions ---
 
-      if (results.length === 0) {
-        resultsContainer.innerHTML = `<p>No results found for "<strong>${query}</strong>".</p>`;
-        return;
-      }
-
-      results.forEach((result) => {
-        const card = document.createElement('div');
-        card.className = 'result-card';
-        
-        const faviconUrl = getFaviconUrl(result.url);
-        
-        card.innerHTML = `
-          <div style="display: flex; align-items: flex-start; gap: 12px;">
-            <img src="${faviconUrl}" alt="Favicon" style="width: 32px; height: 32px; border-radius: 4px; flex-shrink: 0;" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 fill=%22%23444%22 rx=%224%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22white%22 font-size=%2216%22 font-family=%22Arial%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>?</text></svg>'; this.style.width='32px'; this.style.height='32px';">
-            <div style="flex: 1; min-width: 0;">
-              <h2 style="margin: 0 0 8px 0; font-size: 1.2rem;">${result.title || 'Untitled'}</h2>
-              <p class="url-subtitle"><a href="${result.url}" target="_blank">${result.url}</a></p>
-              <p style="margin: 8px 0;">${result.description || 'No description available.'}</p>
-              <div class="tags" style="margin-top: 8px;">${Array.isArray(result.tags) ? result.tags.map(tag => `<span>${tag}</span>`).join(' ') : ''}</div>
-            </div>
-          </div>
-        `;
-        resultsContainer.appendChild(card);
-      });
-    }
-
-    // Render pagination
-    function renderPagination(totalPages) {
-      paginationContainer.innerHTML = '';
-
-      if (totalPages <= 1) return;
-
-      const fragment = document.createDocumentFragment();
-
-      // Previous button
-      const prevButton = document.createElement('button');
-      prevButton.innerHTML = '&laquo;';
-      prevButton.disabled = currentPage === 1;
-      prevButton.addEventListener('click', () => goToPage(currentPage - 1));
-      fragment.appendChild(prevButton);
-
-      // Page numbers
-      const startPage = Math.max(1, currentPage - 2);
-      const endPage = Math.min(totalPages, currentPage + 2);
-
-      if (startPage > 1) {
-        const firstButton = document.createElement('button');
-        firstButton.textContent = '1';
-        firstButton.addEventListener('click', () => goToPage(1));
-        fragment.appendChild(firstButton);
-
-        if (startPage > 2) {
-          const ellipsis = document.createElement('span');
-          ellipsis.textContent = '...';
-          ellipsis.style.padding = '0 5px';
-          fragment.appendChild(ellipsis);
-        }
-      }
-
-      for (let i = startPage; i <= endPage; i++) {
-        const pageButton = document.createElement('button');
-        pageButton.textContent = i;
-        if (i === currentPage) {
-          pageButton.classList.add('active');
-        }
-        pageButton.addEventListener('click', () => goToPage(i));
-        fragment.appendChild(pageButton);
-      }
-
-      if (endPage < totalPages) {
-        if (endPage < totalPages - 1) {
-          const ellipsis = document.createElement('span');
-          ellipsis.textContent = '...';
-          ellipsis.style.padding = '0 5px';
-          fragment.appendChild(ellipsis);
-        }
-        const lastButton = document.createElement('button');
-        lastButton.textContent = totalPages;
-        lastButton.addEventListener('click', () => goToPage(totalPages));
-        fragment.appendChild(lastButton);
-      }
-
-      // Next button
-      const nextButton = document.createElement('button');
-      nextButton.innerHTML = '&raquo;';
-      nextButton.disabled = currentPage === totalPages;
-      nextButton.addEventListener('click', () => goToPage(currentPage + 1));
-      fragment.appendChild(nextButton);
-
-      paginationContainer.appendChild(fragment);
-    }
-
-    // Go to specific page
-    function goToPage(page) {
-      currentPage = page;
-      
-      // Update URL
-      const url = new URL(window.location);
-      url.searchParams.set('page', page.toString());
-      window.history.pushState({ page }, '', url);
-
-      // Filter and render
-      filteredResults = applyFilters(allResults, query, currentFilter);
-      const totalPages = Math.ceil(filteredResults.length / RESULTS_PER_PAGE);
-      const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
-      const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, filteredResults.length);
-      const pageResults = filteredResults.slice(startIndex, endIndex);
-
-      renderResults(pageResults);
-      renderPagination(totalPages);
-    }
-
-    // Set up filter tabs
-    function setupFilterTabs() {
-      const filterTabs = document.querySelectorAll('.filter-tab');
-      filterTabs.forEach(tab => {
-        tab.addEventListener('click', function() {
-          // Update active tab
-          filterTabs.forEach(t => t.classList.remove('active'));
-          this.classList.add('active');
-          
-          // Set filter and reset page
-          currentFilter = this.getAttribute('data-filter');
-          currentPage = 1;
-          
-          // Re-filter and re-render
-          filteredResults = applyFilters(allResults, query, currentFilter);
-          const totalPages = Math.ceil(filteredResults.length / RESULTS_PER_PAGE);
-          const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
-          const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, filteredResults.length);
-          const pageResults = filteredResults.slice(startIndex, endIndex);
-
-          renderResults(pageResults);
-          renderPagination(totalPages);
-        });
-      });
-    }
-
-    // Handle search form submission
-    searchForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      query = searchInput.value.trim();
-      
-      if (!query) {
-        alert('Please enter a search term.');
-        return;
-      }
-
-      try {
-        // Show loading
-        resultsContainer.innerHTML = '<p>Loading results...</p>';
-        paginationContainer.innerHTML = '';
-
-        // Load all results
-        allResults = await loadAllResults();
-        
-        // Filter results
-        filteredResults = applyFilters(allResults, query, currentFilter);
-        
-        // Paginate and render
-        const totalPages = Math.ceil(filteredResults.length / RESULTS_PER_PAGE);
-        const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
-        const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, filteredResults.length);
-        const pageResults = filteredResults.slice(startIndex, endIndex);
-
-        renderResults(pageResults);
-        renderPagination(totalPages);
-
-      } catch (error) {
-        console.error('Search error:', error);
-        resultsContainer.innerHTML = '<p style="color: #ff9999;">An error occurred while searching. Please try again.</p>';
-        paginationContainer.innerHTML = '';
+    // Login
+    loginBtn.addEventListener('click', () => {
+      const pass = adminPass.value;
+      if (pass === ADMIN_PASSWORD) {
+        localStorage.setItem('niroboAdminPass', 'nirobo');
+        loginSection.style.display = 'none';
+        adminContent.style.display = 'block';
+        loadAllData();
+        alert('✅ Login successful!');
+      } else {
+        alert('❌ Incorrect password');
       }
     });
 
-    // Initialize
-    document.addEventListener('DOMContentLoaded', () => {
-      console.log('DOM fully loaded. Setting up search engine...');
-      setupFilterTabs();
+    // Logout
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('niroboAdminPass');
+      loginSection.style.display = 'block';
+      adminContent.style.display = 'none';
+      adminPass.value = '';
+      alert('✅ Logged out successfully!');
+    });
 
-      // Check URL parameters on initial load
-      const urlParams = new URLSearchParams(window.location.search);
-      const initialQuery = urlParams.get('q');
-      const initialPage = parseInt(urlParams.get('page')) || 1;
+    // Load all data
+    function loadAllData() {
+      loadAnalytics();
+      loadPendingSubmissions();
+      loadApprovedSubmissions();
+      loadBannedUsers();
+    }
+
+    // Load analytics
+    function loadAnalytics() {
+      const visits = JSON.parse(localStorage.getItem('niroboVisits') || '[]');
+      const submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
       
-      if (initialQuery) {
-        searchInput.value = initialQuery;
-        currentPage = initialPage;
-        searchForm.dispatchEvent(new Event('submit'));
+      const container = document.getElementById('analyticsSummary');
+      
+      if (visits.length === 0) {
+        // Add test data if none exists
+        const testVisits = [
+          {
+            visitorId: 'test1',
+            timestamp: new Date().toISOString(),
+            url: 'https://yoursite.com/search.html?q=prothom',
+            country: 'Bangladesh',
+            browser: 'Chrome',
+            device: 'Desktop',
+            referrer: 'Direct'
+          },
+          {
+            visitorId: 'test2',
+            timestamp: new Date(Date.now() - 86400000).toISOString(), // 24h ago
+            url: 'https://yoursite.com/search.html?q=bkash',
+            country: 'Bangladesh',
+            browser: 'Firefox',
+            device: 'Mobile',
+            referrer: 'https://google.com'
+          }
+        ];
+        localStorage.setItem('niroboVisits', JSON.stringify(testVisits));
+        loadAnalytics(); // Reload with test data
+        return;
+      }
+
+      const uniqueVisitors = new Set(visits.map(v => v.visitorId)).size;
+      const totalSubmissions = submissions.length;
+      const approvedSubmissions = submissions.filter(s => s.status === "approved").length;
+      const pendingSubmissions = submissions.filter(s => s.status === "pending").length;
+
+      container.innerHTML = `
+        <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
+          <h3>📈 Summary</h3>
+          <p><strong>Total Pageviews:</strong> ${visits.length}</p>
+          <p><strong>Unique Visitors:</strong> ${uniqueVisitors}</p>
+          <p><strong>Total Submissions:</strong> ${totalSubmissions}</p>
+          <p><strong>Approved:</strong> ${approvedSubmissions}</p>
+          <p><strong>Pending:</strong> ${pendingSubmissions}</p>
+        </div>
+      `;
+    }
+
+    // Load pending submissions
+    function loadPendingSubmissions() {
+      const submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+      const pending = submissions.filter(sub => sub.status === "pending");
+      const container = document.getElementById('pendingList');
+      
+      if (pending.length === 0) {
+        container.innerHTML = '<p>🎉 No pending submissions.</p>';
+        return;
+      }
+
+      container.innerHTML = '';
+      pending.forEach((submission, index) => {
+        const div = document.createElement('div');
+        div.className = 'entry-item pending';
+        
+        const faviconUrl = getFaviconUrl(submission.url);
+        
+        div.innerHTML = `
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <img src="${faviconUrl}" alt="Favicon" style="width: 32px; height: 32px; border-radius: 4px; flex-shrink: 0;" onerror="this.src='image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 fill=%22%23444%22 rx=%224%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22white%22 font-size=%2216%22 font-family=%22Arial%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>?</text></svg>'; this.style.width='32px'; this.style.height='32px';">
+            <div style="flex: 1; min-width: 0;">
+              <h2 style="margin: 0 0 8px 0; font-size: 1.2rem;">${submission.title}</h2>
+              <p class="url-subtitle"><a href="${submission.url}" target="_blank">${submission.url}</a></p>
+              <p>${submission.description}</p>
+              <div class="tags">${Array.isArray(submission.tags) ? submission.tags.map(tag => `<span>${tag}</span>`).join(' ') : ''}</div>
+              
+              <div class="entry-actions">
+                <textarea id="reason-${submission.id}" placeholder="Reason for approval (optional)" style="width: 100%; padding: 8px; margin: 5px 0; border-radius: 4px; background: rgba(255,255,255,0.1); color: white; border: 1px solid #d40000;"></textarea>
+                <button class="btn-approve" onclick="approveSubmission('${submission.id}', this.parentElement.querySelector('textarea').value)">✅ Approve</button>
+                <button class="btn-reject" onclick="rejectSubmission('${submission.id}', this.parentElement.querySelector('textarea').value)">❌ Reject</button>
+              </div>
+            </div>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // Load approved submissions
+    function loadApprovedSubmissions() {
+      const submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+      const approved = submissions.filter(sub => sub.status === "approved");
+      const container = document.getElementById('approvedList');
+      
+      if (approved.length === 0) {
+        container.innerHTML = '<p>📭 No approved websites yet.</p>';
+        return;
+      }
+
+      container.innerHTML = '';
+      approved.forEach((submission, index) => {
+        const div = document.createElement('div');
+        div.className = 'entry-item approved';
+        
+        const faviconUrl = getFaviconUrl(submission.url);
+        
+        div.innerHTML = `
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <img src="${faviconUrl}" alt="Favicon" style="width: 32px; height: 32px; border-radius: 4px; flex-shrink: 0;" onerror="this.src='image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 fill=%22%23444%22 rx=%224%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22white%22 font-size=%2216%22 font-family=%22Arial%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>?</text></svg>'; this.style.width='32px'; this.style.height='32px';">
+            <div style="flex: 1; min-width: 0;">
+              <h2 style="margin: 0 0 8px 0; font-size: 1.2rem;">${submission.title}</h2>
+              <p class="url-subtitle"><a href="${submission.url}" target="_blank">${submission.url}</a></p>
+              <p>${submission.description}</p>
+              <div class="tags">${Array.isArray(submission.tags) ? submission.tags.map(tag => `<span>${tag}</span>`).join(' ') : ''}</div>
+              
+              ${submission.adminMessage ? `<div class="admin-message">💬 Admin Message: ${submission.adminMessage}</div>` : ''}
+              
+              <div class="entry-actions">
+                <button class="btn-unapprove" onclick="unapproveSubmission('${submission.id}')">🔄 Unapprove</button>
+              </div>
+            </div>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // Approve submission
+    function approveSubmission(submissionId, adminMessage) {
+      let submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+      const index = submissions.findIndex(sub => sub.id === submissionId);
+      
+      if (index !== -1) {
+        submissions[index] = {
+          ...submissions[index],
+          status: "approved",
+          reviewedAt: new Date().toISOString(),
+          adminMessage: adminMessage || "Your submission has been approved!"
+        };
+        
+        localStorage.setItem('niroboAllSubmissions', JSON.stringify(submissions));
+        
+        // Notify user
+        storeUserNotification(submissions[index].url, 'approved', adminMessage || "Your submission has been approved!", submissions[index].submitterEmail);
+        
+        alert('✅ Approved!');
+        loadPendingSubmissions();
+        loadApprovedSubmissions();
+      }
+    }
+
+    // Reject submission
+    function rejectSubmission(submissionId, adminMessage) {
+      let submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+      const index = submissions.findIndex(sub => sub.id === submissionId);
+      
+      if (index !== -1) {
+        submissions[index] = {
+          ...submissions[index],
+          status: "rejected",
+          reviewedAt: new Date().toISOString(),
+          adminMessage: adminMessage || "Sorry, your submission was not approved."
+        };
+        
+        localStorage.setItem('niroboAllSubmissions', JSON.stringify(submissions));
+        
+        // Notify user
+        storeUserNotification(submissions[index].url, 'rejected', adminMessage || "Sorry, your submission was not approved.", submissions[index].submitterEmail);
+        
+        alert('❌ Rejected!');
+        loadPendingSubmissions();
+        loadApprovedSubmissions();
+      }
+    }
+
+    // Unapprove submission
+    function unapproveSubmission(submissionId) {
+      let submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+      const index = submissions.findIndex(sub => sub.id === submissionId);
+      
+      if (index !== -1) {
+        submissions[index] = {
+          ...submissions[index],
+          status: "pending",
+          reviewedAt: null,
+          adminMessage: "This approval was revoked for review."
+        };
+        
+        localStorage.setItem('niroboAllSubmissions', JSON.stringify(submissions));
+        
+        // Notify user
+        storeUserNotification(submissions[index].url, 'revoked', "Your previously approved website has been revoked for review.", submissions[index].submitterEmail);
+        
+        alert('⚠️ Unapproved!');
+        loadPendingSubmissions();
+        loadApprovedSubmissions();
+      }
+    }
+
+    // Store user notification
+    function storeUserNotification(url, status, message, userEmail) {
+      if (!userEmail) return;
+      
+      let notifications = JSON.parse(localStorage.getItem('niroboUserNotifications') || '{}');
+      
+      if (!notifications[userEmail]) {
+        notifications[userEmail] = [];
+      }
+      
+      notifications[userEmail].push({
+        url,
+        status,
+        message,
+        timestamp: new Date().toISOString()
+      });
+      
+      localStorage.setItem('niroboUserNotifications', JSON.stringify(notifications));
+    }
+
+    // --- Punishment System ---
+
+    // Punish user
+    punishUserBtn.addEventListener('click', () => {
+      const email = document.getElementById('punishEmail').value.trim();
+      const reason = document.getElementById('punishReason').value.trim();
+      const type = document.getElementById('punishType').value;
+      
+      if (!email) {
+        alert('Please enter user email');
+        return;
+      }
+      
+      // Load users
+      const users = JSON.parse(localStorage.getItem('niroboUsers') || '[]');
+      const user = users.find(u => u.email === email);
+      
+      if (!user) {
+        alert('User not found');
+        return;
+      }
+      
+      // Load punishments
+      let punishments = JSON.parse(localStorage.getItem('niroboPunishments') || '{}');
+      
+      // Create punishment record
+      const punishment = {
+        userId: user.id,
+        email: user.email,
+        reason: reason || "No reason provided",
+        type: type,
+        timestamp: new Date().toISOString(),
+        admin: "admin@nirobo.local"
+      };
+      
+      // Add ban expiration for temp ban
+      if (type === "temp_ban") {
+        const banUntil = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
+        punishment.banUntil = banUntil.toISOString();
+      }
+      
+      // Save punishment
+      punishments[user.id] = punishment;
+      localStorage.setItem('niroboPunishments', JSON.stringify(punishments));
+      
+      alert(`✅ User ${email} has been ${type === 'warning' ? 'warned' : type === 'temp_ban' ? 'temporarily banned' : 'permanently banned'}!`);
+      
+      // Clear form
+      document.getElementById('punishEmail').value = '';
+      document.getElementById('punishReason').value = '';
+      document.getElementById('punishType').value = 'warning';
+      
+      // Refresh banned users list
+      loadBannedUsers();
+    });
+
+    // Load banned users
+    function loadBannedUsers() {
+      const punishments = JSON.parse(localStorage.getItem('niroboPunishments') || '{}');
+      const container = document.getElementById('bannedUsersList');
+      
+      // Filter banned users (not warnings)
+      const bannedUsers = Object.values(punishments).filter(p => 
+        p.type === "temp_ban" || p.type === "perm_ban"
+      );
+      
+      if (bannedUsers.length === 0) {
+        container.innerHTML = '<p>🎉 No banned users</p>';
+        return;
+      }
+      
+      container.innerHTML = '';
+      bannedUsers.forEach(punishment => {
+        const div = document.createElement('div');
+        div.className = 'banned-user';
+        
+        const isExpired = punishment.type === "temp_ban" && new Date(punishment.banUntil) < new Date();
+        
+        div.innerHTML = `
+          <div>
+            <strong>${punishment.email}</strong><br>
+            <small>${punishment.type === 'perm_ban' ? '❌ Permanent Ban' : '⏳ Temporary Ban'} | ${punishment.reason}</small><br>
+            <small>Banned: ${new Date(punishment.timestamp).toLocaleString()}</small>
+            ${punishment.type === "temp_ban" ? `<br><small>Ban Until: ${new Date(punishment.banUntil).toLocaleString()} ${isExpired ? '(EXPIRED)' : ''}</small>` : ''}
+          </div>
+          <button class="unban-btn" onclick="unbanUser('${punishment.userId}')">🔓 Unban</button>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // Unban user
+    function unbanUser(userId) {
+      if (!confirm('Are you sure you want to unban this user?')) {
+        return;
+      }
+      
+      let punishments = JSON.parse(localStorage.getItem('niroboPunishments') || '{}');
+      delete punishments[userId];
+      localStorage.setItem('niroboPunishments', JSON.stringify(punishments));
+      
+      alert('✅ User unbanned!');
+      loadBannedUsers();
+    }
+
+    // --- Initialize ---
+    document.addEventListener('DOMContentLoaded', () => {
+      const adminPass = localStorage.getItem('niroboAdminPass');
+      if (adminPass === 'nirobo') {
+        loginSection.style.display = 'none';
+        adminContent.style.display = 'block';
+        loadAllData();
       }
     });
   </script>
