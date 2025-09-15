@@ -372,6 +372,101 @@
         width: auto;
         text-align: center;
       }
+
+      /* --- Filter Tabs (Side-by-Side on Mobile) --- */
+     .filter-tabs {
+       display: flex;
+       gap: 10px;
+       margin-bottom: 20px;
+       flex-wrap: wrap;
+       justify-content: center;
+     }
+
+     .filter-tab {
+       padding: 8px 16px;
+       background-color: #006400;
+       color: white;
+       border: none;
+       border-radius: 20px;
+       cursor: pointer;
+       font-size: 0.9rem;
+       min-width: 80px;
+       text-align: center;
+       flex: 1;
+       max-width: fit-content;
+     }
+
+    .filter-tab:hover {
+      background-color: #008000;
+    }
+
+    .filter-tab.active {
+      background-color: #d40000;
+    }
+
+/* --- Submit Button (Fixed Position) --- */
+    .submit-button {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      background-color: #d40000;
+      color: white;
+      padding: 10px 20px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      box-shadow: 0 0 10px rgba(212, 0, 0, 0.5);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+
+    .submit-button:hover {
+      background-color: #ff0000;
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+    }
+
+/* --- Pagination --- */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .pagination button {
+      padding: 8px 16px;
+      background-color: #006400;
+      color: white;
+      border: 1px solid #004d00;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+   .pagination button:hover:not(:disabled) {
+     background-color: #008000;
+     border-color: #006600;
+   }
+
+  .pagination button:disabled {
+     background-color: #555;
+     color: #aaa;
+     cursor: not-allowed;
+     border-color: #444;
+   }
+
+  .pagination button.active {
+     background-color: #d40000;
+     border-color: #aa0000;
+     font-weight: bold;
+   }
     }
   </style>
 </head>
@@ -783,6 +878,167 @@
       }
     }
 
+    // --- PAGINATION & FILTER SYSTEM ---
+
+// Configuration
+const RESULTS_PER_PAGE = 10;
+let currentPage = 1;
+let currentFilter = 'all';
+let allResults = [];
+let filteredResults = [];
+let query = '';
+
+// DOM Elements
+const searchForm = document.getElementById('search-form');
+const searchInput = document.getElementById('search-input');
+const resultsContainer = document.getElementById('results');
+const paginationContainer = document.getElementById('pagination');
+
+// Setup filter tabs
+function setupFilterTabs() {
+  const filterTabs = document.querySelectorAll('.filter-tab');
+  filterTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      filterTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      currentFilter = tab.dataset.filter || 'all';
+      currentPage = 1;
+      filteredResults = applyFilters(allResults, query, currentFilter);
+      const totalPages = Math.ceil(filteredResults.length / RESULTS_PER_PAGE);
+      const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
+      const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, filteredResults.length);
+      const pageResults = filteredResults.slice(startIndex, endIndex);
+      renderResults(pageResults);
+      renderPagination(totalPages);
+    });
+  });
+}
+
+// Apply filters
+function applyFilters(results, searchTerm, filterType) {
+  let filtered = results;
+
+  if (searchTerm) {
+    const lowerQuery = searchTerm.toLowerCase();
+    filtered = filtered.filter(item =>
+      (item.title && item.title.toLowerCase().includes(lowerQuery)) ||
+      (item.description && item.description.toLowerCase().includes(lowerQuery)) ||
+      (Array.isArray(item.tags) && item.tags.some(tag =>
+        tag.toLowerCase().includes(lowerQuery) || lowerQuery.includes(tag.toLowerCase())
+      ))
+    );
+  }
+
+  if (filterType !== 'all') {
+    filtered = filtered.filter(item => {
+      const urlLower = item.url ? item.url.toLowerCase() : '';
+      const tagsLower = Array.isArray(item.tags) ? item.tags.map(t => t.toLowerCase()) : [];
+
+      switch(filterType) {
+        case 'images':
+          return urlLower.includes('image') || tagsLower.includes('image');
+        case 'videos':
+          return urlLower.includes('youtube') || urlLower.includes('youtu.be') || tagsLower.includes('video');
+        case 'websites':
+          return !(urlLower.includes('image') || tagsLower.includes('image') || urlLower.includes('youtube') || urlLower.includes('youtu.be') || tagsLower.includes('video'));
+        default:
+          return true;
+      }
+    });
+  }
+
+  return filtered;
+}
+
+// Render pagination
+function renderPagination(totalPages) {
+  paginationContainer.innerHTML = '';
+
+  if (totalPages <= 1) return;
+
+  const fragment = document.createDocumentFragment();
+
+  // Previous button
+  const prevButton = document.createElement('button');
+  prevButton.innerHTML = '&laquo;';
+  prevButton.disabled = currentPage === 1;
+  prevButton.addEventListener('click', () => goToPage(currentPage - 1));
+  fragment.appendChild(prevButton);
+
+  // Page numbers
+  const startPage = Math.max(1, currentPage - 2);
+  const endPage = Math.min(totalPages, currentPage + 2);
+
+  if (startPage > 1) {
+    const firstButton = document.createElement('button');
+    firstButton.textContent = '1';
+    firstButton.addEventListener('click', () => goToPage(1));
+    fragment.appendChild(firstButton);
+
+    if (startPage > 2) {
+      const ellipsis = document.createElement('span');
+      ellipsis.textContent = '...';
+      ellipsis.style.padding = '0 5px';
+      fragment.appendChild(ellipsis);
+    }
+  }
+
+  for (let i = startPage; i <= endPage; i++) {
+    const pageButton = document.createElement('button');
+    pageButton.textContent = i;
+    if (i === currentPage) {
+      pageButton.classList.add('active');
+    }
+    pageButton.addEventListener('click', () => goToPage(i));
+    fragment.appendChild(pageButton);
+  }
+
+  if (endPage < totalPages) {
+    if (endPage < totalPages - 1) {
+      const ellipsis = document.createElement('span');
+      ellipsis.textContent = '...';
+      ellipsis.style.padding = '0 5px';
+      fragment.appendChild(ellipsis);
+    }
+    const lastButton = document.createElement('button');
+    lastButton.textContent = totalPages;
+    lastButton.addEventListener('click', () => goToPage(totalPages));
+    fragment.appendChild(lastButton);
+  }
+
+  // Next button
+  const nextButton = document.createElement('button');
+  nextButton.innerHTML = '&raquo;';
+  nextButton.disabled = currentPage === totalPages;
+  nextButton.addEventListener('click', () => goToPage(currentPage + 1));
+  fragment.appendChild(nextButton);
+
+  paginationContainer.appendChild(fragment);
+}
+
+// Go to specific page
+function goToPage(page) {
+  currentPage = page;
+  
+  // Update URL
+  const url = new URL(window.location);
+  url.searchParams.set('page', page.toString());
+  window.history.pushState({ page }, '', url);
+
+  // Filter and render
+  filteredResults = applyFilters(allResults, query, currentFilter);
+  const totalPages = Math.ceil(filteredResults.length / RESULTS_PER_PAGE);
+  const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
+  const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, filteredResults.length);
+  const pageResults = filteredResults.slice(startIndex, endIndex);
+
+  renderResults(pageResults);
+  renderPagination(totalPages);
+}
+
+// Initialize filter tabs
+setupFilterTabs();
+
     // --- Initialize ---
     document.addEventListener('DOMContentLoaded', () => {
       const adminPass = localStorage.getItem('niroboAdminPass');
@@ -792,6 +1048,9 @@
         loadAllData();
       }
     });
+
+    <!-- Pagination Container -->
+<div id="pagination" class="pagination"></div>
   </script>
 </body>
 </html>
