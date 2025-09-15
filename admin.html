@@ -357,6 +357,53 @@
       color: white;
     }
 
+    /* User Stats */
+    .user-stats {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    .user-stats h3 {
+      margin: 0 0 10px;
+      font-size: 1.1rem;
+      color: #ffcccc;
+    }
+
+    .user-stats p {
+      margin: 5px 0;
+      font-size: 0.9rem;
+    }
+
+    /* User History */
+    .user-history {
+      margin-top: 15px;
+      border-top: 1px solid rgba(255, 0, 0, 0.2);
+      padding-top: 15px;
+    }
+
+    .user-history h4 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+      color: #ffcccc;
+    }
+
+    .history-item {
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 0, 0, 0.1);
+    }
+
+    .history-item:last-child {
+      border-bottom: none;
+    }
+
+    .history-item span {
+      font-size: 0.9rem;
+      color: #ff9999;
+    }
+
     /* Responsive adjustments */
     @media (max-width: 768px) {
       #search-input {
@@ -389,7 +436,7 @@
       <h2>🔐 Admin Login</h2>
       <input type="password" id="adminPass" placeholder="Enter Admin Password" />
       <button id="loginBtn">Login</button>
-      <p><small>Hint: password is "[good$profit89]"</small></p>
+      <p><small>Hint: password is stored securely</small></p>
     </div>
 
     <!-- Admin Content (Hidden until login) -->
@@ -430,6 +477,14 @@
         <div id="approvedPagination" class="pagination"></div>
       </div>
 
+      <!-- User Management -->
+      <div class="admin-panel">
+        <h2>👤 User Management</h2>
+        <div id="userManagement">
+          <p>Loading user data...</p>
+        </div>
+      </div>
+
       <div style="text-align: center;">
         <button class="btn-back" onclick="window.location.href='/'">← Back to Nirobo</button>
       </div>
@@ -447,7 +502,6 @@
 
   <script>
     // --- CONFIGURATION ---
-    const ADMIN_PASSWORD = "[good$profit89]";
     const APPROVED_RESULTS_PER_PAGE = 10;
     let currentApprovedPage = 1;
     let approvedSearchQuery = '';
@@ -463,6 +517,7 @@
     const approvedPagination = document.getElementById('approvedPagination');
     const approvedSearch = document.getElementById('approvedSearch');
     const searchApprovedBtn = document.getElementById('searchApprovedBtn');
+    const userManagement = document.getElementById('userManagement');
 
     // --- Helper Functions ---
 
@@ -485,6 +540,13 @@
       }
     }
 
+    // Get user info from email
+    function getUserInfo(email) {
+      const users = JSON.parse(localStorage.getItem('niroboUsers') || '[]');
+      const user = users.find(u => u.email === email);
+      return user || null;
+    }
+
     // --- Login System ---
     loginBtn.addEventListener('click', async () => {
       const pass = adminPass.value.trim();
@@ -493,8 +555,16 @@
         return;
       }
 
-      if (pass === ADMIN_PASSWORD) {
-        localStorage.setItem('niroboAdminPass', '[good$profit89]');
+      // Hash the entered password for comparison
+      const hashedPass = await hashPassword(pass);
+      
+      // Get the stored hashed password
+      const storedHash = localStorage.getItem('niroboAdminHash');
+      
+      if (storedHash && hashedPass === storedHash) {
+        // Set session token
+        const sessionToken = await hashPassword(Date.now().toString() + Math.random());
+        localStorage.setItem('niroboAdminSession', sessionToken);
         loginSection.style.display = 'none';
         adminContent.style.display = 'block';
         loadAllData();
@@ -506,7 +576,7 @@
 
     // --- Logout System ---
     logoutBtn.addEventListener('click', () => {
-      localStorage.removeItem('niroboAdminPass');
+      localStorage.removeItem('niroboAdminSession');
       loginSection.style.display = 'block';
       adminContent.style.display = 'none';
       adminPass.value = '';
@@ -520,6 +590,7 @@
       loadAnalytics();
       loadPendingSubmissions();
       loadApprovedSubmissions();
+      loadUserManagement();
     }
 
     // Load analytics
@@ -571,8 +642,11 @@
           <a href="${submission.url}" target="_blank" class="entry-url">${submission.url}</a>
           <p>${submission.description}</p>
           <div class="tags">${Array.isArray(submission.tags) ? submission.tags.map(tag => `<span>${tag}</span>`).join(' ') : ''}</div>
-          <p><small>📧 Submitter: ${submission.submitterEmail}</small></p>
-          <p><small>📅 Submitted: ${new Date(submission.submittedAt).toLocaleString()}</small></p>
+          
+          <div class="user-info">
+            <p><small>📧 Submitter: ${submission.submitterEmail || 'Unknown'}</small></p>
+            <p><small>📅 Submitted: ${new Date(submission.submittedAt).toLocaleString()}</small></p>
+          </div>
           
           <div class="entry-actions">
             <textarea id="reason-${submission.id}" placeholder="Reason for approval (optional)" style="width: 100%; padding: 8px; margin: 5px 0; border-radius: 4px; background: rgba(255,255,255,0.1); color: white; border: 1px solid #d40000;"></textarea>
@@ -586,17 +660,27 @@
       });
     }
 
-    // Load approved submissions with pagination
+    // Load approved submissions with pagination and URL-based search
     function loadApprovedSubmissions() {
       const submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
       let approved = submissions.filter(sub => sub.status === "approved");
+      
+      // Check URL parameters for search
+      const urlParams = new URLSearchParams(window.location.search);
+      const searchParam = urlParams.get('search');
+      
+      if (searchParam) {
+        approvedSearch.value = searchParam;
+        approvedSearchQuery = searchParam;
+      }
       
       // Apply search filter
       if (approvedSearchQuery) {
         const lowerQuery = approvedSearchQuery.toLowerCase();
         approved = approved.filter(sub => 
-          sub.title.toLowerCase().includes(lowerQuery) ||
-          sub.description.toLowerCase().includes(lowerQuery) ||
+          (sub.title && sub.title.toLowerCase().includes(lowerQuery)) ||
+          (sub.description && sub.description.toLowerCase().includes(lowerQuery)) ||
+          (sub.url && sub.url.toLowerCase().includes(lowerQuery)) ||
           (Array.isArray(sub.tags) && sub.tags.some(tag => tag.toLowerCase().includes(lowerQuery)))
         );
       }
@@ -620,6 +704,9 @@
         
         const faviconUrl = getFaviconUrl(submission.url);
         
+        // Get user info
+        const userInfo = getUserInfo(submission.submitterEmail);
+        
         div.innerHTML = `
           <div class="entry-header">
             <div class="entry-title">${submission.title}</div>
@@ -628,9 +715,18 @@
           <a href="${submission.url}" target="_blank" class="entry-url">${submission.url}</a>
           <p>${submission.description}</p>
           <div class="tags">${Array.isArray(submission.tags) ? submission.tags.map(tag => `<span>${tag}</span>`).join(' ') : ''}</div>
-          <p><small>📧 Submitter: ${submission.submitterEmail}</small></p>
-          <p><small>📅 Approved: ${new Date(submission.reviewedAt).toLocaleString()}</small></p>
-          <p><small>👀 Views: ${submission.viewCount || 0}</small></p>
+          
+          <div class="user-info">
+            <p><small>📧 Submitter: ${submission.submitterEmail || 'Unknown'}</small></p>
+            <p><small>📅 Approved: ${new Date(submission.reviewedAt).toLocaleString()}</small></p>
+            <p><small>👀 Views: ${submission.viewCount || 0}</small></p>
+            
+            ${userInfo ? `
+              <p><small>👤 User ID: ${userInfo.userId}</small></p>
+              <p><small>🎯 Submissions: ${userInfo.submissionCount}</small></p>
+              <p><small>⏱️ Last Activity: ${new Date(userInfo.lastActivity).toLocaleString()}</small></p>
+            ` : ''}
+          </div>
           
           ${submission.adminMessage ? `<div class="admin-message">💬 Admin Message: ${submission.adminMessage}</div>` : ''}
           
@@ -713,13 +809,42 @@
     // Go to approved page
     function goToApprovedPage(page) {
       currentApprovedPage = page;
+      
+      // Update URL with page parameter
+      const url = new URL(window.location);
+      url.searchParams.set('page', page);
+      window.history.pushState({}, '', url);
+      
       loadApprovedSubmissions();
     }
 
-    // Search approved URLs
+    // Search approved URLs with URL update
     searchApprovedBtn.addEventListener('click', () => {
       approvedSearchQuery = approvedSearch.value.trim();
       currentApprovedPage = 1;
+      
+      // Update URL with search parameter
+      const url = new URL(window.location);
+      if (approvedSearchQuery) {
+        url.searchParams.set('search', approvedSearchQuery);
+      } else {
+        url.searchParams.delete('search');
+      }
+      url.searchParams.set('page', '1');
+      window.history.pushState({}, '', url);
+      
+      loadApprovedSubmissions();
+    });
+
+    // Handle URL changes (back/forward navigation)
+    window.addEventListener('popstate', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const pageParam = urlParams.get('page');
+      const searchParam = urlParams.get('search');
+      
+      currentApprovedPage = pageParam ? parseInt(pageParam) : 1;
+      approvedSearchQuery = searchParam || '';
+      
       loadApprovedSubmissions();
     });
 
@@ -737,6 +862,9 @@
         };
         
         localStorage.setItem('niroboAllSubmissions', JSON.stringify(submissions));
+        
+        // Update user submission count
+        updateUserInfo(submissions[index].submitterEmail, 'increment');
         
         alert('✅ Approved!');
         loadAllData();
@@ -783,13 +911,171 @@
       }
     }
 
+    // Update user info
+    function updateUserInfo(email, action) {
+      const users = JSON.parse(localStorage.getItem('niroboUsers') || '[]');
+      const userIndex = users.findIndex(u => u.email === email);
+      
+      if (userIndex !== -1) {
+        const user = users[userIndex];
+        if (action === 'increment') {
+          user.submissionCount = (user.submissionCount || 0) + 1;
+        }
+        user.lastActivity = new Date().toISOString();
+        users[userIndex] = user;
+      } else {
+        // Create new user
+        users.push({
+          email: email,
+          userId: generateUserId(),
+          submissionCount: 1,
+          lastActivity: new Date().toISOString()
+        });
+      }
+      
+      localStorage.setItem('niroboUsers', JSON.stringify(users));
+    }
+
+    // Generate unique user ID
+    function generateUserId() {
+      return 'USR_' + Math.random().toString(36).substr(2, 9);
+    }
+
+    // Load user management data
+    function loadUserManagement() {
+      const users = JSON.parse(localStorage.getItem('niroboUsers') || '[]');
+      const submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+      
+      if (users.length === 0) {
+        userManagement.innerHTML = '<p>No user data available.</p>';
+        return;
+      }
+
+      userManagement.innerHTML = '';
+      
+      // Sort users by submission count (descending)
+      users.sort((a, b) => b.submissionCount - a.submissionCount);
+      
+      users.forEach(user => {
+        const userDiv = document.createElement('div');
+        userDiv.className = 'entry-item';
+        
+        // Calculate submission rate
+        const userSubmissions = submissions.filter(s => s.submitterEmail === user.email);
+        const approvedCount = userSubmissions.filter(s => s.status === 'approved').length;
+        const pendingCount = userSubmissions.filter(s => s.status === 'pending').length;
+        const rejectedCount = userSubmissions.filter(s => s.status === 'rejected').length;
+        
+        const approvalRate = user.submissionCount > 0 ? 
+          Math.round((approvedCount / user.submissionCount) * 100) : 0;
+        
+        userDiv.innerHTML = `
+          <div class="entry-header">
+            <div class="entry-title">${user.email}</div>
+            <span class="status">USER</span>
+          </div>
+          
+          <div class="user-stats">
+            <h3>User Statistics</h3>
+            <p><strong>User ID:</strong> ${user.userId}</p>
+            <p><strong>Total Submissions:</strong> ${user.submissionCount}</p>
+            <p><strong>Approval Rate:</strong> ${approvalRate}%</p>
+            <p><strong>Approved:</strong> ${approvedCount} • <strong>Pending:</strong> ${pendingCount} • <strong>Rejected:</strong> ${rejectedCount}</p>
+            <p><strong>Last Activity:</strong> ${new Date(user.lastActivity).toLocaleString()}</p>
+          </div>
+          
+          <div class="user-history">
+            <h4>Submission History</h4>
+            ${userSubmissions.length > 0 ? 
+              userSubmissions.map(sub => `
+                <div class="history-item">
+                  <span>${sub.title || sub.url}</span>
+                  <p>Status: ${sub.status === 'approved' ? '✅ Approved' : sub.status === 'pending' ? '⏳ Pending' : '❌ Rejected'}</p>
+                  <p>Date: ${new Date(sub.submittedAt).toLocaleString()}</p>
+                </div>
+              `).join('') : 
+              '<p>No submission history.</p>'
+            }
+          </div>
+          
+          <div class="entry-actions">
+            <button class="btn-approve" onclick="banUser('${user.email}')">🚫 Ban User</button>
+            <button class="btn-reject" onclick="warnUser('${user.email}')">⚠️ Warn User</button>
+          </div>
+        `;
+        
+        userManagement.appendChild(userDiv);
+      });
+    }
+
+    // Ban user function
+    function banUser(email) {
+      const users = JSON.parse(localStorage.getItem('niroboUsers') || '[]');
+      const userIndex = users.findIndex(u => u.email === email);
+      
+      if (userIndex !== -1) {
+        users.splice(userIndex, 1);
+        localStorage.setItem('niroboUsers', JSON.stringify(users));
+        
+        // Mark all submissions from this user as banned
+        let submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+        submissions = submissions.map(sub => {
+          if (sub.submitterEmail === email) {
+            return {
+              ...sub,
+              status: 'banned',
+              adminMessage: 'User account has been banned.'
+            };
+          }
+          return sub;
+        });
+        
+        localStorage.setItem('niroboAllSubmissions', JSON.stringify(submissions));
+        
+        alert(`🚫 User ${email} has been banned!`);
+        loadAllData();
+      }
+    }
+
+    // Warn user function
+    function warnUser(email) {
+      alert(`⚠️ User ${email} has been warned!`);
+      // Add warning logic here
+    }
+
     // --- Initialize ---
-    document.addEventListener('DOMContentLoaded', () => {
-      const adminPass = localStorage.getItem('niroboAdminPass');
-      if (adminPass === '[good$profit89]') {
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Check if admin password hash exists, if not create it
+      if (!localStorage.getItem('niroboAdminHash')) {
+        const defaultPassword = "[good$profit89]";
+        const hashedDefault = await hashPassword(defaultPassword);
+        localStorage.setItem('niroboAdminHash', hashedDefault);
+      }
+      
+      // Check session
+      const sessionToken = localStorage.getItem('niroboAdminSession');
+      if (sessionToken) {
         loginSection.style.display = 'none';
         adminContent.style.display = 'block';
         loadAllData();
+      }
+      
+      // Parse URL parameters for initial state
+      const urlParams = new URLSearchParams(window.location.search);
+      const pageParam = urlParams.get('page');
+      const searchParam = urlParams.get('search');
+      
+      if (pageParam) {
+        currentApprovedPage = parseInt(pageParam);
+      }
+      
+      if (searchParam) {
+        approvedSearchQuery = searchParam;
+      }
+      
+      // Load approved submissions with URL parameters
+      if (adminContent.style.display === 'block') {
+        loadApprovedSubmissions();
       }
     });
   </script>
