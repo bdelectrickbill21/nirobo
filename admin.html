@@ -572,7 +572,7 @@
         const hostname = new URL(url).hostname;
         return `https://www.google.com/s2/favicons?domain=${hostname}&sz=32`;
       } catch (e) {
-        return 'image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%23444" rx="4"/><text x="50%" y="50%" fill="white" font-size="16" font-family="Arial" text-anchor="middle" dominant-baseline="middle">?</text></svg>';
+        return 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%23444" rx="4"/><text x="50%" y="50%" fill="white" font-size="16" font-family="Arial" text-anchor="middle" dominant-baseline="middle">?</text></svg>';
       }
     }
 
@@ -584,22 +584,27 @@
         return;
       }
 
-      // Hash the entered password for comparison
-      const hashedPass = await hashPassword(pass);
-      
-      // Get the stored hashed password
-      const storedHash = localStorage.getItem('niroboAdminHash');
-      
-      if (storedHash && hashedPass === storedHash) {
-        // Set session token
-        const sessionToken = await hashPassword(Date.now().toString() + Math.random());
-        localStorage.setItem('niroboAdminSession', sessionToken);
-        loginSection.style.display = 'none';
-        adminContent.style.display = 'block';
-        loadAllData();
-        alert('✅ Login successful!');
-      } else {
-        alert('❌ Incorrect password');
+      try {
+        // Hash the entered password for comparison
+        const hashedPass = await hashPassword(pass);
+        
+        // Get the stored hashed password
+        const storedHash = localStorage.getItem('niroboAdminHash');
+        
+        if (storedHash && hashedPass === storedHash) {
+          // Set session token
+          const sessionToken = await hashPassword(Date.now().toString() + Math.random());
+          localStorage.setItem('niroboAdminSession', sessionToken);
+          loginSection.style.display = 'none';
+          adminContent.style.display = 'block';
+          loadAllData();
+          alert('✅ Login successful!');
+        } else {
+          alert('❌ Incorrect password');
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        alert('Login failed due to system error');
       }
     });
 
@@ -658,17 +663,18 @@
       // Apply search filter
       if (pendingSearchQuery) {
         const lowerQuery = pendingSearchQuery.toLowerCase();
-        pending = pending.filter(sub => 
-          (sub.title && sub.title.toLowerCase().includes(lowerQuery)) ||
-          (sub.description && sub.description.toLowerCase().includes(lowerQuery)) ||
-          (sub.url && sub.url.toLowerCase().includes(lowerQuery)) ||
-          (sub.submitterEmail && sub.submitterEmail.toLowerCase().includes(lowerQuery)) ||
-          (Array.isArray(sub.tags) && sub.tags.some(tag => tag.toLowerCase().includes(lowerQuery)))
-        );
-        
-        return titleMatch || descMatch || urlMatch || emailMatch || tagsMatch;
-    });
-  }
+        pending = pending.filter(sub => {
+          const titleMatch = sub.title && sub.title.toLowerCase().includes(lowerQuery);
+          const descMatch = sub.description && sub.description.toLowerCase().includes(lowerQuery);
+          const urlMatch = sub.url && sub.url.toLowerCase().includes(lowerQuery);
+          const emailMatch = sub.submitterEmail && sub.submitterEmail.toLowerCase().includes(lowerQuery);
+          const tagsMatch = Array.isArray(sub.tags) && sub.tags.some(tag => 
+            tag && tag.toLowerCase().includes(lowerQuery)
+          );
+          
+          return titleMatch || descMatch || urlMatch || emailMatch || tagsMatch;
+        });
+      }
       
       // Pagination
       const totalPages = Math.ceil(pending.length / PENDING_RESULTS_PER_PAGE);
@@ -804,13 +810,17 @@
       // Apply search filter
       if (approvedSearchQuery) {
         const lowerQuery = approvedSearchQuery.toLowerCase();
-        approved = approved.filter(sub => 
-          (sub.title && sub.title.toLowerCase().includes(lowerQuery)) ||
-          (sub.description && sub.description.toLowerCase().includes(lowerQuery)) ||
-          (sub.url && sub.url.toLowerCase().includes(lowerQuery)) ||
-          (sub.submitterEmail && sub.submitterEmail.toLowerCase().includes(lowerQuery)) ||
-          (Array.isArray(sub.tags) && sub.tags.some(tag => tag.toLowerCase().includes(lowerQuery)))
-        );
+        approved = approved.filter(sub => {
+          const titleMatch = sub.title && sub.title.toLowerCase().includes(lowerQuery);
+          const descMatch = sub.description && sub.description.toLowerCase().includes(lowerQuery);
+          const urlMatch = sub.url && sub.url.toLowerCase().includes(lowerQuery);
+          const emailMatch = sub.submitterEmail && sub.submitterEmail.toLowerCase().includes(lowerQuery);
+          const tagsMatch = Array.isArray(sub.tags) && sub.tags.some(tag => 
+            tag && tag.toLowerCase().includes(lowerQuery)
+          );
+          
+          return titleMatch || descMatch || urlMatch || emailMatch || tagsMatch;
+        });
       }
       
       // Pagination
@@ -945,10 +955,11 @@
       // Apply search filter
       if (userSearchQuery) {
         const lowerQuery = userSearchQuery.toLowerCase();
-        filteredUsers = filteredUsers.filter(user => 
-          (user.email && user.email.toLowerCase().includes(lowerQuery)) ||
-          (user.userId && user.userId.toLowerCase().includes(lowerQuery))
-        );
+        filteredUsers = filteredUsers.filter(user => {
+          const emailMatch = user.email && user.email.toLowerCase().includes(lowerQuery);
+          const userIdMatch = user.userId && user.userId.toLowerCase().includes(lowerQuery);
+          return emailMatch || userIdMatch;
+        });
       }
       
       // Pagination
@@ -1254,11 +1265,20 @@
 
     // --- Initialize ---
     document.addEventListener('DOMContentLoaded', async () => {
-      // Check if admin password hash exists, if not create it
+      // Always ensure admin password hash exists
       if (!localStorage.getItem('niroboAdminHash')) {
         const defaultPassword = "[good$profit89]";
         const hashedDefault = await hashPassword(defaultPassword);
         localStorage.setItem('niroboAdminHash', hashedDefault);
+      } else {
+        // Verify the hash is valid
+        const storedHash = localStorage.getItem('niroboAdminHash');
+        if (!storedHash || storedHash.length !== 64) {
+          // Recreate if invalid
+          const defaultPassword = "[good$profit89]";
+          const hashedDefault = await hashPassword(defaultPassword);
+          localStorage.setItem('niroboAdminHash', hashedDefault);
+        }
       }
       
       // Check session
