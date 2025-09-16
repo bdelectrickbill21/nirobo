@@ -665,7 +665,10 @@
           (sub.submitterEmail && sub.submitterEmail.toLowerCase().includes(lowerQuery)) ||
           (Array.isArray(sub.tags) && sub.tags.some(tag => tag.toLowerCase().includes(lowerQuery)))
         );
-      }
+        
+        return titleMatch || descMatch || urlMatch || emailMatch || tagsMatch;
+    });
+  }
       
       // Pagination
       const totalPages = Math.ceil(pending.length / PENDING_RESULTS_PER_PAGE);
