@@ -295,6 +295,7 @@
     .entry-item.approved { border-left-color: #00aa00; }
     .entry-item.rejected { border-left-color: #d40000; }
     .entry-item.pending { border-left-color: #ff9900; }
+    .entry-item.banned { border-left-color: #880000; }
 
     .entry-header {
       display: flex;
@@ -318,6 +319,7 @@
     .status.approved { background: rgba(0, 170, 0, 0.3); color: #00ff00; }
     .status.rejected { background: rgba(212, 0, 0, 0.3); color: #ff0000; }
     .status.pending { background: rgba(255, 153, 0, 0.3); color: #ffcc00; }
+    .status.banned { background: rgba(136, 0, 0, 0.3); color: #ff6666; }
 
     .entry-url {
       color: #ff9999;
@@ -343,6 +345,8 @@
     .btn-reject { background: #d40000; color: white; margin: 5px; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; }
     .btn-unapprove { background: #ff9900; color: white; margin: 5px; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; }
     .btn-back { background: #333; color: white; margin-top: 20px; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+    .btn-ban { background: #880000; color: white; margin: 5px; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; }
+    .btn-unban { background: #0066cc; color: white; margin: 5px; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; }
 
     .logout-btn {
       background: #880000;
@@ -453,9 +457,19 @@
       <!-- Pending Submissions -->
       <div class="admin-panel">
         <h2>📬 Pending Submissions</h2>
+        
+        <!-- Search Box for Pending URLs -->
+        <div style="margin-bottom: 20px;">
+          <input type="text" id="pendingSearch" placeholder="Search pending submissions..." style="padding: 8px; width: 300px; margin-right: 10px; border: 1px solid #d40000; border-radius: 4px; background: rgba(255,255,255,0.1); color: white;" />
+          <button id="searchPendingBtn" style="padding: 8px 16px; background: #d40000; color: white; border: none; border-radius: 4px; cursor: pointer;">🔍 Search</button>
+        </div>
+        
         <div id="pendingList">
           <p>Loading pending submissions...</p>
         </div>
+        
+        <!-- Pagination for Pending URLs -->
+        <div id="pendingPagination" class="pagination"></div>
       </div>
 
       <!-- Approved Websites with Search & Pagination -->
@@ -480,9 +494,19 @@
       <!-- User Management -->
       <div class="admin-panel">
         <h2>👤 User Management</h2>
+        
+        <!-- Search Box for Users -->
+        <div style="margin-bottom: 20px;">
+          <input type="text" id="userSearch" placeholder="Search users..." style="padding: 8px; width: 300px; margin-right: 10px; border: 1px solid #d40000; border-radius: 4px; background: rgba(255,255,255,0.1); color: white;" />
+          <button id="searchUserBtn" style="padding: 8px 16px; background: #d40000; color: white; border: none; border-radius: 4px; cursor: pointer;">🔍 Search</button>
+        </div>
+        
         <div id="userManagement">
           <p>Loading user data...</p>
         </div>
+        
+        <!-- Pagination for Users -->
+        <div id="userPagination" class="pagination"></div>
       </div>
 
       <div style="text-align: center;">
@@ -503,8 +527,14 @@
   <script>
     // --- CONFIGURATION ---
     const APPROVED_RESULTS_PER_PAGE = 10;
+    const PENDING_RESULTS_PER_PAGE = 10;
+    const USERS_RESULTS_PER_PAGE = 10;
     let currentApprovedPage = 1;
+    let currentPendingPage = 1;
+    let currentUserPage = 1;
     let approvedSearchQuery = '';
+    let pendingSearchQuery = '';
+    let userSearchQuery = '';
 
     // --- DOM Elements ---
     const loginSection = document.getElementById('loginSection');
@@ -514,10 +544,16 @@
     const logoutBtn = document.getElementById('logoutBtn');
     const pendingList = document.getElementById('pendingList');
     const approvedList = document.getElementById('approvedList');
-    const approvedPagination = document.getElementById('approvedPagination');
-    const approvedSearch = document.getElementById('approvedSearch');
-    const searchApprovedBtn = document.getElementById('searchApprovedBtn');
     const userManagement = document.getElementById('userManagement');
+    const approvedPagination = document.getElementById('approvedPagination');
+    const pendingPagination = document.getElementById('pendingPagination');
+    const userPagination = document.getElementById('userPagination');
+    const approvedSearch = document.getElementById('approvedSearch');
+    const pendingSearch = document.getElementById('pendingSearch');
+    const userSearch = document.getElementById('userSearch');
+    const searchApprovedBtn = document.getElementById('searchApprovedBtn');
+    const searchPendingBtn = document.getElementById('searchPendingBtn');
+    const searchUserBtn = document.getElementById('searchUserBtn');
 
     // --- Helper Functions ---
 
@@ -536,15 +572,8 @@
         const hostname = new URL(url).hostname;
         return `https://www.google.com/s2/favicons?domain=${hostname}&sz=32`;
       } catch (e) {
-        return 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%23444" rx="4"/><text x="50%" y="50%" fill="white" font-size="16" font-family="Arial" text-anchor="middle" dominant-baseline="middle">?</text></svg>';
+        return 'image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%23444" rx="4"/><text x="50%" y="50%" fill="white" font-size="16" font-family="Arial" text-anchor="middle" dominant-baseline="middle">?</text></svg>';
       }
-    }
-
-    // Get user info from email
-    function getUserInfo(email) {
-      const users = JSON.parse(localStorage.getItem('niroboUsers') || '[]');
-      const user = users.find(u => u.email === email);
-      return user || null;
     }
 
     // --- Login System ---
@@ -597,6 +626,7 @@
     function loadAnalytics() {
       const visits = JSON.parse(localStorage.getItem('niroboVisits') || '[]');
       const submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+      const users = JSON.parse(localStorage.getItem('niroboUsers') || '[]');
       
       const container = document.getElementById('analyticsSummary');
       
@@ -604,6 +634,7 @@
       const totalSubmissions = submissions.length;
       const approvedSubmissions = submissions.filter(s => s.status === 'approved').length;
       const pendingSubmissions = submissions.filter(s => s.status === 'pending').length;
+      const bannedUsers = users.filter(u => u.status === 'banned').length;
 
       container.innerHTML = `
         <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
@@ -613,26 +644,45 @@
           <p><strong>Total Submissions:</strong> ${totalSubmissions}</p>
           <p><strong>Approved:</strong> ${approvedSubmissions}</p>
           <p><strong>Pending:</strong> ${pendingSubmissions}</p>
+          <p><strong>Banned Users:</strong> ${bannedUsers}</p>
+          <p><strong>Total Users:</strong> ${users.length}</p>
         </div>
       `;
     }
 
-    // Load pending submissions
+    // Load pending submissions with pagination
     function loadPendingSubmissions() {
       const submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
-      const pending = submissions.filter(sub => sub.status === "pending");
+      let pending = submissions.filter(sub => sub.status === "pending");
       
-      if (pending.length === 0) {
+      // Apply search filter
+      if (pendingSearchQuery) {
+        const lowerQuery = pendingSearchQuery.toLowerCase();
+        pending = pending.filter(sub => 
+          (sub.title && sub.title.toLowerCase().includes(lowerQuery)) ||
+          (sub.description && sub.description.toLowerCase().includes(lowerQuery)) ||
+          (sub.url && sub.url.toLowerCase().includes(lowerQuery)) ||
+          (sub.submitterEmail && sub.submitterEmail.toLowerCase().includes(lowerQuery)) ||
+          (Array.isArray(sub.tags) && sub.tags.some(tag => tag.toLowerCase().includes(lowerQuery)))
+        );
+      }
+      
+      // Pagination
+      const totalPages = Math.ceil(pending.length / PENDING_RESULTS_PER_PAGE);
+      const startIndex = (currentPendingPage - 1) * PENDING_RESULTS_PER_PAGE;
+      const endIndex = Math.min(startIndex + PENDING_RESULTS_PER_PAGE, pending.length);
+      const pageResults = pending.slice(startIndex, endIndex);
+
+      if (pageResults.length === 0) {
         pendingList.innerHTML = '<p>🎉 No pending submissions.</p>';
+        pendingPagination.innerHTML = '';
         return;
       }
 
       pendingList.innerHTML = '';
-      pending.forEach((submission) => {
+      pageResults.forEach((submission) => {
         const div = document.createElement('div');
         div.className = 'entry-item pending';
-        
-        const faviconUrl = getFaviconUrl(submission.url);
         
         div.innerHTML = `
           <div class="entry-header">
@@ -654,25 +704,99 @@
             
             <textarea id="reject-reason-${submission.id}" placeholder="Reason for rejection (optional)" style="width: 100%; padding: 8px; margin: 5px 0; border-radius: 4px; background: rgba(255,255,255,0.1); color: white; border: 1px solid #d40000;"></textarea>
             <button class="btn-reject" onclick="rejectSubmission('${submission.id}', this.parentElement.querySelector('textarea').value)">❌ Reject</button>
+            
+            <button class="btn-ban" onclick="banUserByEmail('${submission.submitterEmail}')">🚫 Ban User</button>
           </div>
         `;
         pendingList.appendChild(div);
       });
+
+      renderPendingPagination(totalPages);
     }
 
-    // Load approved submissions with pagination and URL-based search
+    // Render pagination for pending URLs
+    function renderPendingPagination(totalPages) {
+      pendingPagination.innerHTML = '';
+
+      if (totalPages <= 1) return;
+
+      const fragment = document.createDocumentFragment();
+
+      // Previous button
+      const prevButton = document.createElement('button');
+      prevButton.innerHTML = '&laquo;';
+      prevButton.disabled = currentPendingPage === 1;
+      prevButton.addEventListener('click', () => goToPendingPage(currentPendingPage - 1));
+      fragment.appendChild(prevButton);
+
+      // Page numbers
+      const startPage = Math.max(1, currentPendingPage - 2);
+      const endPage = Math.min(totalPages, currentPendingPage + 2);
+
+      if (startPage > 1) {
+        const firstButton = document.createElement('button');
+        firstButton.textContent = '1';
+        firstButton.addEventListener('click', () => goToPendingPage(1));
+        fragment.appendChild(firstButton);
+
+        if (startPage > 2) {
+          const ellipsis = document.createElement('span');
+          ellipsis.textContent = '...';
+          ellipsis.style.padding = '0 5px';
+          fragment.appendChild(ellipsis);
+        }
+      }
+
+      for (let i = startPage; i <= endPage; i++) {
+        const pageButton = document.createElement('button');
+        pageButton.textContent = i;
+        if (i === currentPendingPage) {
+          pageButton.classList.add('active');
+        }
+        pageButton.addEventListener('click', () => goToPendingPage(i));
+        fragment.appendChild(pageButton);
+      }
+
+      if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+          const ellipsis = document.createElement('span');
+          ellipsis.textContent = '...';
+          ellipsis.style.padding = '0 5px';
+          fragment.appendChild(ellipsis);
+        }
+        const lastButton = document.createElement('button');
+        lastButton.textContent = totalPages;
+        lastButton.addEventListener('click', () => goToPendingPage(totalPages));
+        fragment.appendChild(lastButton);
+      }
+
+      // Next button
+      const nextButton = document.createElement('button');
+      nextButton.innerHTML = '&raquo;';
+      nextButton.disabled = currentPendingPage === totalPages;
+      nextButton.addEventListener('click', () => goToPendingPage(currentPendingPage + 1));
+      fragment.appendChild(nextButton);
+
+      pendingPagination.appendChild(fragment);
+    }
+
+    // Go to pending page
+    function goToPendingPage(page) {
+      currentPendingPage = page;
+      loadPendingSubmissions();
+    }
+
+    // Search pending URLs
+    searchPendingBtn.addEventListener('click', () => {
+      pendingSearchQuery = pendingSearch.value.trim();
+      currentPendingPage = 1;
+      loadPendingSubmissions();
+    });
+
+    // Load approved submissions with pagination
     function loadApprovedSubmissions() {
       const submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
       let approved = submissions.filter(sub => sub.status === "approved");
-      
-      // Check URL parameters for search
-      const urlParams = new URLSearchParams(window.location.search);
-      const searchParam = urlParams.get('search');
-      
-      if (searchParam) {
-        approvedSearch.value = searchParam;
-        approvedSearchQuery = searchParam;
-      }
       
       // Apply search filter
       if (approvedSearchQuery) {
@@ -681,6 +805,7 @@
           (sub.title && sub.title.toLowerCase().includes(lowerQuery)) ||
           (sub.description && sub.description.toLowerCase().includes(lowerQuery)) ||
           (sub.url && sub.url.toLowerCase().includes(lowerQuery)) ||
+          (sub.submitterEmail && sub.submitterEmail.toLowerCase().includes(lowerQuery)) ||
           (Array.isArray(sub.tags) && sub.tags.some(tag => tag.toLowerCase().includes(lowerQuery)))
         );
       }
@@ -702,11 +827,6 @@
         const div = document.createElement('div');
         div.className = 'entry-item approved';
         
-        const faviconUrl = getFaviconUrl(submission.url);
-        
-        // Get user info
-        const userInfo = getUserInfo(submission.submitterEmail);
-        
         div.innerHTML = `
           <div class="entry-header">
             <div class="entry-title">${submission.title}</div>
@@ -720,18 +840,13 @@
             <p><small>📧 Submitter: ${submission.submitterEmail || 'Unknown'}</small></p>
             <p><small>📅 Approved: ${new Date(submission.reviewedAt).toLocaleString()}</small></p>
             <p><small>👀 Views: ${submission.viewCount || 0}</small></p>
-            
-            ${userInfo ? `
-              <p><small>👤 User ID: ${userInfo.userId}</small></p>
-              <p><small>🎯 Submissions: ${userInfo.submissionCount}</small></p>
-              <p><small>⏱️ Last Activity: ${new Date(userInfo.lastActivity).toLocaleString()}</small></p>
-            ` : ''}
           </div>
           
           ${submission.adminMessage ? `<div class="admin-message">💬 Admin Message: ${submission.adminMessage}</div>` : ''}
           
           <div class="entry-actions">
             <button class="btn-unapprove" onclick="unapproveSubmission('${submission.id}')">🔄 Unapprove (Revoke)</button>
+            <button class="btn-ban" onclick="banUserByEmail('${submission.submitterEmail}')">🚫 Ban User</button>
           </div>
         `;
         approvedList.appendChild(div);
@@ -809,43 +924,162 @@
     // Go to approved page
     function goToApprovedPage(page) {
       currentApprovedPage = page;
-      
-      // Update URL with page parameter
-      const url = new URL(window.location);
-      url.searchParams.set('page', page);
-      window.history.pushState({}, '', url);
-      
       loadApprovedSubmissions();
     }
 
-    // Search approved URLs with URL update
+    // Search approved URLs
     searchApprovedBtn.addEventListener('click', () => {
       approvedSearchQuery = approvedSearch.value.trim();
       currentApprovedPage = 1;
-      
-      // Update URL with search parameter
-      const url = new URL(window.location);
-      if (approvedSearchQuery) {
-        url.searchParams.set('search', approvedSearchQuery);
-      } else {
-        url.searchParams.delete('search');
-      }
-      url.searchParams.set('page', '1');
-      window.history.pushState({}, '', url);
-      
       loadApprovedSubmissions();
     });
 
-    // Handle URL changes (back/forward navigation)
-    window.addEventListener('popstate', () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const pageParam = urlParams.get('page');
-      const searchParam = urlParams.get('search');
+    // Load user management with pagination
+    function loadUserManagement() {
+      const users = JSON.parse(localStorage.getItem('niroboUsers') || '[]');
+      let filteredUsers = [...users];
       
-      currentApprovedPage = pageParam ? parseInt(pageParam) : 1;
-      approvedSearchQuery = searchParam || '';
+      // Apply search filter
+      if (userSearchQuery) {
+        const lowerQuery = userSearchQuery.toLowerCase();
+        filteredUsers = filteredUsers.filter(user => 
+          (user.email && user.email.toLowerCase().includes(lowerQuery)) ||
+          (user.userId && user.userId.toLowerCase().includes(lowerQuery))
+        );
+      }
       
-      loadApprovedSubmissions();
+      // Pagination
+      const totalPages = Math.ceil(filteredUsers.length / USERS_RESULTS_PER_PAGE);
+      const startIndex = (currentUserPage - 1) * USERS_RESULTS_PER_PAGE;
+      const endIndex = Math.min(startIndex + USERS_RESULTS_PER_PAGE, filteredUsers.length);
+      const pageResults = filteredUsers.slice(startIndex, endIndex);
+
+      if (pageResults.length === 0) {
+        userManagement.innerHTML = '<p>No users found.</p>';
+        userPagination.innerHTML = '';
+        return;
+      }
+
+      userManagement.innerHTML = '';
+      pageResults.forEach(user => {
+        const submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+        const userSubmissions = submissions.filter(s => s.submitterEmail === user.email);
+        const approvedCount = userSubmissions.filter(s => s.status === 'approved').length;
+        const pendingCount = userSubmissions.filter(s => s.status === 'pending').length;
+        const rejectedCount = userSubmissions.filter(s => s.status === 'rejected').length;
+        const bannedCount = userSubmissions.filter(s => s.status === 'banned').length;
+        
+        const approvalRate = user.submissionCount > 0 ? 
+          Math.round((approvedCount / user.submissionCount) * 100) : 0;
+        
+        const userDiv = document.createElement('div');
+        userDiv.className = `entry-item ${user.status === 'banned' ? 'banned' : ''}`;
+        
+        userDiv.innerHTML = `
+          <div class="entry-header">
+            <div class="entry-title">${user.email}</div>
+            <span class="status ${user.status}">${user.status.toUpperCase()}</span>
+          </div>
+          
+          <div class="user-stats">
+            <h3>User Statistics</h3>
+            <p><strong>User ID:</strong> ${user.userId}</p>
+            <p><strong>Total Submissions:</strong> ${user.submissionCount}</p>
+            <p><strong>Approval Rate:</strong> ${approvalRate}%</p>
+            <p><strong>Approved:</strong> ${approvedCount} • <strong>Pending:</strong> ${pendingCount} • <strong>Rejected:</strong> ${rejectedCount} • <strong>Banned:</strong> ${bannedCount}</p>
+            <p><strong>Last Activity:</strong> ${new Date(user.lastActivity).toLocaleString()}</p>
+          </div>
+          
+          <div class="entry-actions">
+            ${user.status === 'banned' ? 
+              `<button class="btn-unban" onclick="unbanUser('${user.email}')">🔓 Unban User</button>` : 
+              `<button class="btn-ban" onclick="banUser('${user.email}')">🚫 Ban User</button>`}
+          </div>
+        `;
+        
+        userManagement.appendChild(userDiv);
+      });
+
+      renderUserPagination(totalPages);
+    }
+
+    // Render pagination for users
+    function renderUserPagination(totalPages) {
+      userPagination.innerHTML = '';
+
+      if (totalPages <= 1) return;
+
+      const fragment = document.createDocumentFragment();
+
+      // Previous button
+      const prevButton = document.createElement('button');
+      prevButton.innerHTML = '&laquo;';
+      prevButton.disabled = currentUserPage === 1;
+      prevButton.addEventListener('click', () => goToUserPage(currentUserPage - 1));
+      fragment.appendChild(prevButton);
+
+      // Page numbers
+      const startPage = Math.max(1, currentUserPage - 2);
+      const endPage = Math.min(totalPages, currentUserPage + 2);
+
+      if (startPage > 1) {
+        const firstButton = document.createElement('button');
+        firstButton.textContent = '1';
+        firstButton.addEventListener('click', () => goToUserPage(1));
+        fragment.appendChild(firstButton);
+
+        if (startPage > 2) {
+          const ellipsis = document.createElement('span');
+          ellipsis.textContent = '...';
+          ellipsis.style.padding = '0 5px';
+          fragment.appendChild(ellipsis);
+        }
+      }
+
+      for (let i = startPage; i <= endPage; i++) {
+        const pageButton = document.createElement('button');
+        pageButton.textContent = i;
+        if (i === currentUserPage) {
+          pageButton.classList.add('active');
+        }
+        pageButton.addEventListener('click', () => goToUserPage(i));
+        fragment.appendChild(pageButton);
+      }
+
+      if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+          const ellipsis = document.createElement('span');
+          ellipsis.textContent = '...';
+          ellipsis.style.padding = '0 5px';
+          fragment.appendChild(ellipsis);
+        }
+        const lastButton = document.createElement('button');
+        lastButton.textContent = totalPages;
+        lastButton.addEventListener('click', () => goToUserPage(totalPages));
+        fragment.appendChild(lastButton);
+      }
+
+      // Next button
+      const nextButton = document.createElement('button');
+      nextButton.innerHTML = '&raquo;';
+      nextButton.disabled = currentUserPage === totalPages;
+      nextButton.addEventListener('click', () => goToUserPage(currentUserPage + 1));
+      fragment.appendChild(nextButton);
+
+      userPagination.appendChild(fragment);
+    }
+
+    // Go to user page
+    function goToUserPage(page) {
+      currentUserPage = page;
+      loadUserManagement();
+    }
+
+    // Search users
+    searchUserBtn.addEventListener('click', () => {
+      userSearchQuery = userSearch.value.trim();
+      currentUserPage = 1;
+      loadUserManagement();
     });
 
     // Approve submission
@@ -913,6 +1147,8 @@
 
     // Update user info
     function updateUserInfo(email, action) {
+      if (!email) return;
+      
       const users = JSON.parse(localStorage.getItem('niroboUsers') || '[]');
       const userIndex = users.findIndex(u => u.email === email);
       
@@ -929,7 +1165,8 @@
           email: email,
           userId: generateUserId(),
           submissionCount: 1,
-          lastActivity: new Date().toISOString()
+          lastActivity: new Date().toISOString(),
+          status: 'active'
         });
       }
       
@@ -941,80 +1178,18 @@
       return 'USR_' + Math.random().toString(36).substr(2, 9);
     }
 
-    // Load user management data
-    function loadUserManagement() {
-      const users = JSON.parse(localStorage.getItem('niroboUsers') || '[]');
-      const submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
-      
-      if (users.length === 0) {
-        userManagement.innerHTML = '<p>No user data available.</p>';
+    // Ban user by email
+    function banUserByEmail(email) {
+      if (!email) {
+        alert('No email provided for banning');
         return;
       }
-
-      userManagement.innerHTML = '';
       
-      // Sort users by submission count (descending)
-      users.sort((a, b) => b.submissionCount - a.submissionCount);
-      
-      users.forEach(user => {
-        const userDiv = document.createElement('div');
-        userDiv.className = 'entry-item';
-        
-        // Calculate submission rate
-        const userSubmissions = submissions.filter(s => s.submitterEmail === user.email);
-        const approvedCount = userSubmissions.filter(s => s.status === 'approved').length;
-        const pendingCount = userSubmissions.filter(s => s.status === 'pending').length;
-        const rejectedCount = userSubmissions.filter(s => s.status === 'rejected').length;
-        
-        const approvalRate = user.submissionCount > 0 ? 
-          Math.round((approvedCount / user.submissionCount) * 100) : 0;
-        
-        userDiv.innerHTML = `
-          <div class="entry-header">
-            <div class="entry-title">${user.email}</div>
-            <span class="status">USER</span>
-          </div>
-          
-          <div class="user-stats">
-            <h3>User Statistics</h3>
-            <p><strong>User ID:</strong> ${user.userId}</p>
-            <p><strong>Total Submissions:</strong> ${user.submissionCount}</p>
-            <p><strong>Approval Rate:</strong> ${approvalRate}%</p>
-            <p><strong>Approved:</strong> ${approvedCount} • <strong>Pending:</strong> ${pendingCount} • <strong>Rejected:</strong> ${rejectedCount}</p>
-            <p><strong>Last Activity:</strong> ${new Date(user.lastActivity).toLocaleString()}</p>
-          </div>
-          
-          <div class="user-history">
-            <h4>Submission History</h4>
-            ${userSubmissions.length > 0 ? 
-              userSubmissions.map(sub => `
-                <div class="history-item">
-                  <span>${sub.title || sub.url}</span>
-                  <p>Status: ${sub.status === 'approved' ? '✅ Approved' : sub.status === 'pending' ? '⏳ Pending' : '❌ Rejected'}</p>
-                  <p>Date: ${new Date(sub.submittedAt).toLocaleString()}</p>
-                </div>
-              `).join('') : 
-              '<p>No submission history.</p>'
-            }
-          </div>
-          
-          <div class="entry-actions">
-            <button class="btn-approve" onclick="banUser('${user.email}')">🚫 Ban User</button>
-            <button class="btn-reject" onclick="warnUser('${user.email}')">⚠️ Warn User</button>
-          </div>
-        `;
-        
-        userManagement.appendChild(userDiv);
-      });
-    }
-
-    // Ban user function
-    function banUser(email) {
       const users = JSON.parse(localStorage.getItem('niroboUsers') || '[]');
       const userIndex = users.findIndex(u => u.email === email);
       
       if (userIndex !== -1) {
-        users.splice(userIndex, 1);
+        users[userIndex].status = 'banned';
         localStorage.setItem('niroboUsers', JSON.stringify(users));
         
         // Mark all submissions from this user as banned
@@ -1033,6 +1208,37 @@
         localStorage.setItem('niroboAllSubmissions', JSON.stringify(submissions));
         
         alert(`🚫 User ${email} has been banned!`);
+        loadAllData();
+      } else {
+        // Create banned user record if not exists
+        users.push({
+          email: email,
+          userId: generateUserId(),
+          submissionCount: 0,
+          lastActivity: new Date().toISOString(),
+          status: 'banned'
+        });
+        localStorage.setItem('niroboUsers', JSON.stringify(users));
+        alert(`🚫 User ${email} has been banned!`);
+        loadAllData();
+      }
+    }
+
+    // Ban user by email (from user management)
+    function banUser(email) {
+      banUserByEmail(email);
+    }
+
+    // Unban user
+    function unbanUser(email) {
+      const users = JSON.parse(localStorage.getItem('niroboUsers') || '[]');
+      const userIndex = users.findIndex(u => u.email === email);
+      
+      if (userIndex !== -1) {
+        users[userIndex].status = 'active';
+        localStorage.setItem('niroboUsers', JSON.stringify(users));
+        
+        alert(`🔓 User ${email} has been unbanned!`);
         loadAllData();
       }
     }
@@ -1058,24 +1264,6 @@
         loginSection.style.display = 'none';
         adminContent.style.display = 'block';
         loadAllData();
-      }
-      
-      // Parse URL parameters for initial state
-      const urlParams = new URLSearchParams(window.location.search);
-      const pageParam = urlParams.get('page');
-      const searchParam = urlParams.get('search');
-      
-      if (pageParam) {
-        currentApprovedPage = parseInt(pageParam);
-      }
-      
-      if (searchParam) {
-        approvedSearchQuery = searchParam;
-      }
-      
-      // Load approved submissions with URL parameters
-      if (adminContent.style.display === 'block') {
-        loadApprovedSubmissions();
       }
     });
   </script>
