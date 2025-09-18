@@ -4,39 +4,89 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nirobo — Break The Silence</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body {
+    :root {
+      --primary-dark: #004d00;
+      --primary: #006400;
+      --primary-light: #008000;
+      --accent: #d40000;
+      --accent-hover: #ff0000;
+      --accent-light: #ff3333;
+      --background: #0a1f0a;
+      --card-bg: rgba(26, 26, 26, 0.8);
+      --text: #f5f5f5;
+      --text-secondary: #cccccc;
+      --border: #333333;
+      --success: #00aa00;
+      --warning: #ff9900;
+      --danger: #d40000;
+    }
+
+    * {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #004d00, #006400);
-      color: #f5f5f5;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      color: var(--text);
       padding: 20px;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
+      line-height: 1.6;
     }
 
     .container {
       max-width: 500px;
-      background: rgba(0, 0, 0, 0.3);
+      background: var(--card-bg);
       backdrop-filter: blur(10px);
       padding: 40px;
       border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      border: 2px solid #d40000;
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+      border: 2px solid var(--accent);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-light), var(--accent));
+      animation: gradientFlow 3s linear infinite;
+    }
+
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
     }
 
     .hero {
       text-align: center;
       margin-bottom: 30px;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 15px;
+      border: 1px solid rgba(212, 0, 0, 0.3);
     }
 
     .hero h1 {
       font-size: 2.2rem;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
       text-transform: uppercase;
       letter-spacing: 1px;
+      background: linear-gradient(45deg, #ff9999, #ffffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .hero h1 span {
@@ -46,7 +96,7 @@
     }
 
     .flag-icon {
-      background: #d40000;
+      background: var(--accent);
       color: white;
       width: 32px;
       height: 32px;
@@ -55,6 +105,7 @@
       align-items: center;
       justify-content: center;
       font-weight: bold;
+      box-shadow: 0 0 10px rgba(212, 0, 0, 0.5);
     }
 
     .hero p {
@@ -65,10 +116,18 @@
     }
 
     .form-box {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(0, 0, 0, 0.3);
       padding: 30px;
       border-radius: 15px;
       margin-bottom: 20px;
+      border: 1px solid rgba(212, 0, 0, 0.2);
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .form-box.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 20px rgba(212, 0, 0, 0.3);
     }
 
     .form-title {
@@ -76,10 +135,15 @@
       font-size: 1.5rem;
       margin-bottom: 20px;
       color: #ffcccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
     }
 
     .form-group {
       margin-bottom: 20px;
+      position: relative;
     }
 
     label {
@@ -87,59 +151,131 @@
       margin-bottom: 8px;
       font-weight: 600;
       color: #ffcccc;
+      font-size: 0.95rem;
+    }
+
+    .input-wrapper {
+      position: relative;
     }
 
     input {
       width: 100%;
-      padding: 12px;
-      border: 1px solid #d40000;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      color: white;
+      padding: 14px 45px 14px 15px;
+      border: 2px solid var(--border);
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      color: var(--text);
       font-size: 16px;
       box-sizing: border-box;
+      transition: all 0.3s ease;
     }
 
     input:focus {
       outline: none;
-      border-color: #ffcccc;
-      background: rgba(255, 255, 255, 0.15);
+      border-color: var(--accent);
+      background: rgba(0, 0, 0, 0.4);
+      box-shadow: 0 0 15px rgba(212, 0, 0, 0.3);
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: color 0.3s ease;
+    }
+
+    .password-toggle:hover {
+      color: var(--text);
+    }
+
+    .strength-meter {
+      height: 5px;
+      background: #333;
+      border-radius: 3px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .strength-meter-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 3px;
+      transition: width 0.3s ease, background 0.3s ease;
+    }
+
+    .strength-text {
+      font-size: 0.8rem;
+      margin-top: 5px;
+      text-align: right;
+      color: var(--text-secondary);
     }
 
     button {
-      padding: 12px 24px;
-      background: #d40000;
+      padding: 14px 24px;
+      background: linear-gradient(45deg, var(--accent), var(--accent-hover));
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 16px;
       font-weight: bold;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: all 0.3s ease;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       width: 100%;
       margin-top: 10px;
+      box-shadow: 0 5px 15px rgba(212, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
     }
 
     button:hover {
-      background: #ff0000;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 0, 0, 0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: 0.5s;
+    }
+
+    button:hover::before {
+      left: 100%;
     }
 
     .switch-form {
       text-align: center;
       margin-top: 20px;
       color: #ccc;
+      font-size: 0.95rem;
     }
 
     .switch-form a {
-      color: #ffcccc;
+      color: #ff9999;
       text-decoration: none;
       font-weight: bold;
+      transition: color 0.3s ease;
     }
 
     .switch-form a:hover {
       text-decoration: underline;
+      color: var(--accent-light);
     }
 
     /* --- NEW STYLES FOR RULES & FORGOT PASSWORD --- */
@@ -148,7 +284,7 @@
       padding: 20px;
       border-radius: 10px;
       margin-bottom: 20px;
-      border-left: 4px solid #ff9900; /* Orange for attention */
+      border-left: 4px solid var(--warning);
     }
 
     .rules-section h3 {
@@ -156,8 +292,11 @@
       margin-top: 0;
       margin-bottom: 15px;
       font-size: 1.2rem;
-      border-bottom: 1px solid #ff9900;
+      border-bottom: 1px solid var(--warning);
       padding-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     .rules-section ul {
@@ -168,18 +307,21 @@
     .rules-section li {
       margin-bottom: 8px;
       line-height: 1.4;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
     }
 
     .rules-section .allowed {
-      color: #00ff00; /* Green for allowed */
+      color: var(--success);
     }
 
     .rules-section .not-allowed {
-      color: #ff0000; /* Red for not allowed */
+      color: var(--danger);
     }
 
     .rules-section .penalties {
-      color: #ffcc00; /* Yellow for penalties */
+      color: var(--warning);
     }
 
     .agree-checkbox {
@@ -189,9 +331,16 @@
       margin-top: 15px;
     }
 
-    .agree-checkbox input {
+    .agree-checkbox input[type="checkbox"] {
       width: auto;
       margin-top: 5px;
+      accent-color: var(--accent);
+    }
+
+    .agree-checkbox label {
+      margin-bottom: 0;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
     }
 
     .forgot-password-link {
@@ -204,6 +353,9 @@
     .forgot-password-link a {
       color: #ff9999;
       text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
     }
 
     .forgot-password-link a:hover {
@@ -212,15 +364,86 @@
 
     /* Forgot Password Form Styles */
     #forgotPasswordBox {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(0, 0, 0, 0.3);
       padding: 30px;
       border-radius: 15px;
       margin-bottom: 20px;
-      display: none; /* Hidden by default */
+      display: none;
+      border: 1px solid rgba(255, 153, 0, 0.3);
     }
 
     #forgotPasswordBox .form-title {
-      color: #ff9900; /* Orange title for distinction */
+      color: var(--warning);
+    }
+
+    /* Password Strength Colors */
+    .strength-weak { background: var(--danger); width: 33%; }
+    .strength-medium { background: var(--warning); width: 66%; }
+    .strength-strong { background: var(--success); width: 100%; }
+
+    /* Loading Spinner */
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+        margin: 10px;
+      }
+      
+      .hero h1 {
+        font-size: 1.8rem;
+      }
+      
+      .form-box {
+        padding: 20px;
+      }
+    }
+
+    /* Notification Styles */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 500;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      z-index: 1000;
+      transform: translateX(120%);
+      transition: transform 0.3s ease;
+      max-width: 350px;
+    }
+
+    .notification.show {
+      transform: translateX(0);
+    }
+
+    .notification.success {
+      background: linear-gradient(45deg, var(--success), #00cc00);
+    }
+
+    .notification.error {
+      background: linear-gradient(45deg, var(--danger), #ff3333);
+    }
+
+    .notification.warning {
+      background: linear-gradient(45deg, var(--warning), #ffcc00);
     }
   </style>
 </head>
@@ -230,57 +453,69 @@
       <h1><span><span class="flag-icon">🇧🇩</span> BREAK THE SILENCE</span></h1>
       <p>
         “Silence has never protected truth — your voice, your website, your story deserves to be heard.<br>
-        Don’t wait for permission. Don’t fear rejection. Rise. Speak. Submit. The digital soul of Bangladesh is being written — and you hold the pen.”
+        Don't wait for permission. Don't fear rejection. Rise. Speak. Submit. The digital soul of Bangladesh is being written — and you hold the pen.”
       </p>
     </div>
 
     <!-- Rules & Guidelines Section (NEW) -->
     <div class="rules-section">
-      <h3>📜 Nirobo Submission Rules</h3>
+      <h3><i class="fas fa-gavel"></i> Nirobo Submission Rules</h3>
       
-      <p><strong class="allowed">✅ ALLOWED:</strong></p>
+      <p><strong class="allowed"><i class="fas fa-check-circle"></i> ALLOWED:</strong></p>
       <ul>
-        <li>Educational content (courses, tutorials, research)</li>
-        <li>Cultural & historical content (photos, videos, documentaries)</li>
-        <li>News articles from reputable sources</li>
-        <li>Creative works with context (art, music, literature)</li>
-        <li>Cloud files with educational value (PDFs, docs, spreadsheets)</li>
-        <li>Social media posts with knowledge/informational value</li>
+        <li><i class="fas fa-graduation-cap"></i> Educational content (courses, tutorials, research)</li>
+        <li><i class="fas fa-landmark"></i> Cultural & historical content (photos, videos, documentaries)</li>
+        <li><i class="fas fa-newspaper"></i> News articles from reputable sources</li>
+        <li><i class="fas fa-palette"></i> Creative works with context (art, music, literature)</li>
+        <li><i class="fas fa-cloud"></i> Cloud files with educational value (PDFs, docs, spreadsheets)</li>
+        <li><i class="fas fa-hashtag"></i> Social media posts with knowledge/informational value</li>
       </ul>
       
-      <p><strong class="not-allowed">❌ NOT ALLOWED:</strong></p>
+      <p><strong class="not-allowed"><i class="fas fa-ban"></i> NOT ALLOWED:</strong></p>
       <ul>
-        <li>Hate speech, harassment, or personal attacks</li>
-        <li>Random/unrelated content (vlogs, selfies, daily life)</li>
-        <li>Spam, ads, phishing, or illegal content</li>
-        <li>Copyright infringement (pirated movies, songs, books)</li>
-        <li>Misinformation or fake news</li>
+        <li><i class="fas fa-comment-alt-slash"></i> Hate speech, harassment, or personal attacks</li>
+        <li><i class="fas fa-video-slash"></i> Random/unrelated content (vlogs, selfies, daily life)</li>
+        <li><i class="fas fa-exclamation-triangle"></i> Spam, ads, phishing, or illegal content</li>
+        <li><i class="fas fa-copyright"></i> Copyright infringement (pirated movies, songs, books)</li>
+        <li><i class="fas fa-fake-news"></i> Misinformation or fake news</li>
       </ul>
       
-      <p><strong class="penalties">⚠️ PENALTIES:</strong></p>
+      <p><strong class="penalties"><i class="fas fa-exclamation-circle"></i> PENALTIES:</strong></p>
       <ul>
-        <li>Minor violation → Warning + removal</li>
-        <li>Moderate violation → 7-day ban</li>
-        <li>Severe violation → Permanent ban</li>
+        <li><i class="fas fa-exclamation"></i> Minor violation → Warning + removal</li>
+        <li><i class="fas fa-hourglass-half"></i> Moderate violation → 7-day ban</li>
+        <li><i class="fas fa-ban"></i> Severe violation → Permanent ban</li>
       </ul>
     </div>
 
     <!-- Login Form (Default) -->
-    <div id="loginBox" class="form-box">
-      <h2 class="form-title">Log In</h2>
+    <div id="loginBox" class="form-box active">
+      <h2 class="form-title"><i class="fas fa-sign-in-alt"></i> Log In</h2>
       <div class="form-group">
-        <label>Email</label>
-        <input type="email" id="loginEmail" placeholder="Enter your email" required />
+        <label for="loginEmail">Email</label>
+        <div class="input-wrapper">
+          <input type="email" id="loginEmail" placeholder="Enter your email" required />
+          <i class="fas fa-envelope" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #666;"></i>
+        </div>
       </div>
       <div class="form-group">
-        <label>Password</label>
-        <input type="password" id="loginPassword" placeholder="Enter your password" required />
+        <label for="loginPassword">Password</label>
+        <div class="input-wrapper">
+          <input type="password" id="loginPassword" placeholder="Enter your password" required />
+          <button type="button" class="password-toggle" id="loginPasswordToggle">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
       </div>
-      <button id="loginBtn">Log In</button>
+      <button id="loginBtn">
+        <span id="loginBtnText">Log In</span>
+      </button>
       
       <!-- Forgot Password Link (NEW) -->
       <div class="forgot-password-link">
-        <a href="#" id="showForgotPasswordLink">Forgot Password?</a>
+        <a href="#" id="showForgotPasswordLink">
+          <i class="fas fa-key"></i> Forgot Password?
+        </a>
       </div>
       
       <div class="switch-form">
@@ -289,24 +524,38 @@
     </div>
 
     <!-- Signup Form (Hidden by default) -->
-    <div id="signupBox" class="form-box" style="display: none;">
-      <h2 class="form-title">Sign Up</h2>
+    <div id="signupBox" class="form-box">
+      <h2 class="form-title"><i class="fas fa-user-plus"></i> Sign Up</h2>
       <div class="form-group">
-        <label>Email</label>
-        <input type="email" id="signupEmail" placeholder="Enter your email" required />
+        <label for="signupEmail">Email</label>
+        <div class="input-wrapper">
+          <input type="email" id="signupEmail" placeholder="Enter your email" required />
+          <i class="fas fa-envelope" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #666;"></i>
+        </div>
       </div>
       <div class="form-group">
-        <label>Password</label>
-        <input type="password" id="signupPassword" placeholder="Create a password" required />
+        <label for="signupPassword">Password</label>
+        <div class="input-wrapper">
+          <input type="password" id="signupPassword" placeholder="Create a strong password" required />
+          <button type="button" class="password-toggle" id="signupPasswordToggle">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+        <div class="strength-meter">
+          <div class="strength-meter-fill" id="passwordStrength"></div>
+        </div>
+        <div class="strength-text" id="strengthText">Password strength</div>
       </div>
       
       <!-- Agreement Checkbox (NEW) -->
       <div class="agree-checkbox">
         <input type="checkbox" id="agreeToRules" required />
-        <label for="agreeToRules">I agree to follow Nirobo's submission rules</label>
+        <label for="agreeToRules">I agree to follow Nirobo's submission rules and understand the penalties for violations.</label>
       </div>
       
-      <button id="signupBtn">Create Account</button>
+      <button id="signupBtn">
+        <span id="signupBtnText">Create Account</span>
+      </button>
       <div class="switch-form">
         Already have an account? <a href="#" id="showLoginLink">Log In</a>
       </div>
@@ -314,41 +563,139 @@
 
     <!-- Forgot Password Form (NEW - Hidden by default) -->
     <div id="forgotPasswordBox" class="form-box">
-      <h2 class="form-title">🔐 Forgot Your Password?</h2>
+      <h2 class="form-title"><i class="fas fa-lock"></i> Forgot Your Password?</h2>
       <p style="font-size: 0.95rem; margin-bottom: 20px; color: #ffcccc;">
         Enter your email to reset your password.
       </p>
       <div class="form-group">
-        <label>Email</label>
-        <input type="email" id="resetEmail" placeholder="Enter your email" required />
+        <label for="resetEmail">Email</label>
+        <div class="input-wrapper">
+          <input type="email" id="resetEmail" placeholder="Enter your email" required />
+          <i class="fas fa-envelope" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #666;"></i>
+        </div>
       </div>
-      <button id="sendResetLinkBtn">Send Reset Link</button>
+      <button id="sendResetLinkBtn">
+        <span id="resetBtnText">Send Reset Link</span>
+      </button>
       <div class="switch-form">
-        <a href="#" id="backToLoginFromForgot">← Back to Login</a>
+        <a href="#" id="backToLoginFromForgot"><i class="fas fa-arrow-left"></i> Back to Login</a>
       </div>
     </div>
   </div>
 
+  <!-- Notification Container -->
+  <div id="notification" class="notification"></div>
+
   <script>
-    // --- EXISTING CODE (Unchanged) ---
+    // --- Enhanced Password Toggle Functionality ---
+    function setupPasswordToggle(inputId, toggleId) {
+      const input = document.getElementById(inputId);
+      const toggle = document.getElementById(toggleId);
+      
+      toggle.addEventListener('click', function() {
+        const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+        input.setAttribute('type', type);
+        this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+      });
+    }
+
+    // Setup password toggles
+    setupPasswordToggle('loginPassword', 'loginPasswordToggle');
+    setupPasswordToggle('signupPassword', 'signupPasswordToggle');
+
+    // --- Password Strength Checker ---
+    const passwordInput = document.getElementById('signupPassword');
+    const strengthMeter = document.getElementById('passwordStrength');
+    const strengthText = document.getElementById('strengthText');
+
+    passwordInput.addEventListener('input', function() {
+      const password = this.value;
+      const strength = calculatePasswordStrength(password);
+      
+      // Update strength meter
+      strengthMeter.className = 'strength-meter-fill';
+      strengthMeter.classList.add(`strength-${strength.level}`);
+      
+      // Update text
+      strengthText.textContent = strength.text;
+      strengthText.className = 'strength-text';
+      strengthText.classList.add(strength.level);
+    });
+
+    function calculatePasswordStrength(password) {
+      if (password.length === 0) {
+        return { level: 'empty', text: 'Password strength' };
+      }
+      
+      // Criteria
+      const hasUpperCase = /[A-Z]/.test(password);
+      const hasLowerCase = /[a-z]/.test(password);
+      const hasNumbers = /\d/.test(password);
+      const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+      const length = password.length;
+      
+      // Score calculation
+      let score = 0;
+      if (length >= 8) score += 1;
+      if (length >= 12) score += 1;
+      if (hasUpperCase) score += 1;
+      if (hasLowerCase) score += 1;
+      if (hasNumbers) score += 1;
+      if (hasSpecial) score += 1;
+      
+      // Determine strength
+      if (score < 3) {
+        return { level: 'weak', text: 'Weak password' };
+      } else if (score < 5) {
+        return { level: 'medium', text: 'Medium password' };
+      } else {
+        return { level: 'strong', text: 'Strong password' };
+      }
+    }
+
+    // --- Notification System ---
+    function showNotification(message, type = 'success') {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.className = 'notification ' + type;
+      notification.classList.add('show');
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    }
+
+    // --- EXISTING CODE (Enhanced) ---
 
     // DOM Elements
     const loginBox = document.getElementById('loginBox');
     const signupBox = document.getElementById('signupBox');
     const showSignupLink = document.getElementById('showSignupLink');
     const showLoginLink = document.getElementById('showLoginLink');
+    const loginBtn = document.getElementById('loginBtn');
+    const signupBtn = document.getElementById('signupBtn');
+    const loginBtnText = document.getElementById('loginBtnText');
+    const signupBtnText = document.getElementById('signupBtnText');
 
     // Toggle between forms
     showSignupLink.addEventListener('click', (e) => {
       e.preventDefault();
-      loginBox.style.display = 'none';
-      signupBox.style.display = 'block';
+      loginBox.classList.remove('active');
+      signupBox.classList.add('active');
+      setTimeout(() => {
+        loginBox.style.display = 'none';
+        signupBox.style.display = 'block';
+      }, 150);
     });
 
     showLoginLink.addEventListener('click', (e) => {
       e.preventDefault();
-      signupBox.style.display = 'none';
-      loginBox.style.display = 'block';
+      signupBox.classList.remove('active');
+      loginBox.classList.add('active');
+      setTimeout(() => {
+        signupBox.style.display = 'none';
+        loginBox.style.display = 'block';
+      }, 150);
     });
 
     // Load users from localStorage
@@ -360,80 +707,113 @@
       localStorage.setItem('niroboUsers', JSON.stringify(users));
     }
 
-    // Hash password (simple for demo)
-    function hashPassword(password) {
-      return btoa(password); // Not secure, but works for demo
+    // Hash password (improved)
+    async function hashPassword(password) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(password);
+      const hash = await crypto.subtle.digest('SHA-256', data);
+      return Array.from(new Uint8Array(hash))
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
     }
 
     // Sign Up Handler
-    document.getElementById('signupBtn').addEventListener('click', () => {
+    signupBtn.addEventListener('click', async () => {
       const email = document.getElementById('signupEmail').value.trim();
       const password = document.getElementById('signupPassword').value;
       const agreeCheckbox = document.getElementById('agreeToRules');
 
       if (!email || !password) {
-        alert('Please fill in all fields');
+        showNotification('Please fill in all fields', 'error');
         return;
       }
 
-      // Check if user agreed to rules (NEW)
+      // Check if user agreed to rules
       if (!agreeCheckbox.checked) {
-        alert('Please agree to the submission rules');
+        showNotification('Please agree to the submission rules', 'error');
+        return;
+      }
+
+      // Check password strength
+      const strength = calculatePasswordStrength(password);
+      if (strength.level === 'weak') {
+        showNotification('Please use a stronger password', 'error');
         return;
       }
 
       const users = loadUsers();
       if (users.some(user => user.email === email)) {
-        alert('User already exists');
+        showNotification('User already exists', 'error');
         return;
       }
+
+      // Hash password
+      const hashedPassword = await hashPassword(password);
 
       const newUser = {
         id: Date.now().toString(),
         email,
-        password: hashPassword(password),
+        password: hashedPassword,
         createdAt: new Date().toISOString()
       };
 
       users.push(newUser);
       saveUsers(users);
-      alert('Account created! Please log in.');
+      showNotification('Account created! Please log in.', 'success');
 
       // Switch to login form
-      signupBox.style.display = 'none';
-      loginBox.style.display = 'block';
       document.getElementById('loginEmail').value = email;
+      showLoginLink.click();
     });
 
     // Login Handler
-    document.getElementById('loginBtn').addEventListener('click', () => {
+    loginBtn.addEventListener('click', async () => {
       const email = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPassword').value;
 
       if (!email || !password) {
-        alert('Please fill in all fields');
+        showNotification('Please fill in all fields', 'error');
         return;
       }
 
-      const users = loadUsers();
-      const user = users.find(u => u.email === email && u.password === hashPassword(password));
+      // Show loading state
+      loginBtn.disabled = true;
+      loginBtnText.innerHTML = '<span class="spinner"></span> Logging in...';
 
-      if (!user) {
-        alert('Invalid email or password');
-        return;
+      try {
+        // Hash input password
+        const hashedPassword = await hashPassword(password);
+        
+        const users = loadUsers();
+        const user = users.find(u => u.email === email && u.password === hashedPassword);
+
+        if (!user) {
+          showNotification('Invalid email or password', 'error');
+          return;
+        }
+
+        // --- CHECK FOR BAN STATUS ---
+        if (isUserBanned(user.id)) {
+          showNotification('Your account has been banned due to violations', 'error');
+          return;
+        }
+
+        // Save current user
+        localStorage.setItem('niroboCurrentUser', JSON.stringify(user));
+
+        showNotification('Login successful! Redirecting...', 'success');
+        
+        // Redirect to user dashboard
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 1500);
+      } catch (error) {
+        showNotification('Login failed. Please try again.', 'error');
+      } finally {
+        // Reset button state
+        loginBtn.disabled = false;
+        loginBtnText.textContent = 'Log In';
       }
-
-      // --- CHECK FOR BAN STATUS (NEW) ---
-      if (isUserBanned(user.id)) {
-          alert('❌ Your account has been banned due to violations of Nirobo\'s rules.');
-          return; // Prevent login
-      }
-
-      // Save current user
-      localStorage.setItem('niroboCurrentUser', JSON.stringify(user));
-
-      // Redirect to user dashboard
-      window.location.href = 'dashboard.html';
     });
 
     // --- NEW CODE FOR FORGOT PASSWORD FUNCTIONALITY ---
@@ -443,59 +823,93 @@
     const showForgotPasswordLink = document.getElementById('showForgotPasswordLink');
     const backToLoginFromForgot = document.getElementById('backToLoginFromForgot');
     const sendResetLinkBtn = document.getElementById('sendResetLinkBtn');
+    const resetBtnText = document.getElementById('resetBtnText');
 
     // Show Forgot Password Form
     showForgotPasswordLink.addEventListener('click', (e) => {
       e.preventDefault();
-      loginBox.style.display = 'none';
-      forgotPasswordBox.style.display = 'block';
+      loginBox.classList.remove('active');
+      forgotPasswordBox.classList.add('active');
+      setTimeout(() => {
+        loginBox.style.display = 'none';
+        forgotPasswordBox.style.display = 'block';
+      }, 150);
     });
 
     // Back to Login from Forgot Password
     backToLoginFromForgot.addEventListener('click', (e) => {
       e.preventDefault();
-      forgotPasswordBox.style.display = 'none';
-      loginBox.style.display = 'block';
+      forgotPasswordBox.classList.remove('active');
+      loginBox.classList.add('active');
+      setTimeout(() => {
+        forgotPasswordBox.style.display = 'none';
+        loginBox.style.display = 'block';
+      }, 150);
     });
 
     // Send Reset Link Handler
-    sendResetLinkBtn.addEventListener('click', () => {
+    sendResetLinkBtn.addEventListener('click', async () => {
       const email = document.getElementById('resetEmail').value.trim();
 
       if (!email) {
-        alert('Please enter your email');
+        showNotification('Please enter your email', 'error');
         return;
       }
 
-      const users = loadUsers();
-      const user = users.find(u => u.email === email);
+      // Show loading state
+      sendResetLinkBtn.disabled = true;
+      resetBtnText.innerHTML = '<span class="spinner"></span> Sending...';
 
-      if (!user) {
-        alert('❌ No account found with that email');
-        return;
-      }
+      try {
+        const users = loadUsers();
+        const userIndex = users.findIndex(u => u.email === email);
 
-      // --- CHECK FOR BAN STATUS ON RESET ATTEMPT (NEW) ---
-      if (isUserBanned(user.id)) {
-          alert('❌ Your account has been banned. Password reset is not available.');
-          return; // Prevent reset
-      }
+        if (userIndex === -1) {
+          showNotification('No account found with that email', 'error');
+          return;
+        }
 
-      // In a real app, you would send an email here.
-      // For this frontend-only demo, we'll simulate it.
-      alert(`✅ A password reset link has been sent to ${email}!\n\n(Check your inbox or spam folder)`);
+        const user = users[userIndex];
 
-      // For demo purposes, we can simulate a reset by allowing them to set a new password.
-      // This is NOT secure for a real app, but works for a demo.
-      const newPassword = prompt(`🔐 Set a new password for ${email}:`);
-      if (newPassword) {
-        user.password = hashPassword(newPassword);
-        saveUsers(users);
-        alert('✅ Password updated successfully! Please log in.');
-        // Switch back to login
-        forgotPasswordBox.style.display = 'none';
-        loginBox.style.display = 'block';
-        document.getElementById('loginEmail').value = email;
+        // --- CHECK FOR BAN STATUS ON RESET ATTEMPT ---
+        if (isUserBanned(user.id)) {
+          showNotification('Your account has been banned. Reset not available.', 'error');
+          return;
+        }
+
+        // In a real app, you would send an email here.
+        // For this frontend-only demo, we'll simulate it.
+        showNotification(`Reset link sent to ${email}! Check your inbox.`, 'success');
+
+        // For demo purposes, we can simulate a reset by allowing them to set a new password.
+        setTimeout(() => {
+          const newPassword = prompt(`🔐 Set a new password for ${email}:`);
+          if (newPassword) {
+            // Validate new password
+            const strength = calculatePasswordStrength(newPassword);
+            if (strength.level === 'weak') {
+              showNotification('Please use a stronger password', 'error');
+              return;
+            }
+            
+            // Hash new password
+            const hashedPassword = await hashPassword(newPassword);
+            user.password = hashedPassword;
+            users[userIndex] = user;
+            saveUsers(users);
+            showNotification('Password updated successfully! Please log in.', 'success');
+            
+            // Switch back to login
+            document.getElementById('loginEmail').value = email;
+            backToLoginFromForgot.click();
+          }
+        }, 2000);
+      } catch (error) {
+        showNotification('Password reset failed. Please try again.', 'error');
+      } finally {
+        // Reset button state
+        sendResetLinkBtn.disabled = false;
+        resetBtnText.textContent = 'Send Reset Link';
       }
     });
 
@@ -529,6 +943,14 @@
         return false; // Not banned
     }
 
+    // --- Initialize Form Visibility ---
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check if user is already logged in
+      const currentUser = localStorage.getItem('niroboCurrentUser');
+      if (currentUser) {
+        window.location.href = 'dashboard.html';
+      }
+    });
   </script>
 </body>
 </html>
