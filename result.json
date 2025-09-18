@@ -321,5 +321,110 @@
   "tags": ["news", "bangladesh"],
   "approved": true,
   "timestamp": "2025-08-26T10:30:00Z"
+  },
+    {
+    "title": "Ministry of Finance - Government of Bangladesh",
+    "url": "https://mof.gov.bd",
+    "description": "Official website of the Ministry of Finance, Government of Bangladesh.",
+    "tags": ["government", "finance", "ministry", "bangladesh", "official"],
+    "approved": true
+  },
+  {
+    "title": "Ministry of Home Affairs - Government of Bangladesh",
+    "url": "https://mha.gov.bd",
+    "description": "Official website of the Ministry of Home Affairs, Government of Bangladesh.",
+    "tags": ["government", "home", "affairs", "ministry", "bangladesh", "official"],
+    "approved": true
+  },
+  {
+    "title": "Ministry of Foreign Affairs - Government of Bangladesh",
+    "url": "https://mofa.gov.bd",
+    "description": "Official website of the Ministry of Foreign Affairs, Government of Bangladesh.",
+    "tags": ["government", "foreign", "affairs", "ministry", "bangladesh", "official", "diplomacy"],
+    "approved": true
+  },
+  {
+    "title": "Ministry of Education - Government of Bangladesh",
+    "url": "https://moedu.gov.bd",
+    "description": "Official website of the Ministry of Education, Government of Bangladesh.",
+    "tags": ["government", "education", "ministry", "bangladesh", "official"],
+    "approved": true
+  },
+  {
+    "title": "Ministry of Health and Family Welfare - Government of Bangladesh",
+    "url": "https://mohfw.gov.bd",
+    "description": "Official website of the Ministry of Health and Family Welfare, Government of Bangladesh.",
+    "tags": ["government", "health", "family", "welfare", "ministry", "bangladesh", "official"],
+    "approved": true
+  },
+  {
+    "title": "Ministry of Agriculture - Government of Bangladesh",
+    "url": "https://moa.gov.bd",
+    "description": "Official website of the Ministry of Agriculture, Government of Bangladesh.",
+    "tags": ["government", "agriculture", "ministry", "bangladesh", "official", "farming"],
+    "approved": true
+  },
+  {
+    "title": "Ministry of Industries - Government of Bangladesh",
+    "url": "https://moi.gov.bd",
+    "description": "Official website of the Ministry of Industries, Government of Bangladesh.",
+    "tags": ["government", "industries", "ministry", "bangladesh", "official", "manufacturing"],
+    "approved": true
+  },
+  {
+    "title": "Ministry of Commerce - Government of Bangladesh",
+    "url": "https://moc.gov.bd",
+    "description": "Official website of the Ministry of Commerce, Government of Bangladesh.",
+    "tags": ["government", "commerce", "trade", "ministry", "bangladesh", "official"],
+    "approved": true
+  },
+  {
+    "title": "Ministry of Public Administration - Government of Bangladesh",
+    "url": "https://mpa.gov.bd",
+    "description": "Official website of the Ministry of Public Administration, Government of Bangladesh.",
+    "tags": ["government", "public", "administration", "ministry", "bangladesh", "official", "governance"],
+    "approved": true
+  },
+  {
+    "title": "Ministry of Women and Children Affairs - Government of Bangladesh",
+    "url": "https://mowca.gov.bd",
+    "description": "Official website of the Ministry of Women and Children Affairs, Government of Bangladesh.",
+    "tags": ["government", "women", "children", "affairs", "ministry", "bangladesh", "official"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Bureau of Statistics",
+    "url": "https://bbs.gov.bd",
+    "description": "National statistical organization responsible for collecting, processing, and disseminating statistical information.",
+    "tags": ["government", "statistics", "data", "bangladesh", "official", "research"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Computer Council",
+    "url": "https://bcc.gov.bd",
+    "description": "Government agency responsible for promoting ICT development in Bangladesh.",
+    "tags": ["government", "ict", "technology", "computer", "bangladesh", "official"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Public Service Commission",
+    "url": "https://bpsc.gov.bd",
+    "description": "Responsible for recruiting civil servants for various government departments.",
+    "tags": ["government", "public", "service", "commission", "jobs", "bangladesh", "official"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh University Grants Commission",
+    "url": "https://ugc.ac.bd",
+    "description": "Regulatory body for higher education and universities in Bangladesh.",
+    "tags": ["government", "education", "university", "commission", "bangladesh", "official"],
+    "approved": true
+  },
+  {
+    "title": "Bangladesh Atomic Energy Commission",
+    "url": "https://baec.gov.bd",
+    "description": "Responsible for peaceful uses of atomic energy in Bangladesh.",
+    "tags": ["government", "atomic", "energy", "science", "bangladesh", "official"],
+    "approved": true
   }
 ]
