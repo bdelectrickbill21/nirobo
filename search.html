@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nirobo Search - Intelligent URL Discovery</title>
+  <!-- Add Fuse.js library for fuzzy search -->
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -733,6 +735,8 @@
     let filteredResults = [];
     let query = '';
     let searchHistory = [];
+    // Variable to hold the Fuse.js instance
+    let fuseInstance = null;
 
     // --- DOM Elements ---
     const searchForm = document.getElementById('search-form');
@@ -772,7 +776,7 @@
       
       // Content type insights
       const videoCount = results.filter(r => 
-        r.url.includes('youtube') || r.url.includes('youtu.be') || r.tags.includes('video')
+        r.url.includes('youtube') || r.url.includes('youtu.be') || (Array.isArray(r.tags) && r.tags.includes('video'))
       ).length;
       
       if (videoCount > results.length * 0.3) {
@@ -800,6 +804,56 @@
       }
       
       return insights;
+    }
+
+    // --- Fuzzy Search & Fuse.js Integration ---
+
+    // Initialize Fuse.js with the combined data
+    function initializeFuse(data) {
+      console.log("Initializing Fuse.js...");
+      const options = {
+        keys: [
+          { name: 'title', weight: 1.0 },
+          { name: 'description', weight: 0.8 },
+          { name: 'tags', weight: 0.7 },
+          { name: 'url', weight: 0.5 }
+        ],
+        includeScore: true,
+        threshold: 0.4, // Adjust for desired fuzziness (0.0 to 1.0)
+        distance: 100,
+        minMatchCharLength: 2,
+        shouldSort: true,
+        findAllMatches: false
+      };
+      fuseInstance = new Fuse(data, options);
+      console.log("Fuse.js initialized.");
+    }
+
+    // Perform search using Fuse.js
+    function performSearchFuse(searchTerm) {
+      if (!fuseInstance || !searchTerm) {
+        return [];
+      }
+      console.log("Performing Fuse.js search for:", searchTerm);
+      const fuseResults = fuseInstance.search(searchTerm);
+      console.log("Fuse.js found", fuseResults.length, "results");
+      // Sort by score (lower is better) and extract items
+      return fuseResults
+        .sort((a, b) => (a.score || 1) - (b.score || 1))
+        .map(result => result.item);
+    }
+
+    // Basic spell suggestion (conceptual)
+    function suggestCorrections(query, dataTitles) {
+      const suggestions = new Set();
+      const lowerQuery = query.toLowerCase();
+      dataTitles.forEach(title => {
+         const lowerTitle = title.toLowerCase();
+         if (lowerTitle.includes(lowerQuery) && Math.abs(lowerTitle.length - lowerQuery.length) <= 2) {
+             suggestions.add(title);
+         }
+      });
+      return Array.from(suggestions).slice(0, 3);
     }
 
     // --- Core Search Logic ---
@@ -844,14 +898,19 @@
         viewCount: sub.viewCount || 0
       }));
       
-      return [...jsonResults, ...normalizedApproved];
+      const combinedResults = [...jsonResults, ...normalizedApproved];
+      
+      // NEW: Initialize Fuse.js with the loaded data
+      initializeFuse(combinedResults);
+      
+      return combinedResults;
     }
 
-    // Apply filters to results
+    // Apply filters to results (keeping for filter tabs, but search uses Fuse.js)
     function applyFilters(results, searchTerm, filterType) {
       let filtered = [...results];
 
-      // Apply search term filter
+      // Apply search term filter (exact match for filter tabs)
       if (searchTerm) {
         const lowerQuery = searchTerm.toLowerCase();
         filtered = filtered.filter(item =>
@@ -933,11 +992,26 @@
       resultsContainer.innerHTML = "";
 
       if (results.length === 0) {
+        // Try to get spell suggestions
+        const allTitles = allResults.map(r => r.title || r.url || 'Untitled'); // Fallback if title missing
+        const suggestions = suggestCorrections(query, allTitles);
+
+        let suggestionsHtml = '';
+        if (suggestions.length > 0) {
+            suggestionsHtml = `
+              <p><strong>Did you mean:</strong></p>
+              <ul style="list-style: none; padding: 0;">
+                ${suggestions.map(s => `<li style="margin-bottom: 5px;"><a href="#" onclick="searchInput.value='${s.replace(/'/g, "\\'")}'; searchForm.dispatchEvent(new Event('submit')); return false;" style="color: #ff9999;">${s}</a></li>`).join('')}
+              </ul>
+            `;
+        }
+
         resultsContainer.innerHTML = `
           <div class="no-results">
             <i class="fas fa-search-minus"></i>
             <h3>No Results Found</h3>
-            <p>We couldn't find any matches for your search. Try different keywords or check your spelling.</p>
+            <p>We couldn't find any matches for "${query}".</p>
+            ${suggestionsHtml}
           </div>
         `;
         return;
@@ -1062,7 +1136,13 @@
       if (query) url.searchParams.set('q', query);
       window.history.pushState({ page, query }, '', url);
 
-      filteredResults = applyFilters(allResults, query, currentFilter);
+      // Use Fuse.js for searching when paginating
+      if (query) {
+        filteredResults = performSearchFuse(query);
+      } else {
+        filteredResults = allResults;
+      }
+      
       const sortedResults = sortResults(filteredResults, document.getElementById('sortOptions').value);
       const totalPages = Math.ceil(sortedResults.length / RESULTS_PER_PAGE);
       const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
@@ -1114,7 +1194,9 @@
         currentFilter = tab.dataset.filter;
         currentPage = 1;
         
-        const sortedResults = sortResults(filteredResults, document.getElementById('sortOptions').value);
+        // For filter tabs, we still use the original applyFilters for exact matching
+        const filteredByTabs = applyFilters(allResults, query, currentFilter);
+        const sortedResults = sortResults(filteredByTabs, document.getElementById('sortOptions').value);
         const totalPages = Math.ceil(sortedResults.length / RESULTS_PER_PAGE);
         const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
         const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, sortedResults.length);
@@ -1129,7 +1211,15 @@
 
     // Sort options
     document.getElementById('sortOptions').addEventListener('change', (e) => {
-      const sortedResults = sortResults(filteredResults, e.target.value);
+      // Use Fuse.js results if there's a query, otherwise use all results
+      let resultsToSort = filteredResults;
+      if (query && fuseInstance) {
+        resultsToSort = performSearchFuse(query);
+      } else {
+        resultsToSort = allResults;
+      }
+      
+      const sortedResults = sortResults(resultsToSort, e.target.value);
       const totalPages = Math.ceil(sortedResults.length / RESULTS_PER_PAGE);
       const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
       const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, sortedResults.length);
@@ -1165,7 +1255,17 @@
         `;
 
         allResults = await loadAllResults();
-        filteredResults = applyFilters(allResults, query, currentFilter);
+        
+        // --- Use Fuse.js for searching ---
+        if (query) {
+            // Perform the search using Fuse.js
+            filteredResults = performSearchFuse(query);
+            console.log("Search results after Fuse.js:", filteredResults.length);
+        } else {
+            filteredResults = [];
+        }
+        // --- End Fuse.js search ---
+        
         const sortedResults = sortResults(filteredResults, document.getElementById('sortOptions').value);
         const totalPages = Math.ceil(sortedResults.length / RESULTS_PER_PAGE);
         const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
