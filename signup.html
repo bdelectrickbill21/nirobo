@@ -12,9 +12,8 @@
       --primary-light: #008000;
       --accent: #d40000;
       --accent-hover: #ff0000;
-      --accent-light: #ff3333;
       --background: #0a1f0a;
-      --card-bg: rgba(26, 26, 26, 0.8);
+      --card-bg: rgba(26, 26, 26, 0.9);
       --text: #f5f5f5;
       --text-secondary: #cccccc;
       --border: #333333;
@@ -39,18 +38,21 @@
       align-items: center;
       justify-content: center;
       line-height: 1.6;
+      overflow-x: hidden;
     }
 
     .container {
-      max-width: 500px;
+      max-width: 400px;
       background: var(--card-bg);
       backdrop-filter: blur(10px);
-      padding: 40px;
+      padding: 30px;
       border-radius: 20px;
       box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
       border: 2px solid var(--accent);
       position: relative;
       overflow: hidden;
+      width: 100%;
+      max-width: 100%;
     }
 
     .container::before {
@@ -71,16 +73,12 @@
 
     .hero {
       text-align: center;
-      margin-bottom: 30px;
-      padding: 20px;
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 15px;
-      border: 1px solid rgba(212, 0, 0, 0.3);
+      margin-bottom: 20px;
     }
 
     .hero h1 {
-      font-size: 2.2rem;
-      margin-bottom: 15px;
+      font-size: 1.8rem;
+      margin-bottom: 10px;
       text-transform: uppercase;
       letter-spacing: 1px;
       background: linear-gradient(45deg, #ff9999, #ffffff);
@@ -98,8 +96,8 @@
     .flag-icon {
       background: var(--accent);
       color: white;
-      width: 32px;
-      height: 32px;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
       display: inline-flex;
       align-items: center;
@@ -112,12 +110,58 @@
       font-style: italic;
       color: #ffcccc;
       line-height: 1.6;
+      font-size: 0.9rem;
+    }
+
+    .rules-section {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      border-left: 4px solid var(--warning);
+      font-size: 0.9rem;
+    }
+
+    .rules-section h3 {
+      color: var(--warning);
+      margin-top: 0;
+      margin-bottom: 10px;
       font-size: 1rem;
+      border-bottom: 1px solid var(--warning);
+      padding-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .rules-section ul {
+      padding-left: 20px;
+      margin: 10px 0;
+    }
+
+    .rules-section li {
+      margin-bottom: 8px;
+      line-height: 1.4;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .rules-section .allowed {
+      color: var(--success);
+    }
+
+    .rules-section .not-allowed {
+      color: var(--danger);
+    }
+
+    .rules-section .penalties {
+      color: var(--warning);
     }
 
     .form-box {
       background: rgba(0, 0, 0, 0.3);
-      padding: 30px;
+      padding: 20px;
       border-radius: 15px;
       margin-bottom: 20px;
       border: 1px solid rgba(212, 0, 0, 0.2);
@@ -132,7 +176,7 @@
 
     .form-title {
       text-align: center;
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       margin-bottom: 20px;
       color: #ffcccc;
       display: flex;
@@ -142,7 +186,7 @@
     }
 
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       position: relative;
     }
 
@@ -151,7 +195,7 @@
       margin-bottom: 8px;
       font-weight: 600;
       color: #ffcccc;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
 
     .input-wrapper {
@@ -160,12 +204,12 @@
 
     input {
       width: 100%;
-      padding: 14px 45px 14px 15px;
+      padding: 12px 40px 12px 15px;
       border: 2px solid var(--border);
       background: rgba(0, 0, 0, 0.3);
       border-radius: 10px;
       color: var(--text);
-      font-size: 16px;
+      font-size: 14px;
       box-sizing: border-box;
       transition: all 0.3s ease;
     }
@@ -210,19 +254,19 @@
     }
 
     .strength-text {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       margin-top: 5px;
       text-align: right;
       color: var(--text-secondary);
     }
 
     button {
-      padding: 14px 24px;
+      padding: 12px 24px;
       background: linear-gradient(45deg, var(--accent), var(--accent-hover));
       color: white;
       border: none;
       border-radius: 10px;
-      font-size: 16px;
+      font-size: 14px;
       font-weight: bold;
       cursor: pointer;
       transition: all 0.3s ease;
@@ -261,9 +305,9 @@
 
     .switch-form {
       text-align: center;
-      margin-top: 20px;
+      margin-top: 15px;
       color: #ccc;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
 
     .switch-form a {
@@ -275,105 +319,6 @@
 
     .switch-form a:hover {
       text-decoration: underline;
-      color: var(--accent-light);
-    }
-
-    /* --- NEW STYLES FOR RULES & FORGOT PASSWORD --- */
-    .rules-section {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 20px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      border-left: 4px solid var(--warning);
-    }
-
-    .rules-section h3 {
-      color: #ffcc00;
-      margin-top: 0;
-      margin-bottom: 15px;
-      font-size: 1.2rem;
-      border-bottom: 1px solid var(--warning);
-      padding-bottom: 5px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .rules-section ul {
-      padding-left: 20px;
-      margin: 10px 0;
-    }
-
-    .rules-section li {
-      margin-bottom: 8px;
-      line-height: 1.4;
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-    }
-
-    .rules-section .allowed {
-      color: var(--success);
-    }
-
-    .rules-section .not-allowed {
-      color: var(--danger);
-    }
-
-    .rules-section .penalties {
-      color: var(--warning);
-    }
-
-    .agree-checkbox {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      margin-top: 15px;
-    }
-
-    .agree-checkbox input[type="checkbox"] {
-      width: auto;
-      margin-top: 5px;
-      accent-color: var(--accent);
-    }
-
-    .agree-checkbox label {
-      margin-bottom: 0;
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-    }
-
-    .forgot-password-link {
-      display: block;
-      text-align: center;
-      margin-top: 15px;
-      font-size: 0.9rem;
-    }
-
-    .forgot-password-link a {
-      color: #ff9999;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .forgot-password-link a:hover {
-      text-decoration: underline;
-    }
-
-    /* Forgot Password Form Styles */
-    #forgotPasswordBox {
-      background: rgba(0, 0, 0, 0.3);
-      padding: 30px;
-      border-radius: 15px;
-      margin-bottom: 20px;
-      display: none;
-      border: 1px solid rgba(255, 153, 0, 0.3);
-    }
-
-    #forgotPasswordBox .form-title {
-      color: var(--warning);
     }
 
     /* Password Strength Colors */
@@ -384,9 +329,9 @@
     /* Loading Spinner */
     .spinner {
       display: inline-block;
-      width: 20px;
-      height: 20px;
-      border: 3px solid rgba(255,255,255,.3);
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,.3);
       border-radius: 50%;
       border-top-color: #fff;
       animation: spin 1s ease-in-out infinite;
@@ -396,22 +341,6 @@
 
     @keyframes spin {
       to { transform: rotate(360deg); }
-    }
-
-    /* Responsive Design */
-    @media (max-width: 600px) {
-      .container {
-        padding: 20px;
-        margin: 10px;
-      }
-      
-      .hero h1 {
-        font-size: 1.8rem;
-      }
-      
-      .form-box {
-        padding: 20px;
-      }
     }
 
     /* Notification Styles */
@@ -427,7 +356,7 @@
       z-index: 1000;
       transform: translateX(120%);
       transition: transform 0.3s ease;
-      max-width: 350px;
+      max-width: 300px;
     }
 
     .notification.show {
@@ -445,6 +374,27 @@
     .notification.warning {
       background: linear-gradient(45deg, var(--warning), #ffcc00);
     }
+
+    /* Responsive Design */
+    @media (max-width: 400px) {
+      .container {
+        padding: 20px;
+        margin: 10px;
+      }
+      
+      .hero h1 {
+        font-size: 1.5rem;
+      }
+      
+      .form-box {
+        padding: 15px;
+      }
+    }
+
+    /* Hidden elements */
+    .hidden {
+      display: none !important;
+    }
   </style>
 </head>
 <body>
@@ -457,7 +407,7 @@
       </p>
     </div>
 
-    <!-- Rules & Guidelines Section (NEW) -->
+    <!-- Rules & Guidelines Section -->
     <div class="rules-section">
       <h3><i class="fas fa-gavel"></i> Nirobo Submission Rules</h3>
       
@@ -511,7 +461,7 @@
         <span id="loginBtnText">Log In</span>
       </button>
       
-      <!-- Forgot Password Link (NEW) -->
+      <!-- Forgot Password Link -->
       <div class="forgot-password-link">
         <a href="#" id="showForgotPasswordLink">
           <i class="fas fa-key"></i> Forgot Password?
@@ -524,7 +474,7 @@
     </div>
 
     <!-- Signup Form (Hidden by default) -->
-    <div id="signupBox" class="form-box">
+    <div id="signupBox" class="form-box hidden">
       <h2 class="form-title"><i class="fas fa-user-plus"></i> Sign Up</h2>
       <div class="form-group">
         <label for="signupEmail">Email</label>
@@ -547,7 +497,7 @@
         <div class="strength-text" id="strengthText">Password strength</div>
       </div>
       
-      <!-- Agreement Checkbox (NEW) -->
+      <!-- Agreement Checkbox -->
       <div class="agree-checkbox">
         <input type="checkbox" id="agreeToRules" required />
         <label for="agreeToRules">I agree to follow Nirobo's submission rules and understand the penalties for violations.</label>
@@ -562,7 +512,7 @@
     </div>
 
     <!-- Forgot Password Form (NEW - Hidden by default) -->
-    <div id="forgotPasswordBox" class="form-box">
+    <div id="forgotPasswordBox" class="form-box hidden">
       <h2 class="form-title"><i class="fas fa-lock"></i> Forgot Your Password?</h2>
       <p style="font-size: 0.95rem; margin-bottom: 20px; color: #ffcccc;">
         Enter your email to reset your password.
@@ -670,12 +620,16 @@
     // DOM Elements
     const loginBox = document.getElementById('loginBox');
     const signupBox = document.getElementById('signupBox');
+    const forgotPasswordBox = document.getElementById('forgotPasswordBox');
     const showSignupLink = document.getElementById('showSignupLink');
     const showLoginLink = document.getElementById('showLoginLink');
+    const showForgotPasswordLink = document.getElementById('showForgotPasswordLink');
+    const backToLoginFromForgot = document.getElementById('backToLoginFromForgot');
     const loginBtn = document.getElementById('loginBtn');
     const signupBtn = document.getElementById('signupBtn');
     const loginBtnText = document.getElementById('loginBtnText');
     const signupBtnText = document.getElementById('signupBtnText');
+    const resetBtnText = document.getElementById('resetBtnText');
 
     // Toggle between forms
     showSignupLink.addEventListener('click', (e) => {
@@ -694,6 +648,28 @@
       loginBox.classList.add('active');
       setTimeout(() => {
         signupBox.style.display = 'none';
+        loginBox.style.display = 'block';
+      }, 150);
+    });
+
+    // Show Forgot Password Form
+    showForgotPasswordLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      loginBox.classList.remove('active');
+      forgotPasswordBox.classList.add('active');
+      setTimeout(() => {
+        loginBox.style.display = 'none';
+        forgotPasswordBox.style.display = 'block';
+      }, 150);
+    });
+
+    // Back to Login from Forgot Password
+    backToLoginFromForgot.addEventListener('click', (e) => {
+      e.preventDefault();
+      forgotPasswordBox.classList.remove('active');
+      loginBox.classList.add('active');
+      setTimeout(() => {
+        forgotPasswordBox.style.display = 'none';
         loginBox.style.display = 'block';
       }, 150);
     });
@@ -792,12 +768,6 @@
           return;
         }
 
-        // --- CHECK FOR BAN STATUS ---
-        if (isUserBanned(user.id)) {
-          showNotification('Your account has been banned due to violations', 'error');
-          return;
-        }
-
         // Save current user
         localStorage.setItem('niroboCurrentUser', JSON.stringify(user));
 
@@ -814,37 +784,6 @@
         loginBtn.disabled = false;
         loginBtnText.textContent = 'Log In';
       }
-    });
-
-    // --- NEW CODE FOR FORGOT PASSWORD FUNCTIONALITY ---
-
-    // DOM Elements for Forgot Password
-    const forgotPasswordBox = document.getElementById('forgotPasswordBox');
-    const showForgotPasswordLink = document.getElementById('showForgotPasswordLink');
-    const backToLoginFromForgot = document.getElementById('backToLoginFromForgot');
-    const sendResetLinkBtn = document.getElementById('sendResetLinkBtn');
-    const resetBtnText = document.getElementById('resetBtnText');
-
-    // Show Forgot Password Form
-    showForgotPasswordLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      loginBox.classList.remove('active');
-      forgotPasswordBox.classList.add('active');
-      setTimeout(() => {
-        loginBox.style.display = 'none';
-        forgotPasswordBox.style.display = 'block';
-      }, 150);
-    });
-
-    // Back to Login from Forgot Password
-    backToLoginFromForgot.addEventListener('click', (e) => {
-      e.preventDefault();
-      forgotPasswordBox.classList.remove('active');
-      loginBox.classList.add('active');
-      setTimeout(() => {
-        forgotPasswordBox.style.display = 'none';
-        loginBox.style.display = 'block';
-      }, 150);
     });
 
     // Send Reset Link Handler
@@ -869,14 +808,6 @@
           return;
         }
 
-        const user = users[userIndex];
-
-        // --- CHECK FOR BAN STATUS ON RESET ATTEMPT ---
-        if (isUserBanned(user.id)) {
-          showNotification('Your account has been banned. Reset not available.', 'error');
-          return;
-        }
-
         // In a real app, you would send an email here.
         // For this frontend-only demo, we'll simulate it.
         showNotification(`Reset link sent to ${email}! Check your inbox.`, 'success');
@@ -894,8 +825,7 @@
             
             // Hash new password
             const hashedPassword = await hashPassword(newPassword);
-            user.password = hashedPassword;
-            users[userIndex] = user;
+            users[userIndex].password = hashedPassword;
             saveUsers(users);
             showNotification('Password updated successfully! Please log in.', 'success');
             
@@ -913,37 +843,7 @@
       }
     });
 
-    // --- NEW CODE FOR BAN CHECK SYSTEM ---
-
-    // Function to check if a user is banned
-    function isUserBanned(userId) {
-        const punishments = JSON.parse(localStorage.getItem('niroboPunishments') || '{}');
-        const userPunishment = punishments[userId];
-
-        if (!userPunishment) return false; // Not punished
-
-        // Check permanent ban
-        if (userPunishment.banStatus === "perm_ban") {
-            return true; // Banned
-        }
-
-        // Check temporary ban
-        if (userPunishment.banStatus === "temp_ban" && userPunishment.banUntil) {
-            const banUntil = new Date(userPunishment.banUntil);
-            if (new Date() < banUntil) {
-                return true; // Still banned
-            } else {
-                // Ban expired - remove it
-                delete punishments[userId];
-                localStorage.setItem('niroboPunishments', JSON.stringify(punishments));
-                return false; // Not banned anymore
-            }
-        }
-
-        return false; // Not banned
-    }
-
-    // --- Initialize Form Visibility ---
+    // Initialize form visibility
     document.addEventListener('DOMContentLoaded', () => {
       // Check if user is already logged in
       const currentUser = localStorage.getItem('niroboCurrentUser');
