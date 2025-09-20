@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nirobo — Break The Silence</title>
+  <title>Nirobo — Create Account</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
@@ -39,6 +39,28 @@
       justify-content: center;
       line-height: 1.6;
       overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Animated background elements */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 10% 20%, rgba(212, 0, 0, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(0, 100, 0, 0.1) 0%, transparent 20%);
+      z-index: -1;
+      animation: float 20s infinite linear;
+    }
+
+    @keyframes float {
+      0% { transform: translate(0, 0); }
+      50% { transform: translate(20px, 20px); }
+      100% { transform: translate(0, 0); }
     }
 
     .container {
@@ -53,6 +75,7 @@
       overflow: hidden;
       width: 100%;
       max-width: 100%;
+      z-index: 2;
     }
 
     .container::before {
@@ -62,7 +85,7 @@
       left: 0;
       right: 0;
       height: 4px;
-      background: linear-gradient(90deg, var(--accent), var(--accent-light), var(--accent));
+      background: linear-gradient(90deg, var(--accent), var(--primary-light), var(--accent));
       animation: gradientFlow 3s linear infinite;
     }
 
@@ -85,6 +108,18 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      position: relative;
+      display: inline-block;
+    }
+
+    .hero h1::after {
+      content: "";
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
     }
 
     .hero h1 span {
@@ -125,6 +160,7 @@
       color: #ffcccc;
       line-height: 1.6;
       font-size: 0.9rem;
+      margin-top: 15px;
     }
 
     .rules-section {
@@ -134,6 +170,25 @@
       margin-bottom: 20px;
       border-left: 4px solid var(--warning);
       font-size: 0.9rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rules-section::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.05) 50%, transparent 60%);
+      background-size: 200% 200%;
+      animation: shine 5s infinite;
+    }
+
+    @keyframes shine {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
     }
 
     .rules-section h3 {
@@ -181,11 +236,13 @@
       border: 1px solid rgba(212, 0, 0, 0.2);
       position: relative;
       transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     }
 
     .form-box.active {
       border-color: var(--accent);
       box-shadow: 0 0 20px rgba(212, 0, 0, 0.3);
+      transform: translateY(-5px);
     }
 
     .form-title {
@@ -246,6 +303,7 @@
       cursor: pointer;
       font-size: 1.1rem;
       transition: color 0.3s ease;
+      z-index: 2;
     }
 
     .password-toggle:hover {
@@ -389,6 +447,26 @@
       background: linear-gradient(45deg, var(--warning), #ffcc00);
     }
 
+    /* Checkbox styling */
+    .agree-checkbox {
+      display: flex;
+      align-items: flex-start;
+      margin: 15px 0;
+      gap: 10px;
+    }
+
+    .agree-checkbox input[type="checkbox"] {
+      margin-top: 4px;
+      accent-color: var(--accent);
+    }
+
+    .agree-checkbox label {
+      margin-bottom: 0;
+      font-weight: normal;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
     /* Responsive Design */
     @media (max-width: 400px) {
       .container {
@@ -409,15 +487,37 @@
     .hidden {
       display: none !important;
     }
+
+    /* Floating elements animation */
+    @keyframes floatElement {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .floating {
+      animation: floatElement 3s ease-in-out infinite;
+    }
+
+    /* Pulse effect for buttons */
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(212, 0, 0, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(212, 0, 0, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(212, 0, 0, 0); }
+    }
+
+    .pulse {
+      animation: pulse 2s infinite;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="container floating">
     <div class="hero">
-      <h1><span><span class="flag-icon"></span> BREAK THE SILENCE</span></h1>
+      <h1><span><span class="flag-icon"></span> JOIN NIROBO</span></h1>
       <p>
-        “Silence has never protected truth — your voice, your website, your story deserves to be heard.<br>
-        Don't wait for permission. Don't fear rejection. Rise. Speak. Submit. The digital soul of Bangladesh is being written — and you hold the pen.”
+        “Your voice, your website, your story deserves to be heard.<br>
+        Create an account to start submitting content and be part of the digital soul of Bangladesh.”
       </p>
     </div>
 
@@ -452,8 +552,46 @@
       </ul>
     </div>
 
-    <!-- Login Form (Default) -->
-    <div id="loginBox" class="form-box active">
+    <!-- Signup Form (Now the default) -->
+    <div id="signupBox" class="form-box active">
+      <h2 class="form-title"><i class="fas fa-user-plus"></i> Create Account</h2>
+      <div class="form-group">
+        <label for="signupEmail">Email</label>
+        <div class="input-wrapper">
+          <input type="email" id="signupEmail" placeholder="Enter your email" required />
+          <i class="fas fa-envelope" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #666;"></i>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="signupPassword">Password</label>
+        <div class="input-wrapper">
+          <input type="password" id="signupPassword" placeholder="Create a strong password" required />
+          <button type="button" class="password-toggle" id="signupPasswordToggle">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+        <div class="strength-meter">
+          <div class="strength-meter-fill" id="passwordStrength"></div>
+        </div>
+        <div class="strength-text" id="strengthText">Password strength</div>
+      </div>
+      
+      <!-- Agreement Checkbox -->
+      <div class="agree-checkbox">
+        <input type="checkbox" id="agreeToRules" required />
+        <label for="agreeToRules">I agree to follow Nirobo's submission rules and understand the penalties for violations.</label>
+      </div>
+      
+      <button id="signupBtn" class="pulse">
+        <span id="signupBtnText">Create Account</span>
+      </button>
+      <div class="switch-form">
+        Already have an account? <a href="#" id="showLoginLink">Log In</a>
+      </div>
+    </div>
+
+    <!-- Login Form (Hidden by default) -->
+    <div id="loginBox" class="form-box hidden">
       <h2 class="form-title"><i class="fas fa-sign-in-alt"></i> Log In</h2>
       <div class="form-group">
         <label for="loginEmail">Email</label>
@@ -487,45 +625,7 @@
       </div>
     </div>
 
-    <!-- Signup Form (Hidden by default) -->
-    <div id="signupBox" class="form-box hidden">
-      <h2 class="form-title"><i class="fas fa-user-plus"></i> Sign Up</h2>
-      <div class="form-group">
-        <label for="signupEmail">Email</label>
-        <div class="input-wrapper">
-          <input type="email" id="signupEmail" placeholder="Enter your email" required />
-          <i class="fas fa-envelope" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #666;"></i>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="signupPassword">Password</label>
-        <div class="input-wrapper">
-          <input type="password" id="signupPassword" placeholder="Create a strong password" required />
-          <button type="button" class="password-toggle" id="signupPasswordToggle">
-            <i class="fas fa-eye"></i>
-          </button>
-        </div>
-        <div class="strength-meter">
-          <div class="strength-meter-fill" id="passwordStrength"></div>
-        </div>
-        <div class="strength-text" id="strengthText">Password strength</div>
-      </div>
-      
-      <!-- Agreement Checkbox -->
-      <div class="agree-checkbox">
-        <input type="checkbox" id="agreeToRules" required />
-        <label for="agreeToRules">I agree to follow Nirobo's submission rules and understand the penalties for violations.</label>
-      </div>
-      
-      <button id="signupBtn">
-        <span id="signupBtnText">Create Account</span>
-      </button>
-      <div class="switch-form">
-        Already have an account? <a href="#" id="showLoginLink">Log In</a>
-      </div>
-    </div>
-
-    <!-- Forgot Password Form (NEW - Hidden by default) -->
+    <!-- Forgot Password Form (Hidden by default) -->
     <div id="forgotPasswordBox" class="form-box hidden">
       <h2 class="form-title"><i class="fas fa-lock"></i> Forgot Your Password?</h2>
       <p style="font-size: 0.95rem; margin-bottom: 20px; color: #ffcccc;">
@@ -629,9 +729,7 @@
       }, 3000);
     }
 
-    // --- EXISTING CODE (Enhanced) ---
-
-    // DOM Elements
+    // --- DOM Elements ---
     const loginBox = document.getElementById('loginBox');
     const signupBox = document.getElementById('signupBox');
     const forgotPasswordBox = document.getElementById('forgotPasswordBox');
@@ -864,6 +962,10 @@
       if (currentUser) {
         window.location.href = 'dashboard.html';
       }
+      
+      // Set signup as the default form
+      loginBox.style.display = 'none';
+      signupBox.style.display = 'block';
     });
   </script>
 </body>
