@@ -40,6 +40,7 @@
       line-height: 1.6;
       overflow-x: hidden;
       position: relative;
+      scroll-behavior: smooth;
     }
 
     /* Animated background elements */
@@ -77,6 +78,7 @@
       max-width: 100%;
       z-index: 2;
       transition: all 0.3s ease;
+      margin-bottom: 20px;
     }
 
     .container::before {
@@ -547,6 +549,24 @@
       background: transparent;
       opacity: 0;
     }
+
+    /* Email verification styling */
+    .email-verification {
+      margin-top: 10px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      display: none;
+    }
+
+    .email-verified {
+      color: var(--success);
+      display: block;
+    }
+
+    .email-not-verified {
+      color: var(--danger);
+      display: block;
+    }
   </style>
 </head>
 <body>
@@ -599,6 +619,7 @@
           <input type="email" id="signupEmail" placeholder="Enter your email" required />
           <i class="fas fa-envelope" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #666;"></i>
         </div>
+        <div id="emailVerification" class="email-verification"></div>
       </div>
       <div class="form-group">
         <label for="signupPassword">Password</label>
@@ -765,6 +786,50 @@
       }
     }
 
+    // --- Email Verification ---
+    const emailInput = document.getElementById('signupEmail');
+    const emailVerification = document.getElementById('emailVerification');
+
+    emailInput.addEventListener('blur', async function() {
+      const email = this.value.trim();
+      
+      if (!email) {
+        emailVerification.textContent = '';
+        emailVerification.className = 'email-verification';
+        return;
+      }
+      
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        emailVerification.textContent = 'Please enter a valid email address';
+        emailVerification.className = 'email-verification email-not-verified';
+        return;
+      }
+      
+      // Simulate server check for email availability
+      try {
+        // In a real app, you would make an API call here
+        // For demo purposes, we'll simulate it
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        // Check if email already exists in localStorage
+        const users = JSON.parse(localStorage.getItem('niroboUsers') || '[]');
+        const userExists = users.some(user => user.email === email);
+        
+        if (userExists) {
+          emailVerification.textContent = 'This email is already registered';
+          emailVerification.className = 'email-verification email-not-verified';
+        } else {
+          emailVerification.textContent = 'Email available';
+          emailVerification.className = 'email-verification email-verified';
+        }
+      } catch (error) {
+        emailVerification.textContent = 'Error checking email availability';
+        emailVerification.className = 'email-verification email-not-verified';
+      }
+    });
+
     // --- Notification System ---
     function showNotification(message, type = 'success') {
       const notification = document.getElementById('notification');
@@ -870,6 +935,13 @@
         return;
       }
 
+      // Check email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        showNotification('Please enter a valid email address', 'error');
+        return;
+      }
+
       // Check password strength
       const strength = calculatePasswordStrength(password);
       if (strength.level === 'weak') {
@@ -877,9 +949,10 @@
         return;
       }
 
+      // Check if email is already registered
       const users = loadUsers();
       if (users.some(user => user.email === email)) {
-        showNotification('User already exists', 'error');
+        showNotification('This email is already registered', 'error');
         return;
       }
 
@@ -895,7 +968,7 @@
 
       users.push(newUser);
       saveUsers(users);
-      showNotification('Account created! Please log in.', 'success');
+      showNotification('Account created successfully!', 'success');
 
       // Switch to login form
       document.getElementById('loginEmail').value = email;
