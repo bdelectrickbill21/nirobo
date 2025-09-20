@@ -94,16 +94,30 @@
     }
 
     .flag-icon {
-      background: var(--accent);
-      color: white;
       width: 24px;
       height: 24px;
+      background: #006400; /* Green */
+      color: white;
       border-radius: 50%;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       font-weight: bold;
       box-shadow: 0 0 10px rgba(212, 0, 0, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .flag-icon::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60%;
+      height: 60%;
+      background: #d40000; /* Red circle */
+      border-radius: 50%;
     }
 
     .hero p {
@@ -400,7 +414,7 @@
 <body>
   <div class="container">
     <div class="hero">
-      <h1><span><span class="flag-icon">🇧🇩</span> BREAK THE SILENCE</span></h1>
+      <h1><span><span class="flag-icon"></span> BREAK THE SILENCE</span></h1>
       <p>
         “Silence has never protected truth — your voice, your website, your story deserves to be heard.<br>
         Don't wait for permission. Don't fear rejection. Rise. Speak. Submit. The digital soul of Bangladesh is being written — and you hold the pen.”
