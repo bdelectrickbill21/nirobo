@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up / Log In - Bangladesh</title>
+    <title>Nirobo — Break The Silence</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #006a4e; /* Bangladesh green */
-            --secondary: #f42a41; /* Bangladesh red */
+            --primary: #006a4e;
+            --secondary: #f42a41;
             --dark: #0a1f0a;
             --light: #f0f0f0;
             --card-bg: rgba(255, 255, 255, 0.1);
@@ -272,16 +273,6 @@
             font-size: 12px;
             opacity: 0.7;
         }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 20px;
-            }
-            
-            .header h1 {
-                font-size: 24px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -517,6 +508,9 @@
             signupForm.reset();
             strengthMeter.style.width = '0%';
             strengthText.textContent = 'Password strength';
+            
+            // Redirect to dashboard
+            window.location.href = 'dashboard.html';
         });
 
         // Login Form Handler
@@ -537,11 +531,8 @@
                 localStorage.setItem('currentUser', JSON.stringify({email: user.email}));
                 showNotification('Login successful!', 'success');
                 
-                // Redirect or show dashboard
-                setTimeout(() => {
-                    // window.location.href = 'dashboard.html';
-                    alert('Logged in as: ' + user.email);
-                }, 1000);
+                // Redirect to dashboard
+                window.location.href = 'dashboard.html';
             } else {
                 showNotification('Invalid email or password!', 'error');
             }
@@ -576,8 +567,8 @@
             // Check if user is already logged in
             const currentUser = localStorage.getItem('currentUser');
             if(currentUser) {
-                // Redirect to dashboard or show user info
-                console.log('User already logged in:', JSON.parse(currentUser).email);
+                // Redirect to dashboard
+                window.location.href = 'dashboard.html';
             }
         });
     </script>
