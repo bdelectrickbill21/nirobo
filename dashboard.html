@@ -3,702 +3,129 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nirobo — Your Command Center</title>
+  <title>Nirobo — Your Dashboard</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* --- ROOT VARIABLES & GLOBAL STYLES --- */
-    :root {
-      --primary-dark: #004d00;
-      --primary: #006400;
-      --primary-light: #008000;
-      --accent: #d40000;
-      --accent-hover: #ff0000;
-      --background: #0a1f0a;
-      --card-bg: #1a1a1a;
-      --text: #f5f5f5;
-      --text-secondary: #cccccc;
-      --border: #333333;
-      --success: #00aa00;
-      --warning: #ff9900;
-      --danger: #d40000;
-      --info: #0066cc;
-      --terminal-green: #00ff00;
-      --terminal-black: #000;
-      --terminal-blue: #00aaff;
-      --retro-beige: #f5deb3;
-      --retro-brown: #8b4513;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    /* --- EXISTING STYLES (KEEP YOUR CURRENT DESIGN) --- */
     body {
-      font-family: 'Courier New', 'Lucida Console', Monaco, monospace;
-      background: linear-gradient(135deg, var(--background), var(--primary-dark));
-      color: var(--text);
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #004d00, #006400);
+      color: #f5f5f5;
       padding: 20px;
       min-height: 100vh;
-      line-height: 1.6;
-      overflow-x: hidden;
-      position: relative;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: 
-        repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 2px),
-        repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 2px);
-      background-size: 3px 3px;
-      pointer-events: none;
-      z-index: -1;
     }
 
     .container {
-      max-width: 1000px;
+      max-width: 900px;
       margin: 0 auto;
-      position: relative;
-      z-index: 1;
     }
 
-    /* --- RETRO TERMINAL FRAME --- */
-    .terminal-frame {
-      background: var(--terminal-black);
-      border: 16px solid var(--retro-brown);
-      border-radius: 8px;
-      box-shadow: 
-        0 0 0 2px var(--retro-beige),
-        0 0 20px rgba(0, 0, 0, 0.8),
-        inset 0 0 10px rgba(0, 255, 0, 0.2);
-      padding: 20px;
-      margin-bottom: 30px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .terminal-frame::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 20px;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);
-    }
-
-    .terminal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--retro-beige);
-    }
-
-    .terminal-buttons {
-      display: flex;
-      gap: 8px;
-    }
-
-    .terminal-button {
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-    }
-
-    .close { background: #ff5f56; }
-    .minimize { background: #ffbd2e; }
-    .maximize { background: #27c93f; }
-
-    .terminal-title {
-      font-size: 1.1rem;
-      color: var(--retro-beige);
-      text-align: center;
-      flex-grow: 1;
-      letter-spacing: 1px;
-    }
-
-    .terminal-content {
-      padding: 10px;
-    }
-
-    /* --- HEADER & NAVIGATION --- */
     .header {
       text-align: center;
-      padding: 20px 0;
-      margin-bottom: 20px;
-      border-bottom: 2px solid var(--accent);
-      position: relative;
+      padding: 30px 0;
+      border-bottom: 2px solid #d40000;
+      margin-bottom: 30px;
     }
 
     .header h1 {
-      font-size: 2.8rem;
+      color: #ff0000;
+      font-size: 2.5rem;
       margin-bottom: 10px;
-      letter-spacing: 3px;
-      text-shadow: 0 0 10px rgba(212, 0, 0, 0.7);
-      animation: flicker 1.5s infinite alternate;
-    }
-
-    @keyframes flicker {
-      0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-        opacity: 1;
-        text-shadow: 0 0 10px rgba(212, 0, 0, 0.7), 0 0 20px rgba(212, 0, 0, 0.5);
-      }
-      20%, 24%, 55% {
-        opacity: 0.8;
-        text-shadow: none;
-      }
     }
 
     .header h1 span {
-      color: var(--accent);
+      color: #ffffff;
     }
 
-    .header h1 .nirobo-logo {
-      display: inline-block;
-      position: relative;
+    .header h1 .green {
+      color: #006400;
     }
 
-    .header h1 .nirobo-logo::before {
-      content: "";
-      position: absolute;
-      top: -5px;
-      left: -5px;
-      right: -5px;
-      bottom: -5px;
-      border: 2px solid var(--accent);
-      border-radius: 50%;
-      animation: pulse 2s infinite;
-      pointer-events: none;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); opacity: 0.7; }
-      50% { transform: scale(1.05); opacity: 0.3; }
-      100% { transform: scale(1); opacity: 0.7; }
+    .header h1 .red {
+      color: #ff0000;
     }
 
     .header p {
-      font-size: 1rem;
+      font-size: 16px;
       margin-top: 10px;
       font-style: italic;
-      color: var(--text-secondary);
+      color: #ffcccc;
     }
 
-    nav {
-      background: rgba(26, 26, 26, 0.8);
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 30px;
-      border: 1px solid var(--border);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-    }
-
-    .nav-links {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-
-    .nav-link {
-      color: var(--text-secondary);
-      text-decoration: none;
-      padding: 8px 15px;
-      border-radius: 4px;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.9rem;
-      border: 1px solid transparent;
-    }
-
-    .nav-link:hover, .nav-link.active {
-      color: var(--accent);
-      border-color: var(--accent);
-      background: rgba(212, 0, 0, 0.1);
-      text-shadow: 0 0 5px rgba(212, 0, 0, 0.5);
-    }
-
-    /* --- MAIN CONTENT SECTIONS --- */
-    .section {
-      background: var(--card-bg);
-      padding: 25px;
-      border-radius: 10px;
-      margin-bottom: 25px;
-      border-left: 4px solid var(--accent);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-      position: relative;
-      overflow: hidden;
-      border: 1px solid var(--border);
-    }
-
-    .section::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--accent), transparent);
-      transform: scaleX(0);
-      transition: transform 0.5s ease;
-    }
-
-    .section:hover::before {
-      transform: scaleX(1);
-    }
-
-    .section h2 {
-      color: var(--accent);
-      margin-bottom: 20px;
-      font-size: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    /* --- USER INFO BAR --- */
-    .user-info-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(0, 0, 0, 0.3);
-      padding: 15px 20px;
-      border-radius: 8px;
-      margin-bottom: 25px;
-      border: 1px solid var(--border);
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-
-    .user-details {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .avatar {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background: linear-gradient(45deg, var(--primary), var(--accent));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      font-size: 1.2rem;
-      border: 2px solid var(--accent);
-      box-shadow: 0 0 10px rgba(212, 0, 0, 0.3);
-    }
-
-    .user-text {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .user-email {
-      font-weight: bold;
-      color: var(--accent);
-    }
-
-    .user-stats {
-      display: flex;
-      gap: 20px;
-      font-size: 0.9rem;
-    }
-
-    .stat-item {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .logout-btn {
-      background: linear-gradient(45deg, var(--danger), #ff3333);
-      color: white;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.3s ease;
-    }
-
-    .logout-btn:hover {
-      background: linear-gradient(45deg, #ff3333, var(--danger));
-      box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
-    }
-
-    /* --- FORM STYLING --- */
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: bold;
-      color: var(--text-secondary);
-      font-size: 0.95rem;
-    }
-
-    input, textarea, select {
-      width: 100%;
-      padding: 12px;
-      border: 2px solid var(--border);
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 6px;
-      color: var(--text);
-      font-family: inherit;
-      font-size: 1rem;
-      transition: all 0.3s ease;
-    }
-
-    input:focus, textarea:focus, select:focus {
-      outline: none;
-      border-color: var(--accent);
-      background: rgba(0, 0, 0, 0.5);
-      box-shadow: 0 0 10px rgba(212, 0, 0, 0.3);
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
-
-    .btn {
-      padding: 12px 24px;
-      background: linear-gradient(45deg, var(--primary), var(--accent));
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 1rem;
-      transition: all 0.3s ease;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    }
-
-    .btn:hover {
-      background: linear-gradient(45deg, var(--accent), var(--primary));
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(212, 0, 0, 0.5);
-    }
-
-    .btn:active {
-      transform: translateY(0);
-    }
-
-    .btn-secondary {
-      background: linear-gradient(45deg, var(--info), #0088ff);
-    }
-
-    .btn-secondary:hover {
-      background: linear-gradient(45deg, #0088ff, var(--info));
-    }
-
-    .btn-danger {
-      background: linear-gradient(45deg, var(--danger), #ff3333);
-    }
-
-    .btn-danger:hover {
-      background: linear-gradient(45deg, #ff3333, var(--danger));
-    }
-
-    /* --- SUBMISSION LIST --- */
-    .submissions-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-
-    .filter-sort {
-      display: flex;
-      gap: 15px;
-    }
-
-    .filter-group select, .sort-group select {
-      padding: 8px 12px;
-      border-radius: 4px;
-      background: rgba(0, 0, 0, 0.3);
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-
-    .submission-list {
-      /* Styles for the list container */
-    }
-
-    .submission-item {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 20px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-      border-left: 4px solid var(--accent);
-      transition: all 0.3s ease;
-      border: 1px solid var(--border);
-    }
-
-    .submission-item:hover {
-      background: rgba(255, 255, 255, 0.08);
-      transform: translateX(5px);
-    }
-
-    .submission-item.approved { border-left-color: var(--success); }
-    .submission-item.rejected { border-left-color: var(--danger); }
-    .submission-item.pending { border-left-color: var(--warning); }
-
-    .submission-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 15px;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .submission-title {
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: var(--accent);
-    }
-
-    .status-badge {
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: bold;
-    }
-
-    .status-badge.approved { background: rgba(0, 170, 0, 0.2); color: var(--success); }
-    .status-badge.rejected { background: rgba(212, 0, 0, 0.2); color: var(--danger); }
-    .status-badge.pending { background: rgba(255, 153, 0, 0.2); color: var(--warning); }
-
-    .submission-url {
-      color: var(--text-secondary);
-      text-decoration: none;
-      margin-bottom: 10px;
-      display: block;
-      word-break: break-all;
-      font-size: 0.9rem;
-    }
-
-    .submission-url:hover {
-      color: var(--accent);
+    a {
+      color: #ff0000;
       text-decoration: underline;
     }
 
-    .submission-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 15px;
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-      margin-top: 15px;
-      padding-top: 15px;
-      border-top: 1px dashed var(--border);
-    }
-
-    .submission-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .tag {
-      background: rgba(212, 0, 0, 0.2);
-      color: var(--accent);
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-    }
-
-    .admin-message {
-      background: rgba(0, 100, 200, 0.1);
-      padding: 12px;
-      border-radius: 6px;
-      margin: 15px 0;
-      border-left: 3px solid var(--info);
-      font-size: 0.9rem;
-    }
-
-    .admin-message strong {
-      color: var(--info);
-    }
-
-    .submission-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 15px;
-      flex-wrap: wrap;
-    }
-
-    /* --- STATS & CHARTS --- */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-
-    .stat-card {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 20px;
-      border-radius: 8px;
-      text-align: center;
-      border: 1px solid var(--border);
-      transition: transform 0.3s ease;
-    }
-
-    .stat-card:hover {
-      transform: translateY(-5px);
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    .stat-value {
-      font-size: 2rem;
-      font-weight: bold;
-      color: var(--accent);
-      margin: 10px 0;
-    }
-
-    .stat-label {
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-    }
-
-    .chart-container {
-      background: rgba(0, 0, 0, 0.2);
-      padding: 20px;
-      border-radius: 8px;
-      margin-bottom: 30px;
-      border: 1px solid var(--border);
-    }
-
-    .chart-placeholder {
-      height: 300px;
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-secondary);
-      border: 1px dashed var(--border);
-    }
-
-    /* --- PROFILE & SETTINGS --- */
-    .profile-grid {
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-      gap: 30px;
-    }
-
-    .profile-sidebar {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 20px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-    }
-
-    .settings-form {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 20px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-    }
-
-    /* --- NOTIFICATIONS --- */
-    .notifications {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 1000;
-      width: 300px;
-    }
-
-    .notification {
-      background: var(--card-bg);
-      border-left: 4px solid var(--accent);
-      padding: 15px;
-      margin-bottom: 10px;
-      border-radius: 4px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-      transform: translateX(120%);
-      transition: transform 0.3s ease;
-      border: 1px solid var(--border);
-    }
-
-    .notification.show {
-      transform: translateX(0);
-    }
-
-    .notification.success { border-left-color: var(--success); }
-    .notification.error { border-left-color: var(--danger); }
-    .notification.warning { border-left-color: var(--warning); }
-    .notification.info { border-left-color: var(--info); }
-
-    .notification-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .url-subtitle a {
+      font-size: 0.9em;
+      color: #888;
+      text-decoration: none;
+      display: block;
+      margin-top: -8px;
       margin-bottom: 8px;
     }
-
-    .notification-title {
+    
+    .result-card {
+      background: #1a1a1a;
+      border-left: 4px solid #ff0000;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
       font-weight: bold;
-      font-size: 0.9rem;
-    }
-
-    .notification-close {
-      background: none;
-      border: none;
-      color: var(--text-secondary);
       cursor: pointer;
-      font-size: 1rem;
+      margin: 10px 0;
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
     }
 
-    .notification-message {
-      font-size: 0.85rem;
-    }
-
-    /* --- FOOTER --- */
-    footer {
-      background: var(--card-bg);
-      color: var(--text-secondary);
+    .login-section {
+      background: rgba(255, 255, 255, 0.1);
       padding: 30px;
       text-align: center;
-      font-size: 0.9rem;
-      border-top: 1px solid var(--border);
-      margin-top: 50px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
+      border-radius: 15px;
+      margin-bottom: 30px;
+    }
+
+    .login-section input {
+      margin: 5px;
+      padding: 10px;
+      width: 200px;
+      border: 1px solid #d40000;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+      color: white;
+      font-size: 16px;
+    }
+
+    .login-section button {
+      margin: 5px;
+      padding: 10px 20px;
+      background: #d40000;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .login-section button:hover {
+      background: #ff0000;
+    }
+
+    footer {
+      background: #1a1a1a;
+      color: #ccc;
+      padding: 20px;
+      text-align: center;
+      font-size: 14px;
+      border-top: 1px solid #333;
+      margin-top: 40px;
     }
 
     footer a {
-      color: var(--accent);
+      color: #ff9999;
       text-decoration: none;
     }
 
@@ -706,937 +133,500 @@
       text-decoration: underline;
     }
 
-    /* --- RESPONSIVE DESIGN --- */
-    @media (max-width: 768px) {
-      body {
-        padding: 15px;
-      }
-      
-      .terminal-frame {
-        padding: 15px;
-      }
-      
-      .header h1 {
-        font-size: 2rem;
-      }
-      
-      .nav-links {
-        flex-direction: column;
-        align-items: center;
-      }
-      
-      .profile-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .user-info-bar {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      
-      .filter-sort {
-        width: 100%;
-        flex-direction: column;
-      }
-    }
+    /* --- NEW/UPDATED STYLES FOR DASHBOARD --- */
 
-    /* --- LOADER --- */
-    .loader {
+    .user-info {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 10px;
       display: inline-block;
-      width: 20px;
-      height: 20px;
-      border: 3px solid rgba(255,255,255,.3);
-      border-radius: 50%;
-      border-top-color: var(--accent);
-      animation: spin 1s ease-in-out infinite;
+      margin-bottom: 30px;
+      color: #ffcccc;
     }
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    .section {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 30px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      border: 1px solid rgba(212, 0, 0, 0.5);
     }
 
-    /* --- SCROLLBAR --- */
-    ::-webkit-scrollbar {
-      width: 12px;
+    .section h2 {
+      color: #ffcccc;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+      border-bottom: 1px solid #d40000;
+      padding-bottom: 10px;
     }
 
-    ::-webkit-scrollbar-track {
-      background: var(--card-bg);
+    .form-group {
+      margin-bottom: 20px;
     }
 
-    ::-webkit-scrollbar-thumb {
-      background: var(--accent);
-      border-radius: 6px;
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #ffcccc;
     }
 
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--accent-hover);
-    }
-
-    /* --- BANGLADESH INDICATOR (SUBTLE VISUAL HINT) --- */
-    /* This creates a subtle pattern in the background that hints at the flag */
-    body::after {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
+    input, textarea {
       width: 100%;
-      height: 100%;
-      background-image: 
-        radial-gradient(circle at 20% 30%, rgba(212, 0, 0, 0.03) 0%, transparent 15%),
-        radial-gradient(circle at 80% 70%, rgba(0, 100, 0, 0.03) 0%, transparent 20%);
-      pointer-events: none;
-      z-index: -1;
+      padding: 12px;
+      border: 1px solid #d40000;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      box-sizing: border-box;
     }
 
-    /* --- KEYFRAME ANIMATIONS --- */
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
+    button.main-btn {
+      padding: 12px 24px;
+      background: #d40000;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      width: 100%;
+      margin-top: 10px;
     }
 
-    .blink {
-      animation: blink 1s step-end infinite;
+    button.main-btn:hover {
+      background: #ff0000;
+    }
+
+    .submission-item {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      border-left: 4px solid #d40000;
+    }
+
+    .submission-item.approved { border-left-color: #00aa00; }
+    .submission-item.rejected { border-left-color: #d40000; }
+    .submission-item.pending { border-left-color: #ff9900; }
+
+    .submission-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    .submission-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    .status {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    .status.approved { background: rgba(0, 170, 0, 0.3); color: #00ff00; }
+    .status.rejected { background: rgba(212, 0, 0, 0.3); color: #ff0000; }
+    .status.pending { background: rgba(255, 153, 0, 0.3); color: #ffcc00; }
+
+    .submission-url {
+      color: #ff9999;
+      text-decoration: none;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .admin-message {
+      background: rgba(0, 100, 200, 0.2);
+      padding: 10px;
+      border-radius: 6px;
+      margin: 10px 0;
+      font-style: italic;
+      font-size: 0.9rem;
+    }
+
+    .actions {
+      margin-top: 15px;
+    }
+
+    .btn-delete {
+      background: #880000;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      width: auto;
+    }
+
+    .logout-btn {
+      background: #880000;
+      padding: 10px 20px;
+      font-size: 1rem;
+      display: block;
+      margin: 30px auto 0;
+      text-align: center;
+      width: auto;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 50px;
+      color: #ff9999;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Retro Terminal Style Frame -->
-    <div class="terminal-frame">
-      <div class="terminal-header">
-        <div class="terminal-buttons">
-          <div class="terminal-button close"></div>
-          <div class="terminal-button minimize"></div>
-          <div class="terminal-button maximize"></div>
-        </div>
-        <div class="terminal-title">NIROBO DASHBOARD v2.1</div>
-        <div style="width: 60px;"></div> <!-- Spacer for symmetry -->
-      </div>
+    <div class="header">
+      <h1>
+        <span class="green">N</span>
+        <span class="green">I</span>
+        <span class="green">R</span>
+        <span class="red">O</span>
+        <span class="green">B</span>
+        <span class="green">O</span>
+      </h1>
+      <p>“You hold the pen — write your truth into Bangladesh’s digital soul.”</p>
+    </div>
+
+    <!-- Login Section (Hidden when logged in) -->
+    <div id="loginSection" class="login-section">
+      <h2>🔐 Please Log In</h2>
+      <p>Submit and manage your website in Nirobo's curated search engine</p>
       
-      <div class="terminal-content">
-        <!-- Header -->
-        <div class="header">
-          <h1>
-            <span class="nirobo-logo">NIROBO</span>
-          </h1>
-          <p>“You hold the pen — write your truth into Bangladesh’s digital soul.”</p>
+      <div class="form-group">
+        <input type="email" id="loginEmail" placeholder="Email" />
+      </div>
+      <div class="form-group">
+        <input type="password" id="loginPassword" placeholder="Password" />
+      </div>
+      <button id="loginBtn">Login</button>
+      
+      <p style="margin-top: 20px; font-size: 0.9rem;">
+        Don't have an account? <a href="signup.html">Sign Up</a> | 
+        <a href="forgot-password.html">Forgot Password?</a>
+      </p>
+    </div>
+
+    <!-- Dashboard Content (Hidden until login) -->
+    <div id="dashboardContent" style="display: none;">
+      
+      <!-- User Info -->
+      <div class="user-info">
+        Logged in as: <strong id="userEmail">loading...</strong>
+        <button id="logoutBtn" class="logout-btn">🚪 Logout</button>
+      </div>
+
+      <!-- Submit New Website -->
+      <div class="section">
+        <h2>➕ SUBMIT A NEW WEBSITE</h2>
+        <div class="form-group">
+          <label>Website Title</label>
+          <input type="text" id="websiteTitle" placeholder="e.g., My Blog" />
         </div>
-
-        <!-- Navigation -->
-        <nav>
-          <div class="nav-links">
-            <a href="#" class="nav-link active" data-view="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-            <a href="#" class="nav-link" data-view="submit"><i class="fas fa-plus-circle"></i> Submit</a>
-            <a href="#" class="nav-link" data-view="submissions"><i class="fas fa-list"></i> My Submissions</a>
-            <a href="#" class="nav-link" data-view="stats"><i class="fas fa-chart-line"></i> Stats</a>
-            <a href="#" class="nav-link" data-view="profile"><i class="fas fa-user-cog"></i> Profile</a>
-            <a href="/" class="nav-link"><i class="fas fa-arrow-left"></i> Back to Nirobo</a>
-          </div>
-        </nav>
-
-        <!-- User Info Bar -->
-        <div class="user-info-bar">
-          <div class="user-details">
-            <div class="avatar" id="userAvatar">U</div>
-            <div class="user-text">
-              <span class="user-email" id="userEmailDisplay">loading...</span>
-              <span class="user-id" id="userIdDisplay">ID: ...</span>
-            </div>
-          </div>
-          <div class="user-stats">
-            <div class="stat-item">
-              <i class="fas fa-upload"></i>
-              <span>Submissions: <span id="userSubmissionCount">0</span></span>
-            </div>
-            <div class="stat-item">
-              <i class="fas fa-eye"></i>
-              <span>Views: <span id="userViewCount">0</span></span>
-            </div>
-          </div>
-          <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        <div class="form-group">
+          <label>URL</label>
+          <input type="url" id="websiteUrl" placeholder="https://yourwebsite.com  " />
         </div>
-
-        <!-- Dashboard View -->
-        <div class="view active" id="dashboardView">
-          <!-- Stats Overview -->
-          <div class="stats-grid">
-            <div class="stat-card">
-              <i class="fas fa-globe fa-2x"></i>
-              <div class="stat-value" id="totalSubmissionsStat">0</div>
-              <div class="stat-label">Total Submissions</div>
-            </div>
-            <div class="stat-card">
-              <i class="fas fa-check-circle fa-2x"></i>
-              <div class="stat-value" id="approvedSubmissionsStat">0</div>
-              <div class="stat-label">Approved</div>
-            </div>
-            <div class="stat-card">
-              <i class="fas fa-clock fa-2x"></i>
-              <div class="stat-value" id="pendingSubmissionsStat">0</div>
-              <div class="stat-label">Pending</div>
-            </div>
-            <div class="stat-card">
-              <i class="fas fa-times-circle fa-2x"></i>
-              <div class="stat-value" id="rejectedSubmissionsStat">0</div>
-              <div class="stat-label">Rejected</div>
-            </div>
-          </div>
-
-          <!-- Recent Activity Chart Placeholder -->
-          <div class="chart-container">
-            <h3><i class="fas fa-chart-bar"></i> Recent Activity</h3>
-            <div class="chart-placeholder">
-              <p>📈 Interactive charts will appear here in the full version</p>
-            </div>
-          </div>
-
-          <!-- Quick Actions -->
-          <div class="section">
-            <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
-            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-              <button class="btn" id="quickSubmitBtn"><i class="fas fa-plus"></i> Submit New Website</button>
-              <button class="btn btn-secondary" id="viewSubmissionsBtn"><i class="fas fa-list"></i> View All Submissions</button>
-              <button class="btn btn-secondary" id="viewStatsBtn"><i class="fas fa-chart-pie"></i> Detailed Stats</button>
-            </div>
-          </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="websiteDesc" placeholder="Brief description of your website" rows="3"></textarea>
         </div>
-
-        <!-- Submit Website View -->
-        <div class="view" id="submitView" style="display: none;">
-          <div class="section">
-            <h2><i class="fas fa-plus-circle"></i> SUBMIT A NEW WEBSITE</h2>
-            <form id="submitWebsiteForm">
-              <div class="form-group">
-                <label for="websiteTitle">Website Title *</label>
-                <input type="text" id="websiteTitle" placeholder="e.g., My Awesome Blog" required />
-              </div>
-              <div class="form-group">
-                <label for="websiteUrl">URL *</label>
-                <input type="url" id="websiteUrl" placeholder="https://yourwebsite.com" required />
-              </div>
-              <div class="form-group">
-                <label for="websiteDesc">Description</label>
-                <textarea id="websiteDesc" placeholder="Brief description of your website"></textarea>
-              </div>
-              <div class="form-group">
-                <label for="websiteTags">Tags (comma separated)</label>
-                <input type="text" id="websiteTags" placeholder="news, blog, bangla, technology" />
-              </div>
-              <button type="submit" class="btn" id="submitWebsiteBtn"><i class="fas fa-paper-plane"></i> Submit Website</button>
-            </form>
-          </div>
+        <div class="form-group">
+          <label>Tags (comma separated)</label>
+          <input type="text" id="websiteTags" placeholder="news, blog, bangla" />
         </div>
+        <button id="submitWebsiteBtn" class="main-btn">Submit Website</button>
+      </div>
 
-        <!-- My Submissions View -->
-        <div class="view" id="submissionsView" style="display: none;">
-          <div class="section">
-            <div class="submissions-header">
-              <h2><i class="fas fa-list"></i> YOUR SUBMISSIONS</h2>
-              <div class="filter-sort">
-                <div class="filter-group">
-                  <select id="statusFilter">
-                    <option value="all">All Statuses</option>
-                    <option value="pending">Pending</option>
-                    <option value="approved">Approved</option>
-                    <option value="rejected">Rejected</option>
-                  </select>
-                </div>
-                <div class="sort-group">
-                  <select id="sortSubmissions">
-                    <option value="newest">Newest First</option>
-                    <option value="oldest">Oldest First</option>
-                    <option value="status">By Status</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="submission-list" id="submissionsList">
-              <p>Loading your submissions...</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Stats View -->
-        <div class="view" id="statsView" style="display: none;">
-          <div class="section">
-            <h2><i class="fas fa-chart-line"></i> YOUR STATISTICS</h2>
-            
-            <div class="stats-grid">
-              <div class="stat-card">
-                <i class="fas fa-calendar-alt fa-2x"></i>
-                <div class="stat-value" id="memberSinceStat">...</div>
-                <div class="stat-label">Member Since</div>
-              </div>
-              <div class="stat-card">
-                <i class="fas fa-star fa-2x"></i>
-                <div class="stat-value" id="approvalRateStat">0%</div>
-                <div class="stat-label">Approval Rate</div>
-              </div>
-              <div class="stat-card">
-                <i class="fas fa-fire fa-2x"></i>
-                <div class="stat-value" id="topDomainStat">-</div>
-                <div class="stat-label">Top Domain</div>
-              </div>
-            </div>
-
-            <div class="chart-container">
-              <h3><i class="fas fa-chart-pie"></i> Submissions by Status</h3>
-              <div class="chart-placeholder">
-                <p>📊 Pie chart of your submission statuses</p>
-              </div>
-            </div>
-
-            <div class="chart-container">
-              <h3><i class="fas fa-history"></i> Submission Timeline</h3>
-              <div class="chart-placeholder">
-                <p>🕒 Line graph of your submissions over time</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Profile View -->
-        <div class="view" id="profileView" style="display: none;">
-          <div class="profile-grid">
-            <div class="profile-sidebar">
-              <div class="section">
-                <h3><i class="fas fa-user"></i> Profile Picture</h3>
-                <div style="text-align: center; margin-bottom: 20px;">
-                  <div class="avatar" style="width: 100px; height: 100px; font-size: 2rem;" id="profileAvatarLarge">U</div>
-                </div>
-                <button class="btn btn-secondary" style="width: 100%;"><i class="fas fa-camera"></i> Change Picture</button>
-              </div>
-              
-              <div class="section">
-                <h3><i class="fas fa-shield-alt"></i> Security</h3>
-                <button class="btn btn-danger" style="width: 100%; margin-bottom: 10px;" id="changePasswordBtn"><i class="fas fa-key"></i> Change Password</button>
-                <button class="btn btn-danger" style="width: 100%;" id="deleteAccountBtn"><i class="fas fa-trash"></i> Delete Account</button>
-              </div>
-            </div>
-            
-            <div class="settings-form">
-              <h2><i class="fas fa-user-cog"></i> ACCOUNT SETTINGS</h2>
-              <form id="profileSettingsForm">
-                <div class="form-group">
-                  <label for="profileEmail">Email Address</label>
-                  <input type="email" id="profileEmail" readonly />
-                </div>
-                <div class="form-group">
-                  <label for="profileName">Full Name</label>
-                  <input type="text" id="profileName" placeholder="Your full name" />
-                </div>
-                <div class="form-group">
-                  <label for="profileBio">Bio</label>
-                  <textarea id="profileBio" placeholder="Tell us about yourself..."></textarea>
-                </div>
-                <div class="form-group">
-                  <label for="profileNotifications">
-                    <input type="checkbox" id="profileNotifications" /> 
-                    Receive email notifications for submission updates
-                  </label>
-                </div>
-                <button type="submit" class="btn"><i class="fas fa-save"></i> Save Changes</button>
-              </form>
-            </div>
-          </div>
+      <!-- Your Submissions -->
+      <div class="section">
+        <h2>📊 YOUR SUBMISSIONS</h2>
+        <div id="submissionsList">
+          <p>Loading your submissions...</p>
         </div>
       </div>
     </div>
 
     <footer>
-      <p>Made with <span style="color: #d40000;">❤️</span> in Bangladesh 🇧🇩 | Curated by Nirobo</p>
-      <p>Honoring the Language Movement and the Silent Legacy of Justice</p>
-      <p>Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity</p>
-      <p><a href="/">← Back to Nirobo</a></p>
+      Made in Bangladesh 🇧🇩 | Curated by Nirobo<br>
+      Honoring the Language Movement and the Silent Legacy of Justice<br>
+      Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity<br>
+      <a href="/">← Back to Nirobo</a>
     </footer>
   </div>
 
-  <!-- Notifications Container -->
-  <div class="notifications" id="notificationsContainer"></div>
-
   <script>
-    // --- CONFIGURATION & STATE ---
-    const CONFIG = {
-      MAX_SUBMISSIONS_PER_DOMAIN: 10,
-      APP_NAME: "Nirobo Dashboard"
-    };
-
-    let currentUser = null;
-    let allSubmissions = [];
-    let currentView = 'dashboard';
+    // --- CONFIGURATION ---
+    const MAX_SUBMISSIONS_PER_DOMAIN = 10;
 
     // --- DOM ELEMENTS ---
-    const views = {
-      dashboard: document.getElementById('dashboardView'),
-      submit: document.getElementById('submitView'),
-      submissions: document.getElementById('submissionsView'),
-      stats: document.getElementById('statsView'),
-      profile: document.getElementById('profileView')
-    };
-
-    const navLinks = document.querySelectorAll('.nav-link');
-    const userEmailDisplay = document.getElementById('userEmailDisplay');
-    const userIdDisplay = document.getElementById('userIdDisplay');
-    const userAvatar = document.getElementById('userAvatar');
-    const profileAvatarLarge = document.getElementById('profileAvatarLarge');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const submitWebsiteForm = document.getElementById('submitWebsiteForm');
+    const loginSection = document.getElementById('loginSection');
+    const dashboardContent = document.getElementById('dashboardContent');
+    const loginEmail = document.getElementById('loginEmail');
+    const loginPassword = document.getElementById('loginPassword');
+    const userEmail = document.getElementById('userEmail');
     const submissionsList = document.getElementById('submissionsList');
-    const statusFilter = document.getElementById('statusFilter');
-    const sortSubmissions = document.getElementById('sortSubmissions');
-    const profileSettingsForm = document.getElementById('profileSettingsForm');
-    const notificationsContainer = document.getElementById('notificationsContainer');
 
-    // --- UTILITY FUNCTIONS ---
+    // --- HELPER FUNCTIONS ---
 
-    // Load data from localStorage
-    function loadData(key, defaultValue = []) {
-      try {
-        return JSON.parse(localStorage.getItem(key) || JSON.stringify(defaultValue));
-      } catch (e) {
-        console.error(`Error loading ${key}:`, e);
-        return defaultValue;
-      }
-    }
-
-    // Save data to localStorage
-    function saveData(key, data) {
-      try {
-        localStorage.setItem(key, JSON.stringify(data));
-      } catch (e) {
-        console.error(`Error saving ${key}:`, e);
-        showNotification('Failed to save data. Storage might be full.', 'error');
-      }
-    }
-
-    // Simple password hashing (NOT for production)
-    function hashPassword(password) {
-      return btoa(password); // Base64 encode for demo
-    }
-
-    // Show notification
-    function showNotification(message, type = 'info', duration = 3000) {
-      const notification = document.createElement('div');
-      notification.className = `notification ${type} show`;
-      
-      const iconMap = {
-        success: 'fas fa-check-circle',
-        error: 'fas fa-exclamation-circle',
-        warning: 'fas fa-exclamation-triangle',
-        info: 'fas fa-info-circle'
-      };
-      
-      notification.innerHTML = `
-        <div class="notification-header">
-          <span class="notification-title"><i class="${iconMap[type] || iconMap.info}"></i> ${type.charAt(0).toUpperCase() + type.slice(1)}</span>
-          <button class="notification-close">&times;</button>
-        </div>
-        <div class="notification-message">${message}</div>
-      `;
-      
-      notificationsContainer.appendChild(notification);
-      
-      // Add close event
-      notification.querySelector('.notification-close').addEventListener('click', () => {
-        notification.classList.remove('show');
-        setTimeout(() => notification.remove(), 300);
-      });
-      
-      // Auto-remove after duration
-      if (duration > 0) {
-        setTimeout(() => {
-          notification.classList.remove('show');
-          setTimeout(() => notification.remove(), 300);
-        }, duration);
-      }
-    }
-
-    // Format date
-    function formatDate(dateString) {
-      const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-      return new Date(dateString).toLocaleDateString(undefined, options);
-    }
-
-    // Get domain from URL
-    function getDomain(url) {
-      try {
-        return new URL(url).hostname.replace('www.', '');
-      } catch (e) {
-        return 'unknown-domain';
-      }
-    }
-
-    // --- AUTHENTICATION ---
-
-    // Check if user is logged in
-    function checkAuth() {
-      const user = loadData('niroboCurrentUser', null);
-      if (!user) {
-        window.location.href = 'signup.html';
-        return null;
-      }
-      return user;
-    }
-
-    // Logout user
-    function logout() {
-      localStorage.removeItem('niroboCurrentUser');
-      showNotification('You have been logged out.', 'info');
-      setTimeout(() => {
-        window.location.href = 'signup.html';
-      }, 1000);
-    }
-
-    // --- DATA MANAGEMENT ---
-
-    // Load all submissions
-    function loadSubmissions() {
-      return loadData('niroboAllSubmissions', []);
-    }
-
-    // Save all submissions
-    function saveSubmissions(submissions) {
-      saveData('niroboAllSubmissions', submissions);
-    }
-
-    // Load users
+    // Load users from localStorage
     function loadUsers() {
-      return loadData('niroboUsers', []);
+      return JSON.parse(localStorage.getItem('niroboUsers') || '[]');
     }
 
-    // Save users
+    // Save users to localStorage
     function saveUsers(users) {
-      saveData('niroboUsers', users);
+      localStorage.setItem('niroboUsers', JSON.stringify(users));
     }
 
-    // --- VIEW MANAGEMENT ---
+    // Hash password (simple for demo)
+    function hashPassword(password) {
+      return btoa(password); // Not secure, but works for demo
+    }
 
-    // Switch view
-    function switchView(viewName) {
-      // Hide all views
-      Object.values(views).forEach(view => {
-        view.style.display = 'none';
-      });
-      
-      // Show selected view
-      if (views[viewName]) {
-        views[viewName].style.display = 'block';
+    // Load all submissions from localStorage
+    function loadAllSubmissions() {
+      return JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+    }
+
+    // Save all submissions to localStorage
+    function saveAllSubmissions(submissions) {
+      localStorage.setItem('niroboAllSubmissions', JSON.stringify(submissions));
+    }
+
+    // Check if user is banned
+    function isUserBanned(userId) {
+      const punishments = JSON.parse(localStorage.getItem('niroboPunishments') || '{}');
+      const userPunishment = punishments[userId];
+
+      if (!userPunishment) return false;
+
+      if (userPunishment.banStatus === "perm_ban") {
+        return true;
       }
-      
-      // Update nav links
-      navLinks.forEach(link => {
-        if (link.dataset.view === viewName) {
-          link.classList.add('active');
+
+      if (userPunishment.banStatus === "temp_ban" && userPunishment.banUntil) {
+        const banUntil = new Date(userPunishment.banUntil);
+        if (new Date() < banUntil) {
+          return true;
         } else {
-          link.classList.remove('active');
+          // Ban expired - remove it
+          delete punishments[userId];
+          localStorage.setItem('niroboPunishments', JSON.stringify(punishments));
+          return false;
         }
-      });
-      
-      currentView = viewName;
-      
-      // Trigger view-specific updates
-      switch(viewName) {
-        case 'dashboard':
-          updateDashboardStats();
-          break;
-        case 'submissions':
-          displayUserSubmissions();
-          break;
-        case 'stats':
-          updateUserStats();
-          break;
-        case 'profile':
-          populateProfileForm();
-          break;
       }
+
+      return false;
     }
 
-    // --- DASHBOARD LOGIC ---
+    // --- LOGIN SYSTEM ---
 
-    // Update dashboard statistics
-    function updateDashboardStats() {
-      if (!currentUser) return;
-      
-      const userSubmissions = allSubmissions.filter(s => s.userId === currentUser.id);
-      
-      // Overall stats
-      document.getElementById('totalSubmissionsStat').textContent = userSubmissions.length;
-      
-      const approvedCount = userSubmissions.filter(s => s.status === 'approved').length;
-      const pendingCount = userSubmissions.filter(s => s.status === 'pending').length;
-      const rejectedCount = userSubmissions.filter(s => s.status === 'rejected').length;
-      
-      document.getElementById('approvedSubmissionsStat').textContent = approvedCount;
-      document.getElementById('pendingSubmissionsStat').textContent = pendingCount;
-      document.getElementById('rejectedSubmissionsStat').textContent = rejectedCount;
-      
-      // User stats
-      document.getElementById('userSubmissionCount').textContent = userSubmissions.length;
-      const totalViews = userSubmissions.reduce((sum, s) => sum + (s.viewCount || 0), 0);
-      document.getElementById('userViewCount').textContent = totalViews;
-    }
+    // Login button handler
+    document.getElementById('loginBtn').addEventListener('click', () => {
+      const email = loginEmail.value.trim();
+      const password = loginPassword.value;
 
-    // --- SUBMISSION LOGIC ---
+      if (!email || !password) {
+        alert('Please enter email and password');
+        return;
+      }
 
-    // Submit a new website
-    function submitWebsite(event) {
-      event.preventDefault();
+      const users = loadUsers();
+      const user = users.find(u => u.email === email && u.password === hashPassword(password));
+
+      if (!user) {
+        alert('❌ Invalid email or password');
+        return;
+      }
+
+      // Check ban status
+      if (isUserBanned(user.id)) {
+        alert('❌ Your account has been banned. Please contact support.');
+        return;
+      }
+
+      // Save current user
+      localStorage.setItem('niroboCurrentUser', JSON.stringify(user));
       
+      // Show dashboard
+      loginSection.style.display = 'none';
+      dashboardContent.style.display = 'block';
+      userEmail.textContent = user.email;
+      
+      // Load user's submissions
+      displayUserSubmissions();
+    });
+
+    // Logout button handler
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('niroboCurrentUser');
+      alert('✅ Logged out successfully.');
+      
+      // Show login form
+      loginSection.style.display = 'block';
+      dashboardContent.style.display = 'none';
+      loginEmail.value = '';
+      loginPassword.value = '';
+    });
+
+    // --- SUBMISSION SYSTEM ---
+
+    // Submit new website
+    document.getElementById('submitWebsiteBtn').addEventListener('click', () => {
       const title = document.getElementById('websiteTitle').value.trim();
       const url = document.getElementById('websiteUrl').value.trim();
       const desc = document.getElementById('websiteDesc').value.trim();
-      const tagsInput = document.getElementById('websiteTags').value;
-      
-      // Validation
+      const tags = document.getElementById('websiteTags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
+
       if (!title || !url) {
-        showNotification('Title and URL are required.', 'error');
+        alert('Please enter title and URL');
         return;
       }
-      
-      try {
-        new URL(url); // Validate URL format
-      } catch (e) {
-        showNotification('Please enter a valid URL (e.g., https://example.com).', 'error');
+
+      const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser') || 'null');
+      if (!currentUser) {
+        alert('Please log in first');
         return;
       }
-      
+
+      // Check ban status again (paranoid check)
+      if (isUserBanned(currentUser.id)) {
+        alert('❌ Your account has been banned. Please contact support.');
+        return;
+      }
+
       // Check domain limit
-      const domain = getDomain(url);
-      const domainSubmissions = allSubmissions.filter(s => 
-        getDomain(s.url) === domain && s.userId === currentUser.id
-      );
-      
-      if (domainSubmissions.length >= CONFIG.MAX_SUBMISSIONS_PER_DOMAIN) {
-        showNotification(`You've reached the limit of ${CONFIG.MAX_SUBMISSIONS_PER_DOMAIN} submissions for ${domain}.`, 'error');
-        return;
-      }
-      
-      // Process tags
-      const tags = tagsInput.split(',')
-        .map(tag => tag.trim())
-        .filter(tag => tag.length > 0)
-        .slice(0, 10); // Limit to 10 tags
-      
-      if (tags.length === 0) {
-        tags.push('general');
-      }
-      
-      // Create new submission
-      const newSubmission = {
-        id: 'sub_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-        userId: currentUser.id,
-        title,
-        url,
-        description: desc,
-        tags,
-        submittedAt: new Date().toISOString(),
-        status: 'pending',
-        viewCount: 0,
-        adminMessage: '',
-        submitterEmail: currentUser.email
-      };
-      
-      // Add to submissions
-      allSubmissions.push(newSubmission);
-      saveSubmissions(allSubmissions);
-      
-      // Update UI
-      showNotification('Website submitted for review!', 'success');
-      submitWebsiteForm.reset();
-      
-      // Refresh views if needed
-      if (currentView === 'dashboard' || currentView === 'submissions') {
-        updateDashboardStats();
-        if (currentView === 'submissions') {
-          displayUserSubmissions();
+      try {
+        const domain = new URL(url).hostname;
+        const allSubmissions = loadAllSubmissions();
+        const domainSubmissions = allSubmissions.filter(item => 
+          new URL(item.url).hostname === domain && item.userId === currentUser.id
+        );
+
+        if (domainSubmissions.length >= MAX_SUBMISSIONS_PER_DOMAIN) {
+          alert(`❌ You've reached the limit of ${MAX_SUBMISSIONS_PER_DOMAIN} submissions for ${domain}.`);
+          return;
         }
+
+        const newSubmission = {
+          id: Date.now().toString(),
+          userId: currentUser.id,
+          title,
+          url,
+          description: desc,
+          tags: tags.length ? tags : ["general"],
+          submittedAt: new Date().toISOString(),
+          status: "pending",
+          viewCount: 0,
+          adminMessage: "",
+          submitterEmail: currentUser.email // Store for admin reference
+        };
+
+        allSubmissions.push(newSubmission);
+        saveAllSubmissions(allSubmissions);
+
+        alert('✅ Website submitted for review!');
+        
+        // Clear form
+        document.getElementById('websiteTitle').value = '';
+        document.getElementById('websiteUrl').value = '';
+        document.getElementById('websiteDesc').value = '';
+        document.getElementById('websiteTags').value = '';
+
+        // Refresh submissions list
+        displayUserSubmissions();
+
+      } catch (e) {
+        alert('❌ Please enter a valid URL (e.g., https://example.com  )');
       }
-    }
+    });
 
     // Display user's submissions
     function displayUserSubmissions() {
+      const allSubmissions = loadAllSubmissions();
+      const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser') || 'null');
+      
       if (!currentUser) return;
+
+      const userSubmissions = allSubmissions.filter(sub => sub.userId === currentUser.id);
       
-      let filteredSubmissions = allSubmissions.filter(s => s.userId === currentUser.id);
+      const container = document.getElementById('submissionsList');
       
-      // Apply status filter
-      const statusFilterValue = statusFilter.value;
-      if (statusFilterValue !== 'all') {
-        filteredSubmissions = filteredSubmissions.filter(s => s.status === statusFilterValue);
-      }
-      
-      // Apply sorting
-      const sortValue = sortSubmissions.value;
-      filteredSubmissions.sort((a, b) => {
-        switch(sortValue) {
-          case 'oldest':
-            return new Date(a.submittedAt) - new Date(b.submittedAt);
-          case 'status':
-            return a.status.localeCompare(b.status);
-          case 'newest':
-          default:
-            return new Date(b.submittedAt) - new Date(a.submittedAt);
-        }
-      });
-      
-      // Render
-      if (filteredSubmissions.length === 0) {
-        submissionsList.innerHTML = `
-          <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
-            <i class="fas fa-inbox fa-3x" style="margin-bottom: 20px;"></i>
-            <h3>No submissions found</h3>
-            <p>Submit your first website to get started!</p>
-          </div>
-        `;
+      if (userSubmissions.length === 0) {
+        container.innerHTML = '<div class="empty-state"><h3>📭 No submissions yet</h3><p>Submit your first website above to get started!</p></div>';
         return;
       }
-      
-      submissionsList.innerHTML = '';
-      filteredSubmissions.forEach(sub => {
-        const domain = getDomain(sub.url);
-        const statusClass = sub.status;
-        const statusText = sub.status.charAt(0).toUpperCase() + sub.status.slice(1);
-        
-        const submissionEl = document.createElement('div');
-        submissionEl.className = `submission-item ${statusClass}`;
-        submissionEl.innerHTML = `
+
+      container.innerHTML = '';
+      userSubmissions.forEach(sub => {
+        const div = document.createElement('div');
+        div.className = `submission-item ${sub.status}`;
+        div.innerHTML = `
           <div class="submission-header">
             <div class="submission-title">${sub.title}</div>
-            <span class="status-badge ${statusClass}">${statusText}</span>
+            <span class="status ${sub.status}">${sub.status.toUpperCase()}</span>
           </div>
-          <a href="${sub.url}" target="_blank" class="submission-url">${domain}</a>
-          <p>${sub.description || 'No description provided.'}</p>
-          
-          <div style="margin: 10px 0;">
-            <div class="submission-tags">
-              ${sub.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-            </div>
-          </div>
-          
-          ${sub.adminMessage ? `
-            <div class="admin-message">
-              <strong>Admin Message:</strong> ${sub.adminMessage}
-            </div>
-          ` : ''}
-          
-          <div class="submission-meta">
-            <div>Submitted: ${formatDate(sub.submittedAt)}</div>
-            <div>Views: ${sub.viewCount || 0}</div>
-          </div>
-          
-          <div class="submission-actions">
-            <button class="btn btn-secondary" onclick="editSubmission('${sub.id}')">
-              <i class="fas fa-edit"></i> Edit
-            </button>
-            <button class="btn btn-danger" onclick="deleteSubmission('${sub.id}')">
-              <i class="fas fa-trash"></i> Delete
-            </button>
+          <a href="${sub.url}" target="_blank" class="submission-url">${sub.url}</a>
+          <p>${sub.description}</p>
+          <p><small>Tags: ${sub.tags.join(', ')}</small></p>
+          <p><small>Submitted: ${new Date(sub.submittedAt).toLocaleString()}</small></p>
+          <p><small>👀 Views: ${sub.viewCount || 0}</small></p>
+          ${sub.adminMessage ? `<div class="admin-message">💬 Admin Message: ${sub.adminMessage}</div>` : ''}
+          <div class="actions">
+            <button class="btn-delete" onclick="deleteSubmission('${sub.id}')">🗑️ Remove Submission</button>
           </div>
         `;
-        submissionsList.appendChild(submissionEl);
+        container.appendChild(div);
       });
     }
-
-    // Edit submission (placeholder)
-    window.editSubmission = function(submissionId) {
-      showNotification('Edit functionality would open a modal in a full implementation.', 'info');
-    };
 
     // Delete submission
     window.deleteSubmission = function(submissionId) {
-      if (!confirm('Are you sure you want to delete this submission?')) {
+      if (!confirm('Are you sure you want to remove this submission?')) {
         return;
       }
+
+      let allSubmissions = loadAllSubmissions();
+      const index = allSubmissions.findIndex(sub => sub.id === submissionId);
       
-      allSubmissions = allSubmissions.filter(s => s.id !== submissionId);
-      saveSubmissions(allSubmissions);
-      showNotification('Submission deleted.', 'success');
-      displayUserSubmissions();
-      updateDashboardStats();
+      if (index !== -1) {
+        allSubmissions.splice(index, 1);
+        saveAllSubmissions(allSubmissions);
+        
+        alert('🗑️ Submission removed.');
+        displayUserSubmissions();
+      }
     };
-
-    // --- USER PROFILE LOGIC ---
-
-    // Populate profile form
-    function populateProfileForm() {
-      if (!currentUser) return;
-      
-      document.getElementById('profileEmail').value = currentUser.email;
-      document.getElementById('profileName').value = currentUser.name || '';
-      document.getElementById('profileBio').value = currentUser.bio || '';
-      // For simplicity, assuming notifications are on by default
-      document.getElementById('profileNotifications').checked = currentUser.notifications !== false;
-    }
-
-    // Save profile settings
-    function saveProfileSettings(event) {
-      event.preventDefault();
-      
-      const users = loadUsers();
-      const userIndex = users.findIndex(u => u.id === currentUser.id);
-      
-      if (userIndex !== -1) {
-        // In a real app, you might allow email/name changes with verification
-        // For now, we'll only update bio and notifications
-        users[userIndex].bio = document.getElementById('profileBio').value.trim();
-        users[userIndex].notifications = document.getElementById('profileNotifications').checked;
-        
-        saveUsers(users);
-        
-        // Update current user in localStorage
-        currentUser.bio = users[userIndex].bio;
-        currentUser.notifications = users[userIndex].notifications;
-        localStorage.setItem('niroboCurrentUser', JSON.stringify(currentUser));
-        
-        showNotification('Profile updated successfully!', 'success');
-      }
-    }
-
-    // --- USER STATS LOGIC ---
-
-    // Update user statistics view
-    function updateUserStats() {
-      if (!currentUser) return;
-      
-      const userSubmissions = allSubmissions.filter(s => s.userId === currentUser.id);
-      
-      // Member since
-      const memberSince = currentUser.createdAt ? formatDate(currentUser.createdAt) : 'Unknown';
-      document.getElementById('memberSinceStat').textContent = memberSince;
-      
-      // Approval rate
-      if (userSubmissions.length > 0) {
-        const approvedCount = userSubmissions.filter(s => s.status === 'approved').length;
-        const rate = Math.round((approvedCount / userSubmissions.length) * 100);
-        document.getElementById('approvalRateStat').textContent = `${rate}%`;
-      } else {
-        document.getElementById('approvalRateStat').textContent = '0%';
-      }
-      
-      // Top domain
-      if (userSubmissions.length > 0) {
-        const domainCounts = {};
-        userSubmissions.forEach(s => {
-          const domain = getDomain(s.url);
-          domainCounts[domain] = (domainCounts[domain] || 0) + 1;
-        });
-        
-        let topDomain = '';
-        let maxCount = 0;
-        for (const [domain, count] of Object.entries(domainCounts)) {
-          if (count > maxCount) {
-            maxCount = count;
-            topDomain = domain;
-          }
-        }
-        document.getElementById('topDomainStat').textContent = topDomain;
-      } else {
-        document.getElementById('topDomainStat').textContent = '-';
-      }
-    }
-
-    // --- EVENT LISTENERS ---
-
-    // Navigation
-    navLinks.forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const view = link.dataset.view;
-        if (view) {
-          switchView(view);
-        }
-      });
-    });
-
-    // Logout
-    logoutBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      logout();
-    });
-
-    // Submit form
-    submitWebsiteForm.addEventListener('submit', submitWebsite);
-
-    // Filter and sort submissions
-    statusFilter.addEventListener('change', displayUserSubmissions);
-    sortSubmissions.addEventListener('change', displayUserSubmissions);
-
-    // Profile form
-    profileSettingsForm.addEventListener('submit', saveProfileSettings);
-
-    // Quick action buttons
-    document.getElementById('quickSubmitBtn').addEventListener('click', () => switchView('submit'));
-    document.getElementById('viewSubmissionsBtn').addEventListener('click', () => switchView('submissions'));
-    document.getElementById('viewStatsBtn').addEventListener('click', () => switchView('stats'));
-
-    // Change password (placeholder)
-    document.getElementById('changePasswordBtn').addEventListener('click', () => {
-      const newPassword = prompt('Enter a new password:');
-      if (newPassword && newPassword.length >= 6) {
-        const users = loadUsers();
-        const userIndex = users.findIndex(u => u.id === currentUser.id);
-        if (userIndex !== -1) {
-          users[userIndex].password = hashPassword(newPassword);
-          saveUsers(users);
-          showNotification('Password changed successfully!', 'success');
-        }
-      } else if (newPassword) {
-        showNotification('Password must be at least 6 characters long.', 'error');
-      }
-    });
-
-    // Delete account (placeholder)
-    document.getElementById('deleteAccountBtn').addEventListener('click', () => {
-      if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-        const users = loadUsers();
-        const userIndex = users.findIndex(u => u.id === currentUser.id);
-        if (userIndex !== -1) {
-          users.splice(userIndex, 1);
-          saveUsers(users);
-          
-          // Also delete user's submissions
-          allSubmissions = allSubmissions.filter(s => s.userId !== currentUser.id);
-          saveSubmissions(allSubmissions);
-          
-          showNotification('Account deleted. Redirecting...', 'info');
-          setTimeout(logout, 2000);
-        }
-      }
-    });
 
     // --- INITIALIZATION ---
 
-    // Initialize app
+    // Check if user is already logged in
     document.addEventListener('DOMContentLoaded', () => {
-      // Check authentication
-      currentUser = checkAuth();
-      if (!currentUser) return;
+      const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser') || 'null');
       
-      // Load data
-      allSubmissions = loadSubmissions();
-      
-      // Update UI with user info
-      userEmailDisplay.textContent = currentUser.email;
-      userIdDisplay.textContent = `ID: ${currentUser.id.substring(0, 8)}...`;
-      
-      // Set avatar initials
-      const emailInitial = currentUser.email.charAt(0).toUpperCase();
-      userAvatar.textContent = emailInitial;
-      profileAvatarLarge.textContent = emailInitial;
-      
-      // Initial view update
-      switchView('dashboard');
-      
-      showNotification(`Welcome back, ${currentUser.email}!`, 'success', 2000);
-    });
-
-    // Handle browser back/forward buttons
-    window.addEventListener('popstate', () => {
-      // Could re-implement view switching based on URL hash if needed
-      // For now, we'll just ensure auth is still valid
-      if (!loadData('niroboCurrentUser', null)) {
-        logout();
+      if (currentUser) {
+        // Check ban status on page load
+        if (isUserBanned(currentUser.id)) {
+          alert('❌ Your account has been banned. Please contact support.');
+          localStorage.removeItem('niroboCurrentUser');
+          return;
+        }
+        
+        loginSection.style.display = 'none';
+        dashboardContent.style.display = 'block';
+        userEmail.textContent = currentUser.email;
+        displayUserSubmissions();
+      } else {
+        loginSection.style.display = 'block';
+        dashboardContent.style.display = 'none';
       }
     });
   </script>
