@@ -1,1092 +1,585 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nirobo — Create Account</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    :root {
-      --primary-dark: #004d00;
-      --primary: #006400;
-      --primary-light: #008000;
-      --accent: #d40000;
-      --accent-hover: #ff0000;
-      --background: #0a1f0a;
-      --card-bg: rgba(26, 26, 26, 0.9);
-      --text: #f5f5f5;
-      --text-secondary: #cccccc;
-      --border: #333333;
-      --success: #00aa00;
-      --warning: #ff9900;
-      --danger: #d40000;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-      color: var(--text);
-      padding: 20px;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      line-height: 1.6;
-      overflow-x: hidden;
-      position: relative;
-      scroll-behavior: smooth;
-    }
-
-    /* Animated background elements */
-    body::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: 
-        radial-gradient(circle at 10% 20%, rgba(212, 0, 0, 0.1) 0%, transparent 20%),
-        radial-gradient(circle at 90% 80%, rgba(0, 100, 0, 0.1) 0%, transparent 20%);
-      z-index: -1;
-      animation: float 20s infinite linear;
-    }
-
-    @keyframes float {
-      0% { transform: translate(0, 0); }
-      50% { transform: translate(20px, 20px); }
-      100% { transform: translate(0, 0); }
-    }
-
-    .container {
-      max-width: 400px;
-      background: var(--card-bg);
-      backdrop-filter: blur(10px);
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
-      border: 2px solid var(--accent);
-      position: relative;
-      overflow: hidden;
-      width: 100%;
-      max-width: 100%;
-      z-index: 2;
-      transition: all 0.3s ease;
-    }
-
-    .container::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--accent), var(--primary-light), var(--accent));
-      animation: gradientFlow 3s linear infinite;
-    }
-
-    @keyframes gradientFlow {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 100% 50%; }
-    }
-
-    .hero {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .hero h1 {
-      font-size: 1.8rem;
-      margin-bottom: 10px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      background: linear-gradient(45deg, #ff9999, #ffffff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      position: relative;
-      display: inline-block;
-    }
-
-    .hero h1::after {
-      content: "";
-      position: absolute;
-      bottom: -5px;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background: linear-gradient(90deg, var(--accent), transparent);
-    }
-
-    .hero h1 span {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .flag-icon {
-      width: 24px;
-      height: 24px;
-      background: #006400; /* Green */
-      color: white;
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      box-shadow: 0 0 10px rgba(212, 0, 0, 0.5);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .flag-icon::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 60%;
-      height: 60%;
-      background: #d40000; /* Red circle */
-      border-radius: 50%;
-    }
-
-    .hero p {
-      font-style: italic;
-      color: #ffcccc;
-      line-height: 1.6;
-      font-size: 0.9rem;
-      margin-top: 15px;
-    }
-
-    .rules-section {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      border-left: 4px solid var(--warning);
-      font-size: 0.9rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .rules-section::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.05) 50%, transparent 60%);
-      background-size: 200% 200%;
-      animation: shine 5s infinite;
-    }
-
-    @keyframes shine {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-
-    .rules-section h3 {
-      color: var(--warning);
-      margin-top: 0;
-      margin-bottom: 10px;
-      font-size: 1rem;
-      border-bottom: 1px solid var(--warning);
-      padding-bottom: 5px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .rules-section ul {
-      padding-left: 20px;
-      margin: 10px 0;
-    }
-
-    .rules-section li {
-      margin-bottom: 8px;
-      line-height: 1.4;
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-    }
-
-    .rules-section .allowed {
-      color: var(--success);
-    }
-
-    .rules-section .not-allowed {
-      color: var(--danger);
-    }
-
-    .rules-section .penalties {
-      color: var(--warning);
-    }
-
-    .form-box {
-      background: rgba(0, 0, 0, 0.3);
-      padding: 20px;
-      border-radius: 15px;
-      margin-bottom: 20px;
-      border: 1px solid rgba(212, 0, 0, 0.2);
-      position: relative;
-      transition: all 0.3s ease;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    .form-box.active {
-      border-color: var(--accent);
-      box-shadow: 0 0 20px rgba(212, 0, 0, 0.3);
-      transform: translateY(-5px);
-    }
-
-    .form-title {
-      text-align: center;
-      font-size: 1.3rem;
-      margin-bottom: 20px;
-      color: #ffcccc;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .form-group {
-      margin-bottom: 15px;
-      position: relative;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 600;
-      color: #ffcccc;
-      font-size: 0.9rem;
-    }
-
-    .input-wrapper {
-      position: relative;
-    }
-
-    input {
-      width: 100%;
-      padding: 12px 40px 12px 15px;
-      border: 2px solid var(--border);
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 10px;
-      color: var(--text);
-      font-size: 14px;
-      box-sizing: border-box;
-      transition: all 0.3s ease;
-    }
-
-    input:focus {
-      outline: none;
-      border-color: var(--accent);
-      background: rgba(0, 0, 0, 0.4);
-      box-shadow: 0 0 15px rgba(212, 0, 0, 0.3);
-    }
-
-    .password-toggle {
-      position: absolute;
-      right: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: var(--text-secondary);
-      cursor: pointer;
-      font-size: 1.1rem;
-      transition: color 0.3s ease;
-      z-index: 2;
-    }
-
-    .password-toggle:hover {
-      color: var(--text);
-    }
-
-    .strength-meter {
-      height: 5px;
-      background: #333;
-      border-radius: 3px;
-      margin-top: 8px;
-      overflow: hidden;
-    }
-
-    .strength-meter-fill {
-      height: 100%;
-      width: 0%;
-      border-radius: 3px;
-      transition: width 0.3s ease, background 0.3s ease;
-    }
-
-    .strength-text {
-      font-size: 0.75rem;
-      margin-top: 5px;
-      text-align: right;
-      color: var(--text-secondary);
-    }
-
-    button {
-      padding: 12px 24px;
-      background: linear-gradient(45deg, var(--accent), var(--accent-hover));
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      width: 100%;
-      margin-top: 10px;
-      box-shadow: 0 5px 15px rgba(212, 0, 0, 0.3);
-      position: relative;
-      overflow: hidden;
-    }
-
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(255, 0, 0, 0.4);
-    }
-
-    button:active {
-      transform: translateY(0);
-    }
-
-    button::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      transition: 0.5s;
-    }
-
-    button:hover::before {
-      left: 100%;
-    }
-
-    .switch-form {
-      text-align: center;
-      margin-top: 15px;
-      color: #ccc;
-      font-size: 0.9rem;
-    }
-
-    .switch-form a {
-      color: #ff9999;
-      text-decoration: none;
-      font-weight: bold;
-      transition: color 0.3s ease;
-    }
-
-    .switch-form a:hover {
-      text-decoration: underline;
-    }
-
-    /* Password Strength Colors */
-    .strength-weak { background: var(--danger); width: 33%; }
-    .strength-medium { background: var(--warning); width: 66%; }
-    .strength-strong { background: var(--success); width: 100%; }
-
-    /* Loading Spinner */
-    .spinner {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(255,255,255,.3);
-      border-radius: 50%;
-      border-top-color: #fff;
-      animation: spin 1s ease-in-out infinite;
-      margin-right: 10px;
-      vertical-align: middle;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* Notification Styles */
-    .notification {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 15px 20px;
-      border-radius: 8px;
-      color: white;
-      font-weight: 500;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-      z-index: 1000;
-      transform: translateX(120%);
-      transition: transform 0.3s ease;
-      max-width: 300px;
-    }
-
-    .notification.show {
-      transform: translateX(0);
-    }
-
-    .notification.success {
-      background: linear-gradient(45deg, var(--success), #00cc00);
-    }
-
-    .notification.error {
-      background: linear-gradient(45deg, var(--danger), #ff3333);
-    }
-
-    .notification.warning {
-      background: linear-gradient(45deg, var(--warning), #ffcc00);
-    }
-
-    /* Checkbox styling */
-    .agree-checkbox {
-      display: flex;
-      align-items: flex-start;
-      margin: 15px 0;
-      gap: 10px;
-    }
-
-    .agree-checkbox input[type="checkbox"] {
-      margin-top: 4px;
-      accent-color: var(--accent);
-    }
-
-    .agree-checkbox label {
-      margin-bottom: 0;
-      font-weight: normal;
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-    }
-
-    /* Responsive Design */
-    @media (max-width: 400px) {
-      .container {
-        padding: 20px;
-        margin: 10px;
-      }
-      
-      .hero h1 {
-        font-size: 1.5rem;
-      }
-      
-      .form-box {
-        padding: 15px;
-      }
-    }
-
-    /* Hidden elements */
-    .hidden {
-      display: none !important;
-    }
-
-    /* Floating elements animation */
-    @keyframes floatElement {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-      100% { transform: translateY(0px); }
-    }
-
-    .floating {
-      animation: floatElement 3s ease-in-out infinite;
-    }
-
-    /* Pulse effect for buttons */
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(212, 0, 0, 0.4); }
-      70% { box-shadow: 0 0 0 10px rgba(212, 0, 0, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(212, 0, 0, 0); }
-    }
-
-    .pulse {
-      animation: pulse 2s infinite;
-    }
-
-    /* Face Icon Styling */
-    .face-icon {
-      position: absolute;
-      right: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 20px;
-      height: 20px;
-      background: var(--text-secondary);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-      cursor: pointer;
-      z-index: 2;
-    }
-
-    .face-icon .eye {
-      width: 6px;
-      height: 6px;
-      background: var(--text);
-      border-radius: 50%;
-      margin: 0 2px;
-      transition: all 0.3s ease;
-    }
-
-    .face-icon.open .eye {
-      background: var(--text);
-      opacity: 1;
-    }
-
-    .face-icon.closed .eye {
-      background: transparent;
-      opacity: 0;
-    }
-
-    /* Email verification styling */
-    .email-verification {
-      margin-top: 10px;
-      font-size: 0.8rem;
-      color: var(--text-secondary);
-      display: none;
-    }
-
-    .email-verified {
-      color: var(--success);
-      display: block;
-    }
-
-    .email-not-verified {
-      color: var(--danger);
-      display: block;
-    }
-  </style>
-</head>
-<body>
-  <div class="container floating">
-    <div class="hero">
-      <h1><span><span class="flag-icon"></span> JOIN NIROBO</span></h1>
-      <p>
-        “Your voice, your website, your story deserves to be heard.<br>
-        Create an account to start submitting content and be part of the digital soul of Bangladesh.”
-      </p>
-    </div>
-
-    <!-- Rules & Guidelines Section -->
-    <div class="rules-section">
-      <h3><i class="fas fa-gavel"></i> Nirobo Submission Rules</h3>
-      
-      <p><strong class="allowed"><i class="fas fa-check-circle"></i> ALLOWED:</strong></p>
-      <ul>
-        <li><i class="fas fa-graduation-cap"></i> Educational content (courses, tutorials, research)</li>
-        <li><i class="fas fa-landmark"></i> Cultural & historical content (photos, videos, documentaries)</li>
-        <li><i class="fas fa-newspaper"></i> News articles from reputable sources</li>
-        <li><i class="fas fa-palette"></i> Creative works with context (art, music, literature)</li>
-        <li><i class="fas fa-cloud"></i> Cloud files with educational value (PDFs, docs, spreadsheets)</li>
-        <li><i class="fas fa-hashtag"></i> Social media posts with knowledge/informational value</li>
-      </ul>
-      
-      <p><strong class="not-allowed"><i class="fas fa-ban"></i> NOT ALLOWED:</strong></p>
-      <ul>
-        <li><i class="fas fa-comment-alt-slash"></i> Hate speech, harassment, or personal attacks</li>
-        <li><i class="fas fa-video-slash"></i> Random/unrelated content (vlogs, selfies, daily life)</li>
-        <li><i class="fas fa-exclamation-triangle"></i> Spam, ads, phishing, or illegal content</li>
-        <li><i class="fas fa-copyright"></i> Copyright infringement (pirated movies, songs, books)</li>
-        <li><i class="fas fa-fake-news"></i> Misinformation or fake news</li>
-      </ul>
-      
-      <p><strong class="penalties"><i class="fas fa-exclamation-circle"></i> PENALTIES:</strong></p>
-      <ul>
-        <li><i class="fas fa-exclamation"></i> Minor violation → Warning + removal</li>
-        <li><i class="fas fa-hourglass-half"></i> Moderate violation → 7-day ban</li>
-        <li><i class="fas fa-ban"></i> Severe violation → Permanent ban</li>
-      </ul>
-    </div>
-
-    <!-- Signup Form (Now the default) -->
-    <div id="signupBox" class="form-box active">
-      <h2 class="form-title"><i class="fas fa-user-plus"></i> Create Account</h2>
-      <div class="form-group">
-        <label for="signupEmail">Email</label>
-        <div class="input-wrapper">
-          <input type="email" id="signupEmail" placeholder="Enter your email" required />
-          <i class="fas fa-envelope" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #666;"></i>
-        </div>
-        <div id="emailVerification" class="email-verification"></div>
-      </div>
-      <div class="form-group">
-        <label for="signupPassword">Password</label>
-        <div class="input-wrapper">
-          <input type="password" id="signupPassword" placeholder="Create a strong password" required />
-          <div class="face-icon closed" id="signupFaceToggle">
-            <div class="eye"></div>
-            <div class="eye"></div>
-          </div>
-        </div>
-        <div class="strength-meter">
-          <div class="strength-meter-fill" id="passwordStrength"></div>
-        </div>
-        <div class="strength-text" id="strengthText">Password strength</div>
-      </div>
-      
-      <!-- Agreement Checkbox -->
-      <div class="agree-checkbox">
-        <input type="checkbox" id="agreeToRules" required />
-        <label for="agreeToRules">I agree to follow Nirobo's submission rules and understand the penalties for violations.</label>
-      </div>
-      
-      <button id="signupBtn" class="pulse">
-        <span id="signupBtnText">CREATE ACCOUNT</span>
-      </button>
-      <div class="switch-form">
-        Already have an account? <a href="#" id="showLoginLink">Log In</a>
-      </div>
-    </div>
-
-    <!-- Login Form (Hidden by default) -->
-    <div id="loginBox" class="form-box hidden">
-      <h2 class="form-title"><i class="fas fa-sign-in-alt"></i> Log In</h2>
-      <div class="form-group">
-        <label for="loginEmail">Email</label>
-        <div class="input-wrapper">
-          <input type="email" id="loginEmail" placeholder="Enter your email" required />
-          <i class="fas fa-envelope" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #666;"></i>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="loginPassword">Password</label>
-        <div class="input-wrapper">
-          <input type="password" id="loginPassword" placeholder="Enter your password" required />
-          <div class="face-icon closed" id="loginFaceToggle">
-            <div class="eye"></div>
-            <div class="eye"></div>
-          </div>
-        </div>
-      </div>
-      <button id="loginBtn">
-        <span id="loginBtnText">Log In</span>
-      </button>
-      
-      <!-- Forgot Password Link -->
-      <div class="forgot-password-link">
-        <a href="#" id="showForgotPasswordLink">
-          <i class="fas fa-key"></i> Forgot Password?
-        </a>
-      </div>
-      
-      <div class="switch-form">
-        Don't have an account? <a href="#" id="showSignupLink">Sign Up</a>
-      </div>
-    </div>
-
-    <!-- Forgot Password Form (Hidden by default) -->
-    <div id="forgotPasswordBox" class="form-box hidden">
-      <h2 class="form-title"><i class="fas fa-lock"></i> Forgot Your Password?</h2>
-      <p style="font-size: 0.95rem; margin-bottom: 20px; color: #ffcccc;">
-        Enter your email to reset your password.
-      </p>
-      <div class="form-group">
-        <label for="resetEmail">Email</label>
-        <div class="input-wrapper">
-          <input type="email" id="resetEmail" placeholder="Enter your email" required />
-          <i class="fas fa-envelope" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #666;"></i>
-        </div>
-      </div>
-      <button id="sendResetLinkBtn">
-        <span id="resetBtnText">Send Reset Link</span>
-      </button>
-      <div class="switch-form">
-        <a href="#" id="backToLoginFromForgot"><i class="fas fa-arrow-left"></i> Back to Login</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Notification Container -->
-  <div id="notification" class="notification"></div>
-
-  <script>
-    // --- Enhanced Password Toggle Functionality with Face Icons ---
-    function setupFaceToggle(inputId, faceId) {
-      const input = document.getElementById(inputId);
-      const face = document.getElementById(faceId);
-      
-      face.addEventListener('click', function() {
-        const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
-        input.setAttribute('type', type);
-        
-        // Toggle face state
-        if (type === 'password') {
-          face.classList.add('closed');
-          face.classList.remove('open');
-        } else {
-          face.classList.add('open');
-          face.classList.remove('closed');
-        }
-      });
-    }
-
-    // Setup face toggles
-    setupFaceToggle('signupPassword', 'signupFaceToggle');
-    setupFaceToggle('loginPassword', 'loginFaceToggle');
-
-    // --- Password Strength Checker ---
-    const passwordInput = document.getElementById('signupPassword');
-    const strengthMeter = document.getElementById('passwordStrength');
-    const strengthText = document.getElementById('strengthText');
-
-    passwordInput.addEventListener('input', function() {
-      const password = this.value;
-      const strength = calculatePasswordStrength(password);
-      
-      // Update strength meter
-      strengthMeter.className = 'strength-meter-fill';
-      strengthMeter.classList.add(`strength-${strength.level}`);
-      
-      // Update text
-      strengthText.textContent = strength.text;
-      strengthText.className = 'strength-text';
-      strengthText.classList.add(strength.level);
-    });
-
-    function calculatePasswordStrength(password) {
-      if (password.length === 0) {
-        return { level: 'empty', text: 'Password strength' };
-      }
-      
-      // Criteria
-      const hasUpperCase = /[A-Z]/.test(password);
-      const hasLowerCase = /[a-z]/.test(password);
-      const hasNumbers = /\d/.test(password);
-      const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-      const length = password.length;
-      
-      // Score calculation
-      let score = 0;
-      if (length >= 8) score += 1;
-      if (length >= 12) score += 1;
-      if (hasUpperCase) score += 1;
-      if (hasLowerCase) score += 1;
-      if (hasNumbers) score += 1;
-      if (hasSpecial) score += 1;
-      
-      // Determine strength
-      if (score < 3) {
-        return { level: 'weak', text: 'Weak password' };
-      } else if (score < 5) {
-        return { level: 'medium', text: 'Medium password' };
-      } else {
-        return { level: 'strong', text: 'Strong password' };
-      }
-    }
-
-    // --- Email Verification ---
-    const emailInput = document.getElementById('signupEmail');
-    const emailVerification = document.getElementById('emailVerification');
-
-    emailInput.addEventListener('blur', async function() {
-      const email = this.value.trim();
-      
-      if (!email) {
-        emailVerification.textContent = '';
-        emailVerification.className = 'email-verification';
-        return;
-      }
-      
-      // Validate email format
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        emailVerification.textContent = 'Please enter a valid email address';
-        emailVerification.className = 'email-verification email-not-verified';
-        return;
-      }
-      
-      // Simulate server check for email availability
-      try {
-        // In a real app, you would make an API call here
-        // For demo purposes, we'll simulate it
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        // Check if email already exists in localStorage
-        const users = JSON.parse(localStorage.getItem('niroboUsers') || '[]');
-        const userExists = users.some(user => user.email === email);
-        
-        if (userExists) {
-          emailVerification.textContent = 'This email is already registered';
-          emailVerification.className = 'email-verification email-not-verified';
-        } else {
-          emailVerification.textContent = 'Email available';
-          emailVerification.className = 'email-verification email-verified';
-        }
-      } catch (error) {
-        emailVerification.textContent = 'Error checking email availability';
-        emailVerification.className = 'email-verification email-not-verified';
-      }
-    });
-
-    // --- Notification System ---
-    function showNotification(message, type = 'success') {
-      const notification = document.getElementById('notification');
-      notification.textContent = message;
-      notification.className = 'notification ' + type;
-      notification.classList.add('show');
-      
-      setTimeout(() => {
-        notification.classList.remove('show');
-      }, 3000);
-    }
-
-    // --- DOM Elements ---
-    const loginBox = document.getElementById('loginBox');
-    const signupBox = document.getElementById('signupBox');
-    const forgotPasswordBox = document.getElementById('forgotPasswordBox');
-    const showSignupLink = document.getElementById('showSignupLink');
-    const showLoginLink = document.getElementById('showLoginLink');
-    const showForgotPasswordLink = document.getElementById('showForgotPasswordLink');
-    const backToLoginFromForgot = document.getElementById('backToLoginFromForgot');
-    const loginBtn = document.getElementById('loginBtn');
-    const signupBtn = document.getElementById('signupBtn');
-    const loginBtnText = document.getElementById('loginBtnText');
-    const signupBtnText = document.getElementById('signupBtnText');
-    const resetBtnText = document.getElementById('resetBtnText');
-
-    // Toggle between forms
-    showSignupLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      loginBox.classList.remove('active');
-      signupBox.classList.add('active');
-      setTimeout(() => {
-        loginBox.style.display = 'none';
-        signupBox.style.display = 'block';
-      }, 150);
-    });
-
-    showLoginLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      signupBox.classList.remove('active');
-      loginBox.classList.add('active');
-      setTimeout(() => {
-        signupBox.style.display = 'none';
-        loginBox.style.display = 'block';
-      }, 150);
-    });
-
-    // Show Forgot Password Form
-    showForgotPasswordLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      loginBox.classList.remove('active');
-      forgotPasswordBox.classList.add('active');
-      setTimeout(() => {
-        loginBox.style.display = 'none';
-        forgotPasswordBox.style.display = 'block';
-      }, 150);
-    });
-
-    // Back to Login from Forgot Password
-    backToLoginFromForgot.addEventListener('click', (e) => {
-      e.preventDefault();
-      forgotPasswordBox.classList.remove('active');
-      loginBox.classList.add('active');
-      setTimeout(() => {
-        forgotPasswordBox.style.display = 'none';
-        loginBox.style.display = 'block';
-      }, 150);
-    });
-
-    // Load users from localStorage
-    function loadUsers() {
-      return JSON.parse(localStorage.getItem('niroboUsers') || '[]');
-    }
-
-    function saveUsers(users) {
-      localStorage.setItem('niroboUsers', JSON.stringify(users));
-    }
-
-    // Hash password (improved)
-    async function hashPassword(password) {
-      const encoder = new TextEncoder();
-      const data = encoder.encode(password);
-      const hash = await crypto.subtle.digest('SHA-256', data);
-      return Array.from(new Uint8Array(hash))
-        .map(b => b.toString(16).padStart(2, '0'))
-        .join('');
-    }
-
-    // Sign Up Handler
-    signupBtn.addEventListener('click', async () => {
-      const email = document.getElementById('signupEmail').value.trim();
-      const password = document.getElementById('signupPassword').value;
-      const agreeCheckbox = document.getElementById('agreeToRules');
-
-      if (!email || !password) {
-        showNotification('Please fill in all fields', 'error');
-        return;
-      }
-
-      // Check if user agreed to rules
-      if (!agreeCheckbox.checked) {
-        showNotification('Please agree to the submission rules', 'error');
-        return;
-      }
-
-      // Check email validation
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        showNotification('Please enter a valid email address', 'error');
-        return;
-      }
-
-      // Check password strength
-      const strength = calculatePasswordStrength(password);
-      if (strength.level === 'weak') {
-        showNotification('Please use a stronger password', 'error');
-        return;
-      }
-
-      // Check if email is already registered
-      const users = loadUsers();
-      if (users.some(user => user.email === email)) {
-        showNotification('This email is already registered', 'error');
-        return;
-      }
-
-      // Hash password
-      const hashedPassword = await hashPassword(password);
-
-      const newUser = {
-        id: Date.now().toString(),
-        email,
-        password: hashedPassword,
-        createdAt: new Date().toISOString()
-      };
-
-      users.push(newUser);
-      saveUsers(users);
-      showNotification('Account created successfully!', 'success');
-
-      // Switch to login form
-      document.getElementById('loginEmail').value = email;
-      showLoginLink.click();
-    });
-
-    // Login Handler
-    loginBtn.addEventListener('click', async () => {
-      const email = document.getElementById('loginEmail').value.trim();
-      const password = document.getElementById('loginPassword').value;
-
-      if (!email || !password) {
-        showNotification('Please fill in all fields', 'error');
-        return;
-      }
-
-      // Show loading state
-      loginBtn.disabled = true;
-      loginBtnText.innerHTML = '<span class="spinner"></span> Logging in...';
-
-      try {
-        // Hash input password
-        const hashedPassword = await hashPassword(password);
-        
-        const users = loadUsers();
-        const user = users.find(u => u.email === email && u.password === hashedPassword);
-
-        if (!user) {
-          showNotification('Invalid email or password', 'error');
-          return;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up / Log In - Bangladesh</title>
+    <style>
+        :root {
+            --primary: #006a4e; /* Bangladesh green */
+            --secondary: #f42a41; /* Bangladesh red */
+            --dark: #0a1f0a;
+            --light: #f0f0f0;
+            --card-bg: rgba(255, 255, 255, 0.1);
+            --input-bg: rgba(0, 0, 0, 0.2);
         }
 
-        // Save current user
-        localStorage.setItem('niroboCurrentUser', JSON.stringify(user));
-
-        showNotification('Login successful! Redirecting...', 'success');
-        
-        // Redirect to user dashboard
-        setTimeout(() => {
-          window.location.href = 'dashboard.html';
-        }, 1500);
-      } catch (error) {
-        showNotification('Login failed. Please try again.', 'error');
-      } finally {
-        // Reset button state
-        loginBtn.disabled = false;
-        loginBtnText.textContent = 'Log In';
-      }
-    });
-
-    // Send Reset Link Handler
-    sendResetLinkBtn.addEventListener('click', async () => {
-      const email = document.getElementById('resetEmail').value.trim();
-
-      if (!email) {
-        showNotification('Please enter your email', 'error');
-        return;
-      }
-
-      // Show loading state
-      sendResetLinkBtn.disabled = true;
-      resetBtnText.innerHTML = '<span class="spinner"></span> Sending...';
-
-      try {
-        const users = loadUsers();
-        const userIndex = users.findIndex(u => u.email === email);
-
-        if (userIndex === -1) {
-          showNotification('No account found with that email', 'error');
-          return;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        // In a real app, you would send an email here.
-        // For this frontend-only demo, we'll simulate it.
-        showNotification(`Reset link sent to ${email}! Check your inbox.`, 'success');
+        body {
+            background: linear-gradient(135deg, var(--dark), var(--primary));
+            color: var(--light);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
 
-        // For demo purposes, we can simulate a reset by allowing them to set a new password.
-        setTimeout(() => {
-          const newPassword = prompt(`🔐 Set a new password for ${email}:`);
-          if (newPassword) {
-            // Validate new password
-            const strength = calculatePasswordStrength(newPassword);
-            if (strength.level === 'weak') {
-              showNotification('Please use a stronger password', 'error');
-              return;
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Bangladesh Flag Element */
+        .flag-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 60px;
+            height: 40px;
+            background-color: var(--primary);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .flag-red-circle {
+            width: 25px;
+            height: 25px;
+            background-color: var(--secondary);
+            border-radius: 50%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: var(--light);
+            text-shadow: 0 0 10px rgba(244, 42, 65, 0.5);
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 25px;
+            border-radius: 30px;
+            overflow: hidden;
+            background: var(--input-bg);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: transparent;
+            color: var(--light);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .form-container {
+            transition: transform 0.3s ease;
+        }
+
+        .form {
+            display: none;
+        }
+
+        .form.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: var(--input-bg);
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(244, 42, 65, 0.2);
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+        }
+
+        .strength-meter {
+            height: 5px;
+            background: #ddd;
+            border-radius: 3px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .strength-meter-fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 3px;
+            transition: width 0.3s ease, background 0.3s ease;
+        }
+
+        .strength-text {
+            font-size: 12px;
+            margin-top: 5px;
+            text-align: right;
+            color: #bbb;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .terms {
+            font-size: 12px;
+            margin: 15px 0;
+            text-align: center;
+            opacity: 0.8;
+        }
+
+        .terms a {
+            color: var(--secondary);
+            text-decoration: none;
+        }
+
+        .switch-form {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .switch-form a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            max-width: 300px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: linear-gradient(45deg, var(--primary), #00aa00);
+        }
+
+        .notification.error {
+            background: linear-gradient(45deg, var(--secondary), #ff3333);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
             }
             
-            // Hash new password
-            const hashedPassword = await hashPassword(newPassword);
-            users[userIndex].password = hashedPassword;
-            saveUsers(users);
-            showNotification('Password updated successfully! Please log in.', 'success');
+            .header h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Bangladesh Flag Element -->
+        <div class="flag-container">
+            <div class="flag-red-circle"></div>
+        </div>
+        
+        <div class="header">
+            <h1>Welcome</h1>
+            <p>Join our community today</p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="signup">Sign Up</button>
+            <button class="tab-btn" data-tab="login">Log In</button>
+        </div>
+        
+        <div class="form-container">
+            <!-- Signup Form -->
+            <form class="form active" id="signupForm">
+                <div class="input-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="signupPassword">Password</label>
+                    <div class="password-container">
+                        <input type="password" id="signupPassword" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('signupPassword')">👁️</button>
+                    </div>
+                    <div class="strength-meter">
+                        <div class="strength-meter-fill" id="passwordStrength"></div>
+                    </div>
+                    <div class="strength-text" id="strengthText">Password strength</div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <div class="password-container">
+                        <input type="password" id="confirmPassword" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword')">👁️</button>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn">Create Account</button>
+                
+                <div class="terms">
+                    By signing up, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>
+                </div>
+            </form>
             
-            // Switch back to login
-            document.getElementById('loginEmail').value = email;
-            backToLoginFromForgot.click();
-          }
-        }, 2000);
-      } catch (error) {
-        showNotification('Password reset failed. Please try again.', 'error');
-      } finally {
-        // Reset button state
-        sendResetLinkBtn.disabled = false;
-        resetBtnText.textContent = 'Send Reset Link';
-      }
-    });
+            <!-- Login Form -->
+            <form class="form" id="loginForm">
+                <div class="input-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="loginPassword">Password</label>
+                    <div class="password-container">
+                        <input type="password" id="loginPassword" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('loginPassword')">👁️</button>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn">Log In</button>
+                
+                <div class="switch-form">
+                    <a id="forgotPasswordLink">Forgot Password?</a>
+                </div>
+            </form>
+        </div>
+        
+        <div class="switch-form">
+            Already have an account? <a id="switchToLogin">Log In</a>
+        </div>
+        
+        <div class="switch-form">
+            Don't have an account? <a id="switchToSignup">Sign Up</a>
+        </div>
+        
+        <div class="footer">
+            <p>Made with ❤️ in Bangladesh</p>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification"></div>
 
-    // Initialize form visibility
-    document.addEventListener('DOMContentLoaded', () => {
-      // Check if user is already logged in
-      const currentUser = localStorage.getItem('niroboCurrentUser');
-      if (currentUser) {
-        window.location.href = 'dashboard.html';
-      }
-      
-      // Set signup as the default form
-      loginBox.style.display = 'none';
-      signupBox.style.display = 'block';
-    });
-  </script>
+    <script>
+        // DOM Elements
+        const signupForm = document.getElementById('signupForm');
+        const loginForm = document.getElementById('loginForm');
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const forms = document.querySelectorAll('.form');
+        const switchToLogin = document.getElementById('switchToLogin');
+        const switchToSignup = document.getElementById('switchToSignup');
+        const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+        const passwordInput = document.getElementById('signupPassword');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const strengthMeter = document.getElementById('passwordStrength');
+        const strengthText = document.getElementById('strengthText');
+        const notification = document.getElementById('notification');
+
+        // Tab Switching
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                forms.forEach(form => form.classList.remove('active'));
+                if(btn.dataset.tab === 'signup') {
+                    document.getElementById('signupForm').classList.add('active');
+                } else {
+                    document.getElementById('loginForm').classList.add('active');
+                }
+            });
+        });
+
+        // Form Switching
+        switchToLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            tabBtns.forEach(b => b.classList.remove('active'));
+            document.querySelector('.tab-btn[data-tab="login"]').classList.add('active');
+            forms.forEach(form => form.classList.remove('active'));
+            loginForm.classList.add('active');
+        });
+
+        switchToSignup.addEventListener('click', (e) => {
+            e.preventDefault();
+            tabBtns.forEach(b => b.classList.remove('active'));
+            document.querySelector('.tab-btn[data-tab="signup"]').classList.add('active');
+            forms.forEach(form => form.classList.remove('active'));
+            signupForm.classList.add('active');
+        });
+
+        // Password Toggle
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+            input.setAttribute('type', type);
+        }
+
+        // Password Strength Checker
+        passwordInput.addEventListener('input', function() {
+            const password = this.value;
+            const strength = calculatePasswordStrength(password);
+            
+            strengthMeter.style.width = strength.percentage + '%';
+            strengthMeter.style.backgroundColor = strength.color;
+            strengthText.textContent = strength.text;
+            strengthText.style.color = strength.color;
+        });
+
+        function calculatePasswordStrength(password) {
+            if(password.length === 0) return { percentage: 0, color: '#ddd', text: 'Password strength' };
+            
+            let strength = 0;
+            if(password.length >= 8) strength += 25;
+            if(password.length >= 12) strength += 15;
+            if(/[A-Z]/.test(password)) strength += 20;
+            if(/[0-9]/.test(password)) strength += 20;
+            if(/[^A-Za-z0-9]/.test(password)) strength += 20;
+            
+            let color, text;
+            if(strength < 40) {
+                color = '#f42a41'; // Red
+                text = 'Weak';
+            } else if(strength < 80) {
+                color = '#ffa500'; // Orange
+                text = 'Medium';
+            } else {
+                color = '#00aa00'; // Green
+                text = 'Strong';
+            }
+            
+            return { percentage: strength, color, text };
+        }
+
+        // Show Notification
+        function showNotification(message, type) {
+            notification.textContent = message;
+            notification.className = 'notification ' + type;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Signup Form Handler
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('signupEmail').value;
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            
+            // Validation
+            if(password !== confirmPassword) {
+                showNotification('Passwords do not match!', 'error');
+                return;
+            }
+            
+            if(calculatePasswordStrength(password).percentage < 40) {
+                showNotification('Please use a stronger password!', 'error');
+                return;
+            }
+            
+            // Hash password (simulated for frontend demo)
+            const hashedPassword = await hashPassword(password);
+            
+            // Save to localStorage
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            if(users.some(user => user.email === email)) {
+                showNotification('User already exists!', 'error');
+                return;
+            }
+            
+            users.push({
+                email,
+                password: hashedPassword,
+                createdAt: new Date().toISOString()
+            });
+            
+            localStorage.setItem('users', JSON.stringify(users));
+            showNotification('Account created successfully!', 'success');
+            
+            // Reset form
+            signupForm.reset();
+            strengthMeter.style.width = '0%';
+            strengthText.textContent = 'Password strength';
+        });
+
+        // Login Form Handler
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Hash input password
+            const hashedPassword = await hashPassword(password);
+            
+            // Check credentials
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.email === email && u.password === hashedPassword);
+            
+            if(user) {
+                localStorage.setItem('currentUser', JSON.stringify({email: user.email}));
+                showNotification('Login successful!', 'success');
+                
+                // Redirect or show dashboard
+                setTimeout(() => {
+                    // window.location.href = 'dashboard.html';
+                    alert('Logged in as: ' + user.email);
+                }, 1000);
+            } else {
+                showNotification('Invalid email or password!', 'error');
+            }
+        });
+
+        // Forgot Password Handler
+        forgotPasswordLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            const email = prompt('Enter your email to reset password:');
+            if(email) {
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                const userExists = users.some(u => u.email === email);
+                
+                if(userExists) {
+                    alert(`Password reset link sent to ${email}`);
+                } else {
+                    showNotification('No account found with that email!', 'error');
+                }
+            }
+        });
+
+        // Simple password hashing simulation (NOT secure for production)
+        async function hashPassword(password) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(password);
+            const hash = await crypto.subtle.digest('SHA-256', data);
+            return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if user is already logged in
+            const currentUser = localStorage.getItem('currentUser');
+            if(currentUser) {
+                // Redirect to dashboard or show user info
+                console.log('User already logged in:', JSON.parse(currentUser).email);
+            }
+        });
+    </script>
 </body>
 </html>
