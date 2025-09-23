@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nirobo — Your Dashboard</title>
+  <title>Nirobo — Search Engine</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* --- ROOT VARIABLES & GLOBAL STYLES --- */
     :root {
       --primary-dark: #004d00;
       --primary: #006400;
@@ -40,8 +39,64 @@
     }
 
     .container {
-      max-width: 900px;
+      max-width: 1200px;
       margin: 0 auto;
+      display: flex;
+      gap: 20px;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(212, 0, 0, 0.2);
+      position: sticky;
+      top: 20px;
+      height: fit-content;
+    }
+
+    .sidebar h2 {
+      color: var(--accent);
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 1.5rem;
+    }
+
+    .sidebar ul {
+      list-style: none;
+    }
+
+    .sidebar li {
+      margin-bottom: 12px;
+    }
+
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text);
+      text-decoration: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
+    }
+
+    .sidebar a:hover {
+      background: rgba(212, 0, 0, 0.1);
+      color: var(--accent);
+    }
+
+    .sidebar a.active {
+      background: var(--accent);
+      color: white;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
     }
 
     .header {
@@ -66,20 +121,43 @@
       color: #ffcccc;
     }
 
-    a {
-      color: var(--accent);
-      text-decoration: underline;
+    .search-container {
+      margin-bottom: 30px;
+      text-align: center;
     }
 
-    .url-subtitle a {
-      font-size: 0.9em;
-      color: #888;
-      text-decoration: none;
-      display: block;
-      margin-top: -8px;
-      margin-bottom: 8px;
+    #search-form {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
     }
-    
+
+    #search-input {
+      padding: 0.75rem;
+      width: 400px;
+      font-size: 1rem;
+      border: 1px solid var(--accent);
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      color: white;
+      box-sizing: border-box;
+    }
+
+    #search-form button {
+      padding: 0.75rem 1.5rem;
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    #search-form button:hover {
+      background-color: var(--accent-hover);
+    }
+
     .result-card {
       background: var(--card-bg);
       border-left: 4px solid var(--accent);
@@ -87,6 +165,11 @@
       margin-bottom: 20px;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .result-card:hover {
+      transform: translateY(-2px);
     }
 
     .result-card h2 {
@@ -118,102 +201,6 @@
       font-size: 0.8rem;
     }
 
-    #search-form {
-      margin-bottom: 2rem;
-      display: flex;
-      gap: 10px;
-    }
-
-    #search-input {
-      padding: 0.5rem;
-      width: 70%;
-      font-size: 1rem;
-      border: 1px solid var(--accent);
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
-      color: white;
-      box-sizing: border-box;
-    }
-
-    #search-form button {
-      padding: 0.5rem 1rem;
-      background-color: var(--accent);
-      color: white;
-      border: none;
-      border-radius: 4px;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-
-    #search-form button:hover {
-      background-color: var(--accent-hover);
-    }
-
-    /* --- LOGIN/LOGOUT --- */
-    .login-section {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 30px;
-      border-radius: 15px;
-      margin-bottom: 30px;
-      text-align: center;
-    }
-
-    .login-section input {
-      padding: 12px;
-      width: 250px;
-      margin: 10px;
-      border: 1px solid var(--accent);
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 4px;
-      color: white;
-      font-size: 16px;
-    }
-
-    .login-section button {
-      padding: 12px 20px;
-      background: var(--accent);
-      color: white;
-      border: none;
-      border-radius: 4px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      margin: 10px;
-    }
-
-    .login-section button:hover {
-      background: var(--accent-hover);
-    }
-
-    .logout-btn {
-      background: var(--danger);
-      padding: 10px 20px;
-      font-size: 1rem;
-      display: block;
-      margin: 30px auto 0;
-      text-align: center;
-      width: auto;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      color: white;
-      font-weight: bold;
-    }
-
-    .logout-btn:hover {
-      background: #ff3333;
-    }
-
-    /* --- USER DASHBOARD --- */
-    .user-info {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 15px;
-      border-radius: 10px;
-      display: inline-block;
-      margin-bottom: 30px;
-      color: #ffcccc;
-    }
-
     .section {
       background: rgba(0, 0, 0, 0.3);
       padding: 30px;
@@ -228,48 +215,6 @@
       font-size: 1.5rem;
       border-bottom: 1px solid var(--accent);
       padding-bottom: 10px;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 600;
-      color: #ffcccc;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid var(--accent);
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      color: white;
-      font-size: 16px;
-      box-sizing: border-box;
-    }
-
-    button.main-btn {
-      padding: 12px 24px;
-      background: var(--accent);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      width: 100%;
-      margin-top: 10px;
-    }
-
-    button.main-btn:hover {
-      background: var(--accent-hover);
     }
 
     .submission-item {
@@ -321,25 +266,6 @@
       margin: 10px 0;
       font-style: italic;
       font-size: 0.9rem;
-    }
-
-    .actions {
-      margin-top: 15px;
-    }
-
-    .btn-delete {
-      background: var(--danger);
-      padding: 8px 16px;
-      font-size: 0.9rem;
-      width: auto;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      color: white;
-    }
-
-    .btn-delete:hover {
-      background: #ff3333;
     }
 
     footer {
@@ -403,8 +329,7 @@
       background: linear-gradient(45deg, var(--info), #0088ff);
     }
 
-    /* --- BANGLADESH INDICATOR (SUBTLE VISUAL HINT) --- */
-    /* This creates a subtle pattern in the background that hints at the flag */
+    /* Bangladesh Indicator */
     body::after {
       content: "";
       position: fixed;
@@ -418,426 +343,270 @@
       pointer-events: none;
       z-index: -1;
     }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      
+      .sidebar {
+        width: 100%;
+        position: static;
+      }
+      
+      #search-input {
+        width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="header">
-      <h1>
-        <span>N</span>
-        <span>I</span>
-        <span>R</span>
-        <span>O</span>
-        <span>B</span>
-        <span>O</span>
-      </h1>
-      <p>“You hold the pen — write your truth into Bangladesh’s digital soul.”</p>
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <h2>Nirobo</h2>
+      <ul>
+        <li><a href="#" class="active"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="#"><i class="fas fa-search"></i> Search</a></li>
+        <li><a href="#"><i class="fas fa-bookmark"></i> Favorites</a></li>
+        <li><a href="#"><i class="fas fa-history"></i> History</a></li>
+        <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+        <li><a href="#"><i class="fas fa-info-circle"></i> About</a></li>
+      </ul>
     </div>
 
-    <a href="/">← Back to Nirobo</a>
-
-    <!-- Login Section (Hidden when logged in) -->
-    <div id="loginSection" class="login-section">
-      <h2>🔐 Please Log In</h2>
-      <p>Submit and manage your website in Nirobo's curated search engine</p>
-      
-      <div class="form-group">
-        <input type="email" id="loginEmail" placeholder="Email" />
-      </div>
-      <div class="form-group">
-        <input type="password" id="loginPassword" placeholder="Password" />
-      </div>
-      <button id="loginBtn">Login</button>
-      
-      <p style="margin-top: 20px; font-size: 0.9rem;">
-        Don't have an account? <a href="signup.html">Sign Up</a> | 
-        <a href="forgot-password.html">Forgot Password?</a>
-      </p>
-    </div>
-
-    <!-- Dashboard Content (Hidden until login) -->
-    <div id="dashboardContent" style="display: none;">
-      
-      <!-- User Info -->
-      <div class="user-info">
-        Logged in as: <strong id="userEmail">loading...</strong>
-        <button id="logoutBtn" class="logout-btn">🚪 Logout</button>
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="header">
+        <h1>
+          <span>N</span>
+          <span>I</span>
+          <span>R</span>
+          <span>O</span>
+          <span>B</span>
+          <span>O</span>
+        </h1>
+        <p>“You hold the pen — write your truth into Bangladesh’s digital soul.”</p>
       </div>
 
-      <!-- Submit New Website -->
+      <div class="search-container">
+        <form id="search-form">
+          <input type="text" id="search-input" placeholder="Search for websites..." autocomplete="off">
+          <button type="submit"><i class="fas fa-search"></i> Search</button>
+        </form>
+      </div>
+
       <div class="section">
-        <h2>➕ SUBMIT A NEW WEBSITE</h2>
-        <div class="form-group">
-          <label>Website Title</label>
-          <input type="text" id="websiteTitle" placeholder="e.g., My Blog" />
+        <h2>Latest Additions</h2>
+        <div id="results">
+          <div class="result-card">
+            <h2><a href="#">Bangla News Today</a></h2>
+            <p>Latest news and updates from Bangladesh in Bangla language. Daily news coverage of politics, sports, entertainment, and more.</p>
+            <div class="tags">
+              <span>news</span>
+              <span>bangla</span>
+              <span>current affairs</span>
+            </div>
+            <a href="#" class="url-subtitle">www.banglanewstoday.com</a>
+          </div>
+
+          <div class="result-card">
+            <h2><a href="#">Tech Innovation BD</a></h2>
+            <p>A platform showcasing technological innovations and startups from Bangladesh. Features interviews with tech entrepreneurs and product reviews.</p>
+            <div class="tags">
+              <span>technology</span>
+              <span>startups</span>
+              <span>innovation</span>
+            </div>
+            <a href="#" class="url-subtitle">www.techinnovationbd.com</a>
+          </div>
+
+          <div class="result-card">
+            <h2><a href="#">Cultural Heritage Hub</a></h2>
+            <p>Dedicated to preserving and promoting the rich cultural heritage of Bangladesh. Includes information about traditional arts, music, and festivals.</p>
+            <div class="tags">
+              <span>culture</span>
+              <span>heritage</span>
+              <span>tradition</span>
+            </div>
+            <a href="#" class="url-subtitle">www.culturalhub.com.bd</a>
+          </div>
         </div>
-        <div class="form-group">
-          <label>URL</label>
-          <input type="url" id="websiteUrl" placeholder="https://yourwebsite.com" />
-        </div>
-        <div class="form-group">
-          <label>Description</label>
-          <textarea id="websiteDesc" placeholder="Brief description of your website" rows="3"></textarea>
-        </div>
-        <div class="form-group">
-          <label>Tags (comma separated)</label>
-          <input type="text" id="websiteTags" placeholder="news, blog, bangla" />
-        </div>
-        <button id="submitWebsiteBtn" class="main-btn">Submit Website</button>
       </div>
 
-      <!-- Your Submissions -->
       <div class="section">
-        <h2>📊 YOUR SUBMISSIONS</h2>
-        <div id="submissionsList">
-          <p>Loading your submissions...</p>
+        <h2>Featured Websites</h2>
+        <div class="result-card">
+          <h2><a href="#">Nirobo Official</a></h2>
+          <p>The official search engine dedicated to connecting users with authentic Bangladeshi content. Our mission is to promote local knowledge and culture.</p>
+          <div class="tags">
+            <span>search engine</span>
+            <span>bangladesh</span>
+            <span>local content</span>
+          </div>
+          <a href="#" class="url-subtitle">www.nirobo.com</a>
         </div>
       </div>
     </div>
-
-    <footer>
-      Made in Bangladesh 🇧🇩 | Curated by Nirobo<br>
-      Honoring the Language Movement and the Silent Legacy of Justice<br>
-      Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity<br>
-      <a href="/">← Back to Nirobo</a>
-    </footer>
   </div>
+
+  <footer>
+    Made in Bangladesh 🇧🇩 | Curated by Nirobo<br>
+    Honoring the Language Movement and the Silent Legacy of Justice<br>
+    Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity<br>
+    <a href="/">← Back to Nirobo</a>
+  </footer>
 
   <div class="notification" id="notification"></div>
 
   <script>
-    // --- CONFIGURATION ---
-    const MAX_SUBMISSIONS_PER_DOMAIN = 10;
-
-    // --- DOM ELEMENTS ---
-    const loginSection = document.getElementById('loginSection');
-    const dashboardContent = document.getElementById('dashboardContent');
-    const loginEmail = document.getElementById('loginEmail');
-    const loginPassword = document.getElementById('loginPassword');
-    const userEmail = document.getElementById('userEmail');
-    const submissionsList = document.getElementById('submissionsList');
+    // DOM Elements
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-input');
     const notification = document.getElementById('notification');
 
-    // --- HELPER FUNCTIONS ---
+    // Mock data for search results
+    const mockResults = [
+      {
+        title: "Bangla News Today",
+        description: "Latest news and updates from Bangladesh in Bangla language. Daily news coverage of politics, sports, entertainment, and more.",
+        tags: ["news", "bangla", "current affairs"],
+        url: "www.banglanewstoday.com"
+      },
+      {
+        title: "Tech Innovation BD",
+        description: "A platform showcasing technological innovations and startups from Bangladesh. Features interviews with tech entrepreneurs and product reviews.",
+        tags: ["technology", "startups", "innovation"],
+        url: "www.techinnovationbd.com"
+      },
+      {
+        title: "Cultural Heritage Hub",
+        description: "Dedicated to preserving and promoting the rich cultural heritage of Bangladesh. Includes information about traditional arts, music, and festivals.",
+        tags: ["culture", "heritage", "tradition"],
+        url: "www.culturalhub.com.bd"
+      },
+      {
+        title: "Education Portal BD",
+        description: "Comprehensive educational resources for students and teachers in Bangladesh. Offers study materials, exam preparation, and online courses.",
+        tags: ["education", "learning", "study"],
+        url: "www.educationportalbd.com"
+      },
+      {
+        title: "Healthcare Network",
+        description: "Connecting patients with healthcare providers across Bangladesh. Information about hospitals, doctors, and medical services.",
+        tags: ["health", "medicine", "hospital"],
+        url: "www.healthcarenetwork.com.bd"
+      }
+    ];
 
     // Show notification
     function showNotification(message, type = 'info') {
-        notification.textContent = message;
-        notification.className = 'notification ' + type;
-        notification.classList.add('show');
+      notification.textContent = message;
+      notification.className = 'notification ' + type;
+      notification.classList.add('show');
 
-        setTimeout(() => {
-            notification.classList.remove('show');
-        }, 3000);
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
     }
 
-    // Load data from localStorage
-    function loadData(key, defaultValue = []) {
-      try {
-        return JSON.parse(localStorage.getItem(key) || JSON.stringify(defaultValue));
-      } catch (e) {
-        console.error(`Error loading ${key}:`, e);
-        return defaultValue;
-      }
-    }
-
-    // Save data to localStorage
-    function saveData(key, data) {
-      try {
-        localStorage.setItem(key, JSON.stringify(data));
-      } catch (e) {
-        console.error(`Error saving ${key}:`, e);
-        showNotification('Failed to save data. Storage might be full.', 'error');
-      }
-    }
-
-    // Hash password (simple for demo)
-    function hashPassword(password) {
-      return btoa(password); // Not secure, but works for demo
-    }
-
-    // Format date
-    function formatDate(isoString) {
-        if (!isoString) return 'Unknown';
-        const date = new Date(isoString);
-        // Ensure it's displayed in local (BD) time
-        return date.toLocaleString('en-GB', {
-            timeZone: 'Asia/Dhaka',
-            day: '2-digit',
-            month: 'short',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: true
-        });
-    }
-
-    // Get domain from URL
-    function getDomain(url) {
-      try {
-        return new URL(url).hostname.replace('www.', '');
-      } catch (e) {
-        return 'unknown-domain';
-      }
-    }
-
-    // Check if user is banned
-    function isUserBanned(userId) {
-      const punishments = loadData('niroboPunishments', {});
-      const userPunishment = punishments[userId];
-
-      if (!userPunishment) return false;
-
-      if (userPunishment.banStatus === "perm_ban") {
-        return true;
+    // Handle search form submission
+    searchForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const query = searchInput.value.trim();
+      
+      if (!query) {
+        showNotification('Please enter a search term', 'error');
+        return;
       }
 
-      if (userPunishment.banStatus === "temp_ban" && userPunishment.banUntil) {
-        const banUntil = new Date(userPunishment.banUntil);
-        if (new Date() < banUntil) {
-          return true;
+      // Simulate search process
+      showNotification(`Searching for "${query}"...`, 'info');
+      
+      // Simulate API delay
+      setTimeout(() => {
+        const resultsContainer = document.getElementById('results');
+        
+        if (query.toLowerCase().includes('news')) {
+          resultsContainer.innerHTML = `
+            <div class="result-card">
+              <h2><a href="#">Bangla News Today</a></h2>
+              <p>Latest news and updates from Bangladesh in Bangla language. Daily news coverage of politics, sports, entertainment, and more.</p>
+              <div class="tags">
+                <span>news</span>
+                <span>bangla</span>
+                <span>current affairs</span>
+              </div>
+              <a href="#" class="url-subtitle">www.banglanewstoday.com</a>
+            </div>
+          `;
+          showNotification('Found 1 result matching your query', 'success');
+        } else if (query.toLowerCase().includes('tech')) {
+          resultsContainer.innerHTML = `
+            <div class="result-card">
+              <h2><a href="#">Tech Innovation BD</a></h2>
+              <p>A platform showcasing technological innovations and startups from Bangladesh. Features interviews with tech entrepreneurs and product reviews.</p>
+              <div class="tags">
+                <span>technology</span>
+                <span>startups</span>
+                <span>innovation</span>
+              </div>
+              <a href="#" class="url-subtitle">www.techinnovationbd.com</a>
+            </div>
+          `;
+          showNotification('Found 1 result matching your query', 'success');
         } else {
-          // Ban expired - remove it
-          delete punishments[userId];
-          saveData('niroboPunishments', punishments);
-          return false;
+          resultsContainer.innerHTML = '';
+          
+          mockResults.forEach(result => {
+            const div = document.createElement('div');
+            div.className = 'result-card';
+            div.innerHTML = `
+              <h2><a href="#">${result.title}</a></h2>
+              <p>${result.description}</p>
+              <div class="tags">
+                ${result.tags.map(tag => `<span>${tag}</span>`).join('')}
+              </div>
+              <a href="#" class="url-subtitle">${result.url}</a>
+            `;
+            resultsContainer.appendChild(div);
+          });
+          
+          showNotification(`Found ${mockResults.length} results matching your query`, 'success');
         }
-      }
-
-      return false;
-    }
-
-    // --- AUTHENTICATION ---
-
-    // Check if user is logged in
-    function checkAuth() {
-      const currentUser = loadData('niroboCurrentUser', null);
-      
-      if (!currentUser) {
-        // Not logged in, show login form
-        loginSection.style.display = 'block';
-        dashboardContent.style.display = 'none';
-        return null;
-      }
-      
-      // Check ban status
-      if (isUserBanned(currentUser.id)) {
-        showNotification('❌ Your account has been banned. Please contact support.', 'error');
-        localStorage.removeItem('niroboCurrentUser');
-        setTimeout(() => {
-           window.location.href = 'signup.html';
-        }, 2000);
-        return null;
-      }
-      
-      // User is logged in and not banned
-      loginSection.style.display = 'none';
-      dashboardContent.style.display = 'block';
-      userEmail.textContent = currentUser.email;
-      
-      return currentUser;
-    }
-
-    // Login button handler
-    document.getElementById('loginBtn').addEventListener('click', () => {
-      const email = loginEmail.value.trim();
-      const password = loginPassword.value;
-
-      if (!email || !password) {
-        showNotification('Please enter email and password', 'error');
-        return;
-      }
-
-      const users = loadData('niroboUsers', []);
-      const user = users.find(u => u.email === email && u.password === hashPassword(password));
-
-      if (!user) {
-        showNotification('❌ Invalid email or password', 'error');
-        return;
-      }
-
-      // Check ban status again on login attempt
-      if (isUserBanned(user.id)) {
-        showNotification('❌ Your account has been banned. Please contact support.', 'error');
-        return;
-      }
-
-      // Save current user
-      saveData('niroboCurrentUser', user);
-      
-      // Show dashboard
-      loginSection.style.display = 'none';
-      dashboardContent.style.display = 'block';
-      userEmail.textContent = user.email;
-      
-      // Load user's submissions
-      displayUserSubmissions();
-      
-      showNotification('✅ Login successful!', 'success');
+      }, 800);
     });
 
-    // Logout button handler
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      localStorage.removeItem('niroboCurrentUser');
-      showNotification('✅ Logged out successfully.', 'success');
-      
-      // Show login form
-      loginSection.style.display = 'block';
-      dashboardContent.style.display = 'none';
-      loginEmail.value = '';
-      loginPassword.value = '';
-    });
-
-    // --- SUBMISSION SYSTEM ---
-
-    // Submit new website
-    document.getElementById('submitWebsiteBtn').addEventListener('click', () => {
-      const title = document.getElementById('websiteTitle').value.trim();
-      const url = document.getElementById('websiteUrl').value.trim();
-      const desc = document.getElementById('websiteDesc').value.trim();
-      const tagsInput = document.getElementById('websiteTags').value;
-
-      if (!title || !url) {
-        showNotification('Please enter title and URL', 'error');
-        return;
-      }
-
-      const currentUser = loadData('niroboCurrentUser', null);
-      if (!currentUser) {
-        showNotification('Please log in first', 'error');
-        return;
-      }
-
-      // Check ban status again (paranoid check)
-      if (isUserBanned(currentUser.id)) {
-        showNotification('❌ Your account has been banned. You cannot submit websites.', 'error');
-        return;
-      }
-
-      // Check domain limit
-      try {
-        const domain = getDomain(url);
-        const allSubmissions = loadData('niroboAllSubmissions', []);
-        const domainSubmissions = allSubmissions.filter(item => 
-          getDomain(item.url) === domain && item.userId === currentUser.id
-        );
-
-        if (domainSubmissions.length >= MAX_SUBMISSIONS_PER_DOMAIN) {
-          showNotification(`❌ You've reached the limit of ${MAX_SUBMISSIONS_PER_DOMAIN} submissions for ${domain}.`, 'error');
-          return;
-        }
-
-        // Process tags
-        const tags = tagsInput.split(',')
-          .map(tag => tag.trim())
-          .filter(tag => tag.length > 0)
-          .slice(0, 10); // Limit to 10 tags
-        
-        if (tags.length === 0) {
-          tags.push('general');
-        }
-
-        const newSubmission = {
-          id: 'sub_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-          userId: currentUser.id,
-          title,
-          url,
-          description: desc,
-          tags: tags,
-          submittedAt: new Date().toISOString(),
-          status: "pending",
-          viewCount: 0,
-          adminMessage: "",
-          submitterEmail: currentUser.email // Store for admin reference
-        };
-
-        allSubmissions.push(newSubmission);
-        saveData('niroboAllSubmissions', allSubmissions);
-
-        showNotification('✅ Website submitted for review!', 'success');
-        
-        // Clear form
-        document.getElementById('websiteTitle').value = '';
-        document.getElementById('websiteUrl').value = '';
-        document.getElementById('websiteDesc').value = '';
-        document.getElementById('websiteTags').value = '';
-
-        // Refresh submissions list
-        displayUserSubmissions();
-
-      } catch (e) {
-        showNotification('❌ Please enter a valid URL (e.g., https://example.com)', 'error');
+    // Handle input focus
+    searchInput.addEventListener('focus', () => {
+      if (searchInput.value === '') {
+        searchInput.placeholder = 'Type something to search...';
       }
     });
 
-    // Display user's submissions
-    function displayUserSubmissions() {
-      const allSubmissions = loadData('niroboAllSubmissions', []);
-      const currentUser = loadData('niroboCurrentUser', null);
-      
-      if (!currentUser) return;
-
-      const userSubmissions = allSubmissions.filter(sub => sub.userId === currentUser.id);
-      
-      const container = document.getElementById('submissionsList');
-      
-      if (userSubmissions.length === 0) {
-        container.innerHTML = '<div class="empty-state"><h3>📭 No submissions yet</h3><p>Submit your first website above to get started!</p></div>';
-        return;
+    // Handle input blur
+    searchInput.addEventListener('blur', () => {
+      if (searchInput.value === '') {
+        searchInput.placeholder = 'Search for websites...';
       }
+    });
 
-      container.innerHTML = '';
-      userSubmissions.forEach(sub => {
-        const domain = getDomain(sub.url);
-        const div = document.createElement('div');
-        div.className = `submission-item ${sub.status}`;
-        div.innerHTML = `
-          <div class="submission-header">
-            <div class="submission-title">${sub.title}</div>
-            <span class="status ${sub.status}">${sub.status.toUpperCase()}</span>
-          </div>
-          <a href="${sub.url}" target="_blank" class="submission-url">${domain}</a>
-          <p>${sub.description || 'No description provided.'}</p>
-          <div class="tags">
-            ${(Array.isArray(sub.tags) ? sub.tags : []).map(tag => `<span>${tag}</span>`).join(' ')}
-          </div>
-          <p><small>Submitted: ${formatDate(sub.submittedAt)}</small></p>
-          <p><small>👀 Views: ${sub.viewCount || 0}</small></p>
-          ${sub.adminMessage ? `<div class="admin-message">💬 Admin Message: ${sub.adminMessage}</div>` : ''}
-          <div class="actions">
-            <button class="btn-delete" onclick="deleteSubmission('${sub.id}')">🗑️ Remove Submission</button>
-          </div>
-        `;
-        container.appendChild(div);
-      });
-    }
-
-    // Delete submission
-    window.deleteSubmission = function(submissionId) {
-      if (!confirm('Are you sure you want to remove this submission?')) {
-        return;
-      }
-
-      let allSubmissions = loadData('niroboAllSubmissions', []);
-      const index = allSubmissions.findIndex(sub => sub.id === submissionId);
-      
-      if (index !== -1) {
-        allSubmissions.splice(index, 1);
-        saveData('niroboAllSubmissions', allSubmissions);
-        
-        showNotification('🗑️ Submission removed.', 'success');
-        displayUserSubmissions();
-      }
-    };
-
-    // --- INITIALIZATION ---
-
-    // Check if user is already logged in on page load
+    // Initialize page
     document.addEventListener('DOMContentLoaded', () => {
-      const user = checkAuth();
-      if (user) {
-        displayUserSubmissions();
-      }
+      // Set up sidebar navigation
+      const sidebarLinks = document.querySelectorAll('.sidebar a');
+      sidebarLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          sidebarLinks.forEach(l => l.classList.remove('active'));
+          this.classList.add('active');
+          
+          // In a real app, this would navigate to different pages
+          showNotification('Navigating to ' + this.textContent.split(' ')[0], 'info');
+        });
+      });
     });
   </script>
 </body>
