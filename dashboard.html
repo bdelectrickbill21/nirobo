@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nirobo — Search Engine</title>
+  <title>Nirobo — Your Dashboard</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
@@ -217,6 +217,48 @@
       padding-bottom: 10px;
     }
 
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #ffcccc;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--accent);
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    button.main-btn {
+      padding: 12px 24px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    button.main-btn:hover {
+      background: var(--accent-hover);
+    }
+
     .submission-item {
       background: rgba(255, 255, 255, 0.05);
       padding: 20px;
@@ -390,62 +432,31 @@
         <p>“You hold the pen — write your truth into Bangladesh’s digital soul.”</p>
       </div>
 
-      <div class="search-container">
-        <form id="search-form">
-          <input type="text" id="search-input" placeholder="Search for websites..." autocomplete="off">
-          <button type="submit"><i class="fas fa-search"></i> Search</button>
-        </form>
-      </div>
-
       <div class="section">
-        <h2>Latest Additions</h2>
-        <div id="results">
-          <div class="result-card">
-            <h2><a href="#">Bangla News Today</a></h2>
-            <p>Latest news and updates from Bangladesh in Bangla language. Daily news coverage of politics, sports, entertainment, and more.</p>
-            <div class="tags">
-              <span>news</span>
-              <span>bangla</span>
-              <span>current affairs</span>
-            </div>
-            <a href="#" class="url-subtitle">www.banglanewstoday.com</a>
-          </div>
-
-          <div class="result-card">
-            <h2><a href="#">Tech Innovation BD</a></h2>
-            <p>A platform showcasing technological innovations and startups from Bangladesh. Features interviews with tech entrepreneurs and product reviews.</p>
-            <div class="tags">
-              <span>technology</span>
-              <span>startups</span>
-              <span>innovation</span>
-            </div>
-            <a href="#" class="url-subtitle">www.techinnovationbd.com</a>
-          </div>
-
-          <div class="result-card">
-            <h2><a href="#">Cultural Heritage Hub</a></h2>
-            <p>Dedicated to preserving and promoting the rich cultural heritage of Bangladesh. Includes information about traditional arts, music, and festivals.</p>
-            <div class="tags">
-              <span>culture</span>
-              <span>heritage</span>
-              <span>tradition</span>
-            </div>
-            <a href="#" class="url-subtitle">www.culturalhub.com.bd</a>
-          </div>
+        <h2>➕ SUBMIT A NEW WEBSITE</h2>
+        <div class="form-group">
+          <label>Website Title</label>
+          <input type="text" id="websiteTitle" placeholder="e.g., My Blog" />
         </div>
+        <div class="form-group">
+          <label>URL</label>
+          <input type="url" id="websiteUrl" placeholder="https://yourwebsite.com" />
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="websiteDesc" placeholder="Brief description of your website" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Tags (comma separated)</label>
+          <input type="text" id="websiteTags" placeholder="news, blog, bangla" />
+        </div>
+        <button id="submitWebsiteBtn" class="main-btn">Submit Website</button>
       </div>
 
       <div class="section">
-        <h2>Featured Websites</h2>
-        <div class="result-card">
-          <h2><a href="#">Nirobo Official</a></h2>
-          <p>The official search engine dedicated to connecting users with authentic Bangladeshi content. Our mission is to promote local knowledge and culture.</p>
-          <div class="tags">
-            <span>search engine</span>
-            <span>bangladesh</span>
-            <span>local content</span>
-          </div>
-          <a href="#" class="url-subtitle">www.nirobo.com</a>
+        <h2>📊 YOUR SUBMISSIONS</h2>
+        <div id="submissionsList">
+          <p>Loading your submissions...</p>
         </div>
       </div>
     </div>
@@ -462,41 +473,29 @@
 
   <script>
     // DOM Elements
-    const searchForm = document.getElementById('search-form');
-    const searchInput = document.getElementById('search-input');
+    const submitWebsiteBtn = document.getElementById('submitWebsiteBtn');
+    const submissionsList = document.getElementById('submissionsList');
     const notification = document.getElementById('notification');
 
-    // Mock data for search results
-    const mockResults = [
+    // Mock data for submissions
+    let submissions = [
       {
-        title: "Bangla News Today",
-        description: "Latest news and updates from Bangladesh in Bangla language. Daily news coverage of politics, sports, entertainment, and more.",
-        tags: ["news", "bangla", "current affairs"],
-        url: "www.banglanewstoday.com"
+        id: 'sub_1',
+        title: 'Bangla News Today',
+        url: 'https://banglanewstoday.com',
+        description: 'Latest news and updates from Bangladesh in Bangla language.',
+        tags: ['news', 'bangla', 'current affairs'],
+        status: 'approved',
+        submittedAt: '2023-01-15T10:30:00Z'
       },
       {
-        title: "Tech Innovation BD",
-        description: "A platform showcasing technological innovations and startups from Bangladesh. Features interviews with tech entrepreneurs and product reviews.",
-        tags: ["technology", "startups", "innovation"],
-        url: "www.techinnovationbd.com"
-      },
-      {
-        title: "Cultural Heritage Hub",
-        description: "Dedicated to preserving and promoting the rich cultural heritage of Bangladesh. Includes information about traditional arts, music, and festivals.",
-        tags: ["culture", "heritage", "tradition"],
-        url: "www.culturalhub.com.bd"
-      },
-      {
-        title: "Education Portal BD",
-        description: "Comprehensive educational resources for students and teachers in Bangladesh. Offers study materials, exam preparation, and online courses.",
-        tags: ["education", "learning", "study"],
-        url: "www.educationportalbd.com"
-      },
-      {
-        title: "Healthcare Network",
-        description: "Connecting patients with healthcare providers across Bangladesh. Information about hospitals, doctors, and medical services.",
-        tags: ["health", "medicine", "hospital"],
-        url: "www.healthcarenetwork.com.bd"
+        id: 'sub_2',
+        title: 'Tech Innovation BD',
+        url: 'https://techinnovationbd.com',
+        description: 'A platform showcasing technological innovations and startups from Bangladesh.',
+        tags: ['technology', 'startups', 'innovation'],
+        status: 'pending',
+        submittedAt: '2023-01-16T14:20:00Z'
       }
     ];
 
@@ -511,102 +510,130 @@
       }, 3000);
     }
 
-    // Handle search form submission
-    searchForm.addEventListener('submit', function(e) {
-      e.preventDefault();
+    // Format date
+    function formatDate(isoString) {
+      if (!isoString) return 'Unknown';
+      const date = new Date(isoString);
+      return date.toLocaleString('en-GB', {
+        timeZone: 'Asia/Dhaka',
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      });
+    }
+
+    // Get domain from URL
+    function getDomain(url) {
+      try {
+        return new URL(url).hostname.replace('www.', '');
+      } catch (e) {
+        return 'unknown-domain';
+      }
+    }
+
+    // Display submissions
+    function displaySubmissions() {
+      const container = document.getElementById('submissionsList');
       
-      const query = searchInput.value.trim();
-      
-      if (!query) {
-        showNotification('Please enter a search term', 'error');
+      if (submissions.length === 0) {
+        container.innerHTML = '<div class="empty-state"><h3>📭 No submissions yet</h3><p>Submit your first website above to get started!</p></div>';
         return;
       }
 
-      // Simulate search process
-      showNotification(`Searching for "${query}"...`, 'info');
-      
-      // Simulate API delay
-      setTimeout(() => {
-        const resultsContainer = document.getElementById('results');
+      container.innerHTML = '';
+      submissions.forEach(sub => {
+        const div = document.createElement('div');
+        div.className = `submission-item ${sub.status}`;
+        div.innerHTML = `
+          <div class="submission-header">
+            <div class="submission-title">${sub.title}</div>
+            <span class="status ${sub.status}">${sub.status.toUpperCase()}</span>
+          </div>
+          <a href="${sub.url}" target="_blank" class="submission-url">${getDomain(sub.url)}</a>
+          <p>${sub.description || 'No description provided.'}</p>
+          <div class="tags">
+            ${(Array.isArray(sub.tags) ? sub.tags : []).map(tag => `<span>${tag}</span>`).join(' ')}
+          </div>
+          <p><small>Submitted: ${formatDate(sub.submittedAt)}</small></p>
+          <div class="actions">
+            <button class="btn-delete" onclick="deleteSubmission('${sub.id}')">🗑️ Remove Submission</button>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // Submit new website
+    submitWebsiteBtn.addEventListener('click', () => {
+      const title = document.getElementById('websiteTitle').value.trim();
+      const url = document.getElementById('websiteUrl').value.trim();
+      const desc = document.getElementById('websiteDesc').value.trim();
+      const tagsInput = document.getElementById('websiteTags').value;
+
+      if (!title || !url) {
+        showNotification('Please enter title and URL', 'error');
+        return;
+      }
+
+      // Check if URL is valid
+      try {
+        new URL(url);
+      } catch (e) {
+        showNotification('Please enter a valid URL (e.g., https://example.com)', 'error');
+        return;
+      }
+
+      // Process tags
+      const tags = tagsInput.split(',')
+        .map(tag => tag.trim())
+        .filter(tag => tag.length > 0)
+        .slice(0, 10); // Limit to 10 tags
         
-        if (query.toLowerCase().includes('news')) {
-          resultsContainer.innerHTML = `
-            <div class="result-card">
-              <h2><a href="#">Bangla News Today</a></h2>
-              <p>Latest news and updates from Bangladesh in Bangla language. Daily news coverage of politics, sports, entertainment, and more.</p>
-              <div class="tags">
-                <span>news</span>
-                <span>bangla</span>
-                <span>current affairs</span>
-              </div>
-              <a href="#" class="url-subtitle">www.banglanewstoday.com</a>
-            </div>
-          `;
-          showNotification('Found 1 result matching your query', 'success');
-        } else if (query.toLowerCase().includes('tech')) {
-          resultsContainer.innerHTML = `
-            <div class="result-card">
-              <h2><a href="#">Tech Innovation BD</a></h2>
-              <p>A platform showcasing technological innovations and startups from Bangladesh. Features interviews with tech entrepreneurs and product reviews.</p>
-              <div class="tags">
-                <span>technology</span>
-                <span>startups</span>
-                <span>innovation</span>
-              </div>
-              <a href="#" class="url-subtitle">www.techinnovationbd.com</a>
-            </div>
-          `;
-          showNotification('Found 1 result matching your query', 'success');
-        } else {
-          resultsContainer.innerHTML = '';
-          
-          mockResults.forEach(result => {
-            const div = document.createElement('div');
-            div.className = 'result-card';
-            div.innerHTML = `
-              <h2><a href="#">${result.title}</a></h2>
-              <p>${result.description}</p>
-              <div class="tags">
-                ${result.tags.map(tag => `<span>${tag}</span>`).join('')}
-              </div>
-              <a href="#" class="url-subtitle">${result.url}</a>
-            `;
-            resultsContainer.appendChild(div);
-          });
-          
-          showNotification(`Found ${mockResults.length} results matching your query`, 'success');
-        }
-      }, 800);
+      if (tags.length === 0) {
+        tags.push('general');
+      }
+
+      // Create new submission
+      const newSubmission = {
+        id: 'sub_' + Date.now(),
+        title,
+        url,
+        description: desc,
+        tags: tags,
+        status: "pending",
+        submittedAt: new Date().toISOString()
+      };
+
+      submissions.unshift(newSubmission);
+      showNotification('✅ Website submitted for review!', 'success');
+      
+      // Clear form
+      document.getElementById('websiteTitle').value = '';
+      document.getElementById('websiteUrl').value = '';
+      document.getElementById('websiteDesc').value = '';
+      document.getElementById('websiteTags').value = '';
+
+      // Refresh submissions list
+      displaySubmissions();
     });
 
-    // Handle input focus
-    searchInput.addEventListener('focus', () => {
-      if (searchInput.value === '') {
-        searchInput.placeholder = 'Type something to search...';
+    // Delete submission
+    window.deleteSubmission = function(submissionId) {
+      if (!confirm('Are you sure you want to remove this submission?')) {
+        return;
       }
-    });
 
-    // Handle input blur
-    searchInput.addEventListener('blur', () => {
-      if (searchInput.value === '') {
-        searchInput.placeholder = 'Search for websites...';
-      }
-    });
+      submissions = submissions.filter(sub => sub.id !== submissionId);
+      showNotification('🗑️ Submission removed.', 'success');
+      displaySubmissions();
+    };
 
     // Initialize page
     document.addEventListener('DOMContentLoaded', () => {
-      // Set up sidebar navigation
-      const sidebarLinks = document.querySelectorAll('.sidebar a');
-      sidebarLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          sidebarLinks.forEach(l => l.classList.remove('active'));
-          this.classList.add('active');
-          
-          // In a real app, this would navigate to different pages
-          showNotification('Navigating to ' + this.textContent.split(' ')[0], 'info');
-        });
-      });
+      displaySubmissions();
     });
   </script>
 </body>
