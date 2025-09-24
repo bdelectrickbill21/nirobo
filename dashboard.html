@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nirobo — Dashboard</title>
+  <title>Nirobo — Your Dashboard</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
@@ -21,6 +21,9 @@
       --warning: #ff9900;
       --danger: #d40000;
       --info: #0066cc;
+      --analytics-green: #00c853;
+      --analytics-blue: #2962ff;
+      --analytics-purple: #aa00ff;
     }
 
     * {
@@ -55,11 +58,6 @@
       position: sticky;
       top: 20px;
       height: fit-content;
-      display: none;
-    }
-
-    .sidebar.visible {
-      display: block;
     }
 
     .sidebar h2 {
@@ -126,48 +124,13 @@
       color: #ffcccc;
     }
 
-    .login-section {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 30px;
-      border-radius: 15px;
-      margin-bottom: 30px;
-      text-align: center;
-      max-width: 500px;
-      margin: 0 auto 30px;
-    }
-
-    .login-section input {
-      padding: 12px;
-      width: 250px;
-      margin: 10px;
-      border: 1px solid var(--accent);
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 4px;
-      color: white;
-      font-size: 16px;
-    }
-
-    .login-section button {
-      padding: 12px 20px;
-      background: var(--accent);
-      color: white;
-      border: none;
-      border-radius: 4px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      margin: 10px;
-    }
-
-    .login-section button:hover {
-      background: var(--accent-hover);
-    }
-
     .user-info {
       background: rgba(255, 255, 255, 0.1);
       padding: 15px;
       border-radius: 10px;
-      display: inline-block;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 30px;
       color: #ffcccc;
     }
@@ -177,7 +140,6 @@
       padding: 10px 20px;
       font-size: 1rem;
       display: inline-block;
-      margin-left: 15px;
       text-align: center;
       width: auto;
       border: none;
@@ -258,6 +220,11 @@
       border-left: 4px solid var(--accent);
       display: flex;
       gap: 15px;
+      transition: transform 0.2s;
+    }
+
+    .submission-item:hover {
+      transform: translateX(5px);
     }
 
     .favicon-preview {
@@ -270,6 +237,7 @@
       justify-content: center;
       font-size: 20px;
       color: var(--accent);
+      flex-shrink: 0;
     }
 
     .submission-content {
@@ -293,6 +261,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      flex-wrap: wrap;
     }
 
     .status {
@@ -331,8 +300,7 @@
       font-size: 0.9rem;
     }
 
-    .btn-delete {
-      background: var(--danger);
+    .btn-delete, .btn-edit {
       padding: 6px 12px;
       font-size: 0.85rem;
       width: auto;
@@ -341,10 +309,23 @@
       cursor: pointer;
       color: white;
       margin-top: 10px;
+      margin-right: 8px;
+    }
+
+    .btn-delete {
+      background: var(--danger);
+    }
+
+    .btn-edit {
+      background: var(--info);
     }
 
     .btn-delete:hover {
       background: #ff3333;
+    }
+
+    .btn-edit:hover {
+      background: #0088ff;
     }
 
     footer {
@@ -399,6 +380,60 @@
       background: linear-gradient(45deg, var(--info), #0088ff);
     }
 
+    /* Analytics Charts */
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .metric-card {
+      background: rgba(0, 100, 0, 0.2);
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .metric-value {
+      font-size: 2rem;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .metric-label {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    /* Draft System */
+    .draft-banner {
+      background: rgba(255, 153, 0, 0.2);
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .draft-banner.show {
+      display: block;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        position: static;
+      }
+      .user-info {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+
     /* Bangladesh Indicator */
     body::after {
       content: "";
@@ -414,21 +449,89 @@
       z-index: -1;
     }
 
-    @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
-      }
-      .sidebar {
-        width: 100%;
-        position: static;
-      }
+    /* Loading States */
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-secondary);
+    }
+
+    .skeleton {
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      margin-bottom: 15px;
+      height: 20px;
+    }
+
+    /* Admin Notice Board */
+    .notice-board {
+      background: rgba(0, 100, 200, 0.15);
+      border-left: 4px solid var(--info);
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 25px;
+    }
+
+    .notice-board h3 {
+      color: var(--info);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .notice-list {
+      list-style: none;
+    }
+
+    .notice-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .notice-list li:last-child {
+      border-bottom: none;
+    }
+
+    /* Submission Preview */
+    .preview-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+
+    .preview-content {
+      background: var(--card-bg);
+      width: 90%;
+      max-width: 600px;
+      border-radius: 12px;
+      padding: 30px;
+      position: relative;
+    }
+
+    .close-preview {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.5rem;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
+    <div class="sidebar">
       <h2>Nirobo</h2>
       <ul>
         <li><a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
@@ -436,6 +539,7 @@
         <li><a href="#"><i class="fas fa-chart-line"></i> Analytics</a></li>
         <li><a href="#"><i class="fas fa-bell"></i> Notifications</a></li>
         <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+        <li><a href="index.html"><i class="fas fa-arrow-left"></i> Back to Search</a></li>
       </ul>
     </div>
 
@@ -446,65 +550,87 @@
         <p>“You hold the pen — write your truth into Bangladesh’s digital soul.”</p>
       </div>
 
-      <!-- Login Section -->
-      <div id="loginSection" class="login-section">
-        <h2>🔐 Please Log In</h2>
-        <p>Submit and manage your website in Nirobo's curated search engine</p>
-        <div class="form-group">
-          <input type="email" id="loginEmail" placeholder="Email" />
-        </div>
-        <div class="form-group">
-          <input type="password" id="loginPassword" placeholder="Password" />
-        </div>
-        <button id="loginBtn">Login</button>
-        <p style="margin-top: 20px; font-size: 0.9rem;">
-          Don't have an account? <a href="signup.html">Sign Up</a>
-        </p>
+      <div class="user-info">
+        <span>Logged in as: <strong id="userEmail">user@example.com</strong></span>
+        <a href="#" id="logoutBtn" class="logout-btn">🚪 Logout</a>
       </div>
 
-      <!-- Dashboard Content -->
-      <div id="dashboardContent" style="display: none;">
-        <div class="user-info">
-          Logged in as: <strong id="userEmail">user@example.com</strong>
-          <a href="#" id="logoutBtn" class="logout-btn">🚪 Logout</a>
-        </div>
+      <!-- Admin Notices -->
+      <div class="notice-board">
+        <h3><i class="fas fa-bullhorn"></i> Admin Notices</h3>
+        <ul class="notice-list" id="adminNotices">
+          <li>Loading notices...</li>
+        </ul>
+      </div>
 
-        <!-- Submit New Website -->
-        <div class="section">
-          <h2>➕ SUBMIT A NEW WEBSITE</h2>
-          <div class="form-group">
-            <label>URL</label>
-            <input type="url" id="websiteUrl" placeholder="https://yourwebsite.com" />
+      <!-- Analytics Overview -->
+      <div class="section">
+        <h2>📈 Your Analytics</h2>
+        <div class="analytics-grid">
+          <div class="metric-card">
+            <div class="metric-value" id="totalSubmissions">0</div>
+            <div class="metric-label">Total Submissions</div>
           </div>
-          <div class="form-group">
-            <label>Detected Title</label>
-            <input type="text" id="websiteTitle" placeholder="Title will be auto-filled" readonly />
+          <div class="metric-card">
+            <div class="metric-value" id="approvedCount">0</div>
+            <div class="metric-label">Approved</div>
           </div>
-          <div class="form-group">
-            <label>Type of URL</label>
-            <select id="urlType">
-              <option value="">-- Select Category --</option>
-              <option value="education">Education</option>
-              <option value="entertainment">Entertainment</option>
-              <option value="blog">Blog</option>
-              <option value="company">Company/Organization</option>
-              <option value="tools">Online Tools</option>
-              <option value="news">News</option>
-              <option value="document">Document (PDF, Word, Excel)</option>
-              <option value="media">Images/Videos</option>
-            </select>
+          <div class="metric-card">
+            <div class="metric-value" id="pendingCount">0</div>
+            <div class="metric-label">Pending Review</div>
           </div>
-          <div class="form-group">
-            <label>Description</label>
-            <textarea id="websiteDesc" placeholder="Brief description of your content" rows="3"></textarea>
+          <div class="metric-card">
+            <div class="metric-value" id="totalViews">0</div>
+            <div class="metric-label">Total Views</div>
           </div>
-          <button id="submitWebsiteBtn" class="main-btn">Submit for Review</button>
         </div>
+      </div>
 
-        <!-- Your Submissions -->
-        <div class="section">
-          <h2>📊 YOUR SUBMISSIONS</h2>
-          <div id="submissionsList">
+      <!-- Draft Banner -->
+      <div class="draft-banner" id="draftBanner">
+        <p><i class="fas fa-save"></i> You have an unsaved draft. <button id="resumeDraft" class="btn-edit">Resume</button></p>
+      </div>
+
+      <!-- Submit New Website -->
+      <div class="section">
+        <h2>➕ Submit a New URL</h2>
+        <div class="form-group">
+          <label>URL <span style="color:var(--warning); font-size:0.9em;">(must start with http:// or https://)</span></label>
+          <input type="url" id="websiteUrl" placeholder="https://yourwebsite.com" autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label>Detected Title</label>
+          <input type="text" id="websiteTitle" placeholder="Title will be auto-filled when URL is valid" readonly />
+        </div>
+        <div class="form-group">
+          <label>Type of Content</label>
+          <select id="urlType">
+            <option value="">-- Select Category --</option>
+            <option value="education">🎓 Education</option>
+            <option value="entertainment">🎭 Entertainment</option>
+            <option value="blog">✍️ Blog / Personal</option>
+            <option value="company">🏢 Company / Organization</option>
+            <option value="tools">🛠️ Online Tools</option>
+            <option value="news">📰 News / Media</option>
+            <option value="document">📄 Document (PDF, Word, Excel)</option>
+            <option value="media">🖼️ Images / Videos</option>
+            <option value="other">❓ Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Description (max 200 characters)</label>
+          <textarea id="websiteDesc" placeholder="Briefly describe your content. What makes it valuable?" rows="3" maxlength="200"></textarea>
+          <small id="charCount" style="color:var(--text-secondary); float:right;">0/200</small>
+        </div>
+        <button id="submitWebsiteBtn" class="main-btn">Submit for Review</button>
+        <button id="saveDraftBtn" style="background:var(--warning); margin-top:10px; width:auto; padding:8px 16px;">Save Draft</button>
+      </div>
+
+      <!-- Your Submissions -->
+      <div class="section">
+        <h2>📊 Your Submissions</h2>
+        <div id="submissionsList">
+          <div class="loading">
             <p>Loading your submissions...</p>
           </div>
         </div>
@@ -512,45 +638,63 @@
     </div>
   </div>
 
+  <!-- Preview Modal -->
+  <div class="preview-modal" id="previewModal">
+    <div class="preview-content">
+      <button class="close-preview" id="closePreview">&times;</button>
+      <h3 id="previewTitle">Submission Preview</h3>
+      <p><strong>URL:</strong> <span id="previewUrl"></span></p>
+      <p><strong>Category:</strong> <span id="previewType"></span></p>
+      <p><strong>Description:</strong> <span id="previewDesc"></span></p>
+      <div style="margin-top:20px;">
+        <button class="main-btn" id="confirmSubmit">Confirm & Submit</button>
+      </div>
+    </div>
+  </div>
+
   <footer>
     Made in Bangladesh 🇧🇩 | Curated by Nirobo<br>
-    Honoring the Language Movement and the Silent Legacy of Justice
+    Honoring the Language Movement and the Silent Legacy of Justice<br>
+    Every URL you submit shapes Bangladesh’s digital future.
   </footer>
 
   <div class="notification" id="notification"></div>
 
   <script>
-    // Initialize fresh data on first load
-    if (!localStorage.getItem('niroboInitialized')) {
-      localStorage.setItem('niroboUsers', JSON.stringify([
-        { id: 'admin123', email: 'admin@nirobo.com', password: btoa('admin123'), isAdmin: true }
-      ]));
-      localStorage.setItem('niroboSubmissions', JSON.stringify([]));
-      localStorage.setItem('niroboAdminNotices', JSON.stringify([
-        "Welcome to Nirobo! Submit your first URL to get started.",
-        "All submissions are reviewed within 48 hours."
-      ]));
-      localStorage.setItem('niroboInitialized', 'true');
+    // ======================
+    // DASHBOARD CORE LOGIC
+    // ======================
+
+    // Redirect to login if not authenticated
+    const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser'));
+    if (!currentUser) {
+      window.location.href = 'login.html';
     }
 
     // DOM Elements
-    const loginSection = document.getElementById('loginSection');
-    const dashboardContent = document.getElementById('dashboardContent');
-    const loginEmail = document.getElementById('loginEmail');
-    const loginPassword = document.getElementById('loginPassword');
     const userEmail = document.getElementById('userEmail');
     const submissionsList = document.getElementById('submissionsList');
     const notification = document.getElementById('notification');
     const websiteUrl = document.getElementById('websiteUrl');
     const websiteTitle = document.getElementById('websiteTitle');
     const submitBtn = document.getElementById('submitWebsiteBtn');
+    const saveDraftBtn = document.getElementById('saveDraftBtn');
+    const draftBanner = document.getElementById('draftBanner');
+    const resumeDraftBtn = document.getElementById('resumeDraft');
+    const charCount = document.getElementById('charCount');
+    const previewModal = document.getElementById('previewModal');
+    const closePreview = document.getElementById('closePreview');
+    const confirmSubmit = document.getElementById('confirmSubmit');
+
+    // Set user email
+    userEmail.textContent = currentUser.email;
 
     // Show notification
     function showNotification(message, type = 'info') {
       notification.textContent = message;
       notification.className = 'notification ' + type;
       notification.classList.add('show');
-      setTimeout(() => notification.classList.remove('show'), 3000);
+      setTimeout(() => notification.classList.remove('show'), 3500);
     }
 
     // Load data
@@ -563,30 +707,21 @@
       localStorage.setItem(key, JSON.stringify(data));
     }
 
-    // Hash password (basic for demo)
-    function hashPassword(pw) {
-      return btoa(pw);
-    }
-
-    // Simulate title/favicon extraction
-    function extractMetadata(url) {
+    // Simulate title extraction
+    function extractTitle(url) {
       try {
         const domain = new URL(url).hostname.replace('www.', '');
-        // In real system, this would fetch the page and parse <title> and <link rel="icon">
-        // Here we simulate
         const mockTitles = {
           'example.com': 'Example Domain',
           'github.com': 'GitHub: Where the world builds software',
           'youtube.com': 'YouTube: Watch, Create, Share',
           'docs.google.com': 'Google Docs - Create and edit documents',
-          'wikipedia.org': 'Wikipedia: The Free Encyclopedia'
+          'wikipedia.org': 'Wikipedia: The Free Encyclopedia',
+          'stackoverflow.com': 'Stack Overflow - Where Developers Learn, Share, & Build Careers'
         };
-        const title = mockTitles[domain] || `Homepage of ${domain}`;
-        websiteTitle.value = title;
-        return { title, favicon: `https://www.google.com/s2/favicons?domain=${domain}` };
+        return mockTitles[domain] || `Homepage of ${domain}`;
       } catch (e) {
-        websiteTitle.value = 'Unknown Title';
-        return { title: 'Unknown Title', favicon: '' };
+        return 'Unknown Title';
       }
     }
 
@@ -612,113 +747,60 @@
       }
     }
 
-    // Check auth
-    function checkAuth() {
-      const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser'));
-      if (!currentUser) {
-        loginSection.style.display = 'block';
-        dashboardContent.style.display = 'none';
-        return null;
-      }
-      loginSection.style.display = 'none';
-      dashboardContent.style.display = 'block';
-      userEmail.textContent = currentUser.email;
-      document.getElementById('sidebar').classList.add('visible');
-      displaySubmissions();
-      return currentUser;
+    // Get category label
+    function getCategoryLabel(type) {
+      const labels = {
+        education: '🎓 Education',
+        entertainment: '🎭 Entertainment',
+        blog: '✍️ Blog',
+        company: '🏢 Company',
+        tools: '🛠️ Tools',
+        news: '📰 News',
+        document: '📄 Document',
+        media: '🖼️ Media',
+        other: '❓ Other'
+      };
+      return labels[type] || type;
     }
 
-    // Login
-    document.getElementById('loginBtn').addEventListener('click', () => {
-      const email = loginEmail.value.trim();
-      const password = loginPassword.value;
-      if (!email || !password) return showNotification('Enter email and password', 'error');
-
-      const users = loadData('niroboUsers');
-      const user = users.find(u => u.email === email && u.password === hashPassword(password));
-      if (!user) return showNotification('Invalid credentials', 'error');
-
-      localStorage.setItem('niroboCurrentUser', JSON.stringify(user));
-      showNotification('Login successful!', 'success');
-      checkAuth();
-    });
-
-    // Logout
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      localStorage.removeItem('niroboCurrentUser');
-      showNotification('Logged out', 'info');
-      checkAuth();
-    });
-
-    // URL input handler
-    websiteUrl.addEventListener('input', () => {
-      const url = websiteUrl.value.trim();
-      if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
-        extractMetadata(url);
+    // Display admin notices
+    function displayAdminNotices() {
+      const notices = loadData('niroboAdminNotices');
+      const noticeList = document.getElementById('adminNotices');
+      if (notices.length === 0) {
+        noticeList.innerHTML = '<li>No new notices.</li>';
+        return;
       }
-    });
+      noticeList.innerHTML = notices.map(notice => `<li>${notice}</li>`).join('');
+    }
 
-    // Submit URL
-    submitBtn.addEventListener('click', () => {
-      const url = websiteUrl.value.trim();
-      const title = websiteTitle.value.trim();
-      const type = document.getElementById('urlType').value;
-      const desc = document.getElementById('websiteDesc').value.trim();
-      const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser'));
+    // Display analytics
+    function displayAnalytics() {
+      const submissions = loadData('niroboSubmissions').filter(s => s.userId === currentUser.id);
+      const total = submissions.length;
+      const approved = submissions.filter(s => s.status === 'approved').length;
+      const pending = submissions.filter(s => s.status === 'pending').length;
+      const views = submissions.reduce((sum, s) => sum + (s.viewCount || 0), 0);
 
-      if (!url || !title || !type) {
-        return showNotification('Please fill all fields', 'error');
-      }
-
-      try {
-        new URL(url);
-      } catch {
-        return showNotification('Invalid URL format', 'error');
-      }
-
-      const submissions = loadData('niroboSubmissions');
-      const newSubmission = {
-        id: 'sub_' + Date.now(),
-        userId: currentUser.id,
-        email: currentUser.email,
-        url,
-        title,
-        type,
-        description: desc,
-        status: 'pending',
-        submittedAt: new Date().toISOString(),
-        viewCount: 0,
-        adminMessage: ''
-      };
-
-      submissions.push(newSubmission);
-      saveData('niroboSubmissions', submissions);
-      showNotification('Submitted for review!', 'success');
-
-      // Reset form
-      websiteUrl.value = '';
-      websiteTitle.value = '';
-      document.getElementById('urlType').value = '';
-      document.getElementById('websiteDesc').value = '';
-      displaySubmissions();
-    });
+      document.getElementById('totalSubmissions').textContent = total;
+      document.getElementById('approvedCount').textContent = approved;
+      document.getElementById('pendingCount').textContent = pending;
+      document.getElementById('totalViews').textContent = views;
+    }
 
     // Display submissions
     function displaySubmissions() {
-      const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser'));
-      if (!currentUser) return;
-
-      const allSubmissions = loadData('niroboSubmissions');
-      const userSubmissions = allSubmissions.filter(s => s.userId === currentUser.id);
-
-      if (userSubmissions.length === 0) {
-        submissionsList.innerHTML = '<div class="empty-state"><h3>📭 No submissions yet</h3><p>Submit your first URL above!</p></div>';
+      const submissions = loadData('niroboSubmissions').filter(s => s.userId === currentUser.id);
+      
+      if (submissions.length === 0) {
+        submissionsList.innerHTML = '<div class="empty-state"><h3>📭 No submissions yet</h3><p>Submit your first URL to get started!</p></div>';
         return;
       }
 
       submissionsList.innerHTML = '';
-      userSubmissions.forEach(sub => {
+      submissions.forEach(sub => {
         const domain = getDomain(sub.url);
+        const categoryLabel = getCategoryLabel(sub.type);
         const div = document.createElement('div');
         div.className = `submission-item ${sub.status}`;
         div.innerHTML = `
@@ -729,35 +811,209 @@
             <div class="submission-header">
               <div class="submission-title">
                 <span>${sub.title}</span>
-                <span class="category-badge">${sub.type}</span>
+                <span class="category-badge">${categoryLabel}</span>
               </div>
               <span class="status ${sub.status}">${sub.status}</span>
             </div>
             <a href="${sub.url}" target="_blank" class="submission-url">${domain}</a>
             <p>${sub.description || 'No description'}</p>
-            <p><small>Submitted: ${formatDate(sub.submittedAt)}</small></p>
-            ${sub.adminMessage ? `<div class="admin-message">💬 ${sub.adminMessage}</div>` : ''}
-            <button class="btn-delete" onclick="deleteSubmission('${sub.id}')">Remove</button>
+            <p><small>Submitted: ${formatDate(sub.submittedAt)}</small> | Views: ${sub.viewCount || 0}</p>
+            ${sub.adminMessage ? `<div class="admin-message">💬 Admin: ${sub.adminMessage}</div>` : ''}
+            <div>
+              <button class="btn-edit" onclick="editSubmission('${sub.id}')">Edit</button>
+              <button class="btn-delete" onclick="deleteSubmission('${sub.id}')">Remove</button>
+            </div>
           </div>
         `;
         submissionsList.appendChild(div);
       });
     }
 
+    // Edit submission
+    window.editSubmission = function(id) {
+      const submissions = loadData('niroboSubmissions');
+      const sub = submissions.find(s => s.id === id);
+      if (!sub) return;
+
+      websiteUrl.value = sub.url;
+      websiteTitle.value = sub.title;
+      document.getElementById('urlType').value = sub.type;
+      document.getElementById('websiteDesc').value = sub.description;
+      
+      // Scroll to form
+      document.querySelector('.section').scrollIntoView({ behavior: 'smooth' });
+      showNotification('Loaded submission for editing', 'info');
+    };
+
     // Delete submission
     window.deleteSubmission = function(id) {
-      if (!confirm('Remove this submission?')) return;
+      if (!confirm('Are you sure you want to permanently remove this submission?')) return;
       let submissions = loadData('niroboSubmissions');
       submissions = submissions.filter(s => s.id !== id);
       saveData('niroboSubmissions', submissions);
       showNotification('Submission removed', 'info');
       displaySubmissions();
+      displayAnalytics();
     };
 
-    // Init
-    document.addEventListener('DOMContentLoaded', () => {
-      checkAuth();
+    // Handle URL input
+    websiteUrl.addEventListener('input', () => {
+      const url = websiteUrl.value.trim();
+      if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+        websiteTitle.value = extractTitle(url);
+      } else {
+        websiteTitle.value = 'Title will be auto-filled when URL is valid';
+      }
     });
+
+    // Handle description character count
+    document.getElementById('websiteDesc').addEventListener('input', function() {
+      charCount.textContent = `${this.value.length}/200`;
+    });
+
+    // Save draft
+    saveDraftBtn.addEventListener('click', () => {
+      const draft = {
+        url: websiteUrl.value.trim(),
+        title: websiteTitle.value.trim(),
+        type: document.getElementById('urlType').value,
+        description: document.getElementById('websiteDesc').value.trim()
+      };
+      localStorage.setItem('niroboDraft', JSON.stringify(draft));
+      showNotification('Draft saved successfully!', 'success');
+    });
+
+    // Resume draft
+    resumeDraftBtn.addEventListener('click', () => {
+      const draft = JSON.parse(localStorage.getItem('niroboDraft'));
+      if (draft) {
+        websiteUrl.value = draft.url || '';
+        websiteTitle.value = draft.title || '';
+        document.getElementById('urlType').value = draft.type || '';
+        document.getElementById('websiteDesc').value = draft.description || '';
+        charCount.textContent = `${draft.description?.length || 0}/200`;
+        draftBanner.classList.remove('show');
+        showNotification('Draft loaded', 'info');
+      }
+    });
+
+    // Check for draft on load
+    window.addEventListener('load', () => {
+      const draft = localStorage.getItem('niroboDraft');
+      if (draft) {
+        draftBanner.classList.add('show');
+      }
+    });
+
+    // Preview submission
+    submitBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      
+      const url = websiteUrl.value.trim();
+      const title = websiteTitle.value.trim();
+      const type = document.getElementById('urlType').value;
+      const desc = document.getElementById('websiteDesc').value.trim();
+
+      if (!url || !title || !type) {
+        return showNotification('Please fill all required fields', 'error');
+      }
+
+      try {
+        new URL(url);
+      } catch {
+        return showNotification('Please enter a valid URL (e.g., https://example.com)', 'error');
+      }
+
+      // Show preview
+      document.getElementById('previewTitle').textContent = title;
+      document.getElementById('previewUrl').textContent = url;
+      document.getElementById('previewType').textContent = getCategoryLabel(type);
+      document.getElementById('previewDesc').textContent = desc || 'No description';
+      
+      previewModal.style.display = 'flex';
+      
+      // Set confirm action
+      confirmSubmit.onclick = () => {
+        const submissions = loadData('niroboSubmissions');
+        const newSubmission = {
+          id: 'sub_' + Date.now(),
+          userId: currentUser.id,
+          email: currentUser.email,
+          url,
+          title,
+          type,
+          description: desc,
+          status: 'pending',
+          submittedAt: new Date().toISOString(),
+          viewCount: 0,
+          adminMessage: ''
+        };
+
+        submissions.push(newSubmission);
+        saveData('niroboSubmissions', submissions);
+        localStorage.removeItem('niroboDraft'); // Clear draft
+        previewModal.style.display = 'none';
+        
+        // Reset form
+        websiteUrl.value = '';
+        websiteTitle.value = 'Title will be auto-filled when URL is valid';
+        document.getElementById('urlType').value = '';
+        document.getElementById('websiteDesc').value = '';
+        charCount.textContent = '0/200';
+        
+        showNotification('✅ Submitted for review! You’ll be notified when approved.', 'success');
+        displaySubmissions();
+        displayAnalytics();
+      };
+    });
+
+    // Close preview
+    closePreview.addEventListener('click', () => {
+      previewModal.style.display = 'none';
+    });
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('niroboCurrentUser');
+      showNotification('You have been logged out', 'info');
+      setTimeout(() => {
+        window.location.href = 'login.html';
+      }, 1000);
+    });
+
+    // Initialize dashboard
+    document.addEventListener('DOMContentLoaded', () => {
+      displayAdminNotices();
+      displayAnalytics();
+      displaySubmissions();
+      
+      // Add sample admin notices if none exist
+      const notices = loadData('niroboAdminNotices');
+      if (notices.length === 0) {
+        const defaultNotices = [
+          "Welcome to Nirobo Dashboard! Submit your first URL to get started.",
+          "All submissions are reviewed within 48 hours by our curation team.",
+          "Approved URLs appear in search results and contribute to Bangladesh's digital knowledge base.",
+          "Keep descriptions concise and accurate to improve approval chances."
+        ];
+        saveData('niroboAdminNotices', defaultNotices);
+        displayAdminNotices();
+      }
+    });
+
+    // Auto-save draft every 30 seconds if form has content
+    setInterval(() => {
+      const url = websiteUrl.value.trim();
+      if (url) {
+        const draft = {
+          url,
+          title: websiteTitle.value.trim(),
+          type: document.getElementById('urlType').value,
+          description: document.getElementById('websiteDesc').value.trim()
+        };
+        localStorage.setItem('niroboDraft', JSON.stringify(draft));
+      }
+    }, 30000);
   </script>
 </body>
 </html>
