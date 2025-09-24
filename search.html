@@ -2,1448 +2,315 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nirobo Search - Intelligent URL Discovery</title>
-  <!-- Add Fuse.js library for fuzzy search -->
-  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nirobo Search</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --primary-dark: #004d00;
-      --primary: #006400;
-      --primary-light: #008000;
-      --accent: #d40000;
-      --accent-hover: #ff0000;
-      --background: #0a1f0a;
-      --card-bg: #1a1a1a;
-      --text: #f5f5f5;
-      --text-secondary: #cccccc;
-      --border: #333333;
+      --google-blue: #4285f4;
+      --google-red: #ea4335;
+      --google-yellow: #fbbc05;
+      --google-green: #34a853;
+      --text-primary: #202124;
+      --text-secondary: #5f6368;
+      --border-color: #dfe1e5;
+      --background: #fff;
+      --button-bg: #f8f9fa;
+      --button-border: #f8f9fa;
+      --button-text: #3c4043;
+      --button-hover-bg: #f1f3f4;
     }
+
     * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
     }
+
     body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      background: linear-gradient(135deg, var(--background), #003300);
-      color: var(--text);
-      line-height: 1.6;
-      padding: 20px;
-      min-height: 100vh;
-    }
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    /* Header Styles */
-    header {
-      text-align: center;
-      padding: 30px 0;
-      margin-bottom: 30px;
-      position: relative;
-    }
-    .logo {
-      font-size: 2.8rem;
-      color: var(--accent);
-      margin-bottom: 10px;
-      text-shadow: 0 0 15px rgba(212, 0, 0, 0.5);
-    }
-    .tagline {
-      font-size: 1.2rem;
-      color: #ffcccc;
-      font-style: italic;
-      margin-bottom: 20px;
-    }
-    /* Search Section */
-    .search-section {
-      background: rgba(26, 26, 26, 0.8);
-      border-radius: 15px;
-      padding: 30px;
-      margin-bottom: 30px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(212, 0, 0, 0.3);
-    }
-    .search-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 25px;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-    .search-title {
-      font-size: 1.8rem;
-      color: var(--accent);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .ai-badge {
-      background: linear-gradient(45deg, #8a2be2, #ff00ff);
-      color: white;
-      font-size: 0.8rem;
-      padding: 3px 10px;
-      border-radius: 20px;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-    }
-    #search-form {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 25px;
-    }
-    #search-input {
-      flex: 1;
-      padding: 15px 20px;
-      font-size: 1.1rem;
-      border: 2px solid var(--accent);
-      border-radius: 30px;
-      background: rgba(0, 0, 0, 0.3);
-      color: var(--text);
-      outline: none;
-      transition: all 0.3s ease;
-    }
-    #search-input:focus {
-      border-color: var(--accent-hover);
-      box-shadow: 0 0 15px rgba(212, 0, 0, 0.5);
-    }
-    #search-form button {
-      padding: 15px 30px;
-      background: var(--accent);
-      color: white;
-      border: none;
-      border-radius: 30px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    #search-form button:hover {
-      background: var(--accent-hover);
-      box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
-      transform: translateY(-2px);
-    }
-    /* Advanced Search Toggle */
-    .advanced-toggle {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--text-secondary);
-      cursor: pointer;
-      margin-bottom: 20px;
-      font-size: 0.95rem;
-    }
-    .advanced-toggle:hover {
-      color: var(--accent);
-    }
-    /* Advanced Search Panel */
-    .advanced-search {
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 10px;
-      padding: 20px;
-      margin-top: 15px;
-      display: none;
-    }
-    .advanced-search.active {
-      display: block;
-    }
-    .advanced-options {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin-bottom: 20px;
-    }
-    .filter-group {
-      margin-bottom: 15px;
-    }
-    .filter-group label {
-      display: block;
-      margin-bottom: 8px;
-      color: var(--text-secondary);
-      font-weight: 500;
-    }
-    .filter-group select, 
-    .filter-group input {
-      width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: rgba(0, 0, 0, 0.3);
-      color: var(--text);
-    }
-    .date-filters {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-    }
-    /* Filter Tabs */
-    .filter-tabs {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 25px;
-      flex-wrap: wrap;
-    }
-    .filter-tab {
-      padding: 10px 20px;
-      background: rgba(0, 100, 0, 0.3);
-      color: var(--text);
-      border: none;
-      border-radius: 25px;
-      cursor: pointer;
-      font-size: 0.95rem;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .filter-tab:hover {
-      background: rgba(0, 128, 0, 0.5);
-    }
-    .filter-tab.active {
-      background: var(--accent);
-      color: white;
-      font-weight: bold;
-    }
-    /* Results Section */
-    .results-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-    .results-count {
-      color: var(--text-secondary);
-      font-size: 0.95rem;
-    }
-    .sort-options select {
-      padding: 8px 15px;
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      background: rgba(0, 0, 0, 0.3);
-      color: var(--text);
-    }
-    /* Result Cards */
-    .result-card {
-      background: var(--card-bg);
-      border-left: 4px solid var(--accent);
-      padding: 25px;
-      margin-bottom: 20px;
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-    .result-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(212, 0, 0, 0.3);
-      border-left-color: var(--accent-hover);
-    }
-    .result-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--accent), transparent);
-      transform: scaleX(0);
-      transition: transform 0.5s ease;
-    }
-    .result-card:hover::before {
-      transform: scaleX(1);
-    }
-    .result-header {
-      display: flex;
-      align-items: flex-start;
-      gap: 15px;
-      margin-bottom: 15px;
-    }
-    .favicon {
-      width: 32px;
-      height: 32px;
-      border-radius: 6px;
-      flex-shrink: 0;
-      background: #333;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-    }
-    .result-content {
-      flex: 1;
-    }
-    .result-title {
-      font-size: 1.3rem;
-      margin-bottom: 8px;
-      color: #ff9999;
-    }
-    .result-title a {
-      color: #ff9999;
-      text-decoration: none;
-    }
-    .result-title a:hover {
-      text-decoration: underline;
-      color: var(--accent-hover);
-    }
-    .result-url {
-      color: #888;
-      font-size: 0.9rem;
-      margin-bottom: 12px;
-      display: block;
-      word-break: break-all;
-    }
-    .result-description {
-      margin-bottom: 15px;
-      color: var(--text-secondary);
-      line-height: 1.7;
-    }
-    .result-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 15px;
-    }
-    .result-tag {
-      background: rgba(212, 0, 0, 0.2);
-      color: #ff9999;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-    }
-    .result-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 15px;
-      font-size: 0.85rem;
-      color: #888;
-      padding-top: 15px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    .result-actions {
-      display: flex;
-      gap: 10px;
-    }
-    .action-btn {
-      background: rgba(255, 255, 255, 0.1);
-      color: var(--text);
-      border: 1px solid var(--border);
-      padding: 6px 15px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .action-btn:hover {
-      background: var(--accent);
-      border-color: var(--accent);
-    }
-    /* Pagination */
-    .pagination {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      margin: 40px 0;
-      flex-wrap: wrap;
-    }
-    .pagination button {
-      padding: 10px 18px;
-      background: rgba(0, 100, 0, 0.3);
-      color: var(--text);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: all 0.3s ease;
-    }
-    .pagination button:hover:not(:disabled) {
-      background: rgba(0, 128, 0, 0.5);
-      border-color: var(--primary-light);
-    }
-    .pagination button:disabled {
-      background: #333;
-      color: #666;
-      cursor: not-allowed;
-    }
-    .pagination button.active {
-      background: var(--accent);
-      border-color: var(--accent-hover);
-      font-weight: bold;
-    }
-    /* Loading State */
-    .loading {
-      text-align: center;
-      padding: 40px;
-    }
-    .spinner {
-      border: 4px solid rgba(255, 255, 255, 0.1);
-      border-radius: 50%;
-      border-top: 4px solid var(--accent);
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 20px;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    /* No Results */
-    .no-results {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--text-secondary);
-    }
-    .no-results i {
-      font-size: 3rem;
-      margin-bottom: 20px;
-      color: #555;
-    }
-    /* Footer */
-    footer {
-      background: rgba(26, 26, 26, 0.9);
-      color: #ccc;
-      padding: 30px;
-      text-align: center;
-      font-size: 0.9rem;
-      border-top: 1px solid var(--border);
-      margin-top: 50px;
-      border-radius: 10px;
-    }
-    footer a {
-      color: #ff9999;
-      text-decoration: none;
-    }
-    footer a:hover {
-      text-decoration: underline;
-    }
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      body {
-        padding: 15px;
-      }
-      .search-section {
-        padding: 20px;
-      }
-      #search-form {
-        flex-direction: column;
-      }
-      .search-header {
-        flex-direction: column;
-        text-align: center;
-      }
-      .result-header {
-        flex-direction: column;
-      }
-      .result-meta {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .result-actions {
-        width: 100%;
-        justify-content: flex-end;
-      }
-    }
-    /* AI Features */
-    .ai-insights {
-      background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(255, 0, 255, 0.1));
-      border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 25px;
-      border: 1px solid rgba(138, 43, 226, 0.3);
-    }
-    .ai-insights h3 {
-      color: #da70d6;
-      margin-bottom: 15px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .insight-item {
-      background: rgba(0, 0, 0, 0.2);
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-    }
-    .insight-item:last-child {
-      margin-bottom: 0;
-    }
-    /* Search Suggestions */
-    .suggestions {
-      position: absolute;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      width: 100%;
-      max-height: 300px;
-      overflow-y: auto;
-      z-index: 1000;
-      display: none;
-    }
-    .suggestion-item {
-      padding: 12px 20px;
-      cursor: pointer;
-      border-bottom: 1px solid var(--border);
-    }
-    .suggestion-item:hover {
-      background: rgba(212, 0, 0, 0.1);
-    }
-    .suggestion-item:last-child {
-      border-bottom: none;
-    }
-    /* Feature Cards */
-    .feature-card {
-      background: var(--card-bg);
-      border-left: 4px solid var(--info);
-      padding: 20px;
-      margin-bottom: 20px;
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
-    .calculator, .currency-converter, .dictionary {
-      display: none;
-    }
-    .calculator.active, .currency-converter.active, .dictionary.active {
-      display: block;
-    }
-    .calculator-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-top: 15px;
-    }
-    .calc-btn {
-      padding: 15px;
-      font-size: 1.2rem;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .calc-btn:hover {
-      background: var(--primary-light);
-    }
-    .calc-display {
-      grid-column: span 4;
-      padding: 10px;
-      font-size: 1.5rem;
-      background: var(--text);
-      color: var(--background);
-      border-radius: 5px;
-      text-align: right;
-      margin-bottom: 10px;
-    }
-    .currency-form, .dict-form {
+      font-family: Arial, sans-serif;
+      color: var(--text-primary);
+      background: var(--background);
+      height: 100vh;
       display: flex;
       flex-direction: column;
+    }
+
+    /* Header Styles */
+    header {
+      display: flex;
+      justify-content: flex-end;
+      padding: 20px;
+      font-size: 0.875rem;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
       gap: 15px;
     }
-    .currency-form input, .currency-form select, .dict-form input {
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: rgba(0, 0, 0, 0.3);
-      color: var(--text);
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      transition: background-color 0.2s;
     }
-    .currency-result, .dict-result {
-      margin-top: 15px;
-      padding: 15px;
-      background: rgba(0, 100, 200, 0.2);
-      border-radius: 8px;
+
+    .nav-links a:hover {
+      background-color: rgba(60, 64, 67, 0.08);
+    }
+
+    .apps-icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .apps-icon:hover {
+       background-color: rgba(60, 64, 67, 0.08);
+    }
+
+    .profile-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: var(--google-blue);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* Main Content Styles */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      padding-top: 80px; /* Space for the header */
+      max-width: 584px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Logo Styles */
+    .logo {
+      margin-bottom: 30px;
+    }
+
+    .logo-text {
+      font-size: 5rem;
+      font-weight: 400;
+      letter-spacing: -2px;
+    }
+
+    .logo-text span:nth-child(1) { color: var(--google-blue); }
+    .logo-text span:nth-child(2) { color: var(--google-red); }
+    .logo-text span:nth-child(3) { color: var(--google-yellow); }
+    .logo-text span:nth-child(4) { color: var(--google-blue); }
+    .logo-text span:nth-child(5) { color: var(--google-green); }
+    .logo-text span:nth-child(6) { color: var(--google-red); }
+
+    /* Search Form Styles */
+    .search-container {
+      width: 100%;
+      position: relative;
+      margin-bottom: 30px;
+    }
+
+    #search-form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #search-input {
+      width: 100%;
+      padding: 15px 20px 15px 45px; /* Padding for icon */
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      font-size: 1rem;
+      outline: none;
+      box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);
+    }
+
+    #search-input:hover, #search-input:focus {
+       box-shadow: 0 1px 10px 1px rgba(32, 33, 36, 0.28);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+    }
+
+    .mic-icon, .camera-icon {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    .camera-icon {
+      right: 50px;
+    }
+
+    /* Buttons Styles */
+    .buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .search-button, .lucky-button {
+      background-color: var(--button-bg);
+      border: 1px solid var(--button-border);
+      border-radius: 4px;
+      color: var(--button-text);
+      font-size: 0.875rem;
+      padding: 10px 16px;
+      cursor: pointer;
+    }
+
+    .search-button:hover, .lucky-button:hover {
+      box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+      background-color: var(--button-hover-bg);
+      border: 1px solid var(--border-color);
+    }
+
+    /* Footer Styles */
+    footer {
+      background: #f2f2f2;
+      padding: 0 20px;
+      border-top: 1px solid #dadce0;
+    }
+
+    .footer-country {
+      padding: 15px 0;
+      border-bottom: 1px solid #dadce0;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      padding: 15px 0;
+      font-size: 0.875rem;
+    }
+
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 15px;
+      white-space: nowrap;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    .left-links, .right-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .logo-text {
+        font-size: 3.5rem;
+      }
+      .footer-links {
+        justify-content: center;
+      }
+      .left-links, .right-links {
+        justify-content: center;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="logo">
-        <i class="fas fa-brain"></i> NIROBO
+  <header>
+    <div class="nav-links">
+      <a href="/about">About</a>
+      <a href="/store">Store</a>
+      <div class="apps-icon">
+        <i class="fas fa-th"></i>
       </div>
-      <div class="tagline">"Intelligent URL Discovery Powered by AI"</div>
-      <a href="/" style="color: #ff9999; text-decoration: none;">← Back to Nirobo</a>
-    </header>
-    <!-- Submit URL Button -->
-    <a href="signup.html" class="submit-button">
-      <i class="fas fa-plus-circle"></i> Submit URL
-    </a>
-    <!-- Search Section -->
-    <section class="search-section">
-      <div class="search-header">
-        <h2 class="search-title">
-          <i class="fas fa-search"></i> Intelligent Search
-          <span class="ai-badge">
-            <i class="fas fa-robot"></i> AI-Powered
-          </span>
-        </h2>
-      </div>
+      <div class="profile-icon">U</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="logo">
+      <h1 class="logo-text">
+        <span>N</span><span>i</span><span>r</span><span>o</span><span>b</span><span>o</span>
+      </h1>
+    </div>
+
+    <div class="search-container">
       <form id="search-form">
-        <input type="text" id="search-input" placeholder="Search the web intelligently..." autocomplete="off">
-        <button type="submit">
-          <i class="fas fa-search"></i> Search
-        </button>
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" id="search-input" name="q" title="Search" autocomplete="off" aria-label="Search" role="combobox" aria-haspopup="false" aria-expanded="false">
+        <i class="fas fa-microphone mic-icon" title="Search by voice"></i>
+        <i class="fas fa-camera camera-icon" title="Search by image"></i>
       </form>
-      <div class="advanced-toggle" id="advancedToggle">
-        <i class="fas fa-chevron-down"></i>
-        <span>Advanced Search Options</span>
-      </div>
-      <div class="advanced-search" id="advancedSearch">
-        <div class="advanced-options">
-          <div class="filter-group">
-            <label for="contentType">Content Type</label>
-            <select id="contentType">
-              <option value="all">All Types</option>
-              <option value="websites">Websites</option>
-              <option value="images">Images</option>
-              <option value="videos">Videos</option>
-              <option value="documents">Documents</option>
-            </select>
-          </div>
-          <div class="filter-group">
-            <label for="dateRange">Date Range</label>
-            <select id="dateRange">
-              <option value="any">Any Time</option>
-              <option value="day">Past 24 Hours</option>
-              <option value="week">Past Week</option>
-              <option value="month">Past Month</option>
-              <option value="year">Past Year</option>
-            </select>
-          </div>
-          <div class="filter-group">
-            <label for="sortBy">Sort By</label>
-            <select id="sortBy">
-              <option value="relevance">Relevance</option>
-              <option value="date">Date</option>
-              <option value="popularity">Popularity</option>
-            </select>
-          </div>
-        </div>
-        <div class="date-filters">
-          <div class="filter-group">
-            <label for="dateFrom">From Date</label>
-            <input type="date" id="dateFrom">
-          </div>
-          <div class="filter-group">
-            <label for="dateTo">To Date</label>
-            <input type="date" id="dateTo">
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- Filter Tabs -->
-    <div class="filter-tabs">
-      <button class="filter-tab active" data-filter="all">
-        <i class="fas fa-globe"></i> All
-      </button>
-      <button class="filter-tab" data-filter="websites">
-        <i class="fas fa-window-maximize"></i> Websites
-      </button>
-      <button class="filter-tab" data-filter="images">
-        <i class="fas fa-image"></i> Images
-      </button>
-      <button class="filter-tab" data-filter="videos">
-        <i class="fas fa-video"></i> Videos
-      </button>
-      <button class="filter-tab" data-filter="documents">
-        <i class="fas fa-file-alt"></i> Documents
-      </button>
-      <button class="filter-tab" data-filter="tools">
-        <i class="fas fa-tools"></i> Tools
-      </button>
     </div>
-    <!-- AI Insights Section -->
-    <div class="ai-insights" id="aiInsights" style="display: none;">
-      <h3><i class="fas fa-lightbulb"></i> AI Insights</h3>
-      <div id="insightsContent"></div>
+
+    <div class="buttons">
+      <button type="submit" form="search-form" class="search-button">Nirobo Search</button>
+      <button type="button" class="lucky-button">I'm Feeling Lucky</button>
     </div>
-    <!-- Feature Cards Section (Hidden by default, shown for 'tools' filter) -->
-    <section id="featureCards" style="display: none;">
-      <!-- Calculator -->
-      <div class="feature-card calculator">
-        <h3><i class="fas fa-calculator"></i> Calculator</h3>
-        <div class="calculator-grid">
-          <div class="calc-display" id="calcDisplay">0</div>
-          <button class="calc-btn" onclick="clearDisplay()">C</button>
-          <button class="calc-btn" onclick="deleteLast()">⌫</button>
-          <button class="calc-btn" onclick="appendOperator('/')">/</button>
-          <button class="calc-btn" onclick="appendOperator('*')">×</button>
-          <button class="calc-btn" onclick="appendNumber('7')">7</button>
-          <button class="calc-btn" onclick="appendNumber('8')">8</button>
-          <button class="calc-btn" onclick="appendNumber('9')">9</button>
-          <button class="calc-btn" onclick="appendOperator('-')">-</button>
-          <button class="calc-btn" onclick="appendNumber('4')">4</button>
-          <button class="calc-btn" onclick="appendNumber('5')">5</button>
-          <button class="calc-btn" onclick="appendNumber('6')">6</button>
-          <button class="calc-btn" onclick="appendOperator('+')">+</button>
-          <button class="calc-btn" onclick="appendNumber('1')">1</button>
-          <button class="calc-btn" onclick="appendNumber('2')">2</button>
-          <button class="calc-btn" onclick="appendNumber('3')">3</button>
-          <button class="calc-btn" onclick="calculate()" style="grid-row: span 2;">=</button>
-          <button class="calc-btn" onclick="appendNumber('0')" style="grid-column: span 2;">0</button>
-          <button class="calc-btn" onclick="appendNumber('.')">.</button>
-        </div>
-      </div>
+  </main>
 
-      <!-- Currency Converter -->
-      <div class="feature-card currency-converter">
-        <h3><i class="fas fa-exchange-alt"></i> Currency Converter</h3>
-        <form id="currencyForm" class="currency-form">
-          <input type="number" id="amount" placeholder="Enter amount" step="0.01" required>
-          <select id="fromCurrency" required>
-            <option value="USD">USD</option>
-            <option value="EUR">EUR</option>
-            <option value="GBP">GBP</option>
-            <option value="JPY">JPY</option>
-            <option value="BDT">BDT</option>
-          </select>
-          <select id="toCurrency" required>
-            <option value="BDT">BDT</option>
-            <option value="USD">USD</option>
-            <option value="EUR">EUR</option>
-            <option value="GBP">GBP</option>
-            <option value="JPY">JPY</option>
-          </select>
-          <button type="submit">Convert</button>
-        </form>
-        <div id="currencyResult" class="currency-result"></div>
+  <footer>
+    <div class="footer-country">
+      Bangladesh
+    </div>
+    <div class="footer-links">
+      <div class="left-links">
+        <a href="/ads">Advertising</a>
+        <a href="/business">Business</a>
+        <a href="/howsearchworks">How Search works</a>
       </div>
+      <div class="right-links">
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+        <a href="/settings">Settings</a>
+      </div>
+    </div>
+  </footer>
 
-      <!-- Dictionary -->
-      <div class="feature-card dictionary">
-        <h3><i class="fas fa-book"></i> Dictionary</h3>
-        <form id="dictForm" class="dict-form">
-          <input type="text" id="dictWord" placeholder="Enter a word" required>
-          <button type="submit">Define</button>
-        </form>
-        <div id="dictResult" class="dict-result"></div>
-      </div>
-    </section>
-    <!-- Results Section -->
-    <section class="results-section">
-      <div class="results-header">
-        <div class="results-count" id="resultsCount">Searching...</div>
-        <div class="sort-options">
-          <select id="sortOptions">
-            <option value="relevance">Sort by Relevance</option>
-            <option value="date">Sort by Date</option>
-            <option value="popularity">Sort by Popularity</option>
-          </select>
-        </div>
-      </div>
-      <div id="results">
-        <div class="loading">
-          <div class="spinner"></div>
-          <p>Initializing Nirobo Search Engine...</p>
-        </div>
-      </div>
-      <div id="pagination" class="pagination"></div>
-    </section>
-    <footer>
-      <p>Made in Bangladesh 🇧🇩 | Curated by Nirobo</p>
-      <p>Honoring the Language Movement and the Silent Legacy of Justice</p>
-      <p>Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity</p>
-      <p><a href="/">← Back to Nirobo</a></p>
-    </footer>
-  </div>
   <script>
-    // --- Configuration ---
-    const RESULTS_PER_PAGE = 10;
-    let currentPage = 1;
-    let currentFilter = 'all';
-    let allResults = [];
-    let filteredResults = [];
-    let query = '';
-    let searchHistory = [];
-    // Variable to hold the Fuse.js instance
-    let fuseInstance = null;
-    // --- DOM Elements ---
-    const searchForm = document.getElementById('search-form');
-    const searchInput = document.getElementById('search-input');
-    const resultsContainer = document.getElementById('results');
-    const paginationContainer = document.getElementById('pagination');
-    const resultsCount = document.getElementById('resultsCount');
-    const advancedToggle = document.getElementById('advancedToggle');
-    const advancedSearch = document.getElementById('advancedSearch');
-    const aiInsights = document.getElementById('aiInsights');
-    const insightsContent = document.getElementById('insightsContent');
-    const filterTabs = document.querySelectorAll('.filter-tab');
-    const featureCards = document.getElementById('featureCards');
-    const calculator = document.querySelector('.calculator');
-    const currencyConverter = document.querySelector('.currency-converter');
-    const dictionary = document.querySelector('.dictionary');
-    // --- Helper Functions ---
-    // Get favicon URL
-    function getFaviconUrl(url) {
-      try {
-        const hostname = new URL(url).hostname;
-        return `https://www.google.com/s2/favicons?domain=${hostname}&sz=32`;
-      } catch (e) {
-        return 'image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%23444" rx="4"/><text x="50%" y="50%" fill="white" font-size="16" font-family="Arial" text-anchor="middle" dominant-baseline="middle">?</text></svg>';
-      }
-    }
-    // Generate AI insights based on search query
-    function generateAIInsights(searchQuery, results) {
-      const insights = [];
-      // Topic analysis
-      if (searchQuery.toLowerCase().includes('tutorial') || searchQuery.toLowerCase().includes('how to')) {
-        insights.push({
-          title: "Learning Path Suggestion",
-          content: "We found educational resources. Consider exploring related topics for a comprehensive understanding."
-        });
-      }
-      // Content type insights
-      const videoCount = results.filter(r => 
-        r.url.includes('youtube') || r.url.includes('youtu.be') || (Array.isArray(r.tags) && r.tags.includes('video'))
-      ).length;
-      if (videoCount > results.length * 0.3) {
-        insights.push({
-          title: "Video-Rich Results",
-          content: `${Math.round((videoCount/results.length)*100)}% of results are video content. Visual learning resources are abundant for this topic.`
-        });
-      }
-      // Freshness insight
-      const recentResults = results.filter(r => {
-        if (r.submittedAt) {
-          const date = new Date(r.submittedAt);
-          const daysOld = (Date.now() - date.getTime()) / (1000 * 3600 * 24);
-          return daysOld < 30;
-        }
-        return false;
-      }).length;
-      if (recentResults > results.length * 0.5) {
-        insights.push({
-          title: "Fresh Content",
-          content: "This topic has recently active discussions and updated resources."
-        });
-      }
-      return insights;
-    }
-    // --- Fuzzy Search & Fuse.js Integration ---
-    // Initialize Fuse.js with the combined data
-    function initializeFuse(data) {
-      console.log("Initializing Fuse.js...");
-      const options = {
-        keys: [
-          { name: 'title', weight: 1.0 },
-          { name: 'description', weight: 0.8 },
-          { name: 'tags', weight: 0.7 },
-          { name: 'url', weight: 0.5 }
-        ],
-        includeScore: true,
-        threshold: 0.4, // Adjust for desired fuzziness (0.0 to 1.0)
-        distance: 100,
-        minMatchCharLength: 2,
-        shouldSort: true,
-        findAllMatches: false
-      };
-      fuseInstance = new Fuse(data, options);
-      console.log("Fuse.js initialized.");
-    }
-    // Perform search using Fuse.js
-    function performSearchFuse(searchTerm) {
-      if (!fuseInstance || !searchTerm) {
-        return [];
-      }
-      console.log("Performing Fuse.js search for:", searchTerm);
-      const fuseResults = fuseInstance.search(searchTerm);
-      console.log("Fuse.js found", fuseResults.length, "results");
-      // Sort by score (lower is better) and extract items
-      return fuseResults
-        .sort((a, b) => (a.score || 1) - (b.score || 1))
-        .map(result => result.item);
-    }
-    // Basic spell suggestion (conceptual)
-    function suggestCorrections(query, dataTitles) {
-      const suggestions = new Set();
-      const lowerQuery = query.toLowerCase();
-      dataTitles.forEach(title => {
-         const lowerTitle = title.toLowerCase();
-         if (lowerTitle.includes(lowerQuery) && Math.abs(lowerTitle.length - lowerQuery.length) <= 2) {
-             suggestions.add(title);
-         }
-      });
-      return Array.from(suggestions).slice(0, 3);
-    }
-    // --- Calculator Functions ---
-    let displayValue = '0';
-    const calcDisplay = document.getElementById('calcDisplay');
-
-    function updateDisplay() {
-      calcDisplay.textContent = displayValue;
-    }
-
-    function appendNumber(num) {
-      if (displayValue === '0' && num !== '.') displayValue = '';
-      displayValue += num;
-      updateDisplay();
-    }
-
-    function appendOperator(op) {
-      if (['+', '-', '*', '/'].includes(displayValue.slice(-1))) {
-        displayValue = displayValue.slice(0, -1) + op;
-      } else {
-        displayValue += op;
-      }
-      updateDisplay();
-    }
-
-    function clearDisplay() {
-      displayValue = '0';
-      updateDisplay();
-    }
-
-    function deleteLast() {
-      if (displayValue.length > 1) {
-        displayValue = displayValue.slice(0, -1);
-      } else {
-        displayValue = '0';
-      }
-      updateDisplay();
-    }
-
-    function calculate() {
-      try {
-        // Note: Using eval is generally discouraged for security reasons.
-        // For a production app, use a proper expression parser.
-        displayValue = eval(displayValue).toString();
-        updateDisplay();
-      } catch (e) {
-        displayValue = 'Error';
-        updateDisplay();
-      }
-    }
-
-    // --- Currency Converter Function ---
-    document.getElementById('currencyForm').addEventListener('submit', (e) => {
+    document.getElementById('search-form').addEventListener('submit', function(e) {
       e.preventDefault();
-      const amount = parseFloat(document.getElementById('amount').value);
-      const from = document.getElementById('fromCurrency').value;
-      const to = document.getElementById('toCurrency').value;
-
-      // Simulated conversion rates (in a real app, fetch from an API)
-      const rates = {
-        USD: { BDT: 109.5, EUR: 0.93, GBP: 0.79, JPY: 152.2 },
-        BDT: { USD: 0.0091, EUR: 0.0085, GBP: 0.0072, JPY: 1.39 },
-        EUR: { USD: 1.08, BDT: 117.8, GBP: 0.85, JPY: 160.8 },
-        GBP: { USD: 1.27, BDT: 138.6, EUR: 1.18, JPY: 189.2 },
-        JPY: { USD: 0.0066, BDT: 0.73, EUR: 0.0062, GBP: 0.0053 }
-      };
-
-      if (rates[from] && rates[from][to]) {
-        const result = (amount * rates[from][to]).toFixed(2);
-        document.getElementById('currencyResult').textContent = `${amount} ${from} = ${result} ${to}`;
-      } else {
-        document.getElementById('currencyResult').textContent = 'Conversion rate not available.';
-      }
-    });
-
-    // --- Dictionary Function ---
-    document.getElementById('dictForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const word = document.getElementById('dictWord').value.trim().toLowerCase();
-
-      // Simulated dictionary (in a real app, fetch from an API)
-      const dict = {
-        'hello': 'Used as a greeting or to begin a phone conversation.',
-        'world': 'The earth and all the countries and peoples within it.',
-        'nirobo': 'A Bengali word meaning "intelligent" or "smart".'
-      };
-
-      const definition = dict[word] || 'Definition not found in local dictionary.';
-      document.getElementById('dictResult').textContent = definition;
-    });
-
-    // --- Core Search Logic ---
-    // Load data from result.json
-    async function loadResultJson() {
-      try {
-        const response = await fetch('result.json');
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-        return await response.json();
-      } catch (error) {
-        console.warn('Failed to load result.json:', error);
-        return [];
-      }
-    }
-    // Load approved submissions from localStorage
-    function loadApprovedSubmissions() {
-      try {
-        const submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
-        return submissions.filter(sub => sub.status === 'approved');
-      } catch (error) {
-        console.warn('Failed to load approved submissions:', error);
-        return [];
-      }
-    }
-    // Combine all results
-    async function loadAllResults() {
-      const jsonResults = await loadResultJson();
-      const approvedResults = loadApprovedSubmissions();
-      // Normalize approved results to match json structure
-      const normalizedApproved = approvedResults.map(sub => ({
-        title: sub.title || 'Untitled',
-        url: sub.url || '#',
-        description: sub.description || 'No description available',
-        tags: Array.isArray(sub.tags) ? sub.tags : [],
-        submittedAt: sub.submittedAt,
-        viewCount: sub.viewCount || 0
-      }));
-      const combinedResults = [...jsonResults, ...normalizedApproved];
-      // NEW: Initialize Fuse.js with the loaded data
-      initializeFuse(combinedResults);
-      return combinedResults;
-    }
-    // Apply filters to results (keeping for filter tabs, but search uses Fuse.js)
-    function applyFilters(results, searchTerm, filterType) {
-      let filtered = [...results];
-      // Apply search term filter (exact match for filter tabs)
-      if (searchTerm) {
-        const lowerQuery = searchTerm.toLowerCase();
-        filtered = filtered.filter(item =>
-          (item.title && item.title.toLowerCase().includes(lowerQuery)) ||
-          (item.description && item.description.toLowerCase().includes(lowerQuery)) ||
-          (item.url && item.url.toLowerCase().includes(lowerQuery)) ||
-          (Array.isArray(item.tags) && item.tags.some(tag => 
-            tag && tag.toLowerCase().includes(lowerQuery)
-          ))
-        );
-      }
-      // Apply type filter
-      if (filterType !== 'all' && filterType !== 'tools') {
-        filtered = filtered.filter(item => {
-          const urlLower = item.url ? item.url.toLowerCase() : '';
-          const tagsLower = Array.isArray(item.tags) ? item.tags.map(t => t.toLowerCase()) : [];
-          switch(filterType) {
-            case 'images':
-              return urlLower.includes('image') || 
-                     urlLower.includes('img') || 
-                     tagsLower.includes('image') || 
-                     tagsLower.includes('photo');
-            case 'videos':
-              return urlLower.includes('youtube') || 
-                     urlLower.includes('youtu.be') || 
-                     urlLower.includes('vimeo') || 
-                     tagsLower.includes('video') || 
-                     tagsLower.includes('media');
-            case 'documents':
-              return urlLower.includes('.pdf') || 
-                     urlLower.includes('.doc') || 
-                     urlLower.includes('.txt') || 
-                     tagsLower.includes('document') || 
-                     tagsLower.includes('pdf');
-            case 'websites':
-              return !(urlLower.includes('image') || 
-                      urlLower.includes('img') || 
-                      urlLower.includes('youtube') || 
-                      urlLower.includes('youtu.be') || 
-                      urlLower.includes('vimeo') || 
-                      urlLower.includes('.pdf') || 
-                      urlLower.includes('.doc') || 
-                      urlLower.includes('.txt') || 
-                      tagsLower.includes('image') || 
-                      tagsLower.includes('photo') || 
-                      tagsLower.includes('video') || 
-                      tagsLower.includes('media') || 
-                      tagsLower.includes('document') || 
-                      tagsLower.includes('pdf'));
-            default:
-              return true;
-          }
-        });
-      }
-      return filtered;
-    }
-    // Sort results
-    function sortResults(results, sortBy) {
-      switch(sortBy) {
-        case 'date':
-          return results.sort((a, b) => {
-            const dateA = a.submittedAt ? new Date(a.submittedAt) : new Date(0);
-            const dateB = b.submittedAt ? new Date(b.submittedAt) : new Date(0);
-            return dateB - dateA;
-          });
-        case 'popularity':
-          return results.sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0));
-        default:
-          return results; // Relevance is default
-      }
-    }
-    // Render results
-    function renderResults(results) {
-      resultsContainer.innerHTML = "";
-      if (results.length === 0 && currentFilter !== 'tools') {
-        // Try to get spell suggestions
-        const allTitles = allResults.map(r => r.title || r.url || 'Untitled'); // Fallback if title missing
-        const suggestions = suggestCorrections(query, allTitles);
-        let suggestionsHtml = '';
-        if (suggestions.length > 0) {
-            suggestionsHtml = `
-              <p><strong>Did you mean:</strong></p>
-              <ul style="list-style: none; padding: 0;">
-                ${suggestions.map(s => `<li style="margin-bottom: 5px;"><a href="#" onclick="searchInput.value='${s.replace(/'/g, "\\'")}'; searchForm.dispatchEvent(new Event('submit')); return false;" style="color: #ff9999;">${s}</a></li>`).join('')}
-              </ul>
-            `;
-        }
-        resultsContainer.innerHTML = `
-          <div class="no-results">
-            <i class="fas fa-search-minus"></i>
-            <h3>No Results Found</h3>
-            <p>We couldn't find any matches for "${query}".</p>
-            ${suggestionsHtml}
-          </div>
-        `;
-        return;
-      }
-      results.forEach((result) => {
-        const resultElement = document.createElement("div");
-        resultElement.className = "result-card";
-        const faviconUrl = getFaviconUrl(result.url);
-        const cleanUrl = result.url.replace(/^https?:\/\//, '').replace(/\/$/, '');
-        const truncatedUrl = cleanUrl.length > 50 ? cleanUrl.substring(0, 50) + '...' : cleanUrl;
-        resultElement.innerHTML = `
-          <div class="result-header">
-            <div class="favicon">
-              <img src="${faviconUrl}" alt="Favicon" onerror="this.parentElement.innerHTML='<i class=\'fas fa-link\'></i>'">
-            </div>
-            <div class="result-content">
-              <h3 class="result-title">
-                <a href="${result.url}" target="_blank" rel="noopener">${result.title}</a>
-              </h3>
-              <a href="${result.url}" class="result-url" target="_blank" rel="noopener">${truncatedUrl}</a>
-              <p class="result-description">${result.description}</p>
-              <div class="result-tags">
-                ${(Array.isArray(result.tags) ? result.tags : [])
-                  .slice(0, 5)
-                  .map(tag => `<span class="result-tag">${tag}</span>`)
-                  .join('')}
-              </div>
-            </div>
-          </div>
-          <div class="result-meta">
-            <div class="result-source">
-              ${result.submittedAt ? `Submitted: ${new Date(result.submittedAt).toLocaleDateString()}` : 'Source: Database'}
-            </div>
-            <div class="result-actions">
-              <button class="action-btn report-btn" data-url="${result.url}" data-title="${result.title}">
-                <i class="fas fa-flag"></i> Report
-              </button>
-              <button class="action-btn save-btn" data-url="${result.url}" data-title="${result.title}">
-                <i class="fas fa-bookmark"></i> Save
-              </button>
-            </div>
-          </div>
-        `;
-        resultsContainer.appendChild(resultElement);
-      });
-    }
-    // Render pagination
-    function renderPagination(totalPages) {
-      paginationContainer.innerHTML = '';
-      if (totalPages <= 1) return;
-      const fragment = document.createDocumentFragment();
-      // Previous button
-      const prevButton = document.createElement('button');
-      prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
-      prevButton.disabled = currentPage === 1;
-      prevButton.addEventListener('click', () => goToPage(currentPage - 1));
-      fragment.appendChild(prevButton);
-      // Page numbers
-      const startPage = Math.max(1, currentPage - 2);
-      const endPage = Math.min(totalPages, currentPage + 2);
-      if (startPage > 1) {
-        const firstButton = document.createElement('button');
-        firstButton.textContent = '1';
-        firstButton.addEventListener('click', () => goToPage(1));
-        fragment.appendChild(firstButton);
-        if (startPage > 2) {
-          const ellipsis = document.createElement('span');
-          ellipsis.textContent = '...';
-          ellipsis.style.padding = '0 5px';
-          fragment.appendChild(ellipsis);
-        }
-      }
-      for (let i = startPage; i <= endPage; i++) {
-        const pageButton = document.createElement('button');
-        pageButton.textContent = i;
-        if (i === currentPage) {
-          pageButton.classList.add('active');
-        }
-        pageButton.addEventListener('click', () => goToPage(i));
-        fragment.appendChild(pageButton);
-      }
-      if (endPage < totalPages) {
-        if (endPage < totalPages - 1) {
-          const ellipsis = document.createElement('span');
-          ellipsis.textContent = '...';
-          ellipsis.style.padding = '0 5px';
-          fragment.appendChild(ellipsis);
-        }
-        const lastButton = document.createElement('button');
-        lastButton.textContent = totalPages;
-        lastButton.addEventListener('click', () => goToPage(totalPages));
-        fragment.appendChild(lastButton);
-      }
-      // Next button
-      const nextButton = document.createElement('button');
-      nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
-      nextButton.disabled = currentPage === totalPages;
-      nextButton.addEventListener('click', () => goToPage(currentPage + 1));
-      fragment.appendChild(nextButton);
-      paginationContainer.appendChild(fragment);
-    }
-    // Go to specific page
-    function goToPage(page) {
-      currentPage = page;
-      const url = new URL(window.location);
-      url.searchParams.set('page', page.toString());
-      if (query) url.searchParams.set('q', query);
-      window.history.pushState({ page, query }, '', url);
-      // Use Fuse.js for searching when paginating
+      const query = document.getElementById('search-input').value.trim();
       if (query) {
-        filteredResults = performSearchFuse(query);
-      } else {
-        filteredResults = allResults;
+        // In a real app, this would redirect to your search results page
+        // e.g., window.location.href = `/search?q=${encodeURIComponent(query)}`;
+        alert(`Searching for: ${query}\n(In a real app, this would take you to the results page)`);
       }
-      const sortedResults = sortResults(filteredResults, document.getElementById('sortOptions').value);
-      const totalPages = Math.ceil(sortedResults.length / RESULTS_PER_PAGE);
-      const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
-      const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, sortedResults.length);
-      const pageResults = sortedResults.slice(startIndex, endIndex);
-      renderResults(pageResults);
-      renderPagination(totalPages);
-      updateResultsCount(sortedResults.length);
-    }
-    // Update results count
-    function updateResultsCount(total) {
-      resultsCount.textContent = `About ${total} results (${(Math.random() * 0.5 + 0.1).toFixed(2)} seconds)`;
-    }
-    // Show AI insights
-    function showAIInsights(searchQuery, results) {
-      const insights = generateAIInsights(searchQuery, results);
-      if (insights.length > 0) {
-        aiInsights.style.display = 'block';
-        insightsContent.innerHTML = insights.map(insight => `
-          <div class="insight-item">
-            <h4><i class="fas fa-robot"></i> ${insight.title}</h4>
-            <p>${insight.content}</p>
-          </div>
-        `).join('');
-      } else {
-        aiInsights.style.display = 'none';
-      }
-    }
-    // --- Event Listeners ---
-    // Advanced search toggle
-    advancedToggle.addEventListener('click', () => {
-      advancedSearch.classList.toggle('active');
-      const icon = advancedToggle.querySelector('i');
-      icon.classList.toggle('fa-chevron-down');
-      icon.classList.toggle('fa-chevron-up');
     });
-    // Filter tabs
-    filterTabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        filterTabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        currentFilter = tab.dataset.filter;
 
-        // Handle 'tools' filter separately
-        if (currentFilter === 'tools') {
-          resultsContainer.innerHTML = ''; // Clear regular results
-          featureCards.style.display = 'block';
-          // Show/hide specific tools based on selection
-          calculator.classList.toggle('active', true); // Show calculator as default tool
-          currencyConverter.classList.toggle('active', false);
-          dictionary.classList.toggle('active', false);
-          // Update results count for tools
-          resultsCount.textContent = `Nirobo Tools`;
-        } else {
-          featureCards.style.display = 'none'; // Hide tools section
-          currentPage = 1;
-          // For filter tabs, we still use the original applyFilters for exact matching
-          const filteredByTabs = applyFilters(allResults, query, currentFilter);
-          const sortedResults = sortResults(filteredByTabs, document.getElementById('sortOptions').value);
-          const totalPages = Math.ceil(sortedResults.length / RESULTS_PER_PAGE);
-          const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
-          const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, sortedResults.length);
-          const pageResults = sortedResults.slice(startIndex, endIndex);
-          renderResults(pageResults);
-          renderPagination(totalPages);
-          updateResultsCount(sortedResults.length);
-          showAIInsights(query, sortedResults);
-        }
-      });
-    });
-    // Sort options
-    document.getElementById('sortOptions').addEventListener('change', (e) => {
-      if (currentFilter === 'tools') return; // Do nothing if tools are active
-      // Use Fuse.js results if there's a query, otherwise use all results
-      let resultsToSort = filteredResults;
-      if (query && fuseInstance) {
-        resultsToSort = performSearchFuse(query);
-      } else {
-        resultsToSort = allResults;
-      }
-      const sortedResults = sortResults(resultsToSort, e.target.value);
-      const totalPages = Math.ceil(sortedResults.length / RESULTS_PER_PAGE);
-      const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
-      const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, sortedResults.length);
-      const pageResults = sortedResults.slice(startIndex, endIndex);
-      renderResults(pageResults);
-      renderPagination(totalPages);
-      showAIInsights(query, sortedResults);
-    });
-    // Search form submission
-    searchForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      query = searchInput.value.trim();
-      if (!query) {
-        alert("Please enter a search term.");
-        return;
-      }
-      // Add to search history
-      if (!searchHistory.includes(query)) {
-        searchHistory.unshift(query);
-        if (searchHistory.length > 10) searchHistory.pop();
-      }
-      // Reset filter if it was 'tools'
-      if (currentFilter === 'tools') {
-          filterTabs.forEach(t => t.classList.remove('active'));
-          document.querySelector('.filter-tab[data-filter="all"]').classList.add('active');
-          currentFilter = 'all';
-          featureCards.style.display = 'none';
-      }
-      try {
-        resultsContainer.innerHTML = `
-          <div class="loading">
-            <div class="spinner"></div>
-            <p>Searching with Nirobo AI Engine...</p>
-          </div>
-        `;
-        allResults = await loadAllResults();
-        // --- Use Fuse.js for searching ---
-        if (query) {
-            // Perform the search using Fuse.js
-            filteredResults = performSearchFuse(query);
-            console.log("Search results after Fuse.js:", filteredResults.length);
-        } else {
-            filteredResults = [];
-        }
-        // --- End Fuse.js search ---
-        const sortedResults = sortResults(filteredResults, document.getElementById('sortOptions').value);
-        const totalPages = Math.ceil(sortedResults.length / RESULTS_PER_PAGE);
-        const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
-        const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, sortedResults.length);
-        const pageResults = sortedResults.slice(startIndex, endIndex);
-        renderResults(pageResults);
-        renderPagination(totalPages);
-        updateResultsCount(sortedResults.length);
-        showAIInsights(query, sortedResults);
-        // Update URL
-        const url = new URL(window.location);
-        url.searchParams.set('q', query);
-        url.searchParams.set('page', '1');
-        window.history.pushState({ page: 1, query }, '', url);
-      } catch (error) {
-        console.error("Search error:", error);
-        resultsContainer.innerHTML = `
-          <div class="no-results">
-            <i class="fas fa-exclamation-triangle"></i>
-            <h3>Search Error</h3>
-            <p>An unexpected error occurred. Please try again later.</p>
-          </div>
-        `;
-        paginationContainer.innerHTML = '';
-      }
-    });
-    // Report button handler
-    document.addEventListener('click', function(e) {
-      if (e.target && e.target.classList.contains('report-btn')) {
-        const url = e.target.closest('.report-btn').dataset.url;
-        const title = e.target.closest('.report-btn').dataset.title;
-        const subject = encodeURIComponent(`[Nirobo Report] Illegal Website: ${title}`);
-        const body = encodeURIComponent(`
-INFRINGEMENT REPORT
-===================
-Website Title: ${title}
-URL: ${url}
-Reason for Report:
-[Please describe why you believe this website is illegal]
-Additional Details:
-[Any other information that supports your claim]
-Reporter Info:
-[Your name/email if you wish to be contacted]
-⚠️ NOTE: This report will be sent to Nirobo's admin team for review.
-        `);
-        const mailtoLink = `mailto:infinitealphas0602@outlook.com?subject=${subject}&body=${body}`;
-        window.open(mailtoLink, '_blank');
-        alert('📬 A report email draft has been opened. Please review and send it to infinitealphas0602@outlook.com');
-      }
-    });
-    // Initialize on Page Load
-    document.addEventListener("DOMContentLoaded", async () => {
-      // Check URL parameters
-      const urlParams = new URLSearchParams(window.location.search);
-      const initialQuery = urlParams.get('q');
-      const initialPage = parseInt(urlParams.get('page'), 10) || 1;
-      if (initialQuery) {
-        searchInput.value = initialQuery;
-        query = initialQuery;
-        currentPage = initialPage;
-        searchForm.dispatchEvent(new Event('submit'));
-      } else {
-        resultsContainer.innerHTML = `
-          <div class="no-results">
-            <i class="fas fa-robot"></i>
-            <h3>Welcome to Nirobo Search</h3>
-            <p>Our AI-powered search engine combines curated databases with community submissions.</p>
-            <p>Enter a search term above to begin exploring the web intelligently.</p>
-          </div>
-        `;
-      }
-    });
-    // Handle browser back/forward buttons
-    window.addEventListener('popstate', (event) => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const newQuery = urlParams.get('q') || '';
-      const newPage = parseInt(urlParams.get('page'), 10) || 1;
-      if (newQuery !== query || newPage !== currentPage) {
-        searchInput.value = newQuery;
-        query = newQuery;
-        currentPage = newPage;
-        if (query) {
-          searchForm.dispatchEvent(new Event('submit'));
-        } else {
-          resultsContainer.innerHTML = `
-            <div class="no-results">
-              <i class="fas fa-robot"></i>
-              <h3>Welcome to Nirobo Search</h3>
-              <p>Our AI-powered search engine combines curated databases with community submissions.</p>
-              <p>Enter a search term above to begin exploring the web intelligently.</p>
-            </div>
-          `;
-          paginationContainer.innerHTML = '';
-        }
-      }
+    document.querySelector('.lucky-button').addEventListener('click', function() {
+      alert("I'm Feeling Lucky! (This is a demo button)");
     });
   </script>
 </body>
