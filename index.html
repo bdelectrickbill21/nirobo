@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nirobo — Curated Search</title>
+  <title>Nirobo — Curated Search for Bangladesh</title>
   <style>
     body {
       margin: 0;
@@ -13,7 +13,7 @@
     }
 
     .intro {
-      background-color: #004d00;
+      background: linear-gradient(135deg, #004d00, #006400); /* Gradient for depth */
       color: white;
       padding: 30px 20px;
       text-align: center;
@@ -22,6 +22,7 @@
     .intro h1 {
       font-size: 48px;
       letter-spacing: 2px;
+      margin: 10px 0;
     }
 
     .intro h1 span {
@@ -29,17 +30,20 @@
     }
 
     .intro h1 .green {
-      color: #006400;
+      color: #00ff00; /* Brighter green for contrast */
     }
 
     .intro h1 .red {
-      color: #ff0000;
+      color: #ff6666; /* Softer red */
     }
 
     .intro p {
       font-size: 16px;
       margin-top: 10px;
       font-style: italic;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .search-bar {
@@ -47,34 +51,48 @@
       justify-content: center;
       padding: 20px;
       background-color: #e6ffe6;
+      border-bottom: 2px solid #d40000; /* Red accent */
     }
 
     .search-bar input {
       width: 60%;
-      padding: 12px;
+      padding: 12px 15px; /* Added padding */
       font-size: 16px;
       border: 1px solid #ccc;
       border-radius: 6px 0 0 6px;
+      outline: none; /* Remove default focus outline */
+    }
+
+    .search-bar input:focus {
+      border-color: #d40000; /* Red border on focus */
     }
 
     .search-bar button {
       padding: 12px 20px;
-      background-color: #d40000;
+      background-color: #d40000; /* Red */
       color: white;
       border: none;
       border-radius: 0 6px 6px 0;
       cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s; /* Smooth hover effect */
+    }
+
+    .search-bar button:hover {
+      background-color: #ff0000; /* Brighter red on hover */
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Responsive grid */
       gap: 20px;
       padding: 30px;
+      max-width: 1200px; /* Limit width */
+      margin: 0 auto; /* Center grid */
     }
 
     .card {
-      background-color: #228B22; /* Green */
+      background: linear-gradient(135deg, #228B22, #006400); /* Green gradient */
       color: white;
       padding: 20px;
       border-radius: 8px;
@@ -82,24 +100,62 @@
       font-weight: bold;
       cursor: pointer;
       margin: 10px 0;
+      transition: transform 0.2s, box-shadow 0.2s; /* Hover effect */
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Subtle shadow */
+    }
+
+    .card:hover {
+      transform: translateY(-5px); /* Lift effect */
+      box-shadow: 0 6px 8px rgba(0,0,0,0.15); /* Deeper shadow */
     }
 
     footer {
-      background-color: #222;
+      position: relative; /* Changed from fixed to relative */
+      background-color: #1a1a1a;
       color: #ccc;
       padding: 20px;
       text-align: center;
-      font-size: 14px;
+      font-size: 0.9rem;
+      border-top: 1px solid #333;
+      margin-top: 40px; /* Space above footer */
+    }
+
+    footer a {
+      color: #ff9999;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
     }
 
     .ai-chat-button {
-      background-color: #ff0000; /* Red to match your search button */
+      background-color: #ff0000;
       color: #fff;
       padding: 15px;
       font-weight: bold;
       border: none;
       border-radius: 6px;
       box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+    }
+
+    /* Added styles for the unique value proposition */
+    .unique-value {
+      background-color: #fff8f0; /* Light cream background */
+      padding: 20px;
+      text-align: center;
+      margin: 20px 0;
+      border-left: 4px solid #d40000; /* Red accent */
+    }
+
+    .unique-value h2 {
+      color: #d40000;
+      margin-bottom: 10px;
+    }
+
+    .unique-value p {
+      font-size: 1.1em;
+      color: #555;
     }
   </style>
 </head>
@@ -118,24 +174,30 @@
     <p>A new journey born from invisible sound, shaped by red struggle, echoing the outcry of rights, bound by language, and united in the oneness of silence.</p>
   </div>
 
+  <!-- Unique Value Proposition -->
+  <div class="unique-value">
+    <h2>Why Nirobo?</h2>
+    <p>Unlike general search engines, Nirobo focuses on <strong>Bangladesh</strong> - its culture, language, and people. We curate quality Bangla content, prioritize local sources, and provide tools relevant to life here.</p>
+  </div>
+
   <div class="search-bar">
-    <input id="searchInput" type="text" placeholder="Search the web of Bangladesh..." />
+    <input id="searchInput" type="text" placeholder="Search the web of Bangladesh... (Try in Bangla!)" />
     <button id="searchBtn">Search</button>
   </div>
 
   <!-- Category Grid -->
   <div class="grid">
-    <div class="card">News Portal</div>
-    <div class="card">Business & Finance</div>
-    <div class="card">Healthcare</div>
-    <div class="card">Jobs</div>
-    <div class="card">Education</div>
+    <div class="card" onclick="window.location.href='search.html?q=local+news'">Local News</div>
+    <div class="card" onclick="window.location.href='search.html?q=education'">Education</div>
+    <div class="card" onclick="window.location.href='search.html?q=healthcare'">Healthcare</div>
+    <div class="card" onclick="window.location.href='search.html?q=bangla+literature'">Bangla Literature</div>
+    <div class="card" onclick="window.location.href='search.html?q=jobs'">Jobs</div>
     <div class="card" onclick="window.location.href='chat.html'">Local AI Chat</div>
   </div>
 
   <!-- User Portal Button -->
   <div style="text-align: center; padding: 20px;">
-    <a href="signup.html" style="background: #006400; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
+    <a href="signup.html" style="background: #006400; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; transition: background-color 0.3s;">
       👤 My Submissions & Account
     </a>
     <p style="margin-top: 10px; font-size: 0.9em; color: #666;">
@@ -144,24 +206,12 @@
   </div>
 
   <!-- Footer -->
-<footer style="
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: #1a1a1a;
-  color: #ccc;
-  padding: 20px;
-  text-align: center;
-  font-size: 0.9rem;
-  border-top: 1px solid #333;
-  z-index: 100;
-">
-  <p>Made in Bangladesh 🇧🇩 | Curated by Nirobo</p>
-  <p>Honoring the Language Movement and the Silent Legacy of Justice</p>
-  <p>Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity</p>
-  <p><a href="signup.html" style="color: #ff9999;">Submit Your Site</a> | <a href="admin.html" style="color: #ff9999;">Admin</a></p>
-</footer>
+  <footer>
+    <p>Made in Bangladesh 🇧🇩 | Curated by Nirobo</p>
+    <p>Honoring the Language Movement and the Silent Legacy of Justice</p>
+    <p>Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity</p>
+    <p><a href="signup.html">Submit Your Site</a> | <a href="admin.html">Admin</a></p>
+  </footer>
 
   <script>
     document.getElementById('searchBtn').onclick = () => {
@@ -211,7 +261,7 @@
   // Get country (simplified)
   async function getCountry() {
     try {
-      const response = await fetch('https://ipapi.co/json');
+      const response = await fetch('https://ipapi.co/json ');
       const data = await response.json();
       return data.country_name || 'Unknown';
     } catch (error) {
@@ -235,6 +285,6 @@
     console.log('✅ Visit tracked:', visitorInfo);
   });
 })();
-</script>
+  </script>
 </body>
 </html>
