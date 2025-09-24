@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nirobo Search - Intelligent URL Discovery</title>
-  <!-- Add Fuse.js library for fuzzy search -->
+  <title>Nirobo — Search for Bangladesh</title>
   <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -20,14 +19,16 @@
       --text: #f5f5f5;
       --text-secondary: #cccccc;
       --border: #333333;
+      --success: #00aa00;
+      --warning: #ff9900;
+      --danger: #d40000;
+      --info: #0066cc;
     }
-
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-
     body {
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       background: linear-gradient(135deg, var(--background), #003300);
@@ -36,12 +37,10 @@
       padding: 20px;
       min-height: 100vh;
     }
-
     .container {
       max-width: 1200px;
       margin: 0 auto;
     }
-
     /* Header Styles */
     header {
       text-align: center;
@@ -49,21 +48,18 @@
       margin-bottom: 30px;
       position: relative;
     }
-
     .logo {
       font-size: 2.8rem;
       color: var(--accent);
       margin-bottom: 10px;
       text-shadow: 0 0 15px rgba(212, 0, 0, 0.5);
     }
-
     .tagline {
       font-size: 1.2rem;
       color: #ffcccc;
       font-style: italic;
       margin-bottom: 20px;
     }
-
     /* Search Section */
     .search-section {
       background: rgba(26, 26, 26, 0.8);
@@ -73,7 +69,6 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
       border: 1px solid rgba(212, 0, 0, 0.3);
     }
-
     .search-header {
       display: flex;
       justify-content: space-between;
@@ -82,7 +77,6 @@
       flex-wrap: wrap;
       gap: 15px;
     }
-
     .search-title {
       font-size: 1.8rem;
       color: var(--accent);
@@ -90,7 +84,6 @@
       align-items: center;
       gap: 10px;
     }
-
     .ai-badge {
       background: linear-gradient(45deg, #8a2be2, #ff00ff);
       color: white;
@@ -101,13 +94,11 @@
       align-items: center;
       gap: 5px;
     }
-
     #search-form {
       display: flex;
       gap: 15px;
       margin-bottom: 25px;
     }
-
     #search-input {
       flex: 1;
       padding: 15px 20px;
@@ -119,12 +110,10 @@
       outline: none;
       transition: all 0.3s ease;
     }
-
     #search-input:focus {
       border-color: var(--accent-hover);
       box-shadow: 0 0 15px rgba(212, 0, 0, 0.5);
     }
-
     #search-form button {
       padding: 15px 30px;
       background: var(--accent);
@@ -139,13 +128,40 @@
       align-items: center;
       gap: 8px;
     }
-
     #search-form button:hover {
       background: var(--accent-hover);
       box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
       transform: translateY(-2px);
     }
-
+    /* Bangla Input Tool */
+    .bangla-input {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 15px;
+      display: none;
+    }
+    .bangla-input.active {
+      display: block;
+    }
+    .bangla-keys {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 5px;
+      margin-top: 10px;
+    }
+    .bangla-key {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .bangla-key:hover {
+      background: rgba(212, 0, 0, 0.2);
+    }
     /* Advanced Search Toggle */
     .advanced-toggle {
       display: flex;
@@ -156,11 +172,9 @@
       margin-bottom: 20px;
       font-size: 0.95rem;
     }
-
     .advanced-toggle:hover {
       color: var(--accent);
     }
-
     /* Advanced Search Panel */
     .advanced-search {
       background: rgba(0, 0, 0, 0.2);
@@ -169,29 +183,24 @@
       margin-top: 15px;
       display: none;
     }
-
     .advanced-search.active {
       display: block;
     }
-
     .advanced-options {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
       margin-bottom: 20px;
     }
-
     .filter-group {
       margin-bottom: 15px;
     }
-
     .filter-group label {
       display: block;
       margin-bottom: 8px;
       color: var(--text-secondary);
       font-weight: 500;
     }
-
     .filter-group select, 
     .filter-group input {
       width: 100%;
@@ -201,13 +210,11 @@
       background: rgba(0, 0, 0, 0.3);
       color: var(--text);
     }
-
     .date-filters {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 15px;
     }
-
     /* Filter Tabs */
     .filter-tabs {
       display: flex;
@@ -215,7 +222,6 @@
       margin-bottom: 25px;
       flex-wrap: wrap;
     }
-
     .filter-tab {
       padding: 10px 20px;
       background: rgba(0, 100, 0, 0.3);
@@ -229,17 +235,68 @@
       align-items: center;
       gap: 8px;
     }
-
     .filter-tab:hover {
       background: rgba(0, 128, 0, 0.5);
     }
-
     .filter-tab.active {
       background: var(--accent);
       color: white;
       font-weight: bold;
     }
-
+    /* AI Insights Section */
+    .ai-insights {
+      background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(255, 0, 255, 0.1));
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 25px;
+      border: 1px solid rgba(138, 43, 226, 0.3);
+    }
+    .ai-insights h3 {
+      color: #da70d6;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .insight-item {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    .insight-item:last-child {
+      margin-bottom: 0;
+    }
+    /* Local Tools */
+    .local-tools {
+      background: rgba(0, 100, 200, 0.1);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 25px;
+      border: 1px solid rgba(0, 100, 200, 0.3);
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+    .tool-card {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .tool-card:hover {
+      transform: translateY(-3px);
+      background: rgba(0, 100, 200, 0.2);
+    }
+    .tool-card i {
+      font-size: 1.8rem;
+      color: var(--info);
+      margin-bottom: 10px;
+    }
     /* Results Section */
     .results-header {
       display: flex;
@@ -249,12 +306,10 @@
       flex-wrap: wrap;
       gap: 15px;
     }
-
     .results-count {
       color: var(--text-secondary);
       font-size: 0.95rem;
     }
-
     .sort-options select {
       padding: 8px 15px;
       border-radius: 20px;
@@ -262,7 +317,6 @@
       background: rgba(0, 0, 0, 0.3);
       color: var(--text);
     }
-
     /* Result Cards */
     .result-card {
       background: var(--card-bg);
@@ -275,13 +329,11 @@
       position: relative;
       overflow: hidden;
     }
-
     .result-card:hover {
       transform: translateY(-3px);
       box-shadow: 0 8px 25px rgba(212, 0, 0, 0.3);
       border-left-color: var(--accent-hover);
     }
-
     .result-card::before {
       content: '';
       position: absolute;
@@ -293,18 +345,15 @@
       transform: scaleX(0);
       transition: transform 0.5s ease;
     }
-
     .result-card:hover::before {
       transform: scaleX(1);
     }
-
     .result-header {
       display: flex;
       align-items: flex-start;
       gap: 15px;
       margin-bottom: 15px;
     }
-
     .favicon {
       width: 32px;
       height: 32px;
@@ -316,27 +365,22 @@
       justify-content: center;
       font-size: 16px;
     }
-
     .result-content {
       flex: 1;
     }
-
     .result-title {
       font-size: 1.3rem;
       margin-bottom: 8px;
       color: #ff9999;
     }
-
     .result-title a {
       color: #ff9999;
       text-decoration: none;
     }
-
     .result-title a:hover {
       text-decoration: underline;
       color: var(--accent-hover);
     }
-
     .result-url {
       color: #888;
       font-size: 0.9rem;
@@ -344,20 +388,17 @@
       display: block;
       word-break: break-all;
     }
-
     .result-description {
       margin-bottom: 15px;
       color: var(--text-secondary);
       line-height: 1.7;
     }
-
     .result-tags {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
       margin-bottom: 15px;
     }
-
     .result-tag {
       background: rgba(212, 0, 0, 0.2);
       color: #ff9999;
@@ -365,7 +406,6 @@
       border-radius: 20px;
       font-size: 0.85rem;
     }
-
     .result-meta {
       display: flex;
       justify-content: space-between;
@@ -377,12 +417,10 @@
       padding-top: 15px;
       border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
-
     .result-actions {
       display: flex;
       gap: 10px;
     }
-
     .action-btn {
       background: rgba(255, 255, 255, 0.1);
       color: var(--text);
@@ -396,12 +434,10 @@
       align-items: center;
       gap: 5px;
     }
-
     .action-btn:hover {
       background: var(--accent);
       border-color: var(--accent);
     }
-
     /* Pagination */
     .pagination {
       display: flex;
@@ -411,7 +447,6 @@
       margin: 40px 0;
       flex-wrap: wrap;
     }
-
     .pagination button {
       padding: 10px 18px;
       background: rgba(0, 100, 0, 0.3);
@@ -422,30 +457,25 @@
       font-size: 1rem;
       transition: all 0.3s ease;
     }
-
     .pagination button:hover:not(:disabled) {
       background: rgba(0, 128, 0, 0.5);
       border-color: var(--primary-light);
     }
-
     .pagination button:disabled {
       background: #333;
       color: #666;
       cursor: not-allowed;
     }
-
     .pagination button.active {
       background: var(--accent);
       border-color: var(--accent-hover);
       font-weight: bold;
     }
-
     /* Loading State */
     .loading {
       text-align: center;
       padding: 40px;
     }
-
     .spinner {
       border: 4px solid rgba(255, 255, 255, 0.1);
       border-radius: 50%;
@@ -455,25 +485,21 @@
       animation: spin 1s linear infinite;
       margin: 0 auto 20px;
     }
-
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-
     /* No Results */
     .no-results {
       text-align: center;
       padding: 60px 20px;
       color: var(--text-secondary);
     }
-
     .no-results i {
       font-size: 3rem;
       margin-bottom: 20px;
       color: #555;
     }
-
     /* Footer */
     footer {
       background: rgba(26, 26, 26, 0.9);
@@ -485,103 +511,42 @@
       margin-top: 50px;
       border-radius: 10px;
     }
-
     footer a {
       color: #ff9999;
       text-decoration: none;
     }
-
     footer a:hover {
       text-decoration: underline;
     }
-
     /* Responsive Design */
     @media (max-width: 768px) {
       body {
         padding: 15px;
       }
-      
       .search-section {
         padding: 20px;
       }
-      
       #search-form {
         flex-direction: column;
       }
-      
       .search-header {
         flex-direction: column;
         text-align: center;
       }
-      
       .result-header {
         flex-direction: column;
       }
-      
       .result-meta {
         flex-direction: column;
         align-items: flex-start;
       }
-      
       .result-actions {
         width: 100%;
         justify-content: flex-end;
       }
-    }
-
-    /* AI Features */
-    .ai-insights {
-      background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(255, 0, 255, 0.1));
-      border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 25px;
-      border: 1px solid rgba(138, 43, 226, 0.3);
-    }
-
-    .ai-insights h3 {
-      color: #da70d6;
-      margin-bottom: 15px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .insight-item {
-      background: rgba(0, 0, 0, 0.2);
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-    }
-
-    .insight-item:last-child {
-      margin-bottom: 0;
-    }
-
-    /* Search Suggestions */
-    .suggestions {
-      position: absolute;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      width: 100%;
-      max-height: 300px;
-      overflow-y: auto;
-      z-index: 1000;
-      display: none;
-    }
-
-    .suggestion-item {
-      padding: 12px 20px;
-      cursor: pointer;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .suggestion-item:hover {
-      background: rgba(212, 0, 0, 0.1);
-    }
-
-    .suggestion-item:last-child {
-      border-bottom: none;
+      .bangla-keys {
+        grid-template-columns: repeat(5, 1fr);
+      }
     }
   </style>
 </head>
@@ -589,64 +554,109 @@
   <div class="container">
     <header>
       <div class="logo">
-        <i class="fas fa-brain"></i> NIROBO
+        <i class="fas fa-search"></i> NIROBO
       </div>
-      <div class="tagline">"Intelligent URL Discovery Powered by AI"</div>
+      <div class="tagline">"Search the web of Bangladesh"</div>
       <a href="/" style="color: #ff9999; text-decoration: none;">← Back to Nirobo</a>
     </header>
-
     <!-- Submit URL Button -->
-    <a href="signup.html" class="submit-button">
-      <i class="fas fa-plus-circle"></i> Submit URL
-    </a>
-
+    <div style="text-align: center; margin-bottom: 20px;">
+      <a href="signup.html" style="background: #006400; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; transition: background-color 0.3s;">
+        <i class="fas fa-plus-circle"></i> Submit Your Site
+      </a>
+    </div>
     <!-- Search Section -->
     <section class="search-section">
       <div class="search-header">
         <h2 class="search-title">
           <i class="fas fa-search"></i> Intelligent Search
-          <span class="ai-badge">
-            <i class="fas fa-robot"></i> AI-Powered
-          </span>
         </h2>
       </div>
-
       <form id="search-form">
-        <input type="text" id="search-input" placeholder="Search the web intelligently..." autocomplete="off">
+        <input type="text" id="search-input" placeholder="Search for Bangladeshi content..." autocomplete="off">
         <button type="submit">
           <i class="fas fa-search"></i> Search
         </button>
       </form>
-
+      <div class="advanced-toggle" id="banglaToggle">
+        <i class="fas fa-chevron-down"></i>
+        <span>বাংলা লেখুন (Bangla Input)</span>
+      </div>
+      <div class="bangla-input" id="banglaInput">
+        <p>Click keys to type in Bangla (Transliteration)</p>
+        <div class="bangla-keys">
+          <div class="bangla-key" data-key="a">া</div>
+          <div class="bangla-key" data-key="i">ি</div>
+          <div class="bangla-key" data-key="u">ু</div>
+          <div class="bangla-key" data-key="e">ে</div>
+          <div class="bangla-key" data-key="o">ো</div>
+          <div class="bangla-key" data-key="k">ক</div>
+          <div class="bangla-key" data-key="kh">খ</div>
+          <div class="bangla-key" data-key="g">গ</div>
+          <div class="bangla-key" data-key="gh">ঘ</div>
+          <div class="bangla-key" data-key="ng">ঙ</div>
+          <div class="bangla-key" data-key="c">চ</div>
+          <div class="bangla-key" data-key="ch">ছ</div>
+          <div class="bangla-key" data-key="j">জ</div>
+          <div class="bangla-key" data-key="jh">ঝ</div>
+          <div class="bangla-key" data-key="ny">ঞ</div>
+          <div class="bangla-key" data-key="t">ট</div>
+          <div class="bangla-key" data-key="th">ঠ</div>
+          <div class="bangla-key" data-key="d">ড</div>
+          <div class="bangla-key" data-key="dh">ঢ</div>
+          <div class="bangla-key" data-key="n">ণ</div>
+          <div class="bangla-key" data-key="tt">ত</div>
+          <div class="bangla-key" data-key="tth">থ</div>
+          <div class="bangla-key" data-key="dd">দ</div>
+          <div class="bangla-key" data-key="ddh">ধ</div>
+          <div class="bangla-key" data-key="nn">ন</div>
+          <div class="bangla-key" data-key="p">প</div>
+          <div class="bangla-key" data-key="ph">ফ</div>
+          <div class="bangla-key" data-key="b">ব</div>
+          <div class="bangla-key" data-key="bh">ভ</div>
+          <div class="bangla-key" data-key="m">ম</div>
+          <div class="bangla-key" data-key="y">য</div>
+          <div class="bangla-key" data-key="r">র</div>
+          <div class="bangla-key" data-key="l">ল</div>
+          <div class="bangla-key" data-key="sh">শ</div>
+          <div class="bangla-key" data-key="ss">ষ</div>
+          <div class="bangla-key" data-key="s">স</div>
+          <div class="bangla-key" data-key="h">হ</div>
+          <div class="bangla-key" data-key="w">ও</div>
+          <div class="bangla-key" data-key="x">ক্স</div>
+        </div>
+      </div>
       <div class="advanced-toggle" id="advancedToggle">
         <i class="fas fa-chevron-down"></i>
         <span>Advanced Search Options</span>
       </div>
-
       <div class="advanced-search" id="advancedSearch">
         <div class="advanced-options">
           <div class="filter-group">
             <label for="contentType">Content Type</label>
             <select id="contentType">
               <option value="all">All Types</option>
-              <option value="websites">Websites</option>
-              <option value="images">Images</option>
-              <option value="videos">Videos</option>
-              <option value="documents">Documents</option>
+              <option value="education">Education</option>
+              <option value="news">News</option>
+              <option value="literature">Literature</option>
+              <option value="business">Business</option>
+              <option value="health">Healthcare</option>
             </select>
           </div>
-
           <div class="filter-group">
-            <label for="dateRange">Date Range</label>
-            <select id="dateRange">
-              <option value="any">Any Time</option>
-              <option value="day">Past 24 Hours</option>
-              <option value="week">Past Week</option>
-              <option value="month">Past Month</option>
-              <option value="year">Past Year</option>
+            <label for="region">Region</label>
+            <select id="region">
+              <option value="all">All of Bangladesh</option>
+              <option value="dhaka">Dhaka</option>
+              <option value="chittagong">Chittagong</option>
+              <option value="sylhet">Sylhet</option>
+              <option value="khulna">Khulna</option>
+              <option value="rajshahi">Rajshahi</option>
+              <option value="barisal">Barisal</option>
+              <option value="rangpur">Rangpur</option>
+              <option value="mymensingh">Mymensingh</option>
             </select>
           </div>
-
           <div class="filter-group">
             <label for="sortBy">Sort By</label>
             <select id="sortBy">
@@ -656,7 +666,6 @@
             </select>
           </div>
         </div>
-
         <div class="date-filters">
           <div class="filter-group">
             <label for="dateFrom">From Date</label>
@@ -669,32 +678,57 @@
         </div>
       </div>
     </section>
-
     <!-- Filter Tabs -->
     <div class="filter-tabs">
       <button class="filter-tab active" data-filter="all">
         <i class="fas fa-globe"></i> All
       </button>
-      <button class="filter-tab" data-filter="websites">
-        <i class="fas fa-window-maximize"></i> Websites
+      <button class="filter-tab" data-filter="education">
+        <i class="fas fa-graduation-cap"></i> Education
       </button>
-      <button class="filter-tab" data-filter="images">
-        <i class="fas fa-image"></i> Images
+      <button class="filter-tab" data-filter="news">
+        <i class="fas fa-newspaper"></i> News
       </button>
-      <button class="filter-tab" data-filter="videos">
-        <i class="fas fa-video"></i> Videos
+      <button class="filter-tab" data-filter="literature">
+        <i class="fas fa-book"></i> Literature
       </button>
-      <button class="filter-tab" data-filter="documents">
-        <i class="fas fa-file-alt"></i> Documents
+      <button class="filter-tab" data-filter="business">
+        <i class="fas fa-building"></i> Business
       </button>
     </div>
-
     <!-- AI Insights Section -->
     <div class="ai-insights" id="aiInsights" style="display: none;">
-      <h3><i class="fas fa-lightbulb"></i> AI Insights</h3>
+      <h3><i class="fas fa-lightbulb"></i> Cultural Insights</h3>
       <div id="insightsContent"></div>
     </div>
-
+    <!-- Local Tools -->
+    <div class="local-tools">
+      <h3 style="color: var(--info); margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+        <i class="fas fa-tools"></i> Local Tools
+      </h3>
+      <div class="tools-grid">
+        <div class="tool-card" id="unitConverter">
+          <i class="fas fa-ruler-combined"></i>
+          <h4>Unit Converter</h4>
+          <p>Maunds, Katha, Feet to Metric</p>
+        </div>
+        <div class="tool-card" id="bdtCalculator">
+          <i class="fas fa-calculator"></i>
+          <h4>BDT Calculator</h4>
+          <p>Local Price Comparison</p>
+        </div>
+        <div class="tool-card" id="banglaCalendar">
+          <i class="fas fa-calendar-alt"></i>
+          <h4>Bengali Calendar</h4>
+          <p>Check Bengali Dates</p>
+        </div>
+        <div class="tool-card" id="dictionary">
+          <i class="fas fa-language"></i>
+          <h4>BD Dictionary</h4>
+          <p>Translate & Define</p>
+        </div>
+      </div>
+    </div>
     <!-- Results Section -->
     <section class="results-section">
       <div class="results-header">
@@ -707,23 +741,29 @@
           </select>
         </div>
       </div>
-
       <div id="results">
         <div class="loading">
           <div class="spinner"></div>
           <p>Initializing Nirobo Search Engine...</p>
         </div>
       </div>
-
       <div id="pagination" class="pagination"></div>
     </section>
-
     <footer>
       <p>Made in Bangladesh 🇧🇩 | Curated by Nirobo</p>
       <p>Honoring the Language Movement and the Silent Legacy of Justice</p>
       <p>Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity</p>
       <p><a href="/">← Back to Nirobo</a></p>
     </footer>
+  </div>
+
+  <!-- Tool Modals -->
+  <div id="modalOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:2000; justify-content:center; align-items:center;">
+    <div id="modalContent" style="background:var(--card-bg); padding:30px; border-radius:10px; width:90%; max-width:500px; position:relative;">
+      <button id="closeModal" style="position:absolute; top:10px; right:15px; background:none; border:none; color:var(--text); font-size:1.5rem; cursor:pointer;">&times;</button>
+      <h3 id="modalTitle" style="color:var(--accent); margin-bottom:20px;"></h3>
+      <div id="modalBody"></div>
+    </div>
   </div>
 
   <script>
@@ -737,7 +777,6 @@
     let searchHistory = [];
     // Variable to hold the Fuse.js instance
     let fuseInstance = null;
-
     // --- DOM Elements ---
     const searchForm = document.getElementById('search-form');
     const searchInput = document.getElementById('search-input');
@@ -749,65 +788,62 @@
     const aiInsights = document.getElementById('aiInsights');
     const insightsContent = document.getElementById('insightsContent');
     const filterTabs = document.querySelectorAll('.filter-tab');
-
+    const banglaToggle = document.getElementById('banglaToggle');
+    const banglaInput = document.getElementById('banglaInput');
+    const banglaKeys = document.querySelectorAll('.bangla-key');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalContent = document.getElementById('modalContent');
+    const closeModal = document.getElementById('closeModal');
+    const unitConverter = document.getElementById('unitConverter');
+    const bdtCalculator = document.getElementById('bdtCalculator');
+    const banglaCalendar = document.getElementById('banglaCalendar');
+    const dictionary = document.getElementById('dictionary');
     // --- Helper Functions ---
-
     // Get favicon URL
     function getFaviconUrl(url) {
       try {
         const hostname = new URL(url).hostname;
         return `https://www.google.com/s2/favicons?domain=${hostname}&sz=32`;
       } catch (e) {
-        return 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%23444" rx="4"/><text x="50%" y="50%" fill="white" font-size="16" font-family="Arial" text-anchor="middle" dominant-baseline="middle">?</text></svg>';
+        return 'image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%23444" rx="4"/><text x="50%" y="50%" fill="white" font-size="16" font-family="Arial" text-anchor="middle" dominant-baseline="middle">?</text></svg>';
       }
     }
-
     // Generate AI insights based on search query
     function generateAIInsights(searchQuery, results) {
       const insights = [];
-      
-      // Topic analysis
-      if (searchQuery.toLowerCase().includes('tutorial') || searchQuery.toLowerCase().includes('how to')) {
+      const queryLower = searchQuery.toLowerCase();
+      // Cultural insights
+      if (queryLower.includes('pohela boishakh') || queryLower.includes('baishakhi')) {
         insights.push({
-          title: "Learning Path Suggestion",
-          content: "We found educational resources. Consider exploring related topics for a comprehensive understanding."
+          title: "Cultural Context",
+          content: "Pohela Boishakh is the Bengali New Year. Results might include cultural events, traditional celebrations, and related news from Bangladesh."
         });
       }
-      
+      if (queryLower.includes('ekushey') || queryLower.includes('language movement')) {
+        insights.push({
+          title: "Historical Context",
+          content: "February 21st marks the Language Movement Day in Bangladesh. Results may highlight historical significance, monuments, and cultural programs."
+        });
+      }
+      if (queryLower.includes('cricket') || queryLower.includes('bangladesh cricket')) {
+        insights.push({
+          title: "National Interest",
+          content: "Cricket is a national passion in Bangladesh. Expect results from local sports news, team updates, and match schedules."
+        });
+      }
       // Content type insights
-      const videoCount = results.filter(r => 
-        r.url.includes('youtube') || r.url.includes('youtu.be') || (Array.isArray(r.tags) && r.tags.includes('video'))
+      const educationCount = results.filter(r => 
+        r.tags.includes('education') || r.tags.includes('university') || r.tags.includes('ssc') || r.tags.includes('hsc')
       ).length;
-      
-      if (videoCount > results.length * 0.3) {
+      if (educationCount > results.length * 0.3) {
         insights.push({
-          title: "Video-Rich Results",
-          content: `${Math.round((videoCount/results.length)*100)}% of results are video content. Visual learning resources are abundant for this topic.`
+          title: "Educational Focus",
+          content: "Many results are related to education in Bangladesh. Consider exploring SSC, HSC, or university resources."
         });
       }
-      
-      // Freshness insight
-      const recentResults = results.filter(r => {
-        if (r.submittedAt) {
-          const date = new Date(r.submittedAt);
-          const daysOld = (Date.now() - date.getTime()) / (1000 * 3600 * 24);
-          return daysOld < 30;
-        }
-        return false;
-      }).length;
-      
-      if (recentResults > results.length * 0.5) {
-        insights.push({
-          title: "Fresh Content",
-          content: "This topic has recently active discussions and updated resources."
-        });
-      }
-      
       return insights;
     }
-
     // --- Fuzzy Search & Fuse.js Integration ---
-
     // Initialize Fuse.js with the combined data
     function initializeFuse(data) {
       console.log("Initializing Fuse.js...");
@@ -816,7 +852,8 @@
           { name: 'title', weight: 1.0 },
           { name: 'description', weight: 0.8 },
           { name: 'tags', weight: 0.7 },
-          { name: 'url', weight: 0.5 }
+          { name: 'url', weight: 0.5 },
+          { name: 'region', weight: 0.6 } // Added region for local search
         ],
         includeScore: true,
         threshold: 0.4, // Adjust for desired fuzziness (0.0 to 1.0)
@@ -828,7 +865,6 @@
       fuseInstance = new Fuse(data, options);
       console.log("Fuse.js initialized.");
     }
-
     // Perform search using Fuse.js
     function performSearchFuse(searchTerm) {
       if (!fuseInstance || !searchTerm) {
@@ -842,7 +878,6 @@
         .sort((a, b) => (a.score || 1) - (b.score || 1))
         .map(result => result.item);
     }
-
     // Basic spell suggestion (conceptual)
     function suggestCorrections(query, dataTitles) {
       const suggestions = new Set();
@@ -855,9 +890,7 @@
       });
       return Array.from(suggestions).slice(0, 3);
     }
-
     // --- Core Search Logic ---
-
     // Load data from result.json
     async function loadResultJson() {
       try {
@@ -871,7 +904,6 @@
         return [];
       }
     }
-
     // Load approved submissions from localStorage
     function loadApprovedSubmissions() {
       try {
@@ -882,12 +914,10 @@
         return [];
       }
     }
-
     // Combine all results
     async function loadAllResults() {
       const jsonResults = await loadResultJson();
       const approvedResults = loadApprovedSubmissions();
-      
       // Normalize approved results to match json structure
       const normalizedApproved = approvedResults.map(sub => ({
         title: sub.title || 'Untitled',
@@ -895,21 +925,17 @@
         description: sub.description || 'No description available',
         tags: Array.isArray(sub.tags) ? sub.tags : [],
         submittedAt: sub.submittedAt,
-        viewCount: sub.viewCount || 0
+        viewCount: sub.viewCount || 0,
+        region: sub.region || 'all' // Add region if available from submission
       }));
-      
       const combinedResults = [...jsonResults, ...normalizedApproved];
-      
       // NEW: Initialize Fuse.js with the loaded data
       initializeFuse(combinedResults);
-      
       return combinedResults;
     }
-
     // Apply filters to results (keeping for filter tabs, but search uses Fuse.js)
     function applyFilters(results, searchTerm, filterType) {
       let filtered = [...results];
-
       // Apply search term filter (exact match for filter tabs)
       if (searchTerm) {
         const lowerQuery = searchTerm.toLowerCase();
@@ -922,55 +948,40 @@
           ))
         );
       }
-
       // Apply type filter
       if (filterType !== 'all') {
         filtered = filtered.filter(item => {
-          const urlLower = item.url ? item.url.toLowerCase() : '';
           const tagsLower = Array.isArray(item.tags) ? item.tags.map(t => t.toLowerCase()) : [];
-
           switch(filterType) {
-            case 'images':
-              return urlLower.includes('image') || 
-                     urlLower.includes('img') || 
-                     tagsLower.includes('image') || 
-                     tagsLower.includes('photo');
-            case 'videos':
-              return urlLower.includes('youtube') || 
-                     urlLower.includes('youtu.be') || 
-                     urlLower.includes('vimeo') || 
-                     tagsLower.includes('video') || 
-                     tagsLower.includes('media');
-            case 'documents':
-              return urlLower.includes('.pdf') || 
-                     urlLower.includes('.doc') || 
-                     urlLower.includes('.txt') || 
-                     tagsLower.includes('document') || 
-                     tagsLower.includes('pdf');
-            case 'websites':
-              return !(urlLower.includes('image') || 
-                      urlLower.includes('img') || 
-                      urlLower.includes('youtube') || 
-                      urlLower.includes('youtu.be') || 
-                      urlLower.includes('vimeo') || 
-                      urlLower.includes('.pdf') || 
-                      urlLower.includes('.doc') || 
-                      urlLower.includes('.txt') || 
-                      tagsLower.includes('image') || 
-                      tagsLower.includes('photo') || 
-                      tagsLower.includes('video') || 
-                      tagsLower.includes('media') || 
-                      tagsLower.includes('document') || 
-                      tagsLower.includes('pdf'));
+            case 'education':
+              return tagsLower.includes('education') || 
+                     tagsLower.includes('university') || 
+                     tagsLower.includes('ssc') || 
+                     tagsLower.includes('hsc');
+            case 'news':
+              return tagsLower.includes('news') || 
+                     tagsLower.includes('media') || 
+                     tagsLower.includes('politics');
+            case 'literature':
+              return tagsLower.includes('literature') || 
+                     tagsLower.includes('book') || 
+                     tagsLower.includes('poetry') ||
+                     tagsLower.includes('novel');
+            case 'business':
+              return tagsLower.includes('business') || 
+                     tagsLower.includes('company') || 
+                     tagsLower.includes('finance');
+            case 'health':
+              return tagsLower.includes('health') || 
+                     tagsLower.includes('medicine') || 
+                     tagsLower.includes('hospital');
             default:
               return true;
           }
         });
       }
-
       return filtered;
     }
-
     // Sort results
     function sortResults(results, sortBy) {
       switch(sortBy) {
@@ -986,16 +997,13 @@
           return results; // Relevance is default
       }
     }
-
     // Render results
     function renderResults(results) {
       resultsContainer.innerHTML = "";
-
       if (results.length === 0) {
         // Try to get spell suggestions
         const allTitles = allResults.map(r => r.title || r.url || 'Untitled'); // Fallback if title missing
         const suggestions = suggestCorrections(query, allTitles);
-
         let suggestionsHtml = '';
         if (suggestions.length > 0) {
             suggestionsHtml = `
@@ -1005,7 +1013,6 @@
               </ul>
             `;
         }
-
         resultsContainer.innerHTML = `
           <div class="no-results">
             <i class="fas fa-search-minus"></i>
@@ -1016,15 +1023,12 @@
         `;
         return;
       }
-
       results.forEach((result) => {
         const resultElement = document.createElement("div");
         resultElement.className = "result-card";
-
         const faviconUrl = getFaviconUrl(result.url);
         const cleanUrl = result.url.replace(/^https?:\/\//, '').replace(/\/$/, '');
         const truncatedUrl = cleanUrl.length > 50 ? cleanUrl.substring(0, 50) + '...' : cleanUrl;
-
         resultElement.innerHTML = `
           <div class="result-header">
             <div class="favicon">
@@ -1061,32 +1065,25 @@
         resultsContainer.appendChild(resultElement);
       });
     }
-
     // Render pagination
     function renderPagination(totalPages) {
       paginationContainer.innerHTML = '';
-
       if (totalPages <= 1) return;
-
       const fragment = document.createDocumentFragment();
-
       // Previous button
       const prevButton = document.createElement('button');
       prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
       prevButton.disabled = currentPage === 1;
       prevButton.addEventListener('click', () => goToPage(currentPage - 1));
       fragment.appendChild(prevButton);
-
       // Page numbers
       const startPage = Math.max(1, currentPage - 2);
       const endPage = Math.min(totalPages, currentPage + 2);
-
       if (startPage > 1) {
         const firstButton = document.createElement('button');
         firstButton.textContent = '1';
         firstButton.addEventListener('click', () => goToPage(1));
         fragment.appendChild(firstButton);
-
         if (startPage > 2) {
           const ellipsis = document.createElement('span');
           ellipsis.textContent = '...';
@@ -1094,7 +1091,6 @@
           fragment.appendChild(ellipsis);
         }
       }
-
       for (let i = startPage; i <= endPage; i++) {
         const pageButton = document.createElement('button');
         pageButton.textContent = i;
@@ -1104,7 +1100,6 @@
         pageButton.addEventListener('click', () => goToPage(i));
         fragment.appendChild(pageButton);
       }
-
       if (endPage < totalPages) {
         if (endPage < totalPages - 1) {
           const ellipsis = document.createElement('span');
@@ -1117,17 +1112,14 @@
         lastButton.addEventListener('click', () => goToPage(totalPages));
         fragment.appendChild(lastButton);
       }
-
       // Next button
       const nextButton = document.createElement('button');
       nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
       nextButton.disabled = currentPage === totalPages;
       nextButton.addEventListener('click', () => goToPage(currentPage + 1));
       fragment.appendChild(nextButton);
-
       paginationContainer.appendChild(fragment);
     }
-
     // Go to specific page
     function goToPage(page) {
       currentPage = page;
@@ -1135,34 +1127,28 @@
       url.searchParams.set('page', page.toString());
       if (query) url.searchParams.set('q', query);
       window.history.pushState({ page, query }, '', url);
-
       // Use Fuse.js for searching when paginating
       if (query) {
         filteredResults = performSearchFuse(query);
       } else {
         filteredResults = allResults;
       }
-      
       const sortedResults = sortResults(filteredResults, document.getElementById('sortOptions').value);
       const totalPages = Math.ceil(sortedResults.length / RESULTS_PER_PAGE);
       const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
       const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, sortedResults.length);
       const pageResults = sortedResults.slice(startIndex, endIndex);
-
       renderResults(pageResults);
       renderPagination(totalPages);
       updateResultsCount(sortedResults.length);
     }
-
     // Update results count
     function updateResultsCount(total) {
       resultsCount.textContent = `About ${total} results (${(Math.random() * 0.5 + 0.1).toFixed(2)} seconds)`;
     }
-
     // Show AI insights
     function showAIInsights(searchQuery, results) {
       const insights = generateAIInsights(searchQuery, results);
-      
       if (insights.length > 0) {
         aiInsights.style.display = 'block';
         insightsContent.innerHTML = insights.map(insight => `
@@ -1175,9 +1161,7 @@
         aiInsights.style.display = 'none';
       }
     }
-
     // --- Event Listeners ---
-
     // Advanced search toggle
     advancedToggle.addEventListener('click', () => {
       advancedSearch.classList.toggle('active');
@@ -1185,7 +1169,21 @@
       icon.classList.toggle('fa-chevron-down');
       icon.classList.toggle('fa-chevron-up');
     });
-
+    // Bangla input toggle
+    banglaToggle.addEventListener('click', () => {
+      banglaInput.classList.toggle('active');
+      const icon = banglaToggle.querySelector('i');
+      icon.classList.toggle('fa-chevron-down');
+      icon.classList.toggle('fa-chevron-up');
+    });
+    // Bangla key input
+    banglaKeys.forEach(key => {
+      key.addEventListener('click', () => {
+        const keyChar = key.getAttribute('data-key');
+        searchInput.value += keyChar;
+        searchInput.focus();
+      });
+    });
     // Filter tabs
     filterTabs.forEach(tab => {
       tab.addEventListener('click', () => {
@@ -1193,7 +1191,6 @@
         tab.classList.add('active');
         currentFilter = tab.dataset.filter;
         currentPage = 1;
-        
         // For filter tabs, we still use the original applyFilters for exact matching
         const filteredByTabs = applyFilters(allResults, query, currentFilter);
         const sortedResults = sortResults(filteredByTabs, document.getElementById('sortOptions').value);
@@ -1201,14 +1198,12 @@
         const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
         const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, sortedResults.length);
         const pageResults = sortedResults.slice(startIndex, endIndex);
-        
         renderResults(pageResults);
         renderPagination(totalPages);
         updateResultsCount(sortedResults.length);
         showAIInsights(query, sortedResults);
       });
     });
-
     // Sort options
     document.getElementById('sortOptions').addEventListener('change', (e) => {
       // Use Fuse.js results if there's a query, otherwise use all results
@@ -1218,34 +1213,28 @@
       } else {
         resultsToSort = allResults;
       }
-      
       const sortedResults = sortResults(resultsToSort, e.target.value);
       const totalPages = Math.ceil(sortedResults.length / RESULTS_PER_PAGE);
       const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
       const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, sortedResults.length);
       const pageResults = sortedResults.slice(startIndex, endIndex);
-      
       renderResults(pageResults);
       renderPagination(totalPages);
       showAIInsights(query, sortedResults);
     });
-
     // Search form submission
     searchForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       query = searchInput.value.trim();
-
       if (!query) {
         alert("Please enter a search term.");
         return;
       }
-
       // Add to search history
       if (!searchHistory.includes(query)) {
         searchHistory.unshift(query);
         if (searchHistory.length > 10) searchHistory.pop();
       }
-
       try {
         resultsContainer.innerHTML = `
           <div class="loading">
@@ -1253,9 +1242,7 @@
             <p>Searching with Nirobo AI Engine...</p>
           </div>
         `;
-
         allResults = await loadAllResults();
-        
         // --- Use Fuse.js for searching ---
         if (query) {
             // Perform the search using Fuse.js
@@ -1265,24 +1252,20 @@
             filteredResults = [];
         }
         // --- End Fuse.js search ---
-        
         const sortedResults = sortResults(filteredResults, document.getElementById('sortOptions').value);
         const totalPages = Math.ceil(sortedResults.length / RESULTS_PER_PAGE);
         const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
         const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, sortedResults.length);
         const pageResults = sortedResults.slice(startIndex, endIndex);
-
         renderResults(pageResults);
         renderPagination(totalPages);
         updateResultsCount(sortedResults.length);
         showAIInsights(query, sortedResults);
-
         // Update URL
         const url = new URL(window.location);
         url.searchParams.set('q', query);
         url.searchParams.set('page', '1');
         window.history.pushState({ page: 1, query }, '', url);
-
       } catch (error) {
         console.error("Search error:", error);
         resultsContainer.innerHTML = `
@@ -1295,46 +1278,146 @@
         paginationContainer.innerHTML = '';
       }
     });
-
     // Report button handler
     document.addEventListener('click', function(e) {
       if (e.target && e.target.classList.contains('report-btn')) {
         const url = e.target.closest('.report-btn').dataset.url;
         const title = e.target.closest('.report-btn').dataset.title;
-
         const subject = encodeURIComponent(`[Nirobo Report] Illegal Website: ${title}`);
         const body = encodeURIComponent(`
 INFRINGEMENT REPORT
 ===================
-
 Website Title: ${title}
 URL: ${url}
-
 Reason for Report:
 [Please describe why you believe this website is illegal]
-
 Additional Details:
 [Any other information that supports your claim]
-
 Reporter Info:
 [Your name/email if you wish to be contacted]
-
 ⚠️ NOTE: This report will be sent to Nirobo's admin team for review.
         `);
-
         const mailtoLink = `mailto:infinitealphas0602@outlook.com?subject=${subject}&body=${body}`;
         window.open(mailtoLink, '_blank');
         alert('📬 A report email draft has been opened. Please review and send it to infinitealphas0602@outlook.com');
       }
     });
-
+    // Local tool modals
+    function openModal(title, content) {
+        document.getElementById('modalTitle').textContent = title;
+        document.getElementById('modalBody').innerHTML = content;
+        modalOverlay.style.display = 'flex';
+    }
+    closeModal.addEventListener('click', () => {
+        modalOverlay.style.display = 'none';
+    });
+    modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) {
+            modalOverlay.style.display = 'none';
+        }
+    });
+    unitConverter.addEventListener('click', () => {
+        openModal('Unit Converter', `
+            <p>Convert between local and metric units:</p>
+            <div style="margin-top:15px;">
+                <label>Enter value: <input type="number" id="unitValue" style="width:100%; padding:8px; margin:5px 0; background:rgba(0,0,0,0.3); color:white; border:1px solid var(--border); border-radius:4px;"></label>
+                <select id="fromUnit" style="width:100%; padding:8px; margin:5px 0; background:rgba(0,0,0,0.3); color:white; border:1px solid var(--border); border-radius:4px;">
+                    <option value="katha">Katha</option>
+                    <option value="bigha">Bigha</option>
+                    <option value="maund">Maund</option>
+                    <option value="feet">Feet</option>
+                    <option value="mile">Mile</option>
+                </select>
+                <select id="toUnit" style="width:100%; padding:8px; margin:5px 0; background:rgba(0,0,0,0.3); color:white; border:1px solid var(--border); border-radius:4px;">
+                    <option value="square_meter">Square Meter</option>
+                    <option value="square_kilometer">Square Kilometer</option>
+                    <option value="kilogram">Kilogram</option>
+                    <option value="meter">Meter</option>
+                    <option value="kilometer">Kilometer</option>
+                </select>
+                <button id="convertBtn" style="width:100%; padding:10px; margin-top:10px; background:var(--accent); color:white; border:none; border-radius:4px; cursor:pointer;">Convert</button>
+                <div id="conversionResult" style="margin-top:10px; font-weight:bold;"></div>
+            </div>
+        `);
+        document.getElementById('convertBtn').addEventListener('click', () => {
+            const value = parseFloat(document.getElementById('unitValue').value);
+            const from = document.getElementById('fromUnit').value;
+            const to = document.getElementById('toUnit').value;
+            let result = 'Conversion not available';
+            // Simplified conversion logic
+            if (from === 'katha' && to === 'square_meter') result = (value * 67.4).toFixed(2);
+            if (from === 'maund' && to === 'kilogram') result = (value * 37.32).toFixed(2);
+            if (from === 'feet' && to === 'meter') result = (value * 0.3048).toFixed(2);
+            document.getElementById('conversionResult').textContent = `${value} ${from} = ${result} ${to}`;
+        });
+    });
+    bdtCalculator.addEventListener('click', () => {
+        openModal('BDT Price Calculator', `
+            <p>Compare prices across different markets:</p>
+            <div style="margin-top:15px;">
+                <label>Item: <input type="text" id="item" placeholder="e.g., Rice, Fish" style="width:100%; padding:8px; margin:5px 0; background:rgba(0,0,0,0.3); color:white; border:1px solid var(--border); border-radius:4px;"></label>
+                <label>Quantity: <input type="number" id="quantity" style="width:100%; padding:8px; margin:5px 0; background:rgba(0,0,0,0.3); color:white; border:1px solid var(--border); border-radius:4px;"></label>
+                <label>Unit Price (BDT): <input type="number" id="price" style="width:100%; padding:8px; margin:5px 0; background:rgba(0,0,0,0.3); color:white; border:1px solid var(--border); border-radius:4px;"></label>
+                <div id="totalResult" style="margin-top:10px; font-weight:bold; font-size:1.2rem;"></div>
+            </div>
+        `);
+        const itemInput = document.getElementById('item');
+        const quantityInput = document.getElementById('quantity');
+        const priceInput = document.getElementById('price');
+        function calculateTotal() {
+            const qty = parseFloat(quantityInput.value) || 0;
+            const price = parseFloat(priceInput.value) || 0;
+            const total = qty * price;
+            document.getElementById('totalResult').textContent = `Total: ${total.toFixed(2)} BDT`;
+        }
+        quantityInput.addEventListener('input', calculateTotal);
+        priceInput.addEventListener('input', calculateTotal);
+    });
+    banglaCalendar.addEventListener('click', () => {
+        const today = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        const gregorianDate = today.toLocaleDateString('en-US', options);
+        // Simulated Bengali date calculation
+        const banglaYear = today.getFullYear() - 594;
+        const banglaMonths = ['Boishakh', 'Jyaishtha', 'Aashad', 'Shrawan', 'Bhadra', 'Ashwin', 'Kartik', 'Agrahayan', 'Poush', 'Magh', 'Falgun', 'Chaitra'];
+        const banglaMonth = banglaMonths[today.getMonth()];
+        const banglaDay = today.getDate();
+        openModal('Bengali Calendar', `
+            <p>Gregorian: ${gregorianDate}</p>
+            <p style="font-size:1.5rem; color:var(--accent);">Bengali: ${banglaDay} ${banglaMonth}, ${banglaYear}</p>
+        `);
+    });
+    dictionary.addEventListener('click', () => {
+        openModal('BD Dictionary', `
+            <p>Translate or define Bengali words:</p>
+            <div style="margin-top:15px;">
+                <label>Enter word: <input type="text" id="dictWord" style="width:100%; padding:8px; margin:5px 0; background:rgba(0,0,0,0.3); color:white; border:1px solid var(--border); border-radius:4px;"></label>
+                <button id="dictSearch" style="width:100%; padding:10px; margin-top:10px; background:var(--accent); color:white; border:none; border-radius:4px; cursor:pointer;">Search</button>
+                <div id="dictResult" style="margin-top:10px;"></div>
+            </div>
+        `);
+        document.getElementById('dictSearch').addEventListener('click', () => {
+            const word = document.getElementById('dictWord').value.trim().toLowerCase();
+            // Simulated dictionary
+            const dict = {
+                'ami': 'I, Me',
+                'tumi': 'You (informal)',
+                'apni': 'You (formal)',
+                'dhaka': 'Capital city of Bangladesh',
+                'sundarbans': 'Largest mangrove forest in the world',
+                'pohela': 'First day of a Bengali month',
+                'baishakh': 'First month of Bengali calendar'
+            };
+            const meaning = dict[word] || 'Definition not found in local dictionary.';
+            document.getElementById('dictResult').innerHTML = `<p><strong>${word}:</strong> ${meaning}</p>`;
+        });
+    });
     // Initialize on Page Load
     document.addEventListener("DOMContentLoaded", async () => {
       // Check URL parameters
       const urlParams = new URLSearchParams(window.location.search);
       const initialQuery = urlParams.get('q');
       const initialPage = parseInt(urlParams.get('page'), 10) || 1;
-
       if (initialQuery) {
         searchInput.value = initialQuery;
         query = initialQuery;
@@ -1343,35 +1426,32 @@ Reporter Info:
       } else {
         resultsContainer.innerHTML = `
           <div class="no-results">
-            <i class="fas fa-robot"></i>
-            <h3>Welcome to Nirobo Search</h3>
-            <p>Our AI-powered search engine combines curated databases with community submissions.</p>
-            <p>Enter a search term above to begin exploring the web intelligently.</p>
+            <i class="fas fa-search"></i>
+            <h3>Welcome to Nirobo</h3>
+            <p>Search for Bangladeshi content, culture, education, and more.</p>
+            <p>Try searching for "Dhaka University", "Pohela Boishakh", or "Bangladesh Cricket".</p>
           </div>
         `;
       }
     });
-
     // Handle browser back/forward buttons
     window.addEventListener('popstate', (event) => {
       const urlParams = new URLSearchParams(window.location.search);
       const newQuery = urlParams.get('q') || '';
       const newPage = parseInt(urlParams.get('page'), 10) || 1;
-      
       if (newQuery !== query || newPage !== currentPage) {
         searchInput.value = newQuery;
         query = newQuery;
         currentPage = newPage;
-        
         if (query) {
           searchForm.dispatchEvent(new Event('submit'));
         } else {
           resultsContainer.innerHTML = `
             <div class="no-results">
-              <i class="fas fa-robot"></i>
-              <h3>Welcome to Nirobo Search</h3>
-              <p>Our AI-powered search engine combines curated databases with community submissions.</p>
-              <p>Enter a search term above to begin exploring the web intelligently.</p>
+              <i class="fas fa-search"></i>
+              <h3>Welcome to Nirobo</h3>
+              <p>Search for Bangladeshi content, culture, education, and more.</p>
+              <p>Try searching for "Dhaka University", "Pohela Boishakh", or "Bangladesh Cricket".</p>
             </div>
           `;
           paginationContainer.innerHTML = '';
