@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nirobo — Your Dashboard</title>
+  <title>Nirobo — Dashboard</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
@@ -55,6 +55,11 @@
       position: sticky;
       top: 20px;
       height: fit-content;
+      display: none;
+    }
+
+    .sidebar.visible {
+      display: block;
     }
 
     .sidebar h2 {
@@ -121,84 +126,70 @@
       color: #ffcccc;
     }
 
-    .search-container {
+    .login-section {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 15px;
       margin-bottom: 30px;
       text-align: center;
+      max-width: 500px;
+      margin: 0 auto 30px;
     }
 
-    #search-form {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    #search-input {
-      padding: 0.75rem;
-      width: 400px;
-      font-size: 1rem;
+    .login-section input {
+      padding: 12px;
+      width: 250px;
+      margin: 10px;
       border: 1px solid var(--accent);
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.2);
       border-radius: 4px;
       color: white;
-      box-sizing: border-box;
+      font-size: 16px;
     }
 
-    #search-form button {
-      padding: 0.75rem 1.5rem;
-      background-color: var(--accent);
+    .login-section button {
+      padding: 12px 20px;
+      background: var(--accent);
       color: white;
       border: none;
       border-radius: 4px;
-      font-size: 1rem;
+      font-size: 16px;
+      font-weight: bold;
       cursor: pointer;
+      margin: 10px;
     }
 
-    #search-form button:hover {
-      background-color: var(--accent-hover);
+    .login-section button:hover {
+      background: var(--accent-hover);
     }
 
-    .result-card {
-      background: var(--card-bg);
-      border-left: 4px solid var(--accent);
-      padding: 20px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
-      transition: transform 0.3s ease;
+    .user-info {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 10px;
+      display: inline-block;
+      margin-bottom: 30px;
+      color: #ffcccc;
     }
 
-    .result-card:hover {
-      transform: translateY(-2px);
-    }
-
-    .result-card h2 {
-      margin: 0 0 0.5rem;
-      font-size: 1.2rem;
-    }
-
-    .result-card p {
-      margin: 0 0 0.5rem;
-      font-size: 0.95rem;
-    }
-
-    .result-card a {
-      color: var(--accent);
+    .logout-btn {
+      background: var(--danger);
+      padding: 10px 20px;
+      font-size: 1rem;
+      display: inline-block;
+      margin-left: 15px;
+      text-align: center;
+      width: auto;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      color: white;
+      font-weight: bold;
       text-decoration: none;
-      font-size: 0.9rem;
     }
 
-    .result-card a:hover {
-      text-decoration: underline;
-    }
-
-    .tags span {
-      background: var(--accent);
-      color: #fff;
-      padding: 0.2rem 0.5rem;
-      margin-right: 0.3rem;
-      border-radius: 3px;
-      font-size: 0.8rem;
+    .logout-btn:hover {
+      background: #ff3333;
     }
 
     .section {
@@ -228,7 +219,7 @@
       color: #ffcccc;
     }
 
-    input, textarea {
+    input, textarea, select {
       width: 100%;
       padding: 12px;
       border: 1px solid var(--accent);
@@ -265,6 +256,24 @@
       border-radius: 10px;
       margin-bottom: 20px;
       border-left: 4px solid var(--accent);
+      display: flex;
+      gap: 15px;
+    }
+
+    .favicon-preview {
+      width: 40px;
+      height: 40px;
+      border-radius: 4px;
+      background: var(--card-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: var(--accent);
+    }
+
+    .submission-content {
+      flex: 1;
     }
 
     .submission-item.approved { border-left-color: var(--success); }
@@ -281,6 +290,9 @@
     .submission-title {
       font-size: 1.2rem;
       font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .status {
@@ -301,6 +313,15 @@
       display: block;
     }
 
+    .category-badge {
+      background: var(--primary);
+      color: white;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      margin-right: 8px;
+    }
+
     .admin-message {
       background: rgba(0, 100, 200, 0.2);
       padding: 10px;
@@ -308,6 +329,22 @@
       margin: 10px 0;
       font-style: italic;
       font-size: 0.9rem;
+    }
+
+    .btn-delete {
+      background: var(--danger);
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      width: auto;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      color: white;
+      margin-top: 10px;
+    }
+
+    .btn-delete:hover {
+      background: #ff3333;
     }
 
     footer {
@@ -319,15 +356,6 @@
       border-top: 1px solid var(--border);
       margin-top: 40px;
       border-radius: 10px;
-    }
-
-    footer a {
-      color: #ff9999;
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
     }
 
     .empty-state {
@@ -386,19 +414,13 @@
       z-index: -1;
     }
 
-    /* Responsive */
     @media (max-width: 768px) {
       .container {
         flex-direction: column;
       }
-      
       .sidebar {
         width: 100%;
         position: static;
-      }
-      
-      #search-input {
-        width: 100%;
       }
     }
   </style>
@@ -406,57 +428,85 @@
 <body>
   <div class="container">
     <!-- Sidebar -->
-    <div class="sidebar">
+    <div class="sidebar" id="sidebar">
       <h2>Nirobo</h2>
       <ul>
-        <li><a href="#" class="active"><i class="fas fa-home"></i> Home</a></li>
-        <li><a href="#"><i class="fas fa-search"></i> Search</a></li>
-        <li><a href="#"><i class="fas fa-bookmark"></i> Favorites</a></li>
-        <li><a href="#"><i class="fas fa-history"></i> History</a></li>
+        <li><a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+        <li><a href="#"><i class="fas fa-plus-circle"></i> Submit URL</a></li>
+        <li><a href="#"><i class="fas fa-chart-line"></i> Analytics</a></li>
+        <li><a href="#"><i class="fas fa-bell"></i> Notifications</a></li>
         <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
-        <li><a href="#"><i class="fas fa-info-circle"></i> About</a></li>
       </ul>
     </div>
 
     <!-- Main Content -->
     <div class="main-content">
       <div class="header">
-        <h1>
-          <span>N</span>
-          <span>I</span>
-          <span>R</span>
-          <span>O</span>
-          <span>B</span>
-          <span>O</span>
-        </h1>
+        <h1><span>N</span><span>I</span><span>R</span><span>O</span><span>B</span><span>O</span></h1>
         <p>“You hold the pen — write your truth into Bangladesh’s digital soul.”</p>
       </div>
 
-      <div class="section">
-        <h2>➕ SUBMIT A NEW WEBSITE</h2>
+      <!-- Login Section -->
+      <div id="loginSection" class="login-section">
+        <h2>🔐 Please Log In</h2>
+        <p>Submit and manage your website in Nirobo's curated search engine</p>
         <div class="form-group">
-          <label>Website Title</label>
-          <input type="text" id="websiteTitle" placeholder="e.g., My Blog" />
+          <input type="email" id="loginEmail" placeholder="Email" />
         </div>
         <div class="form-group">
-          <label>URL</label>
-          <input type="url" id="websiteUrl" placeholder="https://yourwebsite.com" />
+          <input type="password" id="loginPassword" placeholder="Password" />
         </div>
-        <div class="form-group">
-          <label>Description</label>
-          <textarea id="websiteDesc" placeholder="Brief description of your website" rows="3"></textarea>
-        </div>
-        <div class="form-group">
-          <label>Tags (comma separated)</label>
-          <input type="text" id="websiteTags" placeholder="news, blog, bangla" />
-        </div>
-        <button id="submitWebsiteBtn" class="main-btn">Submit Website</button>
+        <button id="loginBtn">Login</button>
+        <p style="margin-top: 20px; font-size: 0.9rem;">
+          Don't have an account? <a href="signup.html">Sign Up</a>
+        </p>
       </div>
 
-      <div class="section">
-        <h2>📊 YOUR SUBMISSIONS</h2>
-        <div id="submissionsList">
-          <p>Loading your submissions...</p>
+      <!-- Dashboard Content -->
+      <div id="dashboardContent" style="display: none;">
+        <div class="user-info">
+          Logged in as: <strong id="userEmail">user@example.com</strong>
+          <a href="#" id="logoutBtn" class="logout-btn">🚪 Logout</a>
+        </div>
+
+        <!-- Submit New Website -->
+        <div class="section">
+          <h2>➕ SUBMIT A NEW WEBSITE</h2>
+          <div class="form-group">
+            <label>URL</label>
+            <input type="url" id="websiteUrl" placeholder="https://yourwebsite.com" />
+          </div>
+          <div class="form-group">
+            <label>Detected Title</label>
+            <input type="text" id="websiteTitle" placeholder="Title will be auto-filled" readonly />
+          </div>
+          <div class="form-group">
+            <label>Type of URL</label>
+            <select id="urlType">
+              <option value="">-- Select Category --</option>
+              <option value="education">Education</option>
+              <option value="entertainment">Entertainment</option>
+              <option value="blog">Blog</option>
+              <option value="company">Company/Organization</option>
+              <option value="tools">Online Tools</option>
+              <option value="news">News</option>
+              <option value="document">Document (PDF, Word, Excel)</option>
+              <option value="media">Images/Videos</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea id="websiteDesc" placeholder="Brief description of your content" rows="3"></textarea>
+          </div>
+          <button id="submitWebsiteBtn" class="main-btn">Submit for Review</button>
+        </div>
+
+        <!-- Your Submissions -->
+        <div class="section">
+          <h2>📊 YOUR SUBMISSIONS</h2>
+          <div id="submissionsList">
+            <p>Loading your submissions...</p>
+          </div>
         </div>
       </div>
     </div>
@@ -464,55 +514,84 @@
 
   <footer>
     Made in Bangladesh 🇧🇩 | Curated by Nirobo<br>
-    Honoring the Language Movement and the Silent Legacy of Justice<br>
-    Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity<br>
-    <a href="/">← Back to Nirobo</a>
+    Honoring the Language Movement and the Silent Legacy of Justice
   </footer>
 
   <div class="notification" id="notification"></div>
 
   <script>
+    // Initialize fresh data on first load
+    if (!localStorage.getItem('niroboInitialized')) {
+      localStorage.setItem('niroboUsers', JSON.stringify([
+        { id: 'admin123', email: 'admin@nirobo.com', password: btoa('admin123'), isAdmin: true }
+      ]));
+      localStorage.setItem('niroboSubmissions', JSON.stringify([]));
+      localStorage.setItem('niroboAdminNotices', JSON.stringify([
+        "Welcome to Nirobo! Submit your first URL to get started.",
+        "All submissions are reviewed within 48 hours."
+      ]));
+      localStorage.setItem('niroboInitialized', 'true');
+    }
+
     // DOM Elements
-    const submitWebsiteBtn = document.getElementById('submitWebsiteBtn');
+    const loginSection = document.getElementById('loginSection');
+    const dashboardContent = document.getElementById('dashboardContent');
+    const loginEmail = document.getElementById('loginEmail');
+    const loginPassword = document.getElementById('loginPassword');
+    const userEmail = document.getElementById('userEmail');
     const submissionsList = document.getElementById('submissionsList');
     const notification = document.getElementById('notification');
-
-    // Mock data for submissions
-    let submissions = [
-      {
-        id: 'sub_1',
-        title: 'Bangla News Today',
-        url: 'https://banglanewstoday.com',
-        description: 'Latest news and updates from Bangladesh in Bangla language.',
-        tags: ['news', 'bangla', 'current affairs'],
-        status: 'approved',
-        submittedAt: '2023-01-15T10:30:00Z'
-      },
-      {
-        id: 'sub_2',
-        title: 'Tech Innovation BD',
-        url: 'https://techinnovationbd.com',
-        description: 'A platform showcasing technological innovations and startups from Bangladesh.',
-        tags: ['technology', 'startups', 'innovation'],
-        status: 'pending',
-        submittedAt: '2023-01-16T14:20:00Z'
-      }
-    ];
+    const websiteUrl = document.getElementById('websiteUrl');
+    const websiteTitle = document.getElementById('websiteTitle');
+    const submitBtn = document.getElementById('submitWebsiteBtn');
 
     // Show notification
     function showNotification(message, type = 'info') {
       notification.textContent = message;
       notification.className = 'notification ' + type;
       notification.classList.add('show');
+      setTimeout(() => notification.classList.remove('show'), 3000);
+    }
 
-      setTimeout(() => {
-        notification.classList.remove('show');
-      }, 3000);
+    // Load data
+    function loadData(key) {
+      return JSON.parse(localStorage.getItem(key) || '[]');
+    }
+
+    // Save data
+    function saveData(key, data) {
+      localStorage.setItem(key, JSON.stringify(data));
+    }
+
+    // Hash password (basic for demo)
+    function hashPassword(pw) {
+      return btoa(pw);
+    }
+
+    // Simulate title/favicon extraction
+    function extractMetadata(url) {
+      try {
+        const domain = new URL(url).hostname.replace('www.', '');
+        // In real system, this would fetch the page and parse <title> and <link rel="icon">
+        // Here we simulate
+        const mockTitles = {
+          'example.com': 'Example Domain',
+          'github.com': 'GitHub: Where the world builds software',
+          'youtube.com': 'YouTube: Watch, Create, Share',
+          'docs.google.com': 'Google Docs - Create and edit documents',
+          'wikipedia.org': 'Wikipedia: The Free Encyclopedia'
+        };
+        const title = mockTitles[domain] || `Homepage of ${domain}`;
+        websiteTitle.value = title;
+        return { title, favicon: `https://www.google.com/s2/favicons?domain=${domain}` };
+      } catch (e) {
+        websiteTitle.value = 'Unknown Title';
+        return { title: 'Unknown Title', favicon: '' };
+      }
     }
 
     // Format date
     function formatDate(isoString) {
-      if (!isoString) return 'Unknown';
       const date = new Date(isoString);
       return date.toLocaleString('en-GB', {
         timeZone: 'Asia/Dhaka',
@@ -520,120 +599,164 @@
         month: 'short',
         year: 'numeric',
         hour: '2-digit',
-        minute: '2-digit',
-        hour12: true
+        minute: '2-digit'
       });
     }
 
-    // Get domain from URL
+    // Get domain
     function getDomain(url) {
       try {
         return new URL(url).hostname.replace('www.', '');
-      } catch (e) {
-        return 'unknown-domain';
+      } catch {
+        return 'unknown';
       }
     }
 
-    // Display submissions
-    function displaySubmissions() {
-      const container = document.getElementById('submissionsList');
-      
-      if (submissions.length === 0) {
-        container.innerHTML = '<div class="empty-state"><h3>📭 No submissions yet</h3><p>Submit your first website above to get started!</p></div>';
-        return;
+    // Check auth
+    function checkAuth() {
+      const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser'));
+      if (!currentUser) {
+        loginSection.style.display = 'block';
+        dashboardContent.style.display = 'none';
+        return null;
       }
-
-      container.innerHTML = '';
-      submissions.forEach(sub => {
-        const div = document.createElement('div');
-        div.className = `submission-item ${sub.status}`;
-        div.innerHTML = `
-          <div class="submission-header">
-            <div class="submission-title">${sub.title}</div>
-            <span class="status ${sub.status}">${sub.status.toUpperCase()}</span>
-          </div>
-          <a href="${sub.url}" target="_blank" class="submission-url">${getDomain(sub.url)}</a>
-          <p>${sub.description || 'No description provided.'}</p>
-          <div class="tags">
-            ${(Array.isArray(sub.tags) ? sub.tags : []).map(tag => `<span>${tag}</span>`).join(' ')}
-          </div>
-          <p><small>Submitted: ${formatDate(sub.submittedAt)}</small></p>
-          <div class="actions">
-            <button class="btn-delete" onclick="deleteSubmission('${sub.id}')">🗑️ Remove Submission</button>
-          </div>
-        `;
-        container.appendChild(div);
-      });
+      loginSection.style.display = 'none';
+      dashboardContent.style.display = 'block';
+      userEmail.textContent = currentUser.email;
+      document.getElementById('sidebar').classList.add('visible');
+      displaySubmissions();
+      return currentUser;
     }
 
-    // Submit new website
-    submitWebsiteBtn.addEventListener('click', () => {
-      const title = document.getElementById('websiteTitle').value.trim();
-      const url = document.getElementById('websiteUrl').value.trim();
+    // Login
+    document.getElementById('loginBtn').addEventListener('click', () => {
+      const email = loginEmail.value.trim();
+      const password = loginPassword.value;
+      if (!email || !password) return showNotification('Enter email and password', 'error');
+
+      const users = loadData('niroboUsers');
+      const user = users.find(u => u.email === email && u.password === hashPassword(password));
+      if (!user) return showNotification('Invalid credentials', 'error');
+
+      localStorage.setItem('niroboCurrentUser', JSON.stringify(user));
+      showNotification('Login successful!', 'success');
+      checkAuth();
+    });
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('niroboCurrentUser');
+      showNotification('Logged out', 'info');
+      checkAuth();
+    });
+
+    // URL input handler
+    websiteUrl.addEventListener('input', () => {
+      const url = websiteUrl.value.trim();
+      if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+        extractMetadata(url);
+      }
+    });
+
+    // Submit URL
+    submitBtn.addEventListener('click', () => {
+      const url = websiteUrl.value.trim();
+      const title = websiteTitle.value.trim();
+      const type = document.getElementById('urlType').value;
       const desc = document.getElementById('websiteDesc').value.trim();
-      const tagsInput = document.getElementById('websiteTags').value;
+      const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser'));
 
-      if (!title || !url) {
-        showNotification('Please enter title and URL', 'error');
-        return;
+      if (!url || !title || !type) {
+        return showNotification('Please fill all fields', 'error');
       }
 
-      // Check if URL is valid
       try {
         new URL(url);
-      } catch (e) {
-        showNotification('Please enter a valid URL (e.g., https://example.com)', 'error');
-        return;
+      } catch {
+        return showNotification('Invalid URL format', 'error');
       }
 
-      // Process tags
-      const tags = tagsInput.split(',')
-        .map(tag => tag.trim())
-        .filter(tag => tag.length > 0)
-        .slice(0, 10); // Limit to 10 tags
-        
-      if (tags.length === 0) {
-        tags.push('general');
-      }
-
-      // Create new submission
+      const submissions = loadData('niroboSubmissions');
       const newSubmission = {
         id: 'sub_' + Date.now(),
-        title,
+        userId: currentUser.id,
+        email: currentUser.email,
         url,
+        title,
+        type,
         description: desc,
-        tags: tags,
-        status: "pending",
-        submittedAt: new Date().toISOString()
+        status: 'pending',
+        submittedAt: new Date().toISOString(),
+        viewCount: 0,
+        adminMessage: ''
       };
 
-      submissions.unshift(newSubmission);
-      showNotification('✅ Website submitted for review!', 'success');
-      
-      // Clear form
-      document.getElementById('websiteTitle').value = '';
-      document.getElementById('websiteUrl').value = '';
-      document.getElementById('websiteDesc').value = '';
-      document.getElementById('websiteTags').value = '';
+      submissions.push(newSubmission);
+      saveData('niroboSubmissions', submissions);
+      showNotification('Submitted for review!', 'success');
 
-      // Refresh submissions list
+      // Reset form
+      websiteUrl.value = '';
+      websiteTitle.value = '';
+      document.getElementById('urlType').value = '';
+      document.getElementById('websiteDesc').value = '';
       displaySubmissions();
     });
 
-    // Delete submission
-    window.deleteSubmission = function(submissionId) {
-      if (!confirm('Are you sure you want to remove this submission?')) {
+    // Display submissions
+    function displaySubmissions() {
+      const currentUser = JSON.parse(localStorage.getItem('niroboCurrentUser'));
+      if (!currentUser) return;
+
+      const allSubmissions = loadData('niroboSubmissions');
+      const userSubmissions = allSubmissions.filter(s => s.userId === currentUser.id);
+
+      if (userSubmissions.length === 0) {
+        submissionsList.innerHTML = '<div class="empty-state"><h3>📭 No submissions yet</h3><p>Submit your first URL above!</p></div>';
         return;
       }
 
-      submissions = submissions.filter(sub => sub.id !== submissionId);
-      showNotification('🗑️ Submission removed.', 'success');
+      submissionsList.innerHTML = '';
+      userSubmissions.forEach(sub => {
+        const domain = getDomain(sub.url);
+        const div = document.createElement('div');
+        div.className = `submission-item ${sub.status}`;
+        div.innerHTML = `
+          <div class="favicon-preview">
+            <i class="fas fa-link"></i>
+          </div>
+          <div class="submission-content">
+            <div class="submission-header">
+              <div class="submission-title">
+                <span>${sub.title}</span>
+                <span class="category-badge">${sub.type}</span>
+              </div>
+              <span class="status ${sub.status}">${sub.status}</span>
+            </div>
+            <a href="${sub.url}" target="_blank" class="submission-url">${domain}</a>
+            <p>${sub.description || 'No description'}</p>
+            <p><small>Submitted: ${formatDate(sub.submittedAt)}</small></p>
+            ${sub.adminMessage ? `<div class="admin-message">💬 ${sub.adminMessage}</div>` : ''}
+            <button class="btn-delete" onclick="deleteSubmission('${sub.id}')">Remove</button>
+          </div>
+        `;
+        submissionsList.appendChild(div);
+      });
+    }
+
+    // Delete submission
+    window.deleteSubmission = function(id) {
+      if (!confirm('Remove this submission?')) return;
+      let submissions = loadData('niroboSubmissions');
+      submissions = submissions.filter(s => s.id !== id);
+      saveData('niroboSubmissions', submissions);
+      showNotification('Submission removed', 'info');
       displaySubmissions();
     };
 
-    // Initialize page
+    // Init
     document.addEventListener('DOMContentLoaded', () => {
-      displaySubmissions();
+      checkAuth();
     });
   </script>
 </body>
