@@ -1,376 +1,1255 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nirobo Search</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nirobo Search - Intelligent URL Discovery</title>
+  <!-- Add Fuse.js library for fuzzy search -->
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
+      --primary-dark: #004d00;
       --primary: #006400;
+      --primary-light: #008000;
       --accent: #d40000;
-      --background: #f0f8f0;
-      --card-bg: #ffffff;
-      --text: #222;
-      --border: #ccc;
+      --accent-hover: #ff0000;
+      --background: #0a1f0a;
+      --card-bg: #1a1a1a;
+      --text: #f5f5f5;
+      --text-secondary: #cccccc;
+      --border: #333333;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--background);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, var(--background), #003300);
       color: var(--text);
       line-height: 1.6;
       padding: 20px;
+      min-height: 100vh;
     }
     .container {
-      max-width: 800px;
+      max-width: 1200px;
       margin: 0 auto;
-      background: var(--card-bg);
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0, 100, 0, 0.1);
     }
+    /* Header Styles */
     header {
       text-align: center;
+      padding: 30px 0;
       margin-bottom: 30px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid var(--border);
+      position: relative;
     }
-    h1 {
-      color: var(--primary);
-      font-size: 2.5rem;
+    .logo {
+      font-size: 2.8rem;
+      color: var(--accent);
       margin-bottom: 10px;
+      text-shadow: 0 0 15px rgba(212, 0, 0, 0.5);
     }
     .tagline {
-      color: var(--accent);
+      font-size: 1.2rem;
+      color: #ffcccc;
       font-style: italic;
-    }
-    nav {
-      text-align: center;
       margin-bottom: 20px;
     }
-    nav a {
-      margin: 0 15px;
-      text-decoration: none;
-      color: var(--primary);
-      font-weight: bold;
+    /* Search Section */
+    .search-section {
+      background: rgba(26, 26, 26, 0.8);
+      border-radius: 15px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(212, 0, 0, 0.3);
     }
-    nav a:hover {
-      text-decoration: underline;
-      color: var(--accent);
-    }
-    .search-box {
+    .search-header {
       display: flex;
-      margin-bottom: 20px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .search-title {
+      font-size: 1.8rem;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .ai-badge {
+      background: linear-gradient(45deg, #8a2be2, #ff00ff);
+      color: white;
+      font-size: 0.8rem;
+      padding: 3px 10px;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    #search-form {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 25px;
     }
     #search-input {
       flex: 1;
-      padding: 15px;
-      font-size: 1rem;
-      border: 2px solid var(--border);
-      border-radius: 5px 0 0 5px;
+      padding: 15px 20px;
+      font-size: 1.1rem;
+      border: 2px solid var(--accent);
+      border-radius: 30px;
+      background: rgba(0, 0, 0, 0.3);
+      color: var(--text);
+      outline: none;
+      transition: all 0.3s ease;
     }
-    #search-button {
-      padding: 15px 25px;
-      background-color: var(--primary);
+    #search-input:focus {
+      border-color: var(--accent-hover);
+      box-shadow: 0 0 15px rgba(212, 0, 0, 0.5);
+    }
+    #search-form button {
+      padding: 15px 30px;
+      background: var(--accent);
       color: white;
       border: none;
-      border-radius: 0 5px 5px 0;
-      cursor: pointer;
+      border-radius: 30px;
+      font-size: 1.1rem;
       font-weight: bold;
-    }
-    #search-button:hover {
-      background-color: var(--accent);
-    }
-    .filters {
+      cursor: pointer;
+      transition: all 0.3s ease;
       display: flex;
-      justify-content: space-between;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+    #search-form button:hover {
+      background: var(--accent-hover);
+      box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
+      transform: translateY(-2px);
+    }
+    /* Advanced Search Toggle */
+    .advanced-toggle {
+      display: flex;
+      align-items: center;
       gap: 10px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+    }
+    .advanced-toggle:hover {
+      color: var(--accent);
+    }
+    /* Advanced Search Panel */
+    .advanced-search {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 15px;
+      display: none;
+    }
+    .advanced-search.active {
+      display: block;
+    }
+    .advanced-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .filter-group {
+      margin-bottom: 15px;
     }
     .filter-group label {
-      margin-right: 5px;
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+    .filter-group select,
+    .filter-group input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.3);
+      color: var(--text);
+    }
+    .date-filters {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    /* Filter Tabs */
+    .filter-tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+    .filter-tab {
+      padding: 10px 20px;
+      background: rgba(0, 100, 0, 0.3);
+      color: var(--text);
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .filter-tab:hover {
+      background: rgba(0, 128, 0, 0.5);
+    }
+    .filter-tab.active {
+      background: var(--accent);
+      color: white;
       font-weight: bold;
     }
-    .results-info {
-      margin-bottom: 15px;
-      font-style: italic;
-      color: #555;
+    /* Results Section */
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
     }
-    .result-item {
-      border-bottom: 1px solid var(--border);
-      padding: 20px 0;
+    .results-count {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+    .sort-options select {
+      padding: 8px 15px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.3);
+      color: var(--text);
+    }
+    /* Result Cards */
+    .result-card {
+      background: var(--card-bg);
+      border-left: 4px solid var(--accent);
+      padding: 25px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .result-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(212, 0, 0, 0.3);
+      border-left-color: var(--accent-hover);
+    }
+    .result-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      transform: scaleX(0);
+      transition: transform 0.5s ease;
+    }
+    .result-card:hover::before {
+      transform: scaleX(1);
+    }
+    .result-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    .favicon {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      flex-shrink: 0;
+      background: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    .result-content {
+      flex: 1;
+    }
+    .result-title {
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+      color: #ff9999;
     }
     .result-title a {
-      color: var(--primary);
+      color: #ff9999;
       text-decoration: none;
-      font-size: 1.2rem;
-      font-weight: bold;
     }
     .result-title a:hover {
-      color: var(--accent);
       text-decoration: underline;
+      color: var(--accent-hover);
     }
     .result-url {
-      color: #006621;
+      color: #888;
       font-size: 0.9rem;
+      margin-bottom: 12px;
+      display: block;
+      word-break: break-all;
     }
     .result-description {
-      margin: 8px 0;
+      margin-bottom: 15px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+    .result-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+    .result-tag {
+      background: rgba(212, 0, 0, 0.2);
+      color: #ff9999;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
     }
     .result-meta {
-      font-size: 0.8rem;
-      color: #777;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      font-size: 0.85rem;
+      color: #888;
+      padding-top: 15px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
+    .result-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .action-btn {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 6px 15px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .action-btn:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+    /* Pagination */
     .pagination {
       display: flex;
       justify-content: center;
-      margin-top: 30px;
+      align-items: center;
+      gap: 10px;
+      margin: 40px 0;
+      flex-wrap: wrap;
     }
     .pagination button {
-      padding: 10px 15px;
-      margin: 0 5px;
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 5px;
+      padding: 10px 18px;
+      background: rgba(0, 100, 0, 0.3);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
       cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    .pagination button:hover:not(:disabled) {
+      background: rgba(0, 128, 0, 0.5);
+      border-color: var(--primary-light);
     }
     .pagination button:disabled {
-      background-color: #ccc;
+      background: #333;
+      color: #666;
       cursor: not-allowed;
     }
+    .pagination button.active {
+      background: var(--accent);
+      border-color: var(--accent-hover);
+      font-weight: bold;
+    }
+    /* Loading State */
+    .loading {
+      text-align: center;
+      padding: 40px;
+    }
+    .spinner {
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      border-top: 4px solid var(--accent);
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    /* No Results */
     .no-results {
       text-align: center;
-      padding: 40px 0;
-      color: #777;
+      padding: 60px 20px;
+      color: var(--text-secondary);
+    }
+    .no-results i {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      color: #555;
+      animation: shake 0.5s ease-in-out;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+    .no-results.animated {
+       animation: fadeIn 1s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Footer */
+    footer {
+      background: rgba(26, 26, 26, 0.9);
+      color: #ccc;
+      padding: 30px;
+      text-align: center;
+      font-size: 0.9rem;
+      border-top: 1px solid var(--border);
+      margin-top: 50px;
+      border-radius: 10px;
+    }
+    footer a {
+      color: #ff9999;
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      body {
+        padding: 15px;
+      }
+      .search-section {
+        padding: 20px;
+      }
+      #search-form {
+        flex-direction: column;
+      }
+      .search-header {
+        flex-direction: column;
+        text-align: center;
+      }
+      .result-header {
+        flex-direction: column;
+      }
+      .result-meta {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .result-actions {
+        width: 100%;
+        justify-content: flex-end;
+      }
+    }
+    /* AI Features */
+    .ai-insights {
+      background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(255, 0, 255, 0.1));
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 25px;
+      border: 1px solid rgba(138, 43, 226, 0.3);
+    }
+    .ai-insights h3 {
+      color: #da70d6;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .insight-item {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    .insight-item:last-child {
+      margin-bottom: 0;
+    }
+    /* Submit Button at Bottom */
+    .submit-section {
+      text-align: center;
+      margin: 40px 0 20px;
+    }
+    .submit-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 24px;
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      border-radius: 30px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 100, 0, 0.3);
+    }
+    .submit-button:hover {
+      background: var(--primary-light);
+      box-shadow: 0 8px 20px rgba(0, 128, 0, 0.5);
+      transform: translateY(-3px);
     }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>NIROBO</h1>
-      <p class="tagline">Intelligent URL Discovery</p>
+      <div class="logo">
+        <i class="fas fa-brain"></i> NIROBO
+      </div>
+      <div class="tagline">"Intelligent URL Discovery Powered by AI"</div>
+      <a href="/" style="color: #ff9999; text-decoration: none;">← Back to Nirobo</a>
     </header>
 
-    <nav>
-      <a href="index.html">Search</a>
-      <a href="submit.html">Submit URL</a>
-      <a href="admin.html">Admin</a>
-    </nav>
+    <!-- Search Section -->
+    <section class="search-section">
+      <div class="search-header">
+        <h2 class="search-title">
+          <i class="fas fa-search"></i> Intelligent Search
+          <span class="ai-badge">
+            <i class="fas fa-robot"></i> AI-Powered
+          </span>
+        </h2>
+      </div>
+      <form id="search-form">
+        <input type="text" id="search-input" placeholder="Search the web intelligently (e.g., উদাহরণ, technology, news)..." autocomplete="off">
+        <button type="submit">
+          <i class="fas fa-search"></i> Search
+        </button>
+      </form>
+      <div class="advanced-toggle" id="advancedToggle">
+        <i class="fas fa-chevron-down"></i>
+        <span>Advanced Search Options</span>
+      </div>
+      <div class="advanced-search" id="advancedSearch">
+        <div class="advanced-options">
+          <div class="filter-group">
+            <label for="contentType">Content Type</label>
+            <select id="contentType">
+              <option value="all">All Types</option>
+              <option value="websites">Websites</option>
+              <option value="images">Images</option>
+              <option value="videos">Videos</option>
+              <option value="documents">Documents</option>
+              <option value="tools">Online Tools</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="dateRange">Date Range</label>
+            <select id="dateRange">
+              <option value="any">Any Time</option>
+              <option value="day">Past 24 Hours</option>
+              <option value="week">Past Week</option>
+              <option value="month">Past Month</option>
+              <option value="year">Past Year</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="sortBy">Sort By</label>
+            <select id="sortBy">
+              <option value="relevance">Relevance</option>
+              <option value="date">Date</option>
+              <option value="popularity">Popularity</option>
+            </select>
+          </div>
+        </div>
+        <div class="date-filters">
+          <div class="filter-group">
+            <label for="dateFrom">From Date</label>
+            <input type="date" id="dateFrom">
+          </div>
+          <div class="filter-group">
+            <label for="dateTo">To Date</label>
+            <input type="date" id="dateTo">
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Filter Tabs -->
+    <div class="filter-tabs">
+      <button class="filter-tab active" data-filter="all">
+        <i class="fas fa-globe"></i> All
+      </button>
+      <button class="filter-tab" data-filter="websites">
+        <i class="fas fa-window-maximize"></i> Websites
+      </button>
+      <button class="filter-tab" data-filter="images">
+        <i class="fas fa-image"></i> Images
+      </button>
+      <button class="filter-tab" data-filter="videos">
+        <i class="fas fa-video"></i> Videos
+      </button>
+      <button class="filter-tab" data-filter="documents">
+        <i class="fas fa-file-alt"></i> Documents
+      </button>
+      <button class="filter-tab" data-filter="tools">
+        <i class="fas fa-wrench"></i> Tools
+      </button>
+    </div>
+    <!-- AI Insights Section -->
+    <div class="ai-insights" id="aiInsights" style="display: none;">
+      <h3><i class="fas fa-lightbulb"></i> AI Insights</h3>
+      <div id="insightsContent"></div>
+    </div>
+    <!-- Results Section -->
+    <section class="results-section">
+      <div class="results-header">
+        <div class="results-count" id="resultsCount">Searching...</div>
+        <div class="sort-options">
+          <select id="sortOptions">
+            <option value="relevance">Sort by Relevance</option>
+            <option value="date">Sort by Date</option>
+            <option value="popularity">Sort by Popularity</option>
+          </select>
+        </div>
+      </div>
+      <div id="results">
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>Initializing Nirobo Search Engine...</p>
+        </div>
+      </div>
+      <div id="pagination" class="pagination"></div>
+    </section>
 
-    <form id="search-form">
-      <div class="search-box">
-        <input type="text" id="search-input" placeholder="Search the web (e.g., উদাহরণ, technology, news)..." autocomplete="off">
-        <button type="submit" id="search-button">Search</button>
-      </div>
-    </form>
-
-    <div class="filters">
-      <div class="filter-group">
-        <label for="category-filter">Category:</label>
-        <select id="category-filter">
-          <option value="all">All</option>
-          <option value="education">Education</option>
-          <option value="news">News</option>
-          <option value="technology">Technology</option>
-          <option value="entertainment">Entertainment</option>
-          <option value="blog">Blog</option>
-          <option value="business">Business</option>
-          <option value="health">Health</option>
-          <!-- Add more categories as needed -->
-        </select>
-      </div>
-      <div class="filter-group">
-        <label for="sort-order">Sort:</label>
-        <select id="sort-order">
-          <option value="relevance">Relevance</option>
-          <option value="date_newest">Date (Newest)</option>
-        </select>
-      </div>
+    <!-- Submit URL Button at the Bottom -->
+    <div class="submit-section">
+      <a href="signup.html" class="submit-button">
+        <i class="fas fa-plus-circle"></i> Submit Your URL
+      </a>
     </div>
 
-    <div id="results-section">
-      <div class="results-info">Enter a term and click Search.</div>
-      <div id="results-container"></div>
-      <div class="pagination" id="pagination-controls"></div>
-    </div>
+    <footer>
+      <p>Made in Bangladesh 🇧🇩 | Curated by Nirobo</p>
+      <p>Honoring the Language Movement and the Silent Legacy of Justice</p>
+      <p>Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity</p>
+      <p><a href="/">← Back to Nirobo</a></p>
+    </footer>
   </div>
-
   <script>
-    const RESULTS_PER_PAGE = 5;
-    let allData = [];
-    let filteredData = [];
+    // --- Configuration ---
+    const RESULTS_PER_PAGE = 10;
     let currentPage = 1;
-
-    // Fetch data from our JSON file
-    async function fetchData() {
+    let currentFilter = 'all';
+    let allResults = [];
+    let filteredResults = [];
+    let query = '';
+    let searchHistory = [];
+    // Variable to hold the Fuse.js instance
+    let fuseInstance = null;
+    // --- DOM Elements ---
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-input');
+    const resultsContainer = document.getElementById('results');
+    const paginationContainer = document.getElementById('pagination');
+    const resultsCount = document.getElementById('resultsCount');
+    const advancedToggle = document.getElementById('advancedToggle');
+    const advancedSearch = document.getElementById('advancedSearch');
+    const aiInsights = document.getElementById('aiInsights');
+    const insightsContent = document.getElementById('insightsContent');
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    // --- Helper Functions ---
+    // Get favicon URL
+    function getFaviconUrl(url) {
       try {
-        const response = await fetch('data.json');
-        if (!response.ok) throw new Error('Failed to load data');
-        allData = await response.json();
-        console.log("Data loaded:", allData.length, "items");
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        document.getElementById('results-container').innerHTML = `<p class="no-results">Error loading search data. Please try again later.</p>`;
+        const hostname = new URL(url).hostname;
+        // Use a service that might be more reliable or offers different sizes/formats
+        return `https://www.google.com/s2/favicons?domain=${hostname}&sz=32`;
+        // Alternative: return `https://favicon.io/favicon.ico?domain=${hostname}`;
+      } catch (e) {
+        // Return a simple SVG placeholder if URL parsing fails
+        return 'image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%23444" rx="4"/><text x="50%" y="50%" fill="white" font-size="16" font-family="Arial" text-anchor="middle" dominant-baseline="middle">?</text></svg>';
       }
     }
-
-    // Simple search function (supports Bangla)
-    function performSearch(query, category) {
-        if (!query.trim() && category === 'all') {
-            return [];
-        }
-        const lowerQuery = query.toLowerCase();
-        return allData.filter(item => {
-            const matchesQuery = query.trim() ?
-                (item.title.toLowerCase().includes(lowerQuery) ||
-                 item.description.toLowerCase().includes(lowerQuery) ||
-                 item.url.toLowerCase().includes(lowerQuery) ||
-                 (Array.isArray(item.tags) && item.tags.some(tag => tag.toLowerCase().includes(lowerQuery)))) :
-                true;
-
-            const matchesCategory = category === 'all' || item.category === category;
-
-            return matchesQuery && matchesCategory;
+    // Generate AI insights based on search query
+    function generateAIInsights(searchQuery, results) {
+      const insights = [];
+      // Topic analysis
+      if (searchQuery.toLowerCase().includes('tutorial') || searchQuery.toLowerCase().includes('how to')) {
+        insights.push({
+          title: "Learning Path Suggestion",
+          content: "We found educational resources. Consider exploring related topics for a comprehensive understanding."
         });
-    }
-
-    // Sort data
-    function sortData(data, sortOrder) {
-        if (sortOrder === 'date_newest') {
-            return [...data].sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
-        }
-        // Default is relevance (simple sorting, could be improved)
-        return data;
-    }
-
-    // Render results
-    function renderResults(data) {
-      const container = document.getElementById('results-container');
-      container.innerHTML = '';
-
-      if (data.length === 0) {
-          container.innerHTML = `<div class="no-results"><p>No results found for your search.</p></div>`;
-          document.getElementById('pagination-controls').innerHTML = '';
-          return;
       }
-
-      const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
-      const endIndex = startIndex + RESULTS_PER_PAGE;
-      const pageItems = data.slice(startIndex, endIndex);
-
-      pageItems.forEach(item => {
-        const itemDiv = document.createElement('div');
-        itemDiv.className = 'result-item';
-        // Simple favicon placeholder
-        const domain = item.url.replace(/^https?:\/\//, '').split('/')[0];
-        itemDiv.innerHTML = `
-          <div class="result-title"><a href="${item.url}" target="_blank" rel="noopener">${item.title}</a></div>
-          <div class="result-url">${domain}</div>
-          <div class="result-description">${item.description}</div>
-          <div class="result-meta">Category: ${item.category} | Submitted: ${new Date(item.submittedAt).toLocaleDateString()}</div>
-        `;
-        container.appendChild(itemDiv);
-      });
-
-      renderPagination(data.length);
-    }
-
-    // Render pagination controls
-    function renderPagination(totalItems) {
-      const totalPages = Math.ceil(totalItems / RESULTS_PER_PAGE);
-      const paginationEl = document.getElementById('pagination-controls');
-      paginationEl.innerHTML = '';
-
-      if (totalPages <= 1) return;
-
-      const prevButton = document.createElement('button');
-      prevButton.textContent = 'Previous';
-      prevButton.disabled = currentPage === 1;
-      prevButton.addEventListener('click', () => {
-        if (currentPage > 1) {
-          currentPage--;
-          const sortedData = sortData(filteredData, document.getElementById('sort-order').value);
-          renderResults(sortedData);
+      // Content type insights
+      const videoCount = results.filter(r =>
+        r.url.includes('youtube') || r.url.includes('youtu.be') || (Array.isArray(r.tags) && r.tags.includes('video'))
+      ).length;
+      if (videoCount > results.length * 0.3) {
+        insights.push({
+          title: "Video-Rich Results",
+          content: `${Math.round((videoCount/results.length)*100)}% of results are video content. Visual learning resources are abundant for this topic.`
+        });
+      }
+      // Freshness insight
+      const recentResults = results.filter(r => {
+        if (r.submittedAt) {
+          const date = new Date(r.submittedAt);
+          const daysOld = (Date.now() - date.getTime()) / (1000 * 3600 * 24);
+          return daysOld < 30;
         }
+        return false;
+      }).length;
+      if (recentResults > results.length * 0.5) {
+        insights.push({
+          title: "Fresh Content",
+          content: "This topic has recently active discussions and updated resources."
+        });
+      }
+      return insights;
+    }
+    // --- Fuzzy Search & Fuse.js Integration ---
+    // Initialize Fuse.js with the combined data
+    function initializeFuse(data) {
+      console.log("Initializing Fuse.js...");
+      const options = {
+        keys: [
+          { name: 'title', weight: 1.0 },
+          { name: 'description', weight: 0.8 },
+          { name: 'tags', weight: 0.7 },
+          { name: 'url', weight: 0.5 }
+        ],
+        includeScore: true,
+        threshold: 0.4, // Adjust for desired fuzziness (0.0 to 1.0)
+        distance: 100,
+        minMatchCharLength: 2,
+        shouldSort: true,
+        findAllMatches: false
+      };
+      fuseInstance = new Fuse(data, options);
+      console.log("Fuse.js initialized.");
+    }
+    // Perform search using Fuse.js
+    function performSearchFuse(searchTerm) {
+      if (!fuseInstance || !searchTerm) {
+        return [];
+      }
+      console.log("Performing Fuse.js search for:", searchTerm);
+      const fuseResults = fuseInstance.search(searchTerm);
+      console.log("Fuse.js found", fuseResults.length, "results");
+      // Sort by score (lower is better) and extract items
+      return fuseResults
+        .sort((a, b) => (a.score || 1) - (b.score || 1))
+        .map(result => result.item);
+    }
+    // Basic spell suggestion (conceptual)
+    function suggestCorrections(query, dataTitles) {
+      const suggestions = new Set();
+      const lowerQuery = query.toLowerCase();
+      dataTitles.forEach(title => {
+         const lowerTitle = title.toLowerCase();
+         // Simple heuristic: if title contains query and lengths are close, suggest it
+         if (lowerTitle.includes(lowerQuery) && Math.abs(lowerTitle.length - lowerQuery.length) <= 2) {
+             suggestions.add(title);
+         }
       });
-      paginationEl.appendChild(prevButton);
+      return Array.from(suggestions).slice(0, 3); // Limit to 3 suggestions
+    }
+    // --- Core Search Logic ---
+    // Load data from result.json
+    async function loadResultJson() {
+      try {
+        const response = await fetch('result.json');
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        return await response.json();
+      } catch (error) {
+        console.warn('Failed to load result.json:', error);
+        return [];
+      }
+    }
+    // Load approved submissions from localStorage
+    function loadApprovedSubmissions() {
+      try {
+        const submissions = JSON.parse(localStorage.getItem('niroboAllSubmissions') || '[]');
+        return submissions.filter(sub => sub.status === 'approved');
+      } catch (error) {
+        console.warn('Failed to load approved submissions:', error);
+        return [];
+      }
+    }
+    // Combine all results
+    async function loadAllResults() {
+      const jsonResults = await loadResultJson();
+      const approvedResults = loadApprovedSubmissions();
+      // Normalize approved results to match json structure
+      const normalizedApproved = approvedResults.map(sub => ({
+        title: sub.title || 'Untitled',
+        url: sub.url || '#',
+        description: sub.description || 'No description available',
+        tags: Array.isArray(sub.tags) ? sub.tags : [],
+        submittedAt: sub.submittedAt,
+        viewCount: sub.viewCount || 0,
+        // Potentially add a field for translated description if available in data
+        // translatedDescription: sub.translatedDescription || null
+      }));
+      const combinedResults = [...jsonResults, ...normalizedApproved];
+      // NEW: Initialize Fuse.js with the loaded data
+      initializeFuse(combinedResults);
+      return combinedResults;
+    }
+    // Apply filters to results (keeping for filter tabs, but search uses Fuse.js)
+    function applyFilters(results, searchTerm, filterType) {
+      let filtered = [...results];
+      // Apply search term filter (exact match for filter tabs)
+      if (searchTerm) {
+        const lowerQuery = searchTerm.toLowerCase();
+        filtered = filtered.filter(item =>
+          (item.title && item.title.toLowerCase().includes(lowerQuery)) ||
+          (item.description && item.description.toLowerCase().includes(lowerQuery)) ||
+          (item.url && item.url.toLowerCase().includes(lowerQuery)) ||
+          (Array.isArray(item.tags) && item.tags.some(tag =>
+            tag && tag.toLowerCase().includes(lowerQuery)
+          ))
+        );
+      }
+      // Apply type filter
+      if (filterType !== 'all') {
+        filtered = filtered.filter(item => {
+          const urlLower = item.url ? item.url.toLowerCase() : '';
+          const tagsLower = Array.isArray(item.tags) ? item.tags.map(t => t.toLowerCase()) : [];
+          switch(filterType) {
+            case 'images':
+              return urlLower.includes('image') ||
+                     urlLower.includes('img') ||
+                     tagsLower.includes('image') ||
+                     tagsLower.includes('photo');
+            case 'videos':
+              return urlLower.includes('youtube') ||
+                     urlLower.includes('youtu.be') ||
+                     urlLower.includes('vimeo') ||
+                     tagsLower.includes('video') ||
+                     tagsLower.includes('media');
+            case 'documents':
+              return urlLower.includes('.pdf') ||
+                     urlLower.includes('.doc') ||
+                     urlLower.includes('.txt') ||
+                     tagsLower.includes('document') ||
+                     tagsLower.includes('pdf');
+            case 'tools':
+               return urlLower.includes('tool') ||
+                      urlLower.includes('calculator') ||
+                      urlLower.includes('converter') ||
+                      tagsLower.includes('tool') ||
+                      tagsLower.includes('calculator') ||
+                      tagsLower.includes('converter');
+            case 'websites':
+              return !(urlLower.includes('image') ||
+                      urlLower.includes('img') ||
+                      urlLower.includes('youtube') ||
+                      urlLower.includes('youtu.be') ||
+                      urlLower.includes('vimeo') ||
+                      urlLower.includes('.pdf') ||
+                      urlLower.includes('.doc') ||
+                      urlLower.includes('.txt') ||
+                      urlLower.includes('tool') ||
+                      urlLower.includes('calculator') ||
+                      urlLower.includes('converter') ||
+                      tagsLower.includes('image') ||
+                      tagsLower.includes('photo') ||
+                      tagsLower.includes('video') ||
+                      tagsLower.includes('media') ||
+                      tagsLower.includes('document') ||
+                      tagsLower.includes('pdf') ||
+                      tagsLower.includes('tool') ||
+                      tagsLower.includes('calculator') ||
+                      tagsLower.includes('converter'));
+            default:
+              return true;
+          }
+        });
+      }
+      return filtered;
+    }
+    // Sort results
+    function sortResults(results, sortBy) {
+      switch(sortBy) {
+        case 'date':
+          return results.sort((a, b) => {
+            const dateA = a.submittedAt ? new Date(a.submittedAt) : new Date(0);
+            const dateB = b.submittedAt ? new Date(b.submittedAt) : new Date(0);
+            return dateB - dateA;
+          });
+        case 'popularity':
+          return results.sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0));
+        default:
+          return results; // Relevance is default
+      }
+    }
+    // Render results
+    function renderResults(results) {
+      resultsContainer.innerHTML = "";
+      if (results.length === 0) {
+        // Try to get spell suggestions
+        const allTitles = allResults.map(r => r.title || r.url || 'Untitled'); // Fallback if title missing
+        const suggestions = suggestCorrections(query, allTitles);
+        let suggestionsHtml = '';
+        if (suggestions.length > 0) {
+            suggestionsHtml = `
+              <p><strong>Did you mean:</strong></p>
+              <ul style="list-style: none; padding: 0;">
+                ${suggestions.map(s => `<li style="margin-bottom: 5px;"><a href="#" onclick="searchInput.value='${s.replace(/'/g, "\\'")}'; searchForm.dispatchEvent(new Event('submit')); return false;" style="color: #ff9999;">${s}</a></li>`).join('')}
+              </ul>
+            `;
+        }
+        resultsContainer.innerHTML = `
+          <div class="no-results animated">
+            <i class="fas fa-sad-tear"></i>
+            <h3>We're Sorry</h3>
+            <p>We couldn't find any matches for "${query}".</p>
+            ${suggestionsHtml}
+          </div>
+        `;
+        return;
+      }
+      results.forEach((result) => {
+        const resultElement = document.createElement("div");
+        resultElement.className = "result-card";
+        const faviconUrl = getFaviconUrl(result.url);
+        const cleanUrl = result.url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+        const truncatedUrl = cleanUrl.length > 50 ? cleanUrl.substring(0, 50) + '...' : cleanUrl;
 
-      // Page numbers (simple)
-      for (let i = 1; i <= totalPages; i++) {
+        // Determine description to display
+        let displayDescription = result.description || 'No description available. The website owner may not have provided one or it was not found.';
+        // If Bangla translation is available in the data (conceptual), display it
+        // This assumes your data.json or submissions include a 'translatedDescription' field
+        // if (result.translatedDescription && isLikelyBangla(query)) {
+        //     displayDescription = result.translatedDescription;
+        // }
+
+        resultElement.innerHTML = `
+          <div class="result-header">
+            <div class="favicon">
+              <img src="${faviconUrl}" alt="Favicon" onerror="this.parentElement.innerHTML='<i class=\'fas fa-link\'></i>'">
+            </div>
+            <div class="result-content">
+              <h3 class="result-title">
+                <a href="${result.url}" target="_blank" rel="noopener">${result.title}</a>
+              </h3>
+              <a href="${result.url}" class="result-url" target="_blank" rel="noopener">${truncatedUrl}</a>
+              <p class="result-description">${displayDescription}</p>
+              <div class="result-tags">
+                ${(Array.isArray(result.tags) ? result.tags : [])
+                  .slice(0, 5)
+                  .map(tag => `<span class="result-tag">${tag}</span>`)
+                  .join('')}
+              </div>
+            </div>
+          </div>
+          <div class="result-meta">
+            <div class="result-source">
+              ${result.submittedAt ? `Submitted: ${new Date(result.submittedAt).toLocaleDateString()}` : 'Source: Database'}
+            </div>
+            <div class="result-actions">
+              <button class="action-btn report-btn" data-url="${result.url}" data-title="${result.title}">
+                <i class="fas fa-flag"></i> Report
+              </button>
+              <button class="action-btn save-btn" data-url="${result.url}" data-title="${result.title}">
+                <i class="fas fa-bookmark"></i> Save
+              </button>
+            </div>
+          </div>
+        `;
+        resultsContainer.appendChild(resultElement);
+      });
+    }
+    // Render pagination
+    function renderPagination(totalPages) {
+      paginationContainer.innerHTML = '';
+      if (totalPages <= 1) return;
+      const fragment = document.createDocumentFragment();
+      // Previous button
+      const prevButton = document.createElement('button');
+      prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
+      prevButton.disabled = currentPage === 1;
+      prevButton.addEventListener('click', () => goToPage(currentPage - 1));
+      fragment.appendChild(prevButton);
+      // Page numbers
+      const startPage = Math.max(1, currentPage - 2);
+      const endPage = Math.min(totalPages, currentPage + 2);
+      if (startPage > 1) {
+        const firstButton = document.createElement('button');
+        firstButton.textContent = '1';
+        firstButton.addEventListener('click', () => goToPage(1));
+        fragment.appendChild(firstButton);
+        if (startPage > 2) {
+          const ellipsis = document.createElement('span');
+          ellipsis.textContent = '...';
+          ellipsis.style.padding = '0 5px';
+          fragment.appendChild(ellipsis);
+        }
+      }
+      for (let i = startPage; i <= endPage; i++) {
         const pageButton = document.createElement('button');
         pageButton.textContent = i;
         if (i === currentPage) {
-          pageButton.disabled = true;
-          pageButton.style.backgroundColor = '#555';
+          pageButton.classList.add('active');
         }
-        pageButton.addEventListener('click', () => {
-          currentPage = i;
-          const sortedData = sortData(filteredData, document.getElementById('sort-order').value);
-          renderResults(sortedData);
-        });
-        paginationEl.appendChild(pageButton);
+        pageButton.addEventListener('click', () => goToPage(i));
+        fragment.appendChild(pageButton);
       }
-
-      const nextButton = document.createElement('button');
-      nextButton.textContent = 'Next';
-      nextButton.disabled = currentPage === totalPages;
-      nextButton.addEventListener('click', () => {
-        if (currentPage < totalPages) {
-          currentPage++;
-          const sortedData = sortData(filteredData, document.getElementById('sort-order').value);
-          renderResults(sortedData);
+      if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+          const ellipsis = document.createElement('span');
+          ellipsis.textContent = '...';
+          ellipsis.style.padding = '0 5px';
+          fragment.appendChild(ellipsis);
         }
-      });
-      paginationEl.appendChild(nextButton);
+        const lastButton = document.createElement('button');
+        lastButton.textContent = totalPages;
+        lastButton.addEventListener('click', () => goToPage(totalPages));
+        fragment.appendChild(lastButton);
+      }
+      // Next button
+      const nextButton = document.createElement('button');
+      nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
+      nextButton.disabled = currentPage === totalPages;
+      nextButton.addEventListener('click', () => goToPage(currentPage + 1));
+      fragment.appendChild(nextButton);
+      paginationContainer.appendChild(fragment);
     }
-
-
-    // Handle search form submission
-    document.getElementById('search-form').addEventListener('submit', async function(e) {
+    // Go to specific page
+    function goToPage(page) {
+      currentPage = page;
+      const url = new URL(window.location);
+      url.searchParams.set('page', page.toString());
+      if (query) url.searchParams.set('q', query);
+      window.history.pushState({ page, query }, '', url);
+      // Use Fuse.js for searching when paginating
+      if (query) {
+        filteredResults = performSearchFuse(query);
+      } else {
+        filteredResults = allResults;
+      }
+      const sortedResults = sortResults(filteredResults, document.getElementById('sortOptions').value);
+      const totalPages = Math.ceil(sortedResults.length / RESULTS_PER_PAGE);
+      const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
+      const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, sortedResults.length);
+      const pageResults = sortedResults.slice(startIndex, endIndex);
+      renderResults(pageResults);
+      renderPagination(totalPages);
+      updateResultsCount(sortedResults.length);
+    }
+    // Update results count
+    function updateResultsCount(total) {
+      resultsCount.textContent = `About ${total} results (${(Math.random() * 0.5 + 0.1).toFixed(2)} seconds)`;
+    }
+    // Show AI insights
+    function showAIInsights(searchQuery, results) {
+      const insights = generateAIInsights(searchQuery, results);
+      if (insights.length > 0) {
+        aiInsights.style.display = 'block';
+        insightsContent.innerHTML = insights.map(insight => `
+          <div class="insight-item">
+            <h4><i class="fas fa-robot"></i> ${insight.title}</h4>
+            <p>${insight.content}</p>
+          </div>
+        `).join('');
+      } else {
+        aiInsights.style.display = 'none';
+      }
+    }
+    // --- Event Listeners ---
+    // Advanced search toggle
+    advancedToggle.addEventListener('click', () => {
+      advancedSearch.classList.toggle('active');
+      const icon = advancedToggle.querySelector('i');
+      icon.classList.toggle('fa-chevron-down');
+      icon.classList.toggle('fa-chevron-up');
+    });
+    // Filter tabs
+    filterTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        filterTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentFilter = tab.dataset.filter;
+        currentPage = 1;
+        // For filter tabs, we still use the original applyFilters for exact matching
+        const filteredByTabs = applyFilters(allResults, query, currentFilter);
+        const sortedResults = sortResults(filteredByTabs, document.getElementById('sortOptions').value);
+        const totalPages = Math.ceil(sortedResults.length / RESULTS_PER_PAGE);
+        const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
+        const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, sortedResults.length);
+        const pageResults = sortedResults.slice(startIndex, endIndex);
+        renderResults(pageResults);
+        renderPagination(totalPages);
+        updateResultsCount(sortedResults.length);
+        showAIInsights(query, sortedResults);
+      });
+    });
+    // Sort options
+    document.getElementById('sortOptions').addEventListener('change', (e) => {
+      // Use Fuse.js results if there's a query, otherwise use all results
+      let resultsToSort = filteredResults;
+      if (query && fuseInstance) {
+        resultsToSort = performSearchFuse(query);
+      } else {
+        resultsToSort = allResults;
+      }
+      const sortedResults = sortResults(resultsToSort, e.target.value);
+      const totalPages = Math.ceil(sortedResults.length / RESULTS_PER_PAGE);
+      const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
+      const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, sortedResults.length);
+      const pageResults = sortedResults.slice(startIndex, endIndex);
+      renderResults(pageResults);
+      renderPagination(totalPages);
+      showAIInsights(query, sortedResults);
+    });
+    // Search form submission
+    searchForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const query = document.getElementById('search-input').value;
-      const category = document.getElementById('category-filter').value;
-      const sortOrder = document.getElementById('sort-order').value;
-
-      document.getElementById('results-info').textContent = `Searching for "${query}" in category "${category}"...`;
-
-      // Perform search
-      filteredData = performSearch(query, category);
-
-      // Sort results
-      const sortedData = sortData(filteredData, sortOrder);
-
-      // Reset to first page
-      currentPage = 1;
-
-      // Render results
-      renderResults(sortedData);
-
-      document.getElementById('results-info').textContent = `Found ${filteredData.length} results.`;
+      query = searchInput.value.trim();
+      if (!query) {
+        alert("Please enter a search term.");
+        return;
+      }
+      // Add to search history
+      if (!searchHistory.includes(query)) {
+        searchHistory.unshift(query);
+        if (searchHistory.length > 10) searchHistory.pop();
+      }
+      try {
+        resultsContainer.innerHTML = `
+          <div class="loading">
+            <div class="spinner"></div>
+            <p>Searching with Nirobo AI Engine...</p>
+          </div>
+        `;
+        allResults = await loadAllResults();
+        // --- Use Fuse.js for searching ---
+        if (query) {
+            // Perform the search using Fuse.js
+            filteredResults = performSearchFuse(query);
+            console.log("Search results after Fuse.js:", filteredResults.length);
+        } else {
+            filteredResults = [];
+        }
+        // --- End Fuse.js search ---
+        const sortedResults = sortResults(filteredResults, document.getElementById('sortOptions').value);
+        const totalPages = Math.ceil(sortedResults.length / RESULTS_PER_PAGE);
+        const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
+        const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, sortedResults.length);
+        const pageResults = sortedResults.slice(startIndex, endIndex);
+        renderResults(pageResults);
+        renderPagination(totalPages);
+        updateResultsCount(sortedResults.length);
+        showAIInsights(query, sortedResults);
+        // Update URL
+        const url = new URL(window.location);
+        url.searchParams.set('q', query);
+        url.searchParams.set('page', '1');
+        window.history.pushState({ page: 1, query }, '', url);
+      } catch (error) {
+        console.error("Search error:", error);
+        resultsContainer.innerHTML = `
+          <div class="no-results">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>Search Error</h3>
+            <p>An unexpected error occurred. Please try again later.</p>
+          </div>
+        `;
+        paginationContainer.innerHTML = '';
+      }
     });
-
-    // Handle filter changes (re-run search)
-    document.getElementById('category-filter').addEventListener('change', () => {
-        document.getElementById('search-form').dispatchEvent(new Event('submit'));
+    // Report button handler
+    document.addEventListener('click', function(e) {
+      if (e.target && e.target.classList.contains('report-btn')) {
+        const url = e.target.closest('.report-btn').dataset.url;
+        const title = e.target.closest('.report-btn').dataset.title;
+        const subject = encodeURIComponent(`[Nirobo Report] Illegal Website: ${title}`);
+        const body = encodeURIComponent(`
+INFRINGEMENT REPORT
+===================
+Website Title: ${title}
+URL: ${url}
+Reason for Report:
+[Please describe why you believe this website is illegal]
+Additional Details:
+[Any other information that supports your claim]
+Reporter Info:
+[Your name/email if you wish to be contacted]
+⚠️ NOTE: This report will be sent to Nirobo's admin team for review.
+        `);
+        const mailtoLink = `mailto:infinitealphas0602@outlook.com?subject=${subject}&body=${body}`;
+        window.open(mailtoLink, '_blank');
+        alert('📬 A report email draft has been opened. Please review and send it to infinitealphas0602@outlook.com');
+      }
     });
-    document.getElementById('sort-order').addEventListener('change', () => {
-        document.getElementById('search-form').dispatchEvent(new Event('submit'));
-    });
-
-
-    // Initialize the page
-    window.addEventListener('DOMContentLoaded', async () => {
-      await fetchData();
-
-      // Check URL parameters for a direct search (e.g., ?q=উদাহরণ)
+    // Initialize on Page Load
+    document.addEventListener("DOMContentLoaded", async () => {
+      // Check URL parameters
       const urlParams = new URLSearchParams(window.location.search);
-      const queryParam = urlParams.get('q');
-      if (queryParam) {
-        document.getElementById('search-input').value = queryParam;
-        document.getElementById('search-form').dispatchEvent(new Event('submit'));
+      const initialQuery = urlParams.get('q');
+      const initialPage = parseInt(urlParams.get('page'), 10) || 1;
+      if (initialQuery) {
+        searchInput.value = initialQuery;
+        query = initialQuery;
+        currentPage = initialPage;
+        searchForm.dispatchEvent(new Event('submit'));
+      } else {
+        resultsContainer.innerHTML = `
+          <div class="no-results">
+            <i class="fas fa-robot"></i>
+            <h3>Welcome to Nirobo Search</h3>
+            <p>Our AI-powered search engine combines curated databases with community submissions.</p>
+            <p>Enter a search term above to begin exploring the web intelligently.</p>
+          </div>
+        `;
+      }
+    });
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', (event) => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const newQuery = urlParams.get('q') || '';
+      const newPage = parseInt(urlParams.get('page'), 10) || 1;
+      if (newQuery !== query || newPage !== currentPage) {
+        searchInput.value = newQuery;
+        query = newQuery;
+        currentPage = newPage;
+        if (query) {
+          searchForm.dispatchEvent(new Event('submit'));
+        } else {
+          resultsContainer.innerHTML = `
+            <div class="no-results">
+              <i class="fas fa-robot"></i>
+              <h3>Welcome to Nirobo Search</h3>
+              <p>Our AI-powered search engine combines curated databases with community submissions.</p>
+              <p>Enter a search term above to begin exploring the web intelligently.</p>
+            </div>
+          `;
+          paginationContainer.innerHTML = '';
+        }
       }
     });
   </script>
