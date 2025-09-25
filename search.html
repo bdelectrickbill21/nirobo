@@ -1,316 +1,377 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nirobo Search</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --google-blue: #4285f4;
-      --google-red: #ea4335;
-      --google-yellow: #fbbc05;
-      --google-green: #34a853;
-      --text-primary: #202124;
-      --text-secondary: #5f6368;
-      --border-color: #dfe1e5;
-      --background: #fff;
-      --button-bg: #f8f9fa;
-      --button-border: #f8f9fa;
-      --button-text: #3c4043;
-      --button-hover-bg: #f1f3f4;
+      --primary: #006400;
+      --accent: #d40000;
+      --background: #f0f8f0;
+      --card-bg: #ffffff;
+      --text: #222;
+      --border: #ccc;
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: Arial, sans-serif;
-      color: var(--text-primary);
-      background: var(--background);
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Header Styles */
-    header {
-      display: flex;
-      justify-content: flex-end;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--background);
+      color: var(--text);
+      line-height: 1.6;
       padding: 20px;
-      font-size: 0.875rem;
     }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .nav-links a {
-      color: var(--text-secondary);
-      text-decoration: none;
-      padding: 5px 10px;
-      border-radius: 4px;
-      transition: background-color 0.2s;
-    }
-
-    .nav-links a:hover {
-      background-color: rgba(60, 64, 67, 0.08);
-    }
-
-    .apps-icon {
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      cursor: pointer;
-    }
-
-    .apps-icon:hover {
-       background-color: rgba(60, 64, 67, 0.08);
-    }
-
-    .profile-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background-color: var(--google-blue);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    /* Main Content Styles */
-    main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      padding-top: 80px; /* Space for the header */
-      max-width: 584px;
+    .container {
+      max-width: 800px;
       margin: 0 auto;
-      width: 100%;
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 100, 0, 0.1);
     }
-
-    /* Logo Styles */
-    .logo {
+    header {
+      text-align: center;
       margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
     }
-
-    .logo-text {
-      font-size: 5rem;
-      font-weight: 400;
-      letter-spacing: -2px;
+    h1 {
+      color: var(--primary);
+      font-size: 2.5rem;
+      margin-bottom: 10px;
     }
-
-    .logo-text span:nth-child(1) { color: var(--google-blue); }
-    .logo-text span:nth-child(2) { color: var(--google-red); }
-    .logo-text span:nth-child(3) { color: var(--google-yellow); }
-    .logo-text span:nth-child(4) { color: var(--google-blue); }
-    .logo-text span:nth-child(5) { color: var(--google-green); }
-    .logo-text span:nth-child(6) { color: var(--google-red); }
-
-    /* Search Form Styles */
-    .search-container {
-      width: 100%;
-      position: relative;
-      margin-bottom: 30px;
+    .tagline {
+      color: var(--accent);
+      font-style: italic;
     }
-
-    #search-form {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    nav {
+      text-align: center;
+      margin-bottom: 20px;
     }
-
-    #search-input {
-      width: 100%;
-      padding: 15px 20px 15px 45px; /* Padding for icon */
-      border: 1px solid var(--border-color);
-      border-radius: 24px;
-      font-size: 1rem;
-      outline: none;
-      box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);
-    }
-
-    #search-input:hover, #search-input:focus {
-       box-shadow: 0 1px 10px 1px rgba(32, 33, 36, 0.28);
-    }
-
-    .search-icon {
-      position: absolute;
-      left: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-secondary);
-    }
-
-    .mic-icon, .camera-icon {
-      position: absolute;
-      right: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-secondary);
-      cursor: pointer;
-    }
-
-    .camera-icon {
-      right: 50px;
-    }
-
-    /* Buttons Styles */
-    .buttons {
-      display: flex;
-      gap: 12px;
-      margin-top: 18px;
-    }
-
-    .search-button, .lucky-button {
-      background-color: var(--button-bg);
-      border: 1px solid var(--button-border);
-      border-radius: 4px;
-      color: var(--button-text);
-      font-size: 0.875rem;
-      padding: 10px 16px;
-      cursor: pointer;
-    }
-
-    .search-button:hover, .lucky-button:hover {
-      box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-      background-color: var(--button-hover-bg);
-      border: 1px solid var(--border-color);
-    }
-
-    /* Footer Styles */
-    footer {
-      background: #f2f2f2;
-      padding: 0 20px;
-      border-top: 1px solid #dadce0;
-    }
-
-    .footer-country {
-      padding: 15px 0;
-      border-bottom: 1px solid #dadce0;
-      color: var(--text-secondary);
-      font-size: 0.875rem;
-    }
-
-    .footer-links {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      padding: 15px 0;
-      font-size: 0.875rem;
-    }
-
-    .footer-links a {
-      color: var(--text-secondary);
+    nav a {
+      margin: 0 15px;
       text-decoration: none;
-      padding: 15px;
-      white-space: nowrap;
+      color: var(--primary);
+      font-weight: bold;
     }
-
-    .footer-links a:hover {
+    nav a:hover {
+      text-decoration: underline;
+      color: var(--accent);
+    }
+    .search-box {
+      display: flex;
+      margin-bottom: 20px;
+    }
+    #search-input {
+      flex: 1;
+      padding: 15px;
+      font-size: 1rem;
+      border: 2px solid var(--border);
+      border-radius: 5px 0 0 5px;
+    }
+    #search-button {
+      padding: 15px 25px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 0 5px 5px 0;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    #search-button:hover {
+      background-color: var(--accent);
+    }
+    .filters {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .filter-group label {
+      margin-right: 5px;
+      font-weight: bold;
+    }
+    .results-info {
+      margin-bottom: 15px;
+      font-style: italic;
+      color: #555;
+    }
+    .result-item {
+      border-bottom: 1px solid var(--border);
+      padding: 20px 0;
+    }
+    .result-title a {
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    .result-title a:hover {
+      color: var(--accent);
       text-decoration: underline;
     }
-
-    .left-links, .right-links {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
+    .result-url {
+      color: #006621;
+      font-size: 0.9rem;
     }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      .logo-text {
-        font-size: 3.5rem;
-      }
-      .footer-links {
-        justify-content: center;
-      }
-      .left-links, .right-links {
-        justify-content: center;
-      }
+    .result-description {
+      margin: 8px 0;
+    }
+    .result-meta {
+      font-size: 0.8rem;
+      color: #777;
+    }
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin-top: 30px;
+    }
+    .pagination button {
+      padding: 10px 15px;
+      margin: 0 5px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .pagination button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    .no-results {
+      text-align: center;
+      padding: 40px 0;
+      color: #777;
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="nav-links">
-      <a href="/about">About</a>
-      <a href="/store">Store</a>
-      <div class="apps-icon">
-        <i class="fas fa-th"></i>
+  <div class="container">
+    <header>
+      <h1>NIROBO</h1>
+      <p class="tagline">Intelligent URL Discovery</p>
+    </header>
+
+    <nav>
+      <a href="index.html">Search</a>
+      <a href="submit.html">Submit URL</a>
+      <a href="admin.html">Admin</a>
+    </nav>
+
+    <form id="search-form">
+      <div class="search-box">
+        <input type="text" id="search-input" placeholder="Search the web (e.g., উদাহরণ, technology, news)..." autocomplete="off">
+        <button type="submit" id="search-button">Search</button>
       </div>
-      <div class="profile-icon">U</div>
-    </div>
-  </header>
+    </form>
 
-  <main>
-    <div class="logo">
-      <h1 class="logo-text">
-        <span>N</span><span>i</span><span>r</span><span>o</span><span>b</span><span>o</span>
-      </h1>
-    </div>
-
-    <div class="search-container">
-      <form id="search-form">
-        <i class="fas fa-search search-icon"></i>
-        <input type="text" id="search-input" name="q" title="Search" autocomplete="off" aria-label="Search" role="combobox" aria-haspopup="false" aria-expanded="false">
-        <i class="fas fa-microphone mic-icon" title="Search by voice"></i>
-        <i class="fas fa-camera camera-icon" title="Search by image"></i>
-      </form>
-    </div>
-
-    <div class="buttons">
-      <button type="submit" form="search-form" class="search-button">Nirobo Search</button>
-      <button type="button" class="lucky-button">I'm Feeling Lucky</button>
-    </div>
-  </main>
-
-  <footer>
-    <div class="footer-country">
-      Bangladesh
-    </div>
-    <div class="footer-links">
-      <div class="left-links">
-        <a href="/ads">Advertising</a>
-        <a href="/business">Business</a>
-        <a href="/howsearchworks">How Search works</a>
+    <div class="filters">
+      <div class="filter-group">
+        <label for="category-filter">Category:</label>
+        <select id="category-filter">
+          <option value="all">All</option>
+          <option value="education">Education</option>
+          <option value="news">News</option>
+          <option value="technology">Technology</option>
+          <option value="entertainment">Entertainment</option>
+          <option value="blog">Blog</option>
+          <option value="business">Business</option>
+          <option value="health">Health</option>
+          <!-- Add more categories as needed -->
+        </select>
       </div>
-      <div class="right-links">
-        <a href="/privacy">Privacy</a>
-        <a href="/terms">Terms</a>
-        <a href="/settings">Settings</a>
+      <div class="filter-group">
+        <label for="sort-order">Sort:</label>
+        <select id="sort-order">
+          <option value="relevance">Relevance</option>
+          <option value="date_newest">Date (Newest)</option>
+        </select>
       </div>
     </div>
-  </footer>
+
+    <div id="results-section">
+      <div class="results-info">Enter a term and click Search.</div>
+      <div id="results-container"></div>
+      <div class="pagination" id="pagination-controls"></div>
+    </div>
+  </div>
 
   <script>
-    document.getElementById('search-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const query = document.getElementById('search-input').value.trim();
-      if (query) {
-        // In a real app, this would redirect to your search results page
-        // e.g., window.location.href = `/search?q=${encodeURIComponent(query)}`;
-        alert(`Searching for: ${query}\n(In a real app, this would take you to the results page)`);
+    const RESULTS_PER_PAGE = 5;
+    let allData = [];
+    let filteredData = [];
+    let currentPage = 1;
+
+    // Fetch data from our JSON file
+    async function fetchData() {
+      try {
+        const response = await fetch('data.json');
+        if (!response.ok) throw new Error('Failed to load data');
+        allData = await response.json();
+        console.log("Data loaded:", allData.length, "items");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        document.getElementById('results-container').innerHTML = `<p class="no-results">Error loading search data. Please try again later.</p>`;
       }
+    }
+
+    // Simple search function (supports Bangla)
+    function performSearch(query, category) {
+        if (!query.trim() && category === 'all') {
+            return [];
+        }
+        const lowerQuery = query.toLowerCase();
+        return allData.filter(item => {
+            const matchesQuery = query.trim() ?
+                (item.title.toLowerCase().includes(lowerQuery) ||
+                 item.description.toLowerCase().includes(lowerQuery) ||
+                 item.url.toLowerCase().includes(lowerQuery) ||
+                 (Array.isArray(item.tags) && item.tags.some(tag => tag.toLowerCase().includes(lowerQuery)))) :
+                true;
+
+            const matchesCategory = category === 'all' || item.category === category;
+
+            return matchesQuery && matchesCategory;
+        });
+    }
+
+    // Sort data
+    function sortData(data, sortOrder) {
+        if (sortOrder === 'date_newest') {
+            return [...data].sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+        }
+        // Default is relevance (simple sorting, could be improved)
+        return data;
+    }
+
+    // Render results
+    function renderResults(data) {
+      const container = document.getElementById('results-container');
+      container.innerHTML = '';
+
+      if (data.length === 0) {
+          container.innerHTML = `<div class="no-results"><p>No results found for your search.</p></div>`;
+          document.getElementById('pagination-controls').innerHTML = '';
+          return;
+      }
+
+      const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
+      const endIndex = startIndex + RESULTS_PER_PAGE;
+      const pageItems = data.slice(startIndex, endIndex);
+
+      pageItems.forEach(item => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'result-item';
+        // Simple favicon placeholder
+        const domain = item.url.replace(/^https?:\/\//, '').split('/')[0];
+        itemDiv.innerHTML = `
+          <div class="result-title"><a href="${item.url}" target="_blank" rel="noopener">${item.title}</a></div>
+          <div class="result-url">${domain}</div>
+          <div class="result-description">${item.description}</div>
+          <div class="result-meta">Category: ${item.category} | Submitted: ${new Date(item.submittedAt).toLocaleDateString()}</div>
+        `;
+        container.appendChild(itemDiv);
+      });
+
+      renderPagination(data.length);
+    }
+
+    // Render pagination controls
+    function renderPagination(totalItems) {
+      const totalPages = Math.ceil(totalItems / RESULTS_PER_PAGE);
+      const paginationEl = document.getElementById('pagination-controls');
+      paginationEl.innerHTML = '';
+
+      if (totalPages <= 1) return;
+
+      const prevButton = document.createElement('button');
+      prevButton.textContent = 'Previous';
+      prevButton.disabled = currentPage === 1;
+      prevButton.addEventListener('click', () => {
+        if (currentPage > 1) {
+          currentPage--;
+          const sortedData = sortData(filteredData, document.getElementById('sort-order').value);
+          renderResults(sortedData);
+        }
+      });
+      paginationEl.appendChild(prevButton);
+
+      // Page numbers (simple)
+      for (let i = 1; i <= totalPages; i++) {
+        const pageButton = document.createElement('button');
+        pageButton.textContent = i;
+        if (i === currentPage) {
+          pageButton.disabled = true;
+          pageButton.style.backgroundColor = '#555';
+        }
+        pageButton.addEventListener('click', () => {
+          currentPage = i;
+          const sortedData = sortData(filteredData, document.getElementById('sort-order').value);
+          renderResults(sortedData);
+        });
+        paginationEl.appendChild(pageButton);
+      }
+
+      const nextButton = document.createElement('button');
+      nextButton.textContent = 'Next';
+      nextButton.disabled = currentPage === totalPages;
+      nextButton.addEventListener('click', () => {
+        if (currentPage < totalPages) {
+          currentPage++;
+          const sortedData = sortData(filteredData, document.getElementById('sort-order').value);
+          renderResults(sortedData);
+        }
+      });
+      paginationEl.appendChild(nextButton);
+    }
+
+
+    // Handle search form submission
+    document.getElementById('search-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const query = document.getElementById('search-input').value;
+      const category = document.getElementById('category-filter').value;
+      const sortOrder = document.getElementById('sort-order').value;
+
+      document.getElementById('results-info').textContent = `Searching for "${query}" in category "${category}"...`;
+
+      // Perform search
+      filteredData = performSearch(query, category);
+
+      // Sort results
+      const sortedData = sortData(filteredData, sortOrder);
+
+      // Reset to first page
+      currentPage = 1;
+
+      // Render results
+      renderResults(sortedData);
+
+      document.getElementById('results-info').textContent = `Found ${filteredData.length} results.`;
     });
 
-    document.querySelector('.lucky-button').addEventListener('click', function() {
-      alert("I'm Feeling Lucky! (This is a demo button)");
+    // Handle filter changes (re-run search)
+    document.getElementById('category-filter').addEventListener('change', () => {
+        document.getElementById('search-form').dispatchEvent(new Event('submit'));
+    });
+    document.getElementById('sort-order').addEventListener('change', () => {
+        document.getElementById('search-form').dispatchEvent(new Event('submit'));
+    });
+
+
+    // Initialize the page
+    window.addEventListener('DOMContentLoaded', async () => {
+      await fetchData();
+
+      // Check URL parameters for a direct search (e.g., ?q=উদাহরণ)
+      const urlParams = new URLSearchParams(window.location.search);
+      const queryParam = urlParams.get('q');
+      if (queryParam) {
+        document.getElementById('search-input').value = queryParam;
+        document.getElementById('search-form').dispatchEvent(new Event('submit'));
+      }
     });
   </script>
 </body>
