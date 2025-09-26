@@ -37,7 +37,7 @@
     .container {
       max-width: 1200px;
       margin: 0 auto;
-      position: relative; /* For positioning the tools button */
+      position: relative;
     }
     /* Header Styles */
     header {
@@ -175,10 +175,10 @@
     .tool-panel.active {
       display: block;
     }
-    /* --- CALCULATOR --- */
+    /* --- SCIENTIFIC CALCULATOR --- */
     .calculator-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       gap: 10px;
       margin-top: 15px;
     }
@@ -196,7 +196,7 @@
       background: var(--primary-light);
     }
     .calc-display {
-      grid-column: span 4;
+      grid-column: span 5;
       padding: 15px;
       font-size: 1.5rem;
       background: var(--text);
@@ -366,10 +366,11 @@
       display: flex;
       gap: 15px;
       margin-bottom: 25px;
+      position: relative;
     }
     #search-input {
       flex: 1;
-      padding: 15px 20px;
+      padding: 15px 60px 15px 20px; /* Extra padding for icons */
       font-size: 1.1rem;
       border: 2px solid var(--accent);
       border-radius: 30px;
@@ -381,6 +382,26 @@
     #search-input:focus {
       border-color: var(--accent-hover);
       box-shadow: 0 0 15px rgba(212, 0, 0, 0.5);
+    }
+    /* Voice and Image Search Icons */
+    .search-icons {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      gap: 10px;
+    }
+    .search-icon-btn {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: color 0.3s ease;
+    }
+    .search-icon-btn:hover {
+      color: var(--accent);
     }
     #search-form button {
       padding: 15px 30px;
@@ -454,7 +475,7 @@
       grid-template-columns: 1fr 1fr;
       gap: 15px;
     }
-    /* Filter Tabs (Categories) */
+    /* Filter Tabs */
     .filter-tabs {
       display: flex;
       gap: 12px;
@@ -720,6 +741,29 @@
     footer a:hover {
       text-decoration: underline;
     }
+    /* Submit URL Button at Bottom */
+    .submit-section {
+      text-align: center;
+      margin: 40px 0 20px;
+    }
+    .submit-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 24px;
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      border-radius: 30px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 100, 0, 0.3);
+    }
+    .submit-button:hover {
+      background: var(--primary-light);
+      box-shadow: 0 8px 20px rgba(0, 128, 0, 0.5);
+      transform: translateY(-3px);
+    }
     /* Responsive Design */
     @media (max-width: 768px) {
       body {
@@ -830,19 +874,24 @@
               <button class="calc-btn" onclick="appendToCalc('8')">8</button>
               <button class="calc-btn" onclick="appendToCalc('9')">9</button>
               <button class="calc-btn" onclick="appendToCalc('-')">-</button>
+              <button class="calc-btn" onclick="appendFunction('sin')">sin</button>
               
               <button class="calc-btn" onclick="appendToCalc('4')">4</button>
               <button class="calc-btn" onclick="appendToCalc('5')">5</button>
               <button class="calc-btn" onclick="appendToCalc('6')">6</button>
               <button class="calc-btn" onclick="appendToCalc('+')">+</button>
+              <button class="calc-btn" onclick="appendFunction('cos')">cos</button>
               
               <button class="calc-btn" onclick="appendToCalc('1')">1</button>
               <button class="calc-btn" onclick="appendToCalc('2')">2</button>
               <button class="calc-btn" onclick="appendToCalc('3')">3</button>
-              <button class="calc-btn" onclick="calculateCalc()" rowspan="2">=</button>
+              <button class="calc-btn" onclick="appendFunction('tan')">tan</button>
+              <button class="calc-btn" onclick="appendFunction('log')">log</button>
               
               <button class="calc-btn" onclick="appendToCalc('0')" colspan="2">0</button>
               <button class="calc-btn" onclick="appendToCalc('.')">.</button>
+              <button class="calc-btn" onclick="appendFunction('sqrt')">√</button>
+              <button class="calc-btn" onclick="calculateCalc()" rowspan="2">=</button>
             </div>
           </div>
 
@@ -938,10 +987,7 @@
       <div class="tagline">"Intelligent URL Discovery Powered by AI"</div>
       <a href="/" style="color: #ff9999; text-decoration: none;">← Back to Nirobo</a>
     </header>
-    <!-- Submit URL Button -->
-    <a href="signup.html" class="submit-button">
-      <i class="fas fa-plus-circle"></i> Submit URL
-    </a>
+
     <!-- Search Section -->
     <section class="search-section">
       <div class="search-header">
@@ -954,6 +1000,14 @@
       </div>
       <form id="search-form">
         <input type="text" id="search-input" placeholder="Search the web intelligently (e.g., উদাহরণ, technology, news)..." autocomplete="off">
+        <div class="search-icons">
+          <button type="button" class="search-icon-btn" id="voiceSearchBtn" title="Voice Search">
+            <i class="fas fa-microphone"></i>
+          </button>
+          <button type="button" class="search-icon-btn" id="imageSearchBtn" title="Image Search">
+            <i class="fas fa-camera"></i>
+          </button>
+        </div>
         <button type="submit">
           <i class="fas fa-search"></i> Search
         </button>
@@ -1006,7 +1060,8 @@
         </div>
       </div>
     </section>
-    <!-- Filter Tabs (Categories) -->
+
+    <!-- Filter Tabs -->
     <div class="filter-tabs">
       <button class="filter-tab active" data-filter="all">
         <i class="fas fa-globe"></i> All
@@ -1027,11 +1082,7 @@
         <i class="fas fa-wrench"></i> Tools
       </button>
     </div>
-    <!-- AI Insights Section -->
-    <div class="ai-insights" id="aiInsights" style="display: none;">
-      <h3><i class="fas fa-lightbulb"></i> AI Insights</h3>
-      <div id="insightsContent"></div>
-    </div>
+
     <!-- Results Section -->
     <section class="results-section">
       <div class="results-header">
@@ -1052,6 +1103,14 @@
       </div>
       <div id="pagination" class="pagination"></div>
     </section>
+
+    <!-- Submit URL Button at the Bottom -->
+    <div class="submit-section">
+      <a href="signup.html" class="submit-button">
+        <i class="fas fa-plus-circle"></i> Submit Your URL
+      </a>
+    </div>
+
     <footer>
       <p>Made in Bangladesh 🇧🇩 | Curated by Nirobo</p>
       <p>Honoring the Language Movement and the Silent Legacy of Justice</p>
@@ -1059,6 +1118,7 @@
       <p><a href="/">← Back to Nirobo</a></p>
     </footer>
   </div>
+
   <script>
     // --- Configuration ---
     const RESULTS_PER_PAGE = 10;
@@ -1078,8 +1138,6 @@
     const resultsCount = document.getElementById('resultsCount');
     const advancedToggle = document.getElementById('advancedToggle');
     const advancedSearch = document.getElementById('advancedSearch');
-    const aiInsights = document.getElementById('aiInsights');
-    const insightsContent = document.getElementById('insightsContent');
     const filterTabs = document.querySelectorAll('.filter-tab');
     // --- Tools Popup Elements ---
     const openToolsBtn = document.getElementById('openToolsBtn');
@@ -1088,6 +1146,9 @@
     const toolsPopup = document.getElementById('toolsPopup');
     const toolTabs = document.querySelectorAll('.tool-tab');
     const toolPanels = document.querySelectorAll('.tool-panel');
+    // --- Voice & Image Search Buttons ---
+    const voiceSearchBtn = document.getElementById('voiceSearchBtn');
+    const imageSearchBtn = document.getElementById('imageSearchBtn');
     // --- Helper Functions ---
     // Get favicon URL
     function getFaviconUrl(url) {
@@ -1175,214 +1236,24 @@
       const lowerQuery = query.toLowerCase();
       dataTitles.forEach(title => {
          const lowerTitle = title.toLowerCase();
+         // Simple heuristic: if title contains query and lengths are close, suggest it
          if (lowerTitle.includes(lowerQuery) && Math.abs(lowerTitle.length - lowerQuery.length) <= 2) {
              suggestions.add(title);
          }
+         // Check for partial word matches (e.g., "exampl" for "example")
+         const wordsInTitle = lowerTitle.split(/\s+/);
+         const wordsInQuery = lowerQuery.split(/\s+/);
+         wordsInQuery.forEach(qWord => {
+             if (qWord.length > 2) { // Only check words longer than 2 chars
+                 wordsInTitle.forEach(tWord => {
+                     if (tWord.includes(qWord) && Math.abs(tWord.length - qWord.length) <= 1) {
+                         suggestions.add(title);
+                     }
+                 });
+             }
+         });
       });
-      return Array.from(suggestions).slice(0, 3);
-    }
-    // --- Calculator Functions ---
-    let displayValue = '0';
-    const calcDisplay = document.getElementById('calcDisplay');
-
-    function updateDisplay() {
-      calcDisplay.textContent = displayValue;
-    }
-
-    function appendToCalc(value) {
-      if (displayValue === '0' && value !== '.') displayValue = '';
-      displayValue += value;
-      updateDisplay();
-    }
-
-    function clearCalc() {
-      displayValue = '0';
-      updateDisplay();
-    }
-
-    function deleteLastCalc() {
-      if (displayValue.length > 1) {
-        displayValue = displayValue.slice(0, -1);
-      } else {
-        displayValue = '0';
-      }
-      updateDisplay();
-    }
-
-    function calculateCalc() {
-      try {
-        // Note: Using eval is generally discouraged for security reasons.
-        // For a production app, use a proper expression parser.
-        displayValue = eval(displayValue).toString();
-        updateDisplay();
-      } catch (e) {
-        displayValue = 'Error';
-        updateDisplay();
-      }
-    }
-    // --- Calendar Functions ---
-    let currentDate = new Date();
-    let currentCalendarType = 'gregorian';
-
-    function updateCalendar() {
-        currentCalendarType = document.getElementById('calendar-type').value;
-        renderCalendar(currentDate, currentCalendarType);
-    }
-
-    function changeCalendarMonth(delta) {
-        if (currentCalendarType === 'gregorian') {
-            currentDate.setMonth(currentDate.getMonth() + delta);
-        } else if (currentCalendarType === 'bengali') {
-             // Simplified month/year change for Bengali calendar
-             // A real implementation would use a proper Bengali calendar library
-             currentDate.setMonth(currentDate.getMonth() + delta);
-        }
-        updateCalendar();
-    }
-
-    function renderCalendar(date, type) {
-        const grid = document.getElementById('calendar-grid');
-        const monthYear = document.getElementById('calendar-month-year');
-        grid.innerHTML = '';
-
-        if (type === 'gregorian') {
-            const monthNames = ["January", "February", "March", "April", "May", "June",
-                                "July", "August", "September", "October", "November", "December"];
-            const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-            monthYear.textContent = `${monthNames[date.getMonth()]} ${date.getFullYear()}`;
-
-            // Create day headers
-            dayNames.forEach(day => {
-                const header = document.createElement('div');
-                header.className = 'calendar-header';
-                header.textContent = day;
-                grid.appendChild(header);
-            });
-
-            // Get first day of month and number of days
-            const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
-            const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-
-            // Add empty cells for days before the first day
-            for (let i = 0; i < firstDay; i++) {
-                const emptyCell = document.createElement('div');
-                emptyCell.className = 'calendar-day empty';
-                grid.appendChild(emptyCell);
-            }
-
-            // Add cells for each day of the month
-            const today = new Date();
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dayCell = document.createElement('div');
-                dayCell.className = 'calendar-day';
-                if (date.getFullYear() === today.getFullYear() &&
-                    date.getMonth() === today.getMonth() &&
-                    day === today.getDate()) {
-                    dayCell.classList.add('today');
-                }
-                dayCell.textContent = day;
-                grid.appendChild(dayCell);
-            }
-        } else if (type === 'bengali') {
-            // Placeholder for Bengali calendar
-            // A real implementation would convert Gregorian date to Bengali date
-            // and display Bengali month names and potentially a different day structure.
-            const gregorianMonthNames = ["January", "February", "March", "April", "May", "June",
-                                         "July", "August", "September", "October", "November", "December"];
-            const bengaliMonthNames = ["Boishakh", "Jyaishtha", "Aashaadh", "Shraavana", "Bhaadra", "Aashwina",
-                                       "Kaarthika", "Agrahayana", "Pausha", "Maagha", "Phaalguna", "Chaaitra"];
-            
-            // This is a very rough approximation and not accurate.
-            // You would need a proper Bengali calendar conversion library.
-            const bengaliMonthIndex = (date.getMonth() + 4) % 12; // Simplified mapping
-            const bengaliYear = date.getFullYear() - 594; // Rough estimate
-            
-            monthYear.textContent = `${bengaliMonthNames[bengaliMonthIndex]}, ${bengaliYear} (Gregorian: ${gregorianMonthNames[date.getMonth()]} ${date.getFullYear()})`;
-
-            // Show a message instead of a full calendar grid for now
-            grid.innerHTML = `<div class="no-results" style="grid-column: span 7; padding: 40px;">
-                                <i class="fas fa-calendar-alt"></i>
-                                <h3>Bengali Calendar</h3>
-                                <p>This is a placeholder. A full Bengali calendar implementation requires a dedicated library for accurate conversions and display.</p>
-                                <p>Current Gregorian Date: ${date.toDateString()}</p>
-                              </div>`;
-        }
-    }
-    // --- Unit Converter Function ---
-    function convertUnits() {
-        const inputValue = parseFloat(document.getElementById('converter-input').value);
-        const fromUnit = document.getElementById('converter-from-unit').value;
-        const toUnit = document.getElementById('converter-to-unit').value;
-        const resultElement = document.getElementById('converter-result');
-
-        if (isNaN(inputValue)) {
-            resultElement.textContent = 'Please enter a valid number.';
-            resultElement.style.color = '#ff9999';
-            return;
-        }
-
-        // Conversion factors (relative to meters)
-        const unitFactors = {
-            meter: 1,
-            kilometer: 1000,
-            centimeter: 0.01,
-            millimeter: 0.001,
-            inch: 0.0254,
-            foot: 0.3048,
-            yard: 0.9144,
-            mile: 1609.344
-        };
-
-        if (unitFactors[fromUnit] === undefined || unitFactors[toUnit] === undefined) {
-            resultElement.textContent = 'Conversion factor not available.';
-            resultElement.style.color = '#ff9999';
-            return;
-        }
-
-        // Convert to base unit (meters), then to target unit
-        const valueInMeters = inputValue * unitFactors[fromUnit];
-        const convertedValue = valueInMeters / unitFactors[toUnit];
-
-        resultElement.textContent = `${inputValue} ${fromUnit} = ${convertedValue.toFixed(6)} ${toUnit}`;
-        resultElement.style.color = '#00aa00'; // Success color
-    }
-    // --- Currency Converter Function ---
-    function convertCurrency() {
-        const amount = parseFloat(document.getElementById('currency-input').value);
-        const fromCurrency = document.getElementById('currency-from').value;
-        const toCurrency = document.getElementById('currency-to').value;
-        const resultElement = document.getElementById('currency-result');
-
-        if (isNaN(amount)) {
-            resultElement.textContent = 'Please enter a valid amount.';
-            resultElement.style.color = '#ff9999';
-            return;
-        }
-
-        // Simulated exchange rates (relative to USD)
-        // In a real app, you would fetch these from an API
-        const exchangeRates = {
-            USD: 1,
-            EUR: 0.93,
-            GBP: 0.79,
-            BDT: 109.5,
-            INR: 83.5
-            // Add more currencies and their rates
-        };
-
-        if (exchangeRates[fromCurrency] === undefined || exchangeRates[toCurrency] === undefined) {
-            resultElement.textContent = 'Exchange rate not available.';
-            resultElement.style.color = '#ff9999';
-            return;
-        }
-
-        // Convert to base currency (USD), then to target currency
-        const amountInUSD = amount / exchangeRates[fromCurrency];
-        const convertedAmount = amountInUSD * exchangeRates[toCurrency];
-
-        resultElement.textContent = `${amount.toFixed(2)} ${fromCurrency} = ${convertedAmount.toFixed(2)} ${toCurrency}`;
-        resultElement.style.color = '#00aa00'; // Success color
+      return Array.from(suggestions).slice(0, 3); // Limit to 3 suggestions
     }
     // --- Core Search Logic ---
     // Load data from result.json
@@ -1420,8 +1291,7 @@
         tags: Array.isArray(sub.tags) ? sub.tags : [],
         submittedAt: sub.submittedAt,
         viewCount: sub.viewCount || 0,
-        // Add category if available from submission
-        category: sub.category || 'websites' // Default to websites if not specified
+        category: sub.category || 'websites' // Add category from submission
       }));
       const combinedResults = [...jsonResults, ...normalizedApproved];
       // NEW: Initialize Fuse.js with the loaded data
@@ -1509,7 +1379,7 @@
     // Render results
     function renderResults(results) {
       resultsContainer.innerHTML = "";
-      if (results.length === 0 && currentFilter !== 'tools') {
+      if (results.length === 0) {
         // Try to get spell suggestions
         const allTitles = allResults.map(r => r.title || r.url || 'Untitled'); // Fallback if title missing
         const suggestions = suggestCorrections(query, allTitles);
@@ -1664,20 +1534,228 @@
     function updateResultsCount(total) {
       resultsCount.textContent = `About ${total} results (${(Math.random() * 0.5 + 0.1).toFixed(2)} seconds)`;
     }
-    // Show AI insights
-    function showAIInsights(searchQuery, results) {
-      const insights = generateAIInsights(searchQuery, results);
-      if (insights.length > 0) {
-        aiInsights.style.display = 'block';
-        insightsContent.innerHTML = insights.map(insight => `
-          <div class="insight-item">
-            <h4><i class="fas fa-robot"></i> ${insight.title}</h4>
-            <p>${insight.content}</p>
-          </div>
-        `).join('');
+    // --- Calculator Functions ---
+    let displayValue = '0';
+    const calcDisplay = document.getElementById('calcDisplay');
+
+    function updateDisplay() {
+      calcDisplay.textContent = displayValue;
+    }
+
+    function appendToCalc(value) {
+      if (displayValue === '0' && value !== '.') displayValue = '';
+      displayValue += value;
+      updateDisplay();
+    }
+
+    function clearCalc() {
+      displayValue = '0';
+      updateDisplay();
+    }
+
+    function deleteLastCalc() {
+      if (displayValue.length > 1) {
+        displayValue = displayValue.slice(0, -1);
       } else {
-        aiInsights.style.display = 'none';
+        displayValue = '0';
       }
+      updateDisplay();
+    }
+
+    function appendFunction(func) {
+        // For functions like sin, cos, tan, log, sqrt, we'll evaluate them immediately
+        // and replace the display value with the result.
+        try {
+            let num = parseFloat(displayValue);
+            let result;
+            switch(func) {
+                case 'sin': result = Math.sin(num * Math.PI / 180); break; // Assuming degrees
+                case 'cos': result = Math.cos(num * Math.PI / 180); break;
+                case 'tan': result = Math.tan(num * Math.PI / 180); break;
+                case 'log': result = Math.log10(num); break;
+                case 'sqrt': result = Math.sqrt(num); break;
+                default: result = num;
+            }
+            displayValue = result.toString();
+            updateDisplay();
+        } catch (e) {
+            displayValue = 'Error';
+            updateDisplay();
+        }
+    }
+
+    function calculateCalc() {
+      try {
+        // Note: Using eval is generally discouraged for security reasons.
+        // For a production app, use a proper expression parser.
+        // This is a simple demo.
+        // Handle power operator (^)
+        let expression = displayValue.replace(/\^/g, '**');
+        displayValue = eval(expression).toString();
+        updateDisplay();
+      } catch (e) {
+        displayValue = 'Error';
+        updateDisplay();
+      }
+    }
+    // --- Calendar Functions ---
+    let currentDate = new Date();
+    let currentCalendarType = 'gregorian';
+
+    function updateCalendar() {
+        currentCalendarType = document.getElementById('calendar-type').value;
+        renderCalendar(currentDate, currentCalendarType);
+    }
+
+    function changeCalendarMonth(delta) {
+        if (currentCalendarType === 'gregorian') {
+            currentDate.setMonth(currentDate.getMonth() + delta);
+        } else if (currentCalendarType === 'bengali') {
+             // Simplified month/year change for Bengali calendar
+             // A real implementation would use a proper Bengali calendar library
+             currentDate.setMonth(currentDate.getMonth() + delta);
+        }
+        updateCalendar();
+    }
+
+    function renderCalendar(date, type) {
+        const grid = document.getElementById('calendar-grid');
+        const monthYear = document.getElementById('calendar-month-year');
+        grid.innerHTML = '';
+
+        if (type === 'gregorian') {
+            const monthNames = ["January", "February", "March", "April", "May", "June",
+                                "July", "August", "September", "October", "November", "December"];
+            const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+            monthYear.textContent = `${monthNames[date.getMonth()]} ${date.getFullYear()}`;
+
+            // Create day headers
+            dayNames.forEach(day => {
+                const header = document.createElement('div');
+                header.className = 'calendar-header';
+                header.textContent = day;
+                grid.appendChild(header);
+            });
+
+            // Get first day of month and number of days
+            const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+            const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+
+            // Add empty cells for days before the first day
+            for (let i = 0; i < firstDay; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'calendar-day empty';
+                grid.appendChild(emptyCell);
+            }
+
+            // Add cells for each day of the month
+            const today = new Date();
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayCell = document.createElement('div');
+                dayCell.className = 'calendar-day';
+                if (date.getFullYear() === today.getFullYear() &&
+                    date.getMonth() === today.getMonth() &&
+                    day === today.getDate()) {
+                    dayCell.classList.add('today');
+                }
+                dayCell.textContent = day;
+                grid.appendChild(dayCell);
+            }
+        } else if (type === 'bengali') {
+            // Placeholder for Bengali calendar
+            // A real implementation would convert Gregorian date to Bengali date
+            // and display Bengali month names and potentially a different day structure.
+            const gregorianMonthNames = ["January", "February", "March", "April", "May", "June",
+                                         "July", "August", "September", "October", "November", "December"];
+            const bengaliMonthNames = ["Boishakh", "Jyaishtha", "Aashaadh", "Shraavana", "Bhaadra", "Aashwina",
+                                       "Kaarthika", "Agrahayana", "Pausha", "Maagha", "Phaalguna", "Chaaitra"];
+            
+            // This is a very rough approximation and not accurate.
+            // You would need a proper Bengali calendar conversion library.
+            const bengaliMonthIndex = (date.getMonth() + 4) % 12; // Simplified mapping
+            const bengaliYear = date.getFullYear() - 594; // Rough estimate
+            
+            monthYear.textContent = `${bengaliMonthNames[bengaliMonthIndex]}, ${bengaliYear} (Gregorian: ${gregorianMonthNames[date.getMonth()]} ${date.getFullYear()})`;
+
+            // Show a message instead of a full calendar grid for now
+            grid.innerHTML = `<div class="no-results" style="grid-column: span 7; padding: 40px;">
+                                <i class="fas fa-calendar-alt"></i>
+                                <h3>Bengali Calendar</h3>
+                                <p>This is a placeholder. A full Bengali calendar implementation requires a dedicated library for accurate conversions and display.</p>
+                                <p>Current Gregorian Date: ${date.toDateString()}</p>
+                              </div>`;
+        }
+    }
+    // --- Unit Converter Function ---
+    function convertUnits() {
+        const inputValue = parseFloat(document.getElementById('converter-input').value);
+        const fromUnit = document.getElementById('converter-from-unit').value;
+        const toUnit = document.getElementById('converter-to-unit').value;
+        const resultElement = document.getElementById('converter-result');
+
+        if (isNaN(inputValue)) {
+            resultElement.textContent = 'Please enter a valid number.';
+            resultElement.style.color = '#ff9999';
+            return;
+        }
+
+        // Conversion factors (relative to meters)
+        const unitFactors = {
+            meter: 1,
+            kilometer: 1000,
+            centimeter: 0.01,
+            millimeter: 0.001,
+            inch: 0.0254,
+            foot: 0.3048,
+            yard: 0.9144,
+            mile: 1609.344
+        };
+
+        if (unitFactors[fromUnit] === undefined || unitFactors[toUnit] === undefined) {
+            resultElement.textContent = 'Conversion factor not available.';
+            resultElement.style.color = '#ff9999';
+            return;
+        }
+
+        // Convert to base unit (meters), then to target unit
+        const valueInMeters = inputValue * unitFactors[fromUnit];
+        const convertedValue = valueInMeters / unitFactors[toUnit];
+
+        resultElement.textContent = `${inputValue} ${fromUnit} = ${convertedValue.toFixed(6)} ${toUnit}`;
+        resultElement.style.color = '#00aa00'; // Success color
+    }
+    // --- Currency Converter Function ---
+    function convertCurrency() {
+        const amount = parseFloat(document.getElementById('currency-input').value);
+        const fromCurrency = document.getElementById('currency-from').value;
+        const toCurrency = document.getElementById('currency-to').value;
+        const resultElement = document.getElementById('currency-result');
+
+        if (isNaN(amount)) {
+            resultElement.textContent = 'Please enter a valid amount.';
+            resultElement.style.color = '#ff9999';
+            return;
+        }
+
+        // Simulated exchange rates (in a real app, fetch from an API)
+        const rates = {
+            USD: { BDT: 109.5, EUR: 0.93, GBP: 0.79, JPY: 152.2, INR: 83.5 },
+            BDT: { USD: 0.0091, EUR: 0.0085, GBP: 0.0072, JPY: 1.39, INR: 0.76 },
+            EUR: { USD: 1.08, BDT: 117.8, GBP: 0.85, JPY: 160.8, INR: 89.8 },
+            GBP: { USD: 1.27, BDT: 138.6, EUR: 1.18, JPY: 189.2, INR: 105.7 },
+            JPY: { USD: 0.0066, BDT: 0.73, EUR: 0.0062, GBP: 0.0053, INR: 0.56 },
+            INR: { USD: 0.012, BDT: 1.31, EUR: 0.011, GBP: 0.0095, JPY: 1.79 }
+        };
+
+        if (rates[fromCurrency] && rates[fromCurrency][toCurrency]) {
+            const result = (amount * rates[fromCurrency][toCurrency]).toFixed(2);
+            resultElement.textContent = `${amount} ${fromCurrency} = ${result} ${toCurrency}`;
+            resultElement.style.color = '#00aa00'; // Success color
+        } else {
+            resultElement.textContent = 'Conversion rate not available.';
+            resultElement.style.color = '#ff9999';
+        }
     }
     // --- Event Listeners ---
     // Advanced search toggle
@@ -1704,7 +1782,6 @@
         renderResults(pageResults);
         renderPagination(totalPages);
         updateResultsCount(sortedResults.length);
-        showAIInsights(query, sortedResults);
       });
     });
     // Sort options
@@ -1723,7 +1800,7 @@
       const pageResults = sortedResults.slice(startIndex, endIndex);
       renderResults(pageResults);
       renderPagination(totalPages);
-      showAIInsights(query, sortedResults);
+      updateResultsCount(sortedResults.length);
     });
     // Search form submission
     searchForm.addEventListener("submit", async (e) => {
@@ -1763,7 +1840,6 @@
         renderResults(pageResults);
         renderPagination(totalPages);
         updateResultsCount(sortedResults.length);
-        showAIInsights(query, sortedResults);
         // Update URL
         const url = new URL(window.location);
         url.searchParams.set('q', query);
@@ -1805,7 +1881,15 @@ Reporter Info:
         alert('📬 A report email draft has been opened. Please review and send it to infinitealphas0602@outlook.com');
       }
     });
-    // --- TOOLS POPUP FUNCTIONALITY ---
+    // Voice Search Handler (Placeholder)
+    voiceSearchBtn.addEventListener('click', () => {
+      alert('🎙️ Voice search is a planned feature. It requires integration with browser speech recognition APIs and a backend service for processing.');
+    });
+    // Image Search Handler (Placeholder)
+    imageSearchBtn.addEventListener('click', () => {
+      alert('📸 Image search is a planned feature. It requires integration with image recognition APIs and a backend service for processing.');
+    });
+    // --- Tools Popup Functionality ---
     // Open Tools Popup
     openToolsBtn.addEventListener('click', () => {
       toolsPopupOverlay.style.display = 'flex';
@@ -1927,292 +2011,5 @@ Reporter Info:
       }
     });
   </script>
-</head>
-<body>
-  <div class="container">
-    <!-- Tools Button (Top Right Corner) -->
-    <button id="openToolsBtn" title="Open Tools">
-      <i class="fas fa-tools"></i>
-    </button>
-
-    <!-- Tools Popup Overlay -->
-    <div id="toolsPopupOverlay">
-      <!-- Tools Popup -->
-      <div id="toolsPopup">
-        <div id="toolsPopupHeader">
-          <h3 id="toolsPopupTitle"><i class="fas fa-tools"></i> Nirobo Tools</h3>
-          <button id="closeToolsPopup">&times;</button>
-        </div>
-        <!-- Tool Tabs -->
-        <div class="tool-tabs">
-          <button class="tool-tab active" data-tool="calculator">
-            <i class="fas fa-calculator"></i> Calculator
-          </button>
-          <button class="tool-tab" data-tool="calendar">
-            <i class="fas fa-calendar-alt"></i> Calendar
-          </button>
-          <button class="tool-tab" data-tool="converter">
-            <i class="fas fa-exchange-alt"></i> Unit Converter
-          </button>
-          <button class="tool-tab" data-tool="currency">
-            <i class="fas fa-money-bill-wave"></i> Currency Converter
-          </button>
-        </div>
-        <!-- Tool Content Area -->
-        <div class="tool-content">
-          <!-- Calculator Tool -->
-          <div id="tool-calculator" class="tool-panel active">
-            <h4><i class="fas fa-calculator"></i> Scientific Calculator</h4>
-            <div class="calculator-grid">
-              <div class="calc-display" id="calcDisplay">0</div>
-              <button class="calc-btn" onclick="clearCalc()">C</button>
-              <button class="calc-btn" onclick="deleteLastCalc()">⌫</button>
-              <button class="calc-btn" onclick="appendToCalc('/')">/</button>
-              <button class="calc-btn" onclick="appendToCalc('*')">×</button>
-              
-              <button class="calc-btn" onclick="appendToCalc('7')">7</button>
-              <button class="calc-btn" onclick="appendToCalc('8')">8</button>
-              <button class="calc-btn" onclick="appendToCalc('9')">9</button>
-              <button class="calc-btn" onclick="appendToCalc('-')">-</button>
-              
-              <button class="calc-btn" onclick="appendToCalc('4')">4</button>
-              <button class="calc-btn" onclick="appendToCalc('5')">5</button>
-              <button class="calc-btn" onclick="appendToCalc('6')">6</button>
-              <button class="calc-btn" onclick="appendToCalc('+')">+</button>
-              
-              <button class="calc-btn" onclick="appendToCalc('1')">1</button>
-              <button class="calc-btn" onclick="appendToCalc('2')">2</button>
-              <button class="calc-btn" onclick="appendToCalc('3')">3</button>
-              <button class="calc-btn" onclick="calculateCalc()" rowspan="2">=</button>
-              
-              <button class="calc-btn" onclick="appendToCalc('0')" colspan="2">0</button>
-              <button class="calc-btn" onclick="appendToCalc('.')">.</button>
-            </div>
-          </div>
-
-          <!-- Calendar Tool -->
-          <div id="tool-calendar" class="tool-panel">
-            <h4><i class="fas fa-calendar-alt"></i> Calendar</h4>
-            <div class="calendar-controls">
-              <button onclick="changeCalendarMonth(-1)"><i class="fas fa-chevron-left"></i></button>
-              <span id="calendar-month-year">Loading...</span>
-              <button onclick="changeCalendarMonth(1)"><i class="fas fa-chevron-right"></i></button>
-            </div>
-            <div class="calendar-type-selector">
-              <label for="calendar-type">Calendar Type:</label>
-              <select id="calendar-type" onchange="updateCalendar()">
-                <option value="gregorian">Gregorian</option>
-                <option value="bengali">Bengali (Bangla)</option>
-                <!-- Add more calendar types here -->
-              </select>
-            </div>
-            <div id="calendar-grid" class="calendar-grid">
-              <!-- Calendar will be generated by JS -->
-            </div>
-          </div>
-
-          <!-- Unit Converter Tool -->
-          <div id="tool-converter" class="tool-panel">
-            <h4><i class="fas fa-exchange-alt"></i> Unit Converter</h4>
-            <div class="converter-form">
-              <input type="number" id="converter-input" placeholder="Enter value" step="any">
-              <select id="converter-from-unit">
-                <option value="meter">Meter</option>
-                <option value="kilometer">Kilometer</option>
-                <option value="centimeter">Centimeter</option>
-                <option value="millimeter">Millimeter</option>
-                <option value="inch">Inch</option>
-                <option value="foot">Foot</option>
-                <option value="yard">Yard</option>
-                <option value="mile">Mile</option>
-                <!-- Add more length units -->
-              </select>
-              <span>to</span>
-              <select id="converter-to-unit">
-                <option value="kilometer">Kilometer</option>
-                <option value="meter">Meter</option>
-                <option value="centimeter">Centimeter</option>
-                <option value="millimeter">Millimeter</option>
-                <option value="inch">Inch</option>
-                <option value="foot">Foot</option>
-                <option value="yard">Yard</option>
-                <option value="mile">Mile</option>
-                <!-- Add more length units -->
-              </select>
-              <button onclick="convertUnits()">Convert</button>
-            </div>
-            <div id="converter-result" class="converter-result">Result will appear here</div>
-          </div>
-
-          <!-- Currency Converter Tool -->
-          <div id="tool-currency" class="tool-panel">
-            <h4><i class="fas fa-money-bill-wave"></i> Currency Converter</h4>
-            <div class="converter-form">
-              <input type="number" id="currency-input" placeholder="Enter amount" step="0.01">
-              <select id="currency-from">
-                <option value="USD">USD</option>
-                <option value="EUR">EUR</option>
-                <option value="GBP">GBP</option>
-                <option value="BDT" selected>BDT</option>
-                <option value="INR">INR</option>
-                <!-- Add more currencies -->
-              </select>
-              <span>to</span>
-              <select id="currency-to">
-                <option value="BDT" selected>BDT</option>
-                <option value="USD">USD</option>
-                <option value="EUR">EUR</option>
-                <option value="GBP">GBP</option>
-                <option value="INR">INR</option>
-                <!-- Add more currencies -->
-              </select>
-              <button onclick="convertCurrency()">Convert</button>
-            </div>
-            <div id="currency-result" class="converter-result">Result will appear here</div>
-            <div class="currency-note">(Rates are simulated. For real-time rates, connect to an API.)</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <header>
-      <div class="logo">
-        <i class="fas fa-brain"></i> NIROBO
-      </div>
-      <div class="tagline">"Intelligent URL Discovery Powered by AI"</div>
-      <a href="/" style="color: #ff9999; text-decoration: none;">← Back to Nirobo</a>
-    </header>
-
-    <!-- Search Section -->
-    <section class="search-section">
-      <div class="search-header">
-        <h2 class="search-title">
-          <i class="fas fa-search"></i> Intelligent Search
-          <span class="ai-badge">
-            <i class="fas fa-robot"></i> AI-Powered
-          </span>
-        </h2>
-      </div>
-      <form id="search-form">
-        <input type="text" id="search-input" placeholder="Search the web intelligently (e.g., উদাহরণ, technology, news)..." autocomplete="off">
-        <button type="submit">
-          <i class="fas fa-search"></i> Search
-        </button>
-      </form>
-      <div class="advanced-toggle" id="advancedToggle">
-        <i class="fas fa-chevron-down"></i>
-        <span>Advanced Search Options</span>
-      </div>
-      <div class="advanced-search" id="advancedSearch">
-        <div class="advanced-options">
-          <div class="filter-group">
-            <label for="contentType">Content Type</label>
-            <select id="contentType">
-              <option value="all">All Types</option>
-              <option value="websites">Websites</option>
-              <option value="images">Images</option>
-              <option value="videos">Videos</option>
-              <option value="documents">Documents</option>
-              <option value="tools">Online Tools</option>
-            </select>
-          </div>
-          <div class="filter-group">
-            <label for="dateRange">Date Range</label>
-            <select id="dateRange">
-              <option value="any">Any Time</option>
-              <option value="day">Past 24 Hours</option>
-              <option value="week">Past Week</option>
-              <option value="month">Past Month</option>
-              <option value="year">Past Year</option>
-            </select>
-          </div>
-          <div class="filter-group">
-            <label for="sortBy">Sort By</label>
-            <select id="sortBy">
-              <option value="relevance">Relevance</option>
-              <option value="date">Date</option>
-              <option value="popularity">Popularity</option>
-            </select>
-          </div>
-        </div>
-        <div class="date-filters">
-          <div class="filter-group">
-            <label for="dateFrom">From Date</label>
-            <input type="date" id="dateFrom">
-          </div>
-          <div class="filter-group">
-            <label for="dateTo">To Date</label>
-            <input type="date" id="dateTo">
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Filter Tabs (Categories) -->
-    <div class="filter-tabs">
-      <button class="filter-tab active" data-filter="all">
-        <i class="fas fa-globe"></i> All
-      </button>
-      <button class="filter-tab" data-filter="websites">
-        <i class="fas fa-window-maximize"></i> Websites
-      </button>
-      <button class="filter-tab" data-filter="images">
-        <i class="fas fa-image"></i> Images
-      </button>
-      <button class="filter-tab" data-filter="videos">
-        <i class="fas fa-video"></i> Videos
-      </button>
-      <button class="filter-tab" data-filter="documents">
-        <i class="fas fa-file-alt"></i> Documents
-      </button>
-      <button class="filter-tab" data-filter="tools">
-        <i class="fas fa-wrench"></i> Tools
-      </button>
-    </div>
-
-    <!-- AI Insights Section -->
-    <div class="ai-insights" id="aiInsights" style="display: none;">
-      <h3><i class="fas fa-lightbulb"></i> AI Insights</h3>
-      <div id="insightsContent"></div>
-    </div>
-
-    <!-- Results Section -->
-    <section class="results-section">
-      <div class="results-header">
-        <div class="results-count" id="resultsCount">Searching...</div>
-        <div class="sort-options">
-          <select id="sortOptions">
-            <option value="relevance">Sort by Relevance</option>
-            <option value="date">Sort by Date</option>
-            <option value="popularity">Sort by Popularity</option>
-          </select>
-        </div>
-      </div>
-      <div id="results">
-        <div class="loading">
-          <div class="spinner"></div>
-          <p>Initializing Nirobo Search Engine...</p>
-        </div>
-      </div>
-      <div id="pagination" class="pagination"></div>
-    </section>
-
-    <!-- Submit URL Button at the Bottom -->
-    <div style="text-align: center; margin: 40px 0 20px;">
-      <a href="signup.html" class="submit-button" style="display: inline-flex; align-items: center; gap: 10px; padding: 15px 30px; background: var(--primary); color: white; text-decoration: none; border-radius: 30px; font-weight: bold; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(0, 100, 0, 0.3);">
-        <i class="fas fa-plus-circle"></i> Submit Your URL
-      </a>
-      <p style="margin-top: 15px; font-size: 0.9rem; color: var(--text-secondary);">
-        Help us expand our index by submitting quality websites.
-      </p>
-    </div>
-
-    <footer>
-      <p>Made in Bangladesh 🇧🇩 | Curated by Nirobo</p>
-      <p>Honoring the Language Movement and the Silent Legacy of Justice</p>
-      <p>Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity</p>
-      <p><a href="/">← Back to Nirobo</a></p>
-    </footer>
-  </div>
 </body>
 </html>
