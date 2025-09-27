@@ -7,6 +7,8 @@
   <!-- Add Fuse.js library for fuzzy search -->
   <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Add Bangla Calendar Library -->
+  <script src="https://cdn.jsdelivr.net/npm/date-bn@1.0.0/dist/date-bn.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
@@ -37,7 +39,7 @@
     .container {
       max-width: 1200px;
       margin: 0 auto;
-      position: relative;
+      position: relative; /* Crucial for absolute positioning of the tools button */
     }
     /* Header Styles */
     header {
@@ -80,254 +82,6 @@
       box-shadow: 0 0 20px rgba(0, 128, 0, 0.7);
       transform: scale(1.1);
     }
-    /* --- TOOLS POPUP OVERLAY --- */
-    #toolsPopupOverlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      display: none; /* Hidden by default */
-      justify-content: center;
-      align-items: center;
-      z-index: 2000; /* High z-index to overlay everything */
-    }
-    /* --- TOOLS POPUP --- */
-    #toolsPopup {
-      position: relative; /* Allows internal dragging */
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 15px;
-      padding: 30px;
-      width: 90%;
-      max-width: 600px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-      z-index: 2001; /* Higher than overlay */
-      cursor: move; /* Indicates it's draggable */
-    }
-    #toolsPopupHeader {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 25px;
-      padding-bottom: 15px;
-      border-bottom: 1px solid var(--border);
-    }
-    #toolsPopupTitle {
-      margin: 0;
-      color: var(--accent);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    #closeToolsPopup {
-      background: none;
-      border: none;
-      color: var(--text-secondary);
-      font-size: 1.8rem;
-      cursor: pointer;
-      padding: 0;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      transition: background 0.3s, color 0.3s;
-    }
-    #closeToolsPopup:hover {
-      background: rgba(255, 255, 255, 0.1);
-      color: var(--accent);
-    }
-    /* --- TOOL TABS --- */
-    .tool-tabs {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 25px;
-      flex-wrap: wrap;
-    }
-    .tool-tab {
-      padding: 10px 20px;
-      background: rgba(0, 100, 0, 0.3);
-      color: var(--text);
-      border: none;
-      border-radius: 25px;
-      cursor: pointer;
-      font-size: 0.95rem;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .tool-tab:hover {
-      background: rgba(0, 128, 0, 0.5);
-    }
-    .tool-tab.active {
-      background: var(--accent);
-      color: white;
-      font-weight: bold;
-    }
-    /* --- TOOL PANELS --- */
-    .tool-panel {
-      display: none;
-    }
-    .tool-panel.active {
-      display: block;
-    }
-    /* --- SCIENTIFIC CALCULATOR --- */
-    .calculator-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
-      margin-top: 15px;
-    }
-    .calc-btn {
-      padding: 15px;
-      font-size: 1.2rem;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .calc-btn:hover {
-      background: var(--primary-light);
-    }
-    .calc-display {
-      grid-column: span 5;
-      padding: 15px;
-      font-size: 1.5rem;
-      background: var(--text);
-      color: var(--background);
-      border-radius: 5px;
-      text-align: right;
-      margin-bottom: 10px;
-      overflow-x: auto; /* Allow horizontal scrolling for long expressions */
-    }
-    /* --- CALENDAR --- */
-    .calendar-controls {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-    .calendar-controls button {
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 5px;
-      padding: 8px 15px;
-      cursor: pointer;
-    }
-    .calendar-controls button:hover {
-      background: var(--primary-light);
-    }
-    #calendar-month-year {
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: var(--accent);
-    }
-    .calendar-type-selector {
-      margin-bottom: 15px;
-    }
-    .calendar-type-selector label {
-      margin-right: 10px;
-    }
-    .calendar-type-selector select {
-      padding: 5px;
-      border-radius: 5px;
-      border: 1px solid var(--border);
-      background: rgba(0, 0, 0, 0.3);
-      color: var(--text);
-    }
-    .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 5px;
-    }
-    .calendar-header {
-      text-align: center;
-      font-weight: bold;
-      padding: 10px 0;
-      background: rgba(0, 100, 0, 0.2);
-      border-radius: 5px;
-    }
-    .calendar-day {
-      text-align: center;
-      padding: 10px 0;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .calendar-day:hover {
-      background: rgba(212, 0, 0, 0.1);
-    }
-    .calendar-day.empty {
-      background: transparent;
-      cursor: default;
-    }
-    .calendar-day.today {
-      background: var(--accent);
-      color: white;
-      font-weight: bold;
-    }
-    .calendar-day.other-month {
-      color: #888;
-    }
-    /* --- CONVERTERS --- */
-    .converter-form {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-      align-items: center;
-      margin-bottom: 20px;
-      padding: 15px;
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 10px;
-    }
-    .converter-form input,
-    .converter-form select,
-    .converter-form button {
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-    }
-    .converter-form input,
-    .converter-form select {
-      background: rgba(0, 0, 0, 0.3);
-      color: var(--text);
-      flex: 1;
-      min-width: 100px;
-    }
-    .converter-form button {
-      background: var(--accent);
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-weight: bold;
-      flex: 0 0 auto;
-    }
-    .converter-form button:hover {
-      background: var(--accent-hover);
-    }
-    .converter-result {
-      padding: 15px;
-      background: rgba(0, 100, 200, 0.2);
-      border-radius: 8px;
-      font-weight: bold;
-      text-align: center;
-      font-size: 1.2rem;
-      color: #ff9999;
-    }
-    .currency-note {
-      font-size: 0.8rem;
-      color: var(--text-secondary);
-      margin-top: 10px;
-      text-align: center;
-      font-style: italic;
-    }
     /* Search Section */
     .search-section {
       background: rgba(26, 26, 26, 0.8);
@@ -366,11 +120,10 @@
       display: flex;
       gap: 15px;
       margin-bottom: 25px;
-      position: relative;
     }
     #search-input {
       flex: 1;
-      padding: 15px 60px 15px 20px; /* Extra padding for icons */
+      padding: 15px 20px;
       font-size: 1.1rem;
       border: 2px solid var(--accent);
       border-radius: 30px;
@@ -382,26 +135,6 @@
     #search-input:focus {
       border-color: var(--accent-hover);
       box-shadow: 0 0 15px rgba(212, 0, 0, 0.5);
-    }
-    /* Voice and Image Search Icons */
-    .search-icons {
-      position: absolute;
-      right: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      display: flex;
-      gap: 10px;
-    }
-    .search-icon-btn {
-      background: none;
-      border: none;
-      color: var(--text-secondary);
-      cursor: pointer;
-      font-size: 1.2rem;
-      transition: color 0.3s ease;
-    }
-    .search-icon-btn:hover {
-      color: var(--accent);
     }
     #search-form button {
       padding: 15px 30px;
@@ -461,7 +194,7 @@
       color: var(--text-secondary);
       font-weight: 500;
     }
-    .filter-group select, 
+    .filter-group select,
     .filter-group input {
       width: 100%;
       padding: 10px;
@@ -475,7 +208,7 @@
       grid-template-columns: 1fr 1fr;
       gap: 15px;
     }
-    /* Filter Tabs */
+    /* --- Filter Tabs (Updated Categories) --- */
     .filter-tabs {
       display: flex;
       gap: 12px;
@@ -699,7 +432,7 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-    /* No Results */
+    /* No Results with Animation */
     .no-results {
       text-align: center;
       padding: 60px 20px;
@@ -740,6 +473,256 @@
     }
     footer a:hover {
       text-decoration: underline;
+    }
+    /* --- TOOLS POPUP OVERLAY --- */
+    #toolsPopupOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: none; /* Hidden by default */
+      justify-content: center;
+      align-items: center;
+      z-index: 2000; /* High z-index to overlay everything */
+    }
+    /* --- TOOLS POPUP --- */
+    #toolsPopup {
+      position: relative; /* Allows internal dragging */
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 30px;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      z-index: 2001; /* Higher than overlay */
+      cursor: move; /* Indicates it's draggable */
+    }
+    #toolsPopupHeader {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border);
+    }
+    #toolsPopupTitle {
+      margin: 0;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    #closeToolsPopup {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 1.8rem;
+      cursor: pointer;
+      padding: 0;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: background 0.3s, color 0.3s;
+    }
+    #closeToolsPopup:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--accent);
+    }
+    /* --- TOOL TABS --- */
+    .tool-tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+    .tool-tab {
+      padding: 10px 20px;
+      background: rgba(0, 100, 0, 0.3);
+      color: var(--text);
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tool-tab:hover {
+      background: rgba(0, 128, 0, 0.5);
+    }
+    .tool-tab.active {
+      background: var(--accent);
+      color: white;
+      font-weight: bold;
+    }
+    /* --- TOOL PANELS --- */
+    .tool-panel {
+      display: none;
+    }
+    .tool-panel.active {
+      display: block;
+    }
+    /* --- ENHANCED SCIENTIFIC CALCULATOR --- */
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr); /* 5 columns for more functions */
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .calc-btn {
+      padding: 15px;
+      font-size: 1.1rem; /* Slightly smaller font for more buttons */
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .calc-btn:hover {
+      background: var(--primary-light);
+    }
+    .calc-display {
+      grid-column: span 5; /* Span full width */
+      padding: 15px;
+      font-size: 1.5rem;
+      background: var(--text);
+      color: var(--background);
+      border-radius: 5px;
+      text-align: right;
+      margin-bottom: 10px;
+      overflow-x: auto; /* Allow horizontal scrolling for long expressions */
+    }
+    /* --- CALENDAR --- */
+    .calendar-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .calendar-controls button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 8px 15px;
+      cursor: pointer;
+    }
+    .calendar-controls button:hover {
+      background: var(--primary-light);
+    }
+    #calendar-month-year {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--accent);
+    }
+    .calendar-type-selector {
+      margin-bottom: 15px;
+    }
+    .calendar-type-selector label {
+      margin-right: 10px;
+    }
+    .calendar-type-selector select {
+      padding: 5px;
+      border-radius: 5px;
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.3);
+      color: var(--text);
+    }
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+    }
+    .calendar-header {
+      text-align: center;
+      font-weight: bold;
+      padding: 10px 0;
+      background: rgba(0, 100, 0, 0.2);
+      border-radius: 5px;
+    }
+    .calendar-day {
+      text-align: center;
+      padding: 10px 0;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .calendar-day:hover {
+      background: rgba(212, 0, 0, 0.1);
+    }
+    .calendar-day.empty {
+      background: transparent;
+      cursor: default;
+    }
+    .calendar-day.today {
+      background: var(--accent);
+      color: white;
+      font-weight: bold;
+    }
+    .calendar-day.other-month {
+      color: #888;
+    }
+    /* --- CONVERTERS --- */
+    .converter-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+    }
+    .converter-form input,
+    .converter-form select,
+    .converter-form button {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .converter-form input,
+    .converter-form select {
+      background: rgba(0, 0, 0, 0.3);
+      color: var(--text);
+      flex: 1;
+      min-width: 100px;
+    }
+    .converter-form button {
+      background: var(--accent);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      flex: 0 0 auto;
+      border-radius: 8px; /* Square corners for buttons */
+    }
+    .converter-form button:hover {
+      background: var(--accent-hover);
+    }
+    .converter-result {
+      margin-top: 15px;
+      padding: 15px;
+      background: rgba(0, 100, 200, 0.2);
+      border-radius: 8px;
+      font-weight: bold;
+      text-align: center;
+      font-size: 1.2rem;
+      color: #ff9999;
+    }
+    .currency-note {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-top: 10px;
+      text-align: center;
+      font-style: italic;
     }
     /* Submit URL Button at Bottom */
     .submit-section {
@@ -820,7 +803,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: 
+      background-image:
         radial-gradient(circle at 20% 30%, rgba(212, 0, 0, 0.03) 0%, transparent 15%),
         radial-gradient(circle at 80% 70%, rgba(0, 100, 0, 0.03) 0%, transparent 20%);
       pointer-events: none;
@@ -830,156 +813,6 @@
 </head>
 <body>
   <div class="container">
-    <!-- Tools Button (Top Right Corner) -->
-    <button id="openToolsBtn" title="Open Tools">
-      <i class="fas fa-tools"></i>
-    </button>
-
-    <!-- Tools Popup Overlay -->
-    <div id="toolsPopupOverlay">
-      <!-- Tools Popup -->
-      <div id="toolsPopup">
-        <div id="toolsPopupHeader">
-          <h3 id="toolsPopupTitle"><i class="fas fa-tools"></i> Nirobo Tools</h3>
-          <button id="closeToolsPopup">&times;</button>
-        </div>
-        <!-- Tool Tabs -->
-        <div class="tool-tabs">
-          <button class="tool-tab active" data-tool="calculator">
-            <i class="fas fa-calculator"></i> Calculator
-          </button>
-          <button class="tool-tab" data-tool="calendar">
-            <i class="fas fa-calendar-alt"></i> Calendar
-          </button>
-          <button class="tool-tab" data-tool="converter">
-            <i class="fas fa-exchange-alt"></i> Unit Converter
-          </button>
-          <button class="tool-tab" data-tool="currency">
-            <i class="fas fa-money-bill-wave"></i> Currency Converter
-          </button>
-        </div>
-        <!-- Tool Content Area -->
-        <div class="tool-content">
-          <!-- Calculator Tool -->
-          <div id="tool-calculator" class="tool-panel active">
-            <h4><i class="fas fa-calculator"></i> Scientific Calculator</h4>
-            <div class="calculator-grid">
-              <div class="calc-display" id="calcDisplay">0</div>
-              <button class="calc-btn" onclick="clearCalc()">C</button>
-              <button class="calc-btn" onclick="deleteLastCalc()">⌫</button>
-              <button class="calc-btn" onclick="appendToCalc('/')">/</button>
-              <button class="calc-btn" onclick="appendToCalc('*')">×</button>
-              
-              <button class="calc-btn" onclick="appendToCalc('7')">7</button>
-              <button class="calc-btn" onclick="appendToCalc('8')">8</button>
-              <button class="calc-btn" onclick="appendToCalc('9')">9</button>
-              <button class="calc-btn" onclick="appendToCalc('-')">-</button>
-              <button class="calc-btn" onclick="appendFunction('sin')">sin</button>
-              
-              <button class="calc-btn" onclick="appendToCalc('4')">4</button>
-              <button class="calc-btn" onclick="appendToCalc('5')">5</button>
-              <button class="calc-btn" onclick="appendToCalc('6')">6</button>
-              <button class="calc-btn" onclick="appendToCalc('+')">+</button>
-              <button class="calc-btn" onclick="appendFunction('cos')">cos</button>
-              
-              <button class="calc-btn" onclick="appendToCalc('1')">1</button>
-              <button class="calc-btn" onclick="appendToCalc('2')">2</button>
-              <button class="calc-btn" onclick="appendToCalc('3')">3</button>
-              <button class="calc-btn" onclick="appendFunction('tan')">tan</button>
-              <button class="calc-btn" onclick="appendFunction('log')">log</button>
-              
-              <button class="calc-btn" onclick="appendToCalc('0')" colspan="2">0</button>
-              <button class="calc-btn" onclick="appendToCalc('.')">.</button>
-              <button class="calc-btn" onclick="appendFunction('sqrt')">√</button>
-              <button class="calc-btn" onclick="calculateCalc()" rowspan="2">=</button>
-            </div>
-          </div>
-
-          <!-- Calendar Tool -->
-          <div id="tool-calendar" class="tool-panel">
-            <h4><i class="fas fa-calendar-alt"></i> Calendar</h4>
-            <div class="calendar-controls">
-              <button onclick="changeCalendarMonth(-1)"><i class="fas fa-chevron-left"></i></button>
-              <span id="calendar-month-year">Loading...</span>
-              <button onclick="changeCalendarMonth(1)"><i class="fas fa-chevron-right"></i></button>
-            </div>
-            <div class="calendar-type-selector">
-              <label for="calendar-type">Calendar Type:</label>
-              <select id="calendar-type" onchange="updateCalendar()">
-                <option value="gregorian">Gregorian</option>
-                <option value="bengali">Bengali (Bangla)</option>
-                <!-- Add more calendar types here -->
-              </select>
-            </div>
-            <div id="calendar-grid" class="calendar-grid">
-              <!-- Calendar will be generated by JS -->
-            </div>
-          </div>
-
-          <!-- Unit Converter Tool -->
-          <div id="tool-converter" class="tool-panel">
-            <h4><i class="fas fa-exchange-alt"></i> Unit Converter</h4>
-            <div class="converter-form">
-              <input type="number" id="converter-input" placeholder="Enter value" step="any">
-              <select id="converter-from-unit">
-                <option value="meter">Meter</option>
-                <option value="kilometer">Kilometer</option>
-                <option value="centimeter">Centimeter</option>
-                <option value="millimeter">Millimeter</option>
-                <option value="inch">Inch</option>
-                <option value="foot">Foot</option>
-                <option value="yard">Yard</option>
-                <option value="mile">Mile</option>
-                <!-- Add more length units -->
-              </select>
-              <span>to</span>
-              <select id="converter-to-unit">
-                <option value="kilometer">Kilometer</option>
-                <option value="meter">Meter</option>
-                <option value="centimeter">Centimeter</option>
-                <option value="millimeter">Millimeter</option>
-                <option value="inch">Inch</option>
-                <option value="foot">Foot</option>
-                <option value="yard">Yard</option>
-                <option value="mile">Mile</option>
-                <!-- Add more length units -->
-              </select>
-              <button onclick="convertUnits()">Convert</button>
-            </div>
-            <div id="converter-result" class="converter-result">Result will appear here</div>
-          </div>
-
-          <!-- Currency Converter Tool -->
-          <div id="tool-currency" class="tool-panel">
-            <h4><i class="fas fa-money-bill-wave"></i> Currency Converter</h4>
-            <div class="converter-form">
-              <input type="number" id="currency-input" placeholder="Enter amount" step="0.01">
-              <select id="currency-from">
-                <option value="USD">USD</option>
-                <option value="EUR">EUR</option>
-                <option value="GBP">GBP</option>
-                <option value="BDT" selected>BDT</option>
-                <option value="INR">INR</option>
-                <!-- Add more currencies -->
-              </select>
-              <span>to</span>
-              <select id="currency-to">
-                <option value="BDT" selected>BDT</option>
-                <option value="USD">USD</option>
-                <option value="EUR">EUR</option>
-                <option value="GBP">GBP</option>
-                <option value="INR">INR</option>
-                <!-- Add more currencies -->
-              </select>
-              <button onclick="convertCurrency()">Convert</button>
-            </div>
-            <div id="currency-result" class="converter-result">Result will appear here</div>
-            <div class="currency-note">(Rates are simulated. For real-time rates, connect to an API.)</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <header>
       <div class="logo">
         <i class="fas fa-brain"></i> NIROBO
@@ -987,6 +820,11 @@
       <div class="tagline">"Intelligent URL Discovery Powered by AI"</div>
       <a href="/" style="color: #ff9999; text-decoration: none;">← Back to Nirobo</a>
     </header>
+
+    <!-- --- TOOLS BUTTON (Top Right Corner) --- -->
+    <button id="openToolsBtn" title="Open Tools">
+      <i class="fas fa-tools"></i>
+    </button>
 
     <!-- Search Section -->
     <section class="search-section">
@@ -1000,14 +838,6 @@
       </div>
       <form id="search-form">
         <input type="text" id="search-input" placeholder="Search the web intelligently (e.g., উদাহরণ, technology, news)..." autocomplete="off">
-        <div class="search-icons">
-          <button type="button" class="search-icon-btn" id="voiceSearchBtn" title="Voice Search">
-            <i class="fas fa-microphone"></i>
-          </button>
-          <button type="button" class="search-icon-btn" id="imageSearchBtn" title="Image Search">
-            <i class="fas fa-camera"></i>
-          </button>
-        </div>
         <button type="submit">
           <i class="fas fa-search"></i> Search
         </button>
@@ -1061,7 +891,7 @@
       </div>
     </section>
 
-    <!-- Filter Tabs -->
+    <!-- Filter Tabs (Updated Categories) -->
     <div class="filter-tabs">
       <button class="filter-tab active" data-filter="all">
         <i class="fas fa-globe"></i> All
@@ -1119,6 +949,157 @@
     </footer>
   </div>
 
+  <!-- --- TOOLS POPUP OVERLAY --- -->
+  <div id="toolsPopupOverlay">
+    <!-- Tools Popup -->
+    <div id="toolsPopup">
+      <div id="toolsPopupHeader">
+        <h3 id="toolsPopupTitle"><i class="fas fa-tools"></i> Nirobo Tools</h3>
+        <button id="closeToolsPopup">&times;</button>
+      </div>
+      <!-- Tool Tabs -->
+      <div class="tool-tabs">
+        <button class="tool-tab active" data-tool="calculator">
+          <i class="fas fa-calculator"></i> Calculator
+        </button>
+        <button class="tool-tab" data-tool="calendar">
+          <i class="fas fa-calendar-alt"></i> Calendar
+        </button>
+        <button class="tool-tab" data-tool="converter">
+          <i class="fas fa-exchange-alt"></i> Unit Converter
+        </button>
+        <button class="tool-tab" data-tool="currency">
+          <i class="fas fa-money-bill-wave"></i> Currency Converter
+        </button>
+      </div>
+      <!-- Tool Content Area -->
+      <div class="tool-content">
+        <!-- Calculator Tool -->
+        <div id="tool-calculator" class="tool-panel active">
+          <h4><i class="fas fa-calculator"></i> Enhanced Scientific Calculator</h4>
+          <div class="calculator-grid">
+            <div class="calc-display" id="calcDisplay">0</div>
+            <button class="calc-btn" onclick="clearCalc()">C</button>
+            <button class="calc-btn" onclick="deleteLastCalc()">⌫</button>
+            <button class="calc-btn" onclick="appendToCalc('(')">(</button>
+            <button class="calc-btn" onclick="appendToCalc(')')">)</button>
+            
+            <button class="calc-btn" onclick="appendFunction('sin')">sin</button>
+            <button class="calc-btn" onclick="appendFunction('cos')">cos</button>
+            <button class="calc-btn" onclick="appendFunction('tan')">tan</button>
+            <button class="calc-btn" onclick="appendToCalc('^')">x^y</button>
+            <button class="calc-btn" onclick="appendToCalc('/')">/</button>
+            
+            <button class="calc-btn" onclick="appendToCalc('7')">7</button>
+            <button class="calc-btn" onclick="appendToCalc('8')">8</button>
+            <button class="calc-btn" onclick="appendToCalc('9')">9</button>
+            <button class="calc-btn" onclick="appendFunction('log')">log</button>
+            <button class="calc-btn" onclick="appendToCalc('*')">×</button>
+            
+            <button class="calc-btn" onclick="appendToCalc('4')">4</button>
+            <button class="calc-btn" onclick="appendToCalc('5')">5</button>
+            <button class="calc-btn" onclick="appendToCalc('6')">6</button>
+            <button class="calc-btn" onclick="appendFunction('ln')">ln</button>
+            <button class="calc-btn" onclick="appendToCalc('-')">-</button>
+            
+            <button class="calc-btn" onclick="appendToCalc('1')">1</button>
+            <button class="calc-btn" onclick="appendToCalc('2')">2</button>
+            <button class="calc-btn" onclick="appendToCalc('3')">3</button>
+            <button class="calc-btn" onclick="appendFunction('sqrt')">√</button>
+            <button class="calc-btn" onclick="appendToCalc('+')">+</button>
+            
+            <button class="calc-btn" onclick="appendToCalc('0')" colspan="2">0</button>
+            <button class="calc-btn" onclick="appendToCalc('.')">.</button>
+            <button class="calc-btn" onclick="appendFunction('pi')">π</button>
+            <button class="calc-btn" onclick="calculateCalc()" rowspan="2">=</button>
+          </div>
+        </div>
+
+        <!-- Calendar Tool -->
+        <div id="tool-calendar" class="tool-panel">
+          <h4><i class="fas fa-calendar-alt"></i> Calendar</h4>
+          <div class="calendar-controls">
+            <button onclick="changeCalendarMonth(-1)"><i class="fas fa-chevron-left"></i></button>
+            <span id="calendar-month-year">Loading...</span>
+            <button onclick="changeCalendarMonth(1)"><i class="fas fa-chevron-right"></i></button>
+          </div>
+          <div class="calendar-type-selector">
+            <label for="calendar-type">Calendar Type:</label>
+            <select id="calendar-type" onchange="updateCalendar()">
+              <option value="gregorian">Gregorian</option>
+              <option value="bengali">Bengali (Bangla)</option>
+              <!-- Add more calendar types here -->
+            </select>
+          </div>
+          <div id="calendar-grid" class="calendar-grid">
+            <!-- Calendar will be generated by JS -->
+          </div>
+        </div>
+
+        <!-- Unit Converter Tool -->
+        <div id="tool-converter" class="tool-panel">
+          <h4><i class="fas fa-exchange-alt"></i> Unit Converter</h4>
+          <div class="converter-form">
+            <input type="number" id="converter-input" placeholder="Enter value" step="any">
+            <select id="converter-from-unit">
+              <option value="meter">Meter</option>
+              <option value="kilometer">Kilometer</option>
+              <option value="centimeter">Centimeter</option>
+              <option value="millimeter">Millimeter</option>
+              <option value="inch">Inch</option>
+              <option value="foot">Foot</option>
+              <option value="yard">Yard</option>
+              <option value="mile">Mile</option>
+              <!-- Add more length units -->
+            </select>
+            <span>to</span>
+            <select id="converter-to-unit">
+              <option value="kilometer">Kilometer</option>
+              <option value="meter">Meter</option>
+              <option value="centimeter">Centimeter</option>
+              <option value="millimeter">Millimeter</option>
+              <option value="inch">Inch</option>
+              <option value="foot">Foot</option>
+              <option value="yard">Yard</option>
+              <option value="mile">Mile</option>
+              <!-- Add more length units -->
+            </select>
+            <button onclick="convertUnits()">Convert</button>
+          </div>
+          <div id="converter-result" class="converter-result">Result will appear here</div>
+        </div>
+
+        <!-- Currency Converter Tool -->
+        <div id="tool-currency" class="tool-panel">
+          <h4><i class="fas fa-money-bill-wave"></i> Currency Converter</h4>
+          <div class="converter-form">
+            <input type="number" id="currency-input" placeholder="Enter amount" step="0.01">
+            <select id="currency-from">
+              <option value="USD">USD</option>
+              <option value="EUR">EUR</option>
+              <option value="GBP">GBP</option>
+              <option value="BDT" selected>BDT</option>
+              <option value="INR">INR</option>
+              <!-- Add more currencies -->
+            </select>
+            <span>to</span>
+            <select id="currency-to">
+              <option value="BDT" selected>BDT</option>
+              <option value="USD">USD</option>
+              <option value="EUR">EUR</option>
+              <option value="GBP">GBP</option>
+              <option value="INR">INR</option>
+              <!-- Add more currencies -->
+            </select>
+            <button onclick="convertCurrency()">Convert</button>
+          </div>
+          <div id="currency-result" class="converter-result">Result will appear here</div>
+          <div class="currency-note">(Rates are from ECB and updated daily. For real-time rates, connect to an API.)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     // --- Configuration ---
     const RESULTS_PER_PAGE = 10;
@@ -1146,9 +1127,6 @@
     const toolsPopup = document.getElementById('toolsPopup');
     const toolTabs = document.querySelectorAll('.tool-tab');
     const toolPanels = document.querySelectorAll('.tool-panel');
-    // --- Voice & Image Search Buttons ---
-    const voiceSearchBtn = document.getElementById('voiceSearchBtn');
-    const imageSearchBtn = document.getElementById('imageSearchBtn');
     // --- Helper Functions ---
     // Get favicon URL
     function getFaviconUrl(url) {
@@ -1170,7 +1148,7 @@
         });
       }
       // Content type insights
-      const videoCount = results.filter(r => 
+      const videoCount = results.filter(r =>
         r.url.includes('youtube') || r.url.includes('youtu.be') || (Array.isArray(r.tags) && r.tags.includes('video'))
       ).length;
       if (videoCount > results.length * 0.3) {
@@ -1308,7 +1286,7 @@
           (item.title && item.title.toLowerCase().includes(lowerQuery)) ||
           (item.description && item.description.toLowerCase().includes(lowerQuery)) ||
           (item.url && item.url.toLowerCase().includes(lowerQuery)) ||
-          (Array.isArray(item.tags) && item.tags.some(tag => 
+          (Array.isArray(item.tags) && item.tags.some(tag =>
             tag && tag.toLowerCase().includes(lowerQuery)
           ))
         );
@@ -1321,23 +1299,23 @@
           const itemCategory = item.category ? item.category.toLowerCase() : 'websites'; // Default category
           switch(filterType) {
             case 'images':
-              return urlLower.includes('image') || 
-                     urlLower.includes('img') || 
-                     tagsLower.includes('image') || 
+              return urlLower.includes('image') ||
+                     urlLower.includes('img') ||
+                     tagsLower.includes('image') ||
                      tagsLower.includes('photo') ||
                      itemCategory === 'images'; // Respect explicit category
             case 'videos':
-              return urlLower.includes('youtube') || 
-                     urlLower.includes('youtu.be') || 
-                     urlLower.includes('vimeo') || 
-                     tagsLower.includes('video') || 
+              return urlLower.includes('youtube') ||
+                     urlLower.includes('youtu.be') ||
+                     urlLower.includes('vimeo') ||
+                     tagsLower.includes('video') ||
                      tagsLower.includes('media') ||
                      itemCategory === 'videos'; // Respect explicit category
             case 'documents':
-              return urlLower.includes('.pdf') || 
-                     urlLower.includes('.doc') || 
-                     urlLower.includes('.txt') || 
-                     tagsLower.includes('document') || 
+              return urlLower.includes('.pdf') ||
+                     urlLower.includes('.doc') ||
+                     urlLower.includes('.txt') ||
+                     tagsLower.includes('document') ||
                      tagsLower.includes('pdf') ||
                      itemCategory === 'documents'; // Respect explicit category
             case 'tools':
@@ -1350,9 +1328,9 @@
                       itemCategory === 'tools'; // Respect explicit category
             case 'websites':
               // Exclude items explicitly categorized as images, videos, docs, or tools
-              return !(itemCategory === 'images' || 
-                      itemCategory === 'videos' || 
-                      itemCategory === 'documents' || 
+              return !(itemCategory === 'images' ||
+                      itemCategory === 'videos' ||
+                      itemCategory === 'documents' ||
                       itemCategory === 'tools');
             default:
               return true;
@@ -1534,6 +1512,27 @@
     function updateResultsCount(total) {
       resultsCount.textContent = `About ${total} results (${(Math.random() * 0.5 + 0.1).toFixed(2)} seconds)`;
     }
+    // Show AI insights
+    function showAIInsights(searchQuery, results) {
+      const insights = generateAIInsights(searchQuery, results);
+      if (insights.length > 0) {
+        // Assuming you have an element for AI insights
+        const aiInsights = document.getElementById('aiInsights');
+        const insightsContent = document.getElementById('insightsContent');
+        if (aiInsights && insightsContent) {
+            aiInsights.style.display = 'block';
+            insightsContent.innerHTML = insights.map(insight => `
+              <div class="insight-item">
+                <h4><i class="fas fa-robot"></i> ${insight.title}</h4>
+                <p>${insight.content}</p>
+              </div>
+            `).join('');
+        }
+      } else {
+        const aiInsights = document.getElementById('aiInsights');
+        if (aiInsights) aiInsights.style.display = 'none';
+      }
+    }
     // --- Calculator Functions ---
     let displayValue = '0';
     const calcDisplay = document.getElementById('calcDisplay');
@@ -1563,8 +1562,8 @@
     }
 
     function appendFunction(func) {
-        // For functions like sin, cos, tan, log, sqrt, we'll evaluate them immediately
-        // and replace the display value with the result.
+        // For functions like sin, cos, tan, log, ln, sqrt, pi
+        // We'll evaluate them immediately and replace the display value with the result.
         try {
             let num = parseFloat(displayValue);
             let result;
@@ -1572,8 +1571,16 @@
                 case 'sin': result = Math.sin(num * Math.PI / 180); break; // Assuming degrees
                 case 'cos': result = Math.cos(num * Math.PI / 180); break;
                 case 'tan': result = Math.tan(num * Math.PI / 180); break;
-                case 'log': result = Math.log10(num); break;
+                case 'log': result = Math.log10(num); break; // Base 10 log
+                case 'ln': result = Math.log(num); break; // Natural log
                 case 'sqrt': result = Math.sqrt(num); break;
+                case 'pi':
+                    // Append pi constant to the expression
+                    if (displayValue === '0') displayValue = '';
+                    displayValue += Math.PI.toString();
+                    updateDisplay();
+                    return;
+                // Add more functions as needed (e.g., x^2, x^3, 1/x, etc.)
                 default: result = num;
             }
             displayValue = result.toString();
@@ -1670,12 +1677,12 @@
                                          "July", "August", "September", "October", "November", "December"];
             const bengaliMonthNames = ["Boishakh", "Jyaishtha", "Aashaadh", "Shraavana", "Bhaadra", "Aashwina",
                                        "Kaarthika", "Agrahayana", "Pausha", "Maagha", "Phaalguna", "Chaaitra"];
-            
+
             // This is a very rough approximation and not accurate.
             // You would need a proper Bengali calendar conversion library.
             const bengaliMonthIndex = (date.getMonth() + 4) % 12; // Simplified mapping
             const bengaliYear = date.getFullYear() - 594; // Rough estimate
-            
+
             monthYear.textContent = `${bengaliMonthNames[bengaliMonthIndex]}, ${bengaliYear} (Gregorian: ${gregorianMonthNames[date.getMonth()]} ${date.getFullYear()})`;
 
             // Show a message instead of a full calendar grid for now
@@ -1725,8 +1732,8 @@
         resultElement.textContent = `${inputValue} ${fromUnit} = ${convertedValue.toFixed(6)} ${toUnit}`;
         resultElement.style.color = '#00aa00'; // Success color
     }
-    // --- Currency Converter Function ---
-    function convertCurrency() {
+    // --- Currency Converter Function (Using ECB Daily Rates) ---
+    async function convertCurrency() {
         const amount = parseFloat(document.getElementById('currency-input').value);
         const fromCurrency = document.getElementById('currency-from').value;
         const toCurrency = document.getElementById('currency-to').value;
@@ -1738,22 +1745,91 @@
             return;
         }
 
-        // Simulated exchange rates (in a real app, fetch from an API)
-        const rates = {
-            USD: { BDT: 109.5, EUR: 0.93, GBP: 0.79, JPY: 152.2, INR: 83.5 },
-            BDT: { USD: 0.0091, EUR: 0.0085, GBP: 0.0072, JPY: 1.39, INR: 0.76 },
-            EUR: { USD: 1.08, BDT: 117.8, GBP: 0.85, JPY: 160.8, INR: 89.8 },
-            GBP: { USD: 1.27, BDT: 138.6, EUR: 1.18, JPY: 189.2, INR: 105.7 },
-            JPY: { USD: 0.0066, BDT: 0.73, EUR: 0.0062, GBP: 0.0053, INR: 0.56 },
-            INR: { USD: 0.012, BDT: 1.31, EUR: 0.011, GBP: 0.0095, JPY: 1.79 }
-        };
+        resultElement.textContent = 'Fetching latest rates from ECB...';
+        resultElement.style.color = '#888';
 
-        if (rates[fromCurrency] && rates[fromCurrency][toCurrency]) {
-            const result = (amount * rates[fromCurrency][toCurrency]).toFixed(2);
-            resultElement.textContent = `${amount} ${fromCurrency} = ${result} ${toCurrency}`;
+        try {
+            // Fetch daily rates from ECB (updated around 4 PM CET on working days)
+            // More info: https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html
+            const response = await fetch('https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml');
+
+            if (!response.ok) {
+                throw new Error(`ECB API error: ${response.status}`);
+            }
+
+            const xmlText = await response.text();
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(xmlText, "application/xml");
+
+            // Parse XML to build rates object (relative to EUR)
+            const rates = { 'EUR': 1.0 }; // Base currency
+            const cubes = xmlDoc.getElementsByTagName('Cube');
+            for (let i = 0; i < cubes.length; i++) {
+                const currency = cubes[i].getAttribute('currency');
+                const rate = cubes[i].getAttribute('rate');
+                if (currency && rate) {
+                    rates[currency] = parseFloat(rate);
+                }
+            }
+
+            console.log("ECB Rates Loaded:", rates);
+
+            if (!(fromCurrency in rates) || !(toCurrency in rates)) {
+                 // Special handling for BDT if not in ECB list
+                 if (fromCurrency === 'BDT' || toCurrency === 'BDT') {
+                     // Use a fixed, approximate rate for BDT as an example
+                     // *** IMPORTANT: This rate is NOT REAL-TIME and will be outdated ***
+                     // You would ideally fetch BDT rate from a Bangladeshi financial source if possible
+                     const BDT_TO_USD_APPROX = 0.0091; // Example fixed rate (1 BDT ≈ 0.0091 USD)
+                     const USD_TO_EUR = 1 / rates['USD']; // Convert USD rate to EUR/USD
+
+                     if (fromCurrency === 'BDT' && toCurrency === 'EUR') {
+                         const eurAmount = amount * BDT_TO_USD_APPROX * USD_TO_EUR;
+                         resultElement.textContent = `${amount.toFixed(2)} ${fromCurrency} ≈ ${eurAmount.toFixed(4)} ${toCurrency} (Using approx. BDT rate & ECB EUR/USD)`;
+                         resultElement.style.color = '#00aa00';
+                         return;
+                     } else if (fromCurrency === 'EUR' && toCurrency === 'BDT') {
+                         const usdAmount = amount * rates['USD']; // Convert EUR to USD using ECB
+                         const bdtAmount = usdAmount / BDT_TO_USD_APPROX;
+                         resultElement.textContent = `${amount.toFixed(2)} ${fromCurrency} ≈ ${bdtAmount.toFixed(2)} ${toCurrency} (Using ECB EUR/USD & approx. BDT rate)`;
+                         resultElement.style.color = '#00aa00';
+                         return;
+                     } else if (fromCurrency === 'BDT' && toCurrency === 'USD') {
+                         const usdAmount = amount * BDT_TO_USD_APPROX;
+                         resultElement.textContent = `${amount.toFixed(2)} ${fromCurrency} ≈ ${usdAmount.toFixed(4)} ${toCurrency} (Using approx. BDT rate)`;
+                         resultElement.style.color = '#00aa00';
+                         return;
+                     } else if (fromCurrency === 'USD' && toCurrency === 'BDT') {
+                         const bdtAmount = amount / BDT_TO_USD_APPROX;
+                         resultElement.textContent = `${amount.toFixed(2)} ${fromCurrency} ≈ ${bdtAmount.toFixed(2)} ${toCurrency} (Using approx. BDT rate)`;
+                         resultElement.style.color = '#00aa00';
+                         return;
+                     }
+                 }
+                 resultElement.textContent = 'Exchange rate not available for selected currencies.';
+                 resultElement.style.color = '#ff9999';
+                 return;
+            }
+
+            // Convert via EUR
+            // amount USD -> EUR -> BDT
+            let convertedAmount;
+            if (fromCurrency === 'EUR') {
+                convertedAmount = amount * rates[toCurrency];
+            } else if (toCurrency === 'EUR') {
+                convertedAmount = amount / rates[fromCurrency];
+            } else {
+                // Convert to EUR first, then to target currency
+                const amountInEUR = amount / rates[fromCurrency];
+                convertedAmount = amountInEUR * rates[toCurrency];
+            }
+
+            resultElement.textContent = `${amount.toFixed(2)} ${fromCurrency} = ${convertedAmount.toFixed(4)} ${toCurrency}`;
             resultElement.style.color = '#00aa00'; // Success color
-        } else {
-            resultElement.textContent = 'Conversion rate not available.';
+
+        } catch (error) {
+            console.error("Currency conversion error:", error);
+            resultElement.textContent = `Error fetching rates: ${error.message}`;
             resultElement.style.color = '#ff9999';
         }
     }
@@ -1782,6 +1858,7 @@
         renderResults(pageResults);
         renderPagination(totalPages);
         updateResultsCount(sortedResults.length);
+        showAIInsights(query, sortedResults);
       });
     });
     // Sort options
@@ -1800,7 +1877,7 @@
       const pageResults = sortedResults.slice(startIndex, endIndex);
       renderResults(pageResults);
       renderPagination(totalPages);
-      updateResultsCount(sortedResults.length);
+      showAIInsights(query, sortedResults);
     });
     // Search form submission
     searchForm.addEventListener("submit", async (e) => {
@@ -1840,6 +1917,7 @@
         renderResults(pageResults);
         renderPagination(totalPages);
         updateResultsCount(sortedResults.length);
+        showAIInsights(query, sortedResults);
         // Update URL
         const url = new URL(window.location);
         url.searchParams.set('q', query);
@@ -1881,15 +1959,7 @@ Reporter Info:
         alert('📬 A report email draft has been opened. Please review and send it to infinitealphas0602@outlook.com');
       }
     });
-    // Voice Search Handler (Placeholder)
-    voiceSearchBtn.addEventListener('click', () => {
-      alert('🎙️ Voice search is a planned feature. It requires integration with browser speech recognition APIs and a backend service for processing.');
-    });
-    // Image Search Handler (Placeholder)
-    imageSearchBtn.addEventListener('click', () => {
-      alert('📸 Image search is a planned feature. It requires integration with image recognition APIs and a backend service for processing.');
-    });
-    // --- Tools Popup Functionality ---
+    // --- TOOLS POPUP FUNCTIONALITY ---
     // Open Tools Popup
     openToolsBtn.addEventListener('click', () => {
       toolsPopupOverlay.style.display = 'flex';
