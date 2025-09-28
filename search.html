@@ -7,8 +7,6 @@
   <!-- Add Fuse.js library for fuzzy search -->
   <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Add Bangla Calendar Library -->
-  <script src="https://cdn.jsdelivr.net/npm/date-bn@1.0.0/dist/date-bn.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
@@ -39,7 +37,7 @@
     .container {
       max-width: 1200px;
       margin: 0 auto;
-      position: relative; /* Crucial for absolute positioning of the tools button */
+      position: relative; /* For positioning the tools button */
     }
     /* Header Styles */
     header {
@@ -59,28 +57,6 @@
       color: #ffcccc;
       font-style: italic;
       margin-bottom: 20px;
-    }
-    /* --- TOOLS BUTTON (Top Right Corner) --- */
-    #openToolsBtn {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      font-size: 1.5rem;
-      cursor: pointer;
-      box-shadow: 0 0 15px rgba(0, 100, 0, 0.5);
-      z-index: 100;
-      transition: all 0.3s ease;
-    }
-    #openToolsBtn:hover {
-      background: var(--primary-light);
-      box-shadow: 0 0 20px rgba(0, 128, 0, 0.7);
-      transform: scale(1.1);
     }
     /* Search Section */
     .search-section {
@@ -208,7 +184,7 @@
       grid-template-columns: 1fr 1fr;
       gap: 15px;
     }
-    /* --- Filter Tabs (Updated Categories) --- */
+    /* Filter Tabs */
     .filter-tabs {
       display: flex;
       gap: 12px;
@@ -473,6 +449,28 @@
     }
     footer a:hover {
       text-decoration: underline;
+    }
+    /* --- TOOLS BUTTON (Top Right Corner) --- */
+    #openToolsBtn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(0, 100, 0, 0.5);
+      z-index: 100;
+      transition: all 0.3s ease;
+    }
+    #openToolsBtn:hover {
+      background: var(--primary-light);
+      box-shadow: 0 0 20px rgba(0, 128, 0, 0.7);
+      transform: scale(1.1);
     }
     /* --- TOOLS POPUP OVERLAY --- */
     #toolsPopupOverlay {
@@ -819,13 +817,11 @@
       </div>
       <div class="tagline">"Intelligent URL Discovery Powered by AI"</div>
       <a href="/" style="color: #ff9999; text-decoration: none;">← Back to Nirobo</a>
+      <!-- Tools Button (Top Right Corner) -->
+      <button id="openToolsBtn" title="Open Tools">
+        <i class="fas fa-tools"></i>
+      </button>
     </header>
-
-    <!-- --- TOOLS BUTTON (Top Right Corner) --- -->
-    <button id="openToolsBtn" title="Open Tools">
-      <i class="fas fa-tools"></i>
-    </button>
-
     <!-- Search Section -->
     <section class="search-section">
       <div class="search-header">
@@ -890,7 +886,6 @@
         </div>
       </div>
     </section>
-
     <!-- Filter Tabs (Updated Categories) -->
     <div class="filter-tabs">
       <button class="filter-tab active" data-filter="all">
@@ -912,7 +907,6 @@
         <i class="fas fa-wrench"></i> Tools
       </button>
     </div>
-
     <!-- Results Section -->
     <section class="results-section">
       <div class="results-header">
@@ -933,14 +927,12 @@
       </div>
       <div id="pagination" class="pagination"></div>
     </section>
-
     <!-- Submit URL Button at the Bottom -->
     <div class="submit-section">
       <a href="signup.html" class="submit-button">
         <i class="fas fa-plus-circle"></i> Submit Your URL
       </a>
     </div>
-
     <footer>
       <p>Made in Bangladesh 🇧🇩 | Curated by Nirobo</p>
       <p>Honoring the Language Movement and the Silent Legacy of Justice</p>
@@ -948,7 +940,6 @@
       <p><a href="/">← Back to Nirobo</a></p>
     </footer>
   </div>
-
   <!-- --- TOOLS POPUP OVERLAY --- -->
   <div id="toolsPopupOverlay">
     <!-- Tools Popup -->
@@ -1099,7 +1090,7 @@
       </div>
     </div>
   </div>
-
+  <div class="notification" id="notification"></div>
   <script>
     // --- Configuration ---
     const RESULTS_PER_PAGE = 10;
@@ -1127,7 +1118,16 @@
     const toolsPopup = document.getElementById('toolsPopup');
     const toolTabs = document.querySelectorAll('.tool-tab');
     const toolPanels = document.querySelectorAll('.tool-panel');
+    // --- Notification Element ---
+    const notification = document.getElementById('notification');
     // --- Helper Functions ---
+    // Show notification
+    function showNotification(message, type = 'info') {
+      notification.textContent = message;
+      notification.className = 'notification ' + type;
+      notification.classList.add('show');
+      setTimeout(() => notification.classList.remove('show'), 3000);
+    }
     // Get favicon URL
     function getFaviconUrl(url) {
       try {
@@ -1533,6 +1533,132 @@
         if (aiInsights) aiInsights.style.display = 'none';
       }
     }
+    // --- Event Listeners ---
+    // Advanced search toggle
+    advancedToggle.addEventListener('click', () => {
+      advancedSearch.classList.toggle('active');
+      const icon = advancedToggle.querySelector('i');
+      icon.classList.toggle('fa-chevron-down');
+      icon.classList.toggle('fa-chevron-up');
+    });
+    // Filter tabs
+    filterTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        filterTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentFilter = tab.dataset.filter;
+        currentPage = 1;
+        // For filter tabs, we still use the original applyFilters for exact matching
+        const filteredByTabs = applyFilters(allResults, query, currentFilter);
+        const sortedResults = sortResults(filteredByTabs, document.getElementById('sortOptions').value);
+        const totalPages = Math.ceil(sortedResults.length / RESULTS_PER_PAGE);
+        const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
+        const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, sortedResults.length);
+        const pageResults = sortedResults.slice(startIndex, endIndex);
+        renderResults(pageResults);
+        renderPagination(totalPages);
+        updateResultsCount(sortedResults.length);
+        showAIInsights(query, sortedResults);
+      });
+    });
+    // Sort options
+    document.getElementById('sortOptions').addEventListener('change', (e) => {
+      // Use Fuse.js results if there's a query, otherwise use all results
+      let resultsToSort = filteredResults;
+      if (query && fuseInstance) {
+        resultsToSort = performSearchFuse(query);
+      } else {
+        resultsToSort = allResults;
+      }
+      const sortedResults = sortResults(resultsToSort, e.target.value);
+      const totalPages = Math.ceil(sortedResults.length / RESULTS_PER_PAGE);
+      const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
+      const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, sortedResults.length);
+      const pageResults = sortedResults.slice(startIndex, endIndex);
+      renderResults(pageResults);
+      renderPagination(totalPages);
+      showAIInsights(query, sortedResults);
+    });
+    // Search form submission
+    searchForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      query = searchInput.value.trim();
+      if (!query) {
+        alert("Please enter a search term.");
+        return;
+      }
+      // Add to search history
+      if (!searchHistory.includes(query)) {
+        searchHistory.unshift(query);
+        if (searchHistory.length > 10) searchHistory.pop();
+      }
+      try {
+        resultsContainer.innerHTML = `
+          <div class="loading">
+            <div class="spinner"></div>
+            <p>Searching with Nirobo AI Engine...</p>
+          </div>
+        `;
+        allResults = await loadAllResults();
+        // --- Use Fuse.js for searching ---
+        if (query) {
+            // Perform the search using Fuse.js
+            filteredResults = performSearchFuse(query);
+            console.log("Search results after Fuse.js:", filteredResults.length);
+        } else {
+            filteredResults = [];
+        }
+        // --- End Fuse.js search ---
+        const sortedResults = sortResults(filteredResults, document.getElementById('sortOptions').value);
+        const totalPages = Math.ceil(sortedResults.length / RESULTS_PER_PAGE);
+        const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
+        const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, sortedResults.length);
+        const pageResults = sortedResults.slice(startIndex, endIndex);
+        renderResults(pageResults);
+        renderPagination(totalPages);
+        updateResultsCount(sortedResults.length);
+        showAIInsights(query, sortedResults);
+        // Update URL
+        const url = new URL(window.location);
+        url.searchParams.set('q', query);
+        url.searchParams.set('page', '1');
+        window.history.pushState({ page: 1, query }, '', url);
+      } catch (error) {
+        console.error("Search error:", error);
+        resultsContainer.innerHTML = `
+          <div class="no-results">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>Search Error</h3>
+            <p>An unexpected error occurred. Please try again later.</p>
+          </div>
+        `;
+        paginationContainer.innerHTML = '';
+      }
+    });
+    // Report button handler
+    document.addEventListener('click', function(e) {
+      if (e.target && e.target.classList.contains('report-btn')) {
+        const url = e.target.closest('.report-btn').dataset.url;
+        const title = e.target.closest('.report-btn').dataset.title;
+        const subject = encodeURIComponent(`[Nirobo Report] Illegal Website: ${title}`);
+        const body = encodeURIComponent(`
+INFRINGEMENT REPORT
+===================
+Website Title: ${title}
+URL: ${url}
+Reason for Report:
+[Please describe why you believe this website is illegal]
+Additional Details:
+[Any other information that supports your claim]
+Reporter Info:
+[Your name/email if you wish to be contacted]
+⚠️ NOTE: This report will be sent to Nirobo's admin team for review.
+        `);
+        const mailtoLink = `mailto:infinitealphas0602@outlook.com?subject=${subject}&body=${body}`;
+        window.open(mailtoLink, '_blank');
+        alert('📬 A report email draft has been opened. Please review and send it to infinitealphas0602@outlook.com');
+      }
+    });
     // --- Calculator Functions ---
     let displayValue = '0';
     const calcDisplay = document.getElementById('calcDisplay');
@@ -1833,130 +1959,50 @@
             resultElement.style.color = '#ff9999';
         }
     }
-    // --- Event Listeners ---
-    // Advanced search toggle
-    advancedToggle.addEventListener('click', () => {
-      advancedSearch.classList.toggle('active');
-      const icon = advancedToggle.querySelector('i');
-      icon.classList.toggle('fa-chevron-down');
-      icon.classList.toggle('fa-chevron-up');
-    });
-    // Filter tabs
-    filterTabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        filterTabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        currentFilter = tab.dataset.filter;
-        currentPage = 1;
-        // For filter tabs, we still use the original applyFilters for exact matching
-        const filteredByTabs = applyFilters(allResults, query, currentFilter);
-        const sortedResults = sortResults(filteredByTabs, document.getElementById('sortOptions').value);
-        const totalPages = Math.ceil(sortedResults.length / RESULTS_PER_PAGE);
-        const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
-        const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, sortedResults.length);
-        const pageResults = sortedResults.slice(startIndex, endIndex);
-        renderResults(pageResults);
-        renderPagination(totalPages);
-        updateResultsCount(sortedResults.length);
-        showAIInsights(query, sortedResults);
-      });
-    });
-    // Sort options
-    document.getElementById('sortOptions').addEventListener('change', (e) => {
-      // Use Fuse.js results if there's a query, otherwise use all results
-      let resultsToSort = filteredResults;
-      if (query && fuseInstance) {
-        resultsToSort = performSearchFuse(query);
+    // --- Initialize on Page Load ---
+    document.addEventListener("DOMContentLoaded", async () => {
+      // Check URL parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const initialQuery = urlParams.get('q');
+      const initialPage = parseInt(urlParams.get('page'), 10) || 1;
+      if (initialQuery) {
+        searchInput.value = initialQuery;
+        query = initialQuery;
+        currentPage = initialPage;
+        searchForm.dispatchEvent(new Event('submit'));
       } else {
-        resultsToSort = allResults;
-      }
-      const sortedResults = sortResults(resultsToSort, e.target.value);
-      const totalPages = Math.ceil(sortedResults.length / RESULTS_PER_PAGE);
-      const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
-      const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, sortedResults.length);
-      const pageResults = sortedResults.slice(startIndex, endIndex);
-      renderResults(pageResults);
-      renderPagination(totalPages);
-      showAIInsights(query, sortedResults);
-    });
-    // Search form submission
-    searchForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      query = searchInput.value.trim();
-      if (!query) {
-        alert("Please enter a search term.");
-        return;
-      }
-      // Add to search history
-      if (!searchHistory.includes(query)) {
-        searchHistory.unshift(query);
-        if (searchHistory.length > 10) searchHistory.pop();
-      }
-      try {
-        resultsContainer.innerHTML = `
-          <div class="loading">
-            <div class="spinner"></div>
-            <p>Searching with Nirobo AI Engine...</p>
-          </div>
-        `;
-        allResults = await loadAllResults();
-        // --- Use Fuse.js for searching ---
-        if (query) {
-            // Perform the search using Fuse.js
-            filteredResults = performSearchFuse(query);
-            console.log("Search results after Fuse.js:", filteredResults.length);
-        } else {
-            filteredResults = [];
-        }
-        // --- End Fuse.js search ---
-        const sortedResults = sortResults(filteredResults, document.getElementById('sortOptions').value);
-        const totalPages = Math.ceil(sortedResults.length / RESULTS_PER_PAGE);
-        const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
-        const endIndex = Math.min(startIndex + RESULTS_PER_PAGE, sortedResults.length);
-        const pageResults = sortedResults.slice(startIndex, endIndex);
-        renderResults(pageResults);
-        renderPagination(totalPages);
-        updateResultsCount(sortedResults.length);
-        showAIInsights(query, sortedResults);
-        // Update URL
-        const url = new URL(window.location);
-        url.searchParams.set('q', query);
-        url.searchParams.set('page', '1');
-        window.history.pushState({ page: 1, query }, '', url);
-      } catch (error) {
-        console.error("Search error:", error);
         resultsContainer.innerHTML = `
           <div class="no-results">
-            <i class="fas fa-exclamation-triangle"></i>
-            <h3>Search Error</h3>
-            <p>An unexpected error occurred. Please try again later.</p>
+            <i class="fas fa-robot"></i>
+            <h3>Welcome to Nirobo Search</h3>
+            <p>Our AI-powered search engine combines curated databases with community submissions.</p>
+            <p>Enter a search term above to begin exploring the web intelligently.</p>
           </div>
         `;
-        paginationContainer.innerHTML = '';
       }
     });
-    // Report button handler
-    document.addEventListener('click', function(e) {
-      if (e.target && e.target.classList.contains('report-btn')) {
-        const url = e.target.closest('.report-btn').dataset.url;
-        const title = e.target.closest('.report-btn').dataset.title;
-        const subject = encodeURIComponent(`[Nirobo Report] Illegal Website: ${title}`);
-        const body = encodeURIComponent(`
-INFRINGEMENT REPORT
-===================
-Website Title: ${title}
-URL: ${url}
-Reason for Report:
-[Please describe why you believe this website is illegal]
-Additional Details:
-[Any other information that supports your claim]
-Reporter Info:
-[Your name/email if you wish to be contacted]
-⚠️ NOTE: This report will be sent to Nirobo's admin team for review.
-        `);
-        const mailtoLink = `mailto:infinitealphas0602@outlook.com?subject=${subject}&body=${body}`;
-        window.open(mailtoLink, '_blank');
-        alert('📬 A report email draft has been opened. Please review and send it to infinitealphas0602@outlook.com');
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', (event) => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const newQuery = urlParams.get('q') || '';
+      const newPage = parseInt(urlParams.get('page'), 10) || 1;
+      if (newQuery !== query || newPage !== currentPage) {
+        searchInput.value = newQuery;
+        query = newQuery;
+        currentPage = newPage;
+        if (query) {
+          searchForm.dispatchEvent(new Event('submit'));
+        } else {
+          resultsContainer.innerHTML = `
+            <div class="no-results">
+              <i class="fas fa-robot"></i>
+              <h3>Welcome to Nirobo Search</h3>
+              <p>Our AI-powered search engine combines curated databases with community submissions.</p>
+              <p>Enter a search term above to begin exploring the web intelligently.</p>
+            </div>
+          `;
+          paginationContainer.innerHTML = '';
+        }
       }
     });
     // --- TOOLS POPUP FUNCTIONALITY ---
@@ -2033,53 +2079,6 @@ Reporter Info:
     document.getElementById('toolsPopupHeader').addEventListener('mousedown', dragMouseDown);
     document.addEventListener('mousemove', dragMouseMove);
     document.addEventListener('mouseup', dragMouseUp);
-
-    // Initialize on Page Load
-    document.addEventListener("DOMContentLoaded", async () => {
-      // Check URL parameters
-      const urlParams = new URLSearchParams(window.location.search);
-      const initialQuery = urlParams.get('q');
-      const initialPage = parseInt(urlParams.get('page'), 10) || 1;
-      if (initialQuery) {
-        searchInput.value = initialQuery;
-        query = initialQuery;
-        currentPage = initialPage;
-        searchForm.dispatchEvent(new Event('submit'));
-      } else {
-        resultsContainer.innerHTML = `
-          <div class="no-results">
-            <i class="fas fa-robot"></i>
-            <h3>Welcome to Nirobo Search</h3>
-            <p>Our AI-powered search engine combines curated databases with community submissions.</p>
-            <p>Enter a search term above to begin exploring the web intelligently.</p>
-          </div>
-        `;
-      }
-    });
-    // Handle browser back/forward buttons
-    window.addEventListener('popstate', (event) => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const newQuery = urlParams.get('q') || '';
-      const newPage = parseInt(urlParams.get('page'), 10) || 1;
-      if (newQuery !== query || newPage !== currentPage) {
-        searchInput.value = newQuery;
-        query = newQuery;
-        currentPage = newPage;
-        if (query) {
-          searchForm.dispatchEvent(new Event('submit'));
-        } else {
-          resultsContainer.innerHTML = `
-            <div class="no-results">
-              <i class="fas fa-robot"></i>
-              <h3>Welcome to Nirobo Search</h3>
-              <p>Our AI-powered search engine combines curated databases with community submissions.</p>
-              <p>Enter a search term above to begin exploring the web intelligently.</p>
-            </div>
-          `;
-          paginationContainer.innerHTML = '';
-        }
-      }
-    });
   </script>
 </body>
 </html>
