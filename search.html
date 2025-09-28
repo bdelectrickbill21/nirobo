@@ -7,6 +7,8 @@
   <!-- Add Fuse.js library for fuzzy search -->
   <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Add Bangla Calendar Library -->
+  <script src="https://cdn.jsdelivr.net/npm/date-bn@1.0.0/dist/date-bn.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
@@ -567,36 +569,71 @@
     .tool-panel.active {
       display: block;
     }
-    /* --- ENHANCED SCIENTIFIC CALCULATOR --- */
-    .calculator-grid {
+    /* --- FX-100MS STYLE CALCULATOR --- */
+    .fx100ms-calculator {
+      background: #2c2c2c;
+      border: 2px solid #1a1a1a;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      font-family: 'Courier New', monospace;
+    }
+    .fx100ms-display {
+      background: #e0e0e0;
+      border: 2px solid #1a1a1a;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 15px;
+      text-align: right;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #000;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .fx100ms-buttons {
       display: grid;
-      grid-template-columns: repeat(5, 1fr); /* 5 columns for more functions */
-      gap: 10px;
+      /* FX-100MS layout: 10 columns for more functions */
+      grid-template-columns: repeat(10, 1fr);
+      gap: 5px;
       margin-top: 15px;
     }
-    .calc-btn {
-      padding: 15px;
-      font-size: 1.1rem; /* Slightly smaller font for more buttons */
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 5px;
+    .fx100ms-btn {
+      padding: 10px;
+      font-size: 0.9rem;
+      border: 1px solid #444;
+      border-radius: 4px;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       transition: background 0.2s;
+      font-weight: bold;
     }
-    .calc-btn:hover {
-      background: var(--primary-light);
+    .fx100ms-btn:hover {
+      background: #444;
     }
-    .calc-display {
-      grid-column: span 5; /* Span full width */
-      padding: 15px;
-      font-size: 1.5rem;
-      background: var(--text);
-      color: var(--background);
-      border-radius: 5px;
-      text-align: right;
-      margin-bottom: 10px;
-      overflow-x: auto; /* Allow horizontal scrolling for long expressions */
+    .fx100ms-btn-grey {
+      background: #a0a0a0;
+      color: #000;
+    }
+    .fx100ms-btn-red {
+      background: #d40000;
+      color: white;
+    }
+    .fx100ms-btn-white {
+      background: #ffffff;
+      color: #000;
+    }
+    .fx100ms-btn-small {
+      font-size: 0.7rem;
+    }
+    .fx100ms-btn-large {
+      font-size: 1.1rem;
     }
     /* --- CALENDAR --- */
     .calendar-controls {
@@ -776,13 +813,13 @@
         width: 95%;
         padding: 20px;
       }
-      .calculator-grid {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 5px;
+      .fx100ms-buttons {
+        grid-template-columns: repeat(5, 1fr); /* Reduce columns on mobile */
+        gap: 3px;
       }
-      .calc-btn {
-        padding: 12px;
-        font-size: 1rem;
+      .fx100ms-btn {
+        padding: 8px;
+        font-size: 0.8rem;
       }
       .converter-form {
         flex-direction: column;
@@ -965,44 +1002,70 @@
       </div>
       <!-- Tool Content Area -->
       <div class="tool-content">
-        <!-- Calculator Tool -->
+        <!-- FX-100MS Style Calculator Tool -->
         <div id="tool-calculator" class="tool-panel active">
-          <h4><i class="fas fa-calculator"></i> Enhanced Scientific Calculator</h4>
-          <div class="calculator-grid">
-            <div class="calc-display" id="calcDisplay">0</div>
-            <button class="calc-btn" onclick="clearCalc()">C</button>
-            <button class="calc-btn" onclick="deleteLastCalc()">⌫</button>
-            <button class="calc-btn" onclick="appendToCalc('(')">(</button>
-            <button class="calc-btn" onclick="appendToCalc(')')">)</button>
-            
-            <button class="calc-btn" onclick="appendFunction('sin')">sin</button>
-            <button class="calc-btn" onclick="appendFunction('cos')">cos</button>
-            <button class="calc-btn" onclick="appendFunction('tan')">tan</button>
-            <button class="calc-btn" onclick="appendToCalc('^')">x^y</button>
-            <button class="calc-btn" onclick="appendToCalc('/')">/</button>
-            
-            <button class="calc-btn" onclick="appendToCalc('7')">7</button>
-            <button class="calc-btn" onclick="appendToCalc('8')">8</button>
-            <button class="calc-btn" onclick="appendToCalc('9')">9</button>
-            <button class="calc-btn" onclick="appendFunction('log')">log</button>
-            <button class="calc-btn" onclick="appendToCalc('*')">×</button>
-            
-            <button class="calc-btn" onclick="appendToCalc('4')">4</button>
-            <button class="calc-btn" onclick="appendToCalc('5')">5</button>
-            <button class="calc-btn" onclick="appendToCalc('6')">6</button>
-            <button class="calc-btn" onclick="appendFunction('ln')">ln</button>
-            <button class="calc-btn" onclick="appendToCalc('-')">-</button>
-            
-            <button class="calc-btn" onclick="appendToCalc('1')">1</button>
-            <button class="calc-btn" onclick="appendToCalc('2')">2</button>
-            <button class="calc-btn" onclick="appendToCalc('3')">3</button>
-            <button class="calc-btn" onclick="appendFunction('sqrt')">√</button>
-            <button class="calc-btn" onclick="appendToCalc('+')">+</button>
-            
-            <button class="calc-btn" onclick="appendToCalc('0')" colspan="2">0</button>
-            <button class="calc-btn" onclick="appendToCalc('.')">.</button>
-            <button class="calc-btn" onclick="appendFunction('pi')">π</button>
-            <button class="calc-btn" onclick="calculateCalc()" rowspan="2">=</button>
+          <h4><i class="fas fa-calculator"></i> FX-100MS Style Scientific Calculator</h4>
+          <div class="fx100ms-calculator">
+            <div class="fx100ms-display" id="calcDisplay">0</div>
+            <div class="fx100ms-buttons">
+              <!-- Row 1 -->
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="clearCalcAll()">AC</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="clearCalcEntry()">CE</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="deleteLastCalc()"><i class="fas fa-backspace"></i></button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('(')">(</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc(')')">)</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('sin(')">sin</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('cos(')">cos</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('tan(')">tan</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('^')">x^y</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('/')">÷</button>
+
+              <!-- Row 2 -->
+              <button class="fx100ms-btn fx100ms-btn-white" onclick="appendToCalc('7')">7</button>
+              <button class="fx100ms-btn fx100ms-btn-white" onclick="appendToCalc('8')">8</button>
+              <button class="fx100ms-btn fx100ms-btn-white" onclick="appendToCalc('9')">9</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('log(')">log</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('ln(')">ln</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('asin(')">sin⁻¹</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('acos(')">cos⁻¹</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('atan(')">tan⁻¹</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('sqrt(')">√</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('*')">×</button>
+
+              <!-- Row 3 -->
+              <button class="fx100ms-btn fx100ms-btn-white" onclick="appendToCalc('4')">4</button>
+              <button class="fx100ms-btn fx100ms-btn-white" onclick="appendToCalc('5')">5</button>
+              <button class="fx100ms-btn fx100ms-btn-white" onclick="appendToCalc('6')">6</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('pi')">π</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('e')">e</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('sinh(')">sinh</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('cosh(')">cosh</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('tanh(')">tanh</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('cbrt(')">∛</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('-')">−</button>
+
+              <!-- Row 4 -->
+              <button class="fx100ms-btn fx100ms-btn-white" onclick="appendToCalc('1')">1</button>
+              <button class="fx100ms-btn fx100ms-btn-white" onclick="appendToCalc('2')">2</button>
+              <button class="fx100ms-btn fx100ms-btn-white" onclick="appendToCalc('3')">3</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('!')">x!</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('%')">%</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('asinh(')">sinh⁻¹</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('acosh(')">cosh⁻¹</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('atanh(')">tanh⁻¹</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('exp(')">e^x</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('+')">+</button>
+
+              <!-- Row 5 -->
+              <button class="fx100ms-btn fx100ms-btn-white" onclick="appendToCalc('0')" colspan="2">0</button>
+              <button class="fx100ms-btn fx100ms-btn-white" onclick="appendToCalc('.')">.</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('Ans')">Ans</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="calculateCalc()" rowspan="2">=</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('1/')">x⁻¹</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('pow(2,')">x²</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('pow(3,')">x³</button>
+              <button class="fx100ms-btn fx100ms-btn-grey" onclick="appendToCalc('10^')">10^x</button>
+            </div>
           </div>
         </div>
 
@@ -1659,62 +1722,118 @@ Reporter Info:
         alert('📬 A report email draft has been opened. Please review and send it to infinitealphas0602@outlook.com');
       }
     });
-    // --- Calculator Functions ---
-    let displayValue = '0';
+    // --- TOOLS POPUP FUNCTIONALITY ---
+    // Open Tools Popup
+    openToolsBtn.addEventListener('click', () => {
+      toolsPopupOverlay.style.display = 'flex';
+      // Initialize calendar on popup open
+      updateCalendar();
+    });
+
+    // Close Tools Popup
+    closeToolsPopup.addEventListener('click', () => {
+      toolsPopupOverlay.style.display = 'none';
+    });
+
+    // Close Tools Popup by clicking outside
+    toolsPopupOverlay.addEventListener('click', (e) => {
+      if (e.target === toolsPopupOverlay) {
+        toolsPopupOverlay.style.display = 'none';
+      }
+    });
+
+    // Tool Tabs Switching
+    toolTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        toolTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const toolName = tab.dataset.tool;
+        toolPanels.forEach(panel => {
+          panel.classList.remove('active');
+          if (panel.id === `tool-${toolName}`) {
+            panel.classList.add('active');
+          }
+        });
+      });
+    });
+
+    // Make Tools Popup Draggable
+    let isDragging = false;
+    let currentX;
+    let currentY;
+    let initialX;
+    let initialY;
+    let xOffset = 0;
+    let yOffset = 0;
+
+    const dragMouseDown = (e) => {
+      initialX = e.clientX - xOffset;
+      initialY = e.clientY - yOffset;
+      isDragging = true;
+    };
+
+    const dragMouseMove = (e) => {
+      if (isDragging) {
+        e.preventDefault();
+        currentX = e.clientX - initialX;
+        currentY = e.clientY - initialY;
+        xOffset = currentX;
+        yOffset = currentY;
+        setTranslate(currentX, currentY, toolsPopup);
+      }
+    };
+
+    const dragMouseUp = () => {
+      initialX = currentX;
+      initialY = currentY;
+      isDragging = false;
+    };
+
+    const setTranslate = (xPos, yPos, el) => {
+      el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
+    };
+
+    document.getElementById('toolsPopupHeader').addEventListener('mousedown', dragMouseDown);
+    document.addEventListener('mousemove', dragMouseMove);
+    document.addEventListener('mouseup', dragMouseUp);
+
+    // --- FX-100MS CALCULATOR LOGIC ---
+    let calcExpression = '0';
     const calcDisplay = document.getElementById('calcDisplay');
 
-    function updateDisplay() {
-      calcDisplay.textContent = displayValue;
+    function updateCalcDisplay() {
+      calcDisplay.textContent = calcExpression;
     }
 
     function appendToCalc(value) {
-      if (displayValue === '0' && value !== '.') displayValue = '';
-      displayValue += value;
-      updateDisplay();
+      if (calcExpression === '0' && value !== '.') calcExpression = '';
+      calcExpression += value;
+      updateCalcDisplay();
     }
 
-    function clearCalc() {
-      displayValue = '0';
-      updateDisplay();
+    function clearCalcAll() {
+      calcExpression = '0';
+      updateCalcDisplay();
+    }
+
+    function clearCalcEntry() {
+      // Clear entry (CE) - clears last number/operator entered
+      // This is a simplification. A real FX-100MS CE would be more complex.
+      if (calcExpression.length > 1) {
+          calcExpression = calcExpression.slice(0, -1);
+      } else {
+          calcExpression = '0';
+      }
+      updateCalcDisplay();
     }
 
     function deleteLastCalc() {
-      if (displayValue.length > 1) {
-        displayValue = displayValue.slice(0, -1);
+      if (calcExpression.length > 1) {
+        calcExpression = calcExpression.slice(0, -1);
       } else {
-        displayValue = '0';
+        calcExpression = '0';
       }
-      updateDisplay();
-    }
-
-    function appendFunction(func) {
-        // For functions like sin, cos, tan, log, ln, sqrt, pi
-        // We'll evaluate them immediately and replace the display value with the result.
-        try {
-            let num = parseFloat(displayValue);
-            let result;
-            switch(func) {
-                case 'sin': result = Math.sin(num * Math.PI / 180); break; // Assuming degrees
-                case 'cos': result = Math.cos(num * Math.PI / 180); break;
-                case 'tan': result = Math.tan(num * Math.PI / 180); break;
-                case 'log': result = Math.log10(num); break; // Base 10 log
-                case 'ln': result = Math.log(num); break; // Natural log
-                case 'sqrt': result = Math.sqrt(num); break;
-                case 'pi':
-                    // Append pi constant to the expression
-                    if (displayValue === '0') displayValue = '';
-                    displayValue += Math.PI.toString();
-                    updateDisplay();
-                    return;
-                // Add more functions as needed (e.g., x^2, x^3, 1/x, etc.)
-                default: result = num;
-            }
-            displayValue = result.toString();
-            updateDisplay();
-        } catch (e) {
-            displayValue = 'Error';
-            updateDisplay();
-        }
+      updateCalcDisplay();
     }
 
     function calculateCalc() {
@@ -1722,31 +1841,69 @@ Reporter Info:
         // Note: Using eval is generally discouraged for security reasons.
         // For a production app, use a proper expression parser.
         // This is a simple demo.
-        // Handle power operator (^)
-        let expression = displayValue.replace(/\^/g, '**');
-        displayValue = eval(expression).toString();
-        updateDisplay();
+        // Handle power operator (^) and functions
+        let expression = calcExpression
+          .replace(/\^/g, '**') // Replace ^ with **
+          .replace(/sin\(/g, 'Math.sin(') // Replace sin( with Math.sin(
+          .replace(/cos\(/g, 'Math.cos(')
+          .replace(/tan\(/g, 'Math.tan(')
+          .replace(/asin\(/g, 'Math.asin(')
+          .replace(/acos\(/g, 'Math.acos(')
+          .replace(/atan\(/g, 'Math.atan(')
+          .replace(/sinh\(/g, 'Math.sinh(')
+          .replace(/cosh\(/g, 'Math.cosh(')
+          .replace(/tanh\(/g, 'Math.tanh(')
+          .replace(/asinh\(/g, 'Math.asinh(')
+          .replace(/acosh\(/g, 'Math.acosh(')
+          .replace(/atanh\(/g, 'Math.atanh(')
+          .replace(/log\(/g, 'Math.log10(') // Base 10 log
+          .replace(/ln\(/g, 'Math.log(')   // Natural log
+          .replace(/sqrt\(/g, 'Math.sqrt(')
+          .replace(/cbrt\(/g, 'Math.cbrt(')
+          .replace(/exp\(/g, 'Math.exp(')
+          .replace(/pi/g, Math.PI.toString()) // Replace pi constant
+          .replace(/e/g, Math.E.toString())   // Replace e constant
+          .replace(/Ans/g, '0') // Placeholder for Ans (last answer)
+          .replace(/x!/g, '!') // Placeholder for factorial (would need custom function)
+          .replace(/%\)/g, '%') // Placeholder for percentage
+          .replace(/1\//g, '1/') // Reciprocal
+          .replace(/pow\(2,/g, 'Math.pow(') // x^2
+          .replace(/pow\(3,/g, 'Math.pow(') // x^3
+          .replace(/10\^/g, 'Math.pow(10,'); // 10^x
+
+        // Very basic factorial handling (limited to small integers)
+        expression = expression.replace(/(\d+)!/g, function(match, p1) {
+            let n = parseInt(p1);
+            if (n < 0 || n > 170) return 'NaN'; // Prevent overflow or negative
+            let fact = 1;
+            for (let i = 2; i <= n; i++) fact *= i;
+            return fact;
+        });
+
+        calcExpression = eval(expression).toString();
+        updateCalcDisplay();
       } catch (e) {
-        displayValue = 'Error';
-        updateDisplay();
+        calcExpression = 'Error';
+        updateCalcDisplay();
       }
     }
-    // --- Calendar Functions ---
-    let currentDate = new Date();
+
+    // --- CALENDAR LOGIC ---
+    let currentDateCal = new Date();
     let currentCalendarType = 'gregorian';
 
     function updateCalendar() {
         currentCalendarType = document.getElementById('calendar-type').value;
-        renderCalendar(currentDate, currentCalendarType);
+        renderCalendar(currentDateCal, currentCalendarType);
     }
 
     function changeCalendarMonth(delta) {
         if (currentCalendarType === 'gregorian') {
-            currentDate.setMonth(currentDate.getMonth() + delta);
+            currentDateCal.setMonth(currentDateCal.getMonth() + delta);
         } else if (currentCalendarType === 'bengali') {
              // Simplified month/year change for Bengali calendar
              // A real implementation would use a proper Bengali calendar library
-             currentDate.setMonth(currentDate.getMonth() + delta);
+             currentDateCal.setMonth(currentDateCal.getMonth() + delta);
         }
         updateCalendar();
     }
@@ -1820,7 +1977,8 @@ Reporter Info:
                               </div>`;
         }
     }
-    // --- Unit Converter Function ---
+
+    // --- UNIT CONVERTER LOGIC ---
     function convertUnits() {
         const inputValue = parseFloat(document.getElementById('converter-input').value);
         const fromUnit = document.getElementById('converter-from-unit').value;
@@ -1858,7 +2016,8 @@ Reporter Info:
         resultElement.textContent = `${inputValue} ${fromUnit} = ${convertedValue.toFixed(6)} ${toUnit}`;
         resultElement.style.color = '#00aa00'; // Success color
     }
-    // --- Currency Converter Function (Using ECB Daily Rates) ---
+
+    // --- CURRENCY CONVERTER LOGIC (Using ECB Daily Rates) ---
     async function convertCurrency() {
         const amount = parseFloat(document.getElementById('currency-input').value);
         const fromCurrency = document.getElementById('currency-from').value;
@@ -1959,6 +2118,7 @@ Reporter Info:
             resultElement.style.color = '#ff9999';
         }
     }
+
     // --- Initialize on Page Load ---
     document.addEventListener("DOMContentLoaded", async () => {
       // Check URL parameters
@@ -2005,80 +2165,6 @@ Reporter Info:
         }
       }
     });
-    // --- TOOLS POPUP FUNCTIONALITY ---
-    // Open Tools Popup
-    openToolsBtn.addEventListener('click', () => {
-      toolsPopupOverlay.style.display = 'flex';
-      // Initialize calendar on popup open
-      updateCalendar();
-    });
-
-    // Close Tools Popup
-    closeToolsPopup.addEventListener('click', () => {
-      toolsPopupOverlay.style.display = 'none';
-    });
-
-    // Close Tools Popup by clicking outside
-    toolsPopupOverlay.addEventListener('click', (e) => {
-      if (e.target === toolsPopupOverlay) {
-        toolsPopupOverlay.style.display = 'none';
-      }
-    });
-
-    // Tool Tabs Switching
-    toolTabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        toolTabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        const toolName = tab.dataset.tool;
-        toolPanels.forEach(panel => {
-          panel.classList.remove('active');
-          if (panel.id === `tool-${toolName}`) {
-            panel.classList.add('active');
-          }
-        });
-      });
-    });
-
-    // Make Tools Popup Draggable
-    let isDragging = false;
-    let currentX;
-    let currentY;
-    let initialX;
-    let initialY;
-    let xOffset = 0;
-    let yOffset = 0;
-
-    const dragMouseDown = (e) => {
-      initialX = e.clientX - xOffset;
-      initialY = e.clientY - yOffset;
-      isDragging = true;
-    };
-
-    const dragMouseMove = (e) => {
-      if (isDragging) {
-        e.preventDefault();
-        currentX = e.clientX - initialX;
-        currentY = e.clientY - initialY;
-        xOffset = currentX;
-        yOffset = currentY;
-        setTranslate(currentX, currentY, toolsPopup);
-      }
-    };
-
-    const dragMouseUp = () => {
-      initialX = currentX;
-      initialY = currentY;
-      isDragging = false;
-    };
-
-    const setTranslate = (xPos, yPos, el) => {
-      el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
-    };
-
-    document.getElementById('toolsPopupHeader').addEventListener('mousedown', dragMouseDown);
-    document.addEventListener('mousemove', dragMouseMove);
-    document.addEventListener('mouseup', dragMouseUp);
   </script>
 </body>
 </html>
