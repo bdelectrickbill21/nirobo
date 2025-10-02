@@ -603,62 +603,58 @@
       }
     });
 
-    // Forgot Password Handler
-    forgotPasswordLink.addEventListener('click', (e) => {
+        // --- REAL Password Recovery Function (Calls Netlify Function) ---
+    document.getElementById('forgotPasswordLink').addEventListener('click', async (e) => {
       e.preventDefault();
+      
+      // Ask user for their email
       const email = prompt('Enter your email to reset password:');
-      if(email) {
-        let users = JSON.parse(localStorage.getItem('niroboUsers') || '[]');
-        const userExists = users.some(u => u.email === email);
-        
-        if(userExists) {
-          // In a real app, you would send a reset link to the email
-          // For this demo, we'll simulate sending an email
-          showNotification(`Password reset instructions sent to ${email}`, 'info');
-          // Simulate opening email client
-          setTimeout(() => {
-            const subject = encodeURIComponent('[Nirobo] Password Reset Request');
-            const body = encodeURIComponent(`
-PASSWORD RESET REQUEST
-=====================
-You have requested to reset your password for your Nirobo account.
+      if (!email) return; // User cancelled
 
-To proceed, please follow these steps:
+      try {
+        // 1. Show loading message in the notification area
+        showNotification('Sending password reset email...', 'info');
 
-1. Open the following link in your browser: [Reset Password Link]
-2. Enter your new password.
-3. Confirm your new password.
-4. Click "Reset Password".
+        // 2. Send a POST request to your Netlify Function
+        //    The URL /.netlify/functions/forgot-password maps to your forgot-password.js file
+        const response = await fetch('/.netlify/functions/forgot-password', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email: email }) // Send the email in the request body
+        });
 
-If you did not request this, please ignore this email.
+        // 3. Parse the response from the function
+        const data = await response.json();
 
-⚠️ NOTE: This is a simulated request. In a real application, a secure reset link would be sent to your email.
-            `);
-            const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
-            window.open(mailtoLink, '_blank');
-          }, 2000);
+        // 4. Check if the function was successful
+        if (response.ok) {
+          // Success! Show confirmation.
+          showNotification(data.message, 'success');
         } else {
-          showNotification('No account found with that email!', 'error');
+          // Error from the function (e.g., email not found, Brevo API error)
+          showNotification(data.error || 'Failed to send reset email.', 'error');
         }
+      } catch (error) {
+        // 5. Handle network errors or other problems
+        console.error("Password recovery error:", error);
+        showNotification('An error occurred. Please try again.', 'error');
       }
     });
 
-    // Simple password hashing simulation (NOT secure for production)
-    async function hashPassword(password) {
-      const encoder = new TextEncoder();
-      const data = encoder.encode(password);
-      const hash = await crypto.subtle.digest('SHA-256', data);
-      return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
-    }
-
-    // Initialize on Page Load
-    document.addEventListener("DOMContentLoaded", () => {
-      // Check if user is already logged in
-      const currentUser = localStorage.getItem('niroboCurrentUser');
-      if(currentUser) {
-        // Redirect to dashboard
-        window.location.href = 'dashboard.html'; // Or 'search.html'
+    // Helper function to show notifications (you might already have this, but including for completeness)
+    function showNotification(message, type = 'info') {
+      const notification = document.getElementById('notification');
+      if (notification) {
+        notification.textContent = message;
+        notification.className = 'notification ' + type;
+        notification.classList.add('show');
+        setTimeout(() => notification.classList.remove('show'), 3000);
+      } else {
+        alert(message); // Fallback if notification element is missing
       }
+    }
     });
   </script>
 </body>
