@@ -1,576 +1,665 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nirobo — Break The Silence</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary: #006a4e;
-            --secondary: #f42a41;
-            --dark: #0a1f0a;
-            --light: #f0f0f0;
-            --card-bg: rgba(255, 255, 255, 0.1);
-            --input-bg: rgba(0, 0, 0, 0.2);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, var(--dark), var(--primary));
-            color: var(--light);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 400px;
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Bangladesh Flag Element */
-        .flag-container {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 60px;
-            height: 40px;
-            background-color: var(--primary);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 4px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .flag-red-circle {
-            width: 25px;
-            height: 25px;
-            background-color: var(--secondary);
-            border-radius: 50%;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-            color: var(--light);
-            text-shadow: 0 0 10px rgba(244, 42, 65, 0.5);
-        }
-
-        .header p {
-            font-size: 14px;
-            opacity: 0.8;
-        }
-
-        .tabs {
-            display: flex;
-            margin-bottom: 25px;
-            border-radius: 30px;
-            overflow: hidden;
-            background: var(--input-bg);
-        }
-
-        .tab-btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            background: transparent;
-            color: var(--light);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .tab-btn.active {
-            background: var(--secondary);
-            color: white;
-        }
-
-        .form-container {
-            transition: transform 0.3s ease;
-        }
-
-        .form {
-            display: none;
-        }
-
-        .form.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            font-size: 14px;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 14px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background: var(--input-bg);
-            color: white;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-
-        .input-group input:focus {
-            outline: none;
-            border-color: var(--secondary);
-            box-shadow: 0 0 0 3px rgba(244, 42, 65, 0.2);
-        }
-
-        .password-container {
-            position: relative;
-        }
-
-        .toggle-password {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: rgba(255, 255, 255, 0.7);
-            cursor: pointer;
-        }
-
-        .strength-meter {
-            height: 5px;
-            background: #ddd;
-            border-radius: 3px;
-            margin-top: 8px;
-            overflow: hidden;
-        }
-
-        .strength-meter-fill {
-            height: 100%;
-            width: 0%;
-            border-radius: 3px;
-            transition: width 0.3s ease, background 0.3s ease;
-        }
-
-        .strength-text {
-            font-size: 12px;
-            margin-top: 5px;
-            text-align: right;
-            color: #bbb;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .terms {
-            font-size: 12px;
-            margin: 15px 0;
-            text-align: center;
-            opacity: 0.8;
-        }
-
-        .terms a {
-            color: var(--secondary);
-            text-decoration: none;
-        }
-
-        .switch-form {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
-        }
-
-        .switch-form a {
-            color: var(--secondary);
-            text-decoration: none;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            border-radius: 8px;
-            color: white;
-            font-weight: 500;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            z-index: 1000;
-            transform: translateX(120%);
-            transition: transform 0.3s ease;
-            max-width: 300px;
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        .notification.success {
-            background: linear-gradient(45deg, var(--primary), #00aa00);
-        }
-
-        .notification.error {
-            background: linear-gradient(45deg, var(--secondary), #ff3333);
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            font-size: 12px;
-            opacity: 0.7;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up / Log In - Nirobo</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-dark: #004d00;
+      --primary: #006400;
+      --primary-light: #008000;
+      --accent: #d40000;
+      --accent-hover: #ff0000;
+      --background: #0a1f0a;
+      --card-bg: #1a1a1a;
+      --text: #f5f5f5;
+      --text-secondary: #cccccc;
+      --border: #333333;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, var(--background), #003300);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+    }
+    /* Auth Container */
+    .auth-container {
+      background: rgba(26, 26, 26, 0.9);
+      border-radius: 15px;
+      padding: 40px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(212, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    /* Bangladesh Flag Element */
+    .flag-container {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 60px;
+      height: 40px;
+      background-color: var(--primary);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .flag-red-circle {
+      width: 25px;
+      height: 25px;
+      background-color: var(--accent);
+      border-radius: 50%;
+    }
+    /* Header Styles */
+    .auth-header {
+      text-align: center;
+      padding: 30px 0;
+      margin-bottom: 30px;
+      position: relative;
+    }
+    .logo {
+      font-size: 2.8rem;
+      color: var(--accent);
+      margin-bottom: 10px;
+      text-shadow: 0 0 15px rgba(212, 0, 0, 0.5);
+    }
+    .tagline {
+      font-size: 1.2rem;
+      color: #ffcccc;
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+    /* Auth Tabs */
+    .auth-tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+    .auth-tab {
+      padding: 12px 24px;
+      background: rgba(0, 100, 0, 0.3);
+      color: var(--text);
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .auth-tab:hover {
+      background: rgba(0, 128, 0, 0.5);
+    }
+    .auth-tab.active {
+      background: var(--accent);
+      color: white;
+    }
+    /* Auth Forms */
+    .auth-form {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+    .auth-form.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .form-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 15px 20px;
+      font-size: 1.1rem;
+      border: 2px solid var(--border);
+      border-radius: 30px;
+      background: rgba(0, 0, 0, 0.3);
+      color: var(--text);
+      outline: none;
+      transition: all 0.3s ease;
+    }
+    .form-group input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 15px rgba(212, 0, 0, 0.5);
+    }
+    /* Password Strength Meter */
+    .strength-meter {
+      height: 5px;
+      background: #ddd;
+      border-radius: 3px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+    .strength-meter-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 3px;
+      transition: width 0.3s ease, background 0.3s ease;
+    }
+    .strength-text {
+      font-size: 0.85rem;
+      margin-top: 5px;
+      text-align: right;
+      color: #bbb;
+    }
+    /* Password Toggle */
+    .password-toggle {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+    /* Submit Button */
+    .submit-btn {
+      width: 100%;
+      padding: 15px 30px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .submit-btn:hover {
+      background: var(--accent-hover);
+      box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
+      transform: translateY(-2px);
+    }
+    /* Forgot Password Link */
+    .forgot-password {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 0.9rem;
+    }
+    .forgot-password a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .forgot-password a:hover {
+      text-decoration: underline;
+    }
+    /* Terms */
+    .terms {
+      font-size: 0.85rem;
+      margin-top: 20px;
+      text-align: center;
+      color: var(--text-secondary);
+    }
+    .terms a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .terms a:hover {
+      text-decoration: underline;
+    }
+    /* Notification */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 500;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      z-index: 1000;
+      transform: translateX(120%);
+      transition: transform 0.3s ease;
+      max-width: 300px;
+    }
+    .notification.show {
+      transform: translateX(0);
+    }
+    .notification.success {
+      background: linear-gradient(45deg, var(--primary), #00aa00);
+    }
+    .notification.error {
+      background: linear-gradient(45deg, var(--accent), #ff3333);
+    }
+    .notification.warning {
+      background: linear-gradient(45deg, var(--warning), #ffcc00);
+    }
+    .notification.info {
+      background: linear-gradient(45deg, var(--info), #0088ff);
+    }
+    /* Footer */
+    footer {
+      background: rgba(26, 26, 26, 0.9);
+      color: #ccc;
+      padding: 30px;
+      text-align: center;
+      font-size: 0.9rem;
+      border-top: 1px solid var(--border);
+      margin-top: 50px;
+      border-radius: 10px;
+    }
+    footer a {
+      color: #ff9999;
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      body {
+        padding: 15px;
+        align-items: flex-start;
+      }
+      .auth-container {
+        padding: 30px 20px;
+        margin-top: 20px;
+      }
+      .auth-header {
+        padding: 20px 0;
+      }
+      .logo {
+        font-size: 2.2rem;
+      }
+      .tagline {
+        font-size: 1rem;
+      }
+      .auth-tabs {
+        flex-direction: column;
+        gap: 8px;
+      }
+      .auth-tab {
+        width: 100%;
+        justify-content: center;
+      }
+      .form-group input {
+        padding: 12px 15px;
+        font-size: 1rem;
+      }
+      .submit-btn {
+        padding: 12px 24px;
+        font-size: 1rem;
+      }
+    }
+    /* Bangladesh Indicator */
+    body::after {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        radial-gradient(circle at 20% 30%, rgba(212, 0, 0, 0.03) 0%, transparent 15%),
+        radial-gradient(circle at 80% 70%, rgba(0, 100, 0, 0.03) 0%, transparent 20%);
+      pointer-events: none;
+      z-index: -1;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Bangladesh Flag Element -->
-        <div class="flag-container">
-            <div class="flag-red-circle"></div>
+  <div class="container">
+    <div class="auth-container">
+      <!-- Bangladesh Flag Element -->
+      <div class="flag-container">
+        <div class="flag-red-circle"></div>
+      </div>
+      
+      <div class="auth-header">
+        <div class="logo">
+          <i class="fas fa-brain"></i> NIROBO
+        </div>
+        <div class="tagline">"Intelligent URL Discovery Powered by AI"</div>
+        <a href="/" style="color: #ff9999; text-decoration: none;">← Back to Nirobo</a>
+      </div>
+      
+      <!-- Auth Tabs -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="signup">
+          <i class="fas fa-user-plus"></i> Sign Up
+        </button>
+        <button class="auth-tab" data-tab="login">
+          <i class="fas fa-sign-in-alt"></i> Log In
+        </button>
+      </div>
+      
+      <!-- Signup Form -->
+      <form id="signupForm" class="auth-form active">
+        <div class="form-group">
+          <label for="signupEmail">Email *</label>
+          <input type="email" id="signupEmail" name="signupEmail" required placeholder="e.g., user@example.com">
         </div>
         
-        <div class="header">
-            <h1>Welcome</h1>
-            <p>Join our community today</p>
+        <div class="form-group">
+          <label for="signupPassword">Password *</label>
+          <input type="password" id="signupPassword" name="signupPassword" required placeholder="Create a strong password">
+          <button type="button" class="password-toggle" onclick="togglePasswordVisibility('signupPassword')">
+            <i class="fas fa-eye"></i>
+          </button>
+          <div class="strength-meter">
+            <div class="strength-meter-fill" id="passwordStrength"></div>
+          </div>
+          <div class="strength-text" id="strengthText">Password strength</div>
         </div>
         
-        <div class="tabs">
-            <button class="tab-btn active" data-tab="signup">Sign Up</button>
-            <button class="tab-btn" data-tab="login">Log In</button>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password *</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Re-enter your password">
+          <button type="button" class="password-toggle" onclick="togglePasswordVisibility('confirmPassword')">
+            <i class="fas fa-eye"></i>
+          </button>
         </div>
         
-        <div class="form-container">
-            <!-- Signup Form -->
-            <form class="form active" id="signupForm">
-                <div class="input-group">
-                    <label for="signupEmail">Email</label>
-                    <input type="email" id="signupEmail" required>
-                </div>
-                
-                <div class="input-group">
-                    <label for="signupPassword">Password</label>
-                    <div class="password-container">
-                        <input type="password" id="signupPassword" required>
-                        <button type="button" class="toggle-password" onclick="togglePassword('signupPassword')">👁️</button>
-                    </div>
-                    <div class="strength-meter">
-                        <div class="strength-meter-fill" id="passwordStrength"></div>
-                    </div>
-                    <div class="strength-text" id="strengthText">Password strength</div>
-                </div>
-                
-                <div class="input-group">
-                    <label for="confirmPassword">Confirm Password</label>
-                    <div class="password-container">
-                        <input type="password" id="confirmPassword" required>
-                        <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword')">👁️</button>
-                    </div>
-                </div>
-                
-                <button type="submit" class="btn">Create Account</button>
-                
-                <div class="terms">
-                    By signing up, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>
-                </div>
-            </form>
-            
-            <!-- Login Form -->
-            <form class="form" id="loginForm">
-                <div class="input-group">
-                    <label for="loginEmail">Email</label>
-                    <input type="email" id="loginEmail" required>
-                </div>
-                
-                <div class="input-group">
-                    <label for="loginPassword">Password</label>
-                    <div class="password-container">
-                        <input type="password" id="loginPassword" required>
-                        <button type="button" class="toggle-password" onclick="togglePassword('loginPassword')">👁️</button>
-                    </div>
-                </div>
-                
-                <button type="submit" class="btn">Log In</button>
-                
-                <div class="switch-form">
-                    <a id="forgotPasswordLink">Forgot Password?</a>
-                </div>
-            </form>
+        <button type="submit" class="submit-btn">
+          <i class="fas fa-user-plus"></i> Create Account
+        </button>
+        
+        <div class="terms">
+          By signing up, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>
+        </div>
+      </form>
+      
+      <!-- Login Form -->
+      <form id="loginForm" class="auth-form">
+        <div class="form-group">
+          <label for="loginEmail">Email *</label>
+          <input type="email" id="loginEmail" name="loginEmail" required placeholder="e.g., user@example.com">
         </div>
         
-        <div class="switch-form">
-            Already have an account? <a id="switchToLogin">Log In</a>
+        <div class="form-group">
+          <label for="loginPassword">Password *</label>
+          <input type="password" id="loginPassword" name="loginPassword" required placeholder="Enter your password">
+          <button type="button" class="password-toggle" onclick="togglePasswordVisibility('loginPassword')">
+            <i class="fas fa-eye"></i>
+          </button>
         </div>
         
-        <div class="switch-form">
-            Don't have an account? <a id="switchToSignup">Sign Up</a>
-        </div>
+        <button type="submit" class="submit-btn">
+          <i class="fas fa-sign-in-alt"></i> Log In
+        </button>
         
-        <div class="footer">
-            <p>Made with ❤️ in Bangladesh</p>
+        <div class="forgot-password">
+          <a href="#" id="forgotPasswordLink">Forgot Password?</a>
         </div>
+      </form>
     </div>
     
-    <div class="notification" id="notification"></div>
+    <footer>
+      <p>Made in Bangladesh 🇧🇩 | Curated by Nirobo</p>
+      <p>Honoring the Language Movement and the Silent Legacy of Justice</p>
+      <p>Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity</p>
+      <p><a href="/">← Back to Nirobo</a></p>
+    </footer>
+  </div>
+  
+  <div class="notification" id="notification"></div>
 
-    <script>
-        // DOM Elements
-        const signupForm = document.getElementById('signupForm');
-        const loginForm = document.getElementById('loginForm');
-        const tabBtns = document.querySelectorAll('.tab-btn');
-        const forms = document.querySelectorAll('.form');
-        const switchToLogin = document.getElementById('switchToLogin');
-        const switchToSignup = document.getElementById('switchToSignup');
-        const forgotPasswordLink = document.getElementById('forgotPasswordLink');
-        const passwordInput = document.getElementById('signupPassword');
-        const confirmPasswordInput = document.getElementById('confirmPassword');
-        const strengthMeter = document.getElementById('passwordStrength');
-        const strengthText = document.getElementById('strengthText');
-        const notification = document.getElementById('notification');
+  <script>
+    // --- DOM Elements ---
+    const signupForm = document.getElementById('signupForm');
+    const loginForm = document.getElementById('loginForm');
+    const authTabs = document.querySelectorAll('.auth-tab');
+    const authForms = document.querySelectorAll('.auth-form');
+    const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+    const passwordInput = document.getElementById('signupPassword');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    const strengthMeter = document.getElementById('passwordStrength');
+    const strengthText = document.getElementById('strengthText');
+    const notification = document.getElementById('notification');
 
-        // Tab Switching
-        tabBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                tabBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
-                forms.forEach(form => form.classList.remove('active'));
-                if(btn.dataset.tab === 'signup') {
-                    document.getElementById('signupForm').classList.add('active');
-                } else {
-                    document.getElementById('loginForm').classList.add('active');
-                }
-            });
-        });
+    // --- Helper Functions ---
+    // Show notification
+    function showNotification(message, type = 'info') {
+      notification.textContent = message;
+      notification.className = 'notification ' + type;
+      notification.classList.add('show');
+      setTimeout(() => notification.classList.remove('show'), 3000);
+    }
 
-        // Form Switching
-        switchToLogin.addEventListener('click', (e) => {
-            e.preventDefault();
-            tabBtns.forEach(b => b.classList.remove('active'));
-            document.querySelector('.tab-btn[data-tab="login"]').classList.add('active');
-            forms.forEach(form => form.classList.remove('active'));
-            loginForm.classList.add('active');
-        });
+    // Toggle password visibility
+    function togglePasswordVisibility(inputId) {
+      const input = document.getElementById(inputId);
+      const toggleBtn = input.nextElementSibling; // Assuming the button is right after the input
+      const icon = toggleBtn.querySelector('i');
+      
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    }
 
-        switchToSignup.addEventListener('click', (e) => {
-            e.preventDefault();
-            tabBtns.forEach(b => b.classList.remove('active'));
-            document.querySelector('.tab-btn[data-tab="signup"]').classList.add('active');
-            forms.forEach(form => form.classList.remove('active'));
-            signupForm.classList.add('active');
-        });
+    // Password strength checker
+    passwordInput.addEventListener('input', function() {
+      const password = this.value;
+      const strength = calculatePasswordStrength(password);
+      
+      strengthMeter.style.width = strength.percentage + '%';
+      strengthMeter.style.backgroundColor = strength.color;
+      strengthText.textContent = strength.text;
+      strengthText.style.color = strength.color;
+    });
 
-        // Password Toggle
-        function togglePassword(inputId) {
-            const input = document.getElementById(inputId);
-            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
-            input.setAttribute('type', type);
+    function calculatePasswordStrength(password) {
+      if(password.length === 0) return { percentage: 0, color: '#ddd', text: 'Password strength' };
+      
+      let strength = 0;
+      if(password.length >= 8) strength += 25;
+      if(password.length >= 12) strength += 15;
+      if(/[A-Z]/.test(password)) strength += 20;
+      if(/[0-9]/.test(password)) strength += 20;
+      if(/[^A-Za-z0-9]/.test(password)) strength += 20;
+      
+      let color, text;
+      if(strength < 40) {
+        color = '#f42a41'; // Red
+        text = 'Weak';
+      } else if(strength < 80) {
+        color = '#ffa500'; // Orange
+        text = 'Medium';
+      } else {
+        color = '#00aa00'; // Green
+        text = 'Strong';
+      }
+      
+      return { percentage: strength, color, text };
+    }
+
+    // --- Auth Logic ---
+    // Switch between auth tabs
+    authTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        authTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        
+        authForms.forEach(form => form.classList.remove('active'));
+        if(tab.dataset.tab === 'signup') {
+          document.getElementById('signupForm').classList.add('active');
+        } else {
+          document.getElementById('loginForm').classList.add('active');
         }
+      });
+    });
 
-        // Password Strength Checker
-        passwordInput.addEventListener('input', function() {
-            const password = this.value;
-            const strength = calculatePasswordStrength(password);
-            
-            strengthMeter.style.width = strength.percentage + '%';
-            strengthMeter.style.backgroundColor = strength.color;
-            strengthText.textContent = strength.text;
-            strengthText.style.color = strength.color;
-        });
+    // Signup form handler
+    signupForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById('signupEmail').value.trim();
+      const password = passwordInput.value;
+      const confirmPassword = confirmPasswordInput.value;
+      
+      // Validation
+      if(password !== confirmPassword) {
+        showNotification('Passwords do not match!', 'error');
+        return;
+      }
+      
+      if(calculatePasswordStrength(password).percentage < 40) {
+        showNotification('Please use a stronger password!', 'error');
+        return;
+      }
+      
+      // Hash password (simulated for frontend demo)
+      const hashedPassword = await hashPassword(password);
+      
+      // Save to localStorage
+      let users = JSON.parse(localStorage.getItem('niroboUsers') || '[]');
+      if(users.some(user => user.email === email)) {
+        showNotification('User already exists!', 'error');
+        return;
+      }
+      
+      users.push({
+        id: 'user_' + Date.now(),
+        email,
+        password: hashedPassword,
+        createdAt: new Date().toISOString()
+      });
+      
+      localStorage.setItem('niroboUsers', JSON.stringify(users));
+      showNotification('Account created successfully! You can now log in.', 'success');
+      
+      // Reset form
+      signupForm.reset();
+      strengthMeter.style.width = '0%';
+      strengthText.textContent = 'Password strength';
+      
+      // Switch to login tab automatically
+      authTabs.forEach(t => t.classList.remove('active'));
+      document.querySelector('.auth-tab[data-tab="login"]').classList.add('active');
+      authForms.forEach(form => form.classList.remove('active'));
+      loginForm.classList.add('active');
+    });
 
-        function calculatePasswordStrength(password) {
-            if(password.length === 0) return { percentage: 0, color: '#ddd', text: 'Password strength' };
-            
-            let strength = 0;
-            if(password.length >= 8) strength += 25;
-            if(password.length >= 12) strength += 15;
-            if(/[A-Z]/.test(password)) strength += 20;
-            if(/[0-9]/.test(password)) strength += 20;
-            if(/[^A-Za-z0-9]/.test(password)) strength += 20;
-            
-            let color, text;
-            if(strength < 40) {
-                color = '#f42a41'; // Red
-                text = 'Weak';
-            } else if(strength < 80) {
-                color = '#ffa500'; // Orange
-                text = 'Medium';
-            } else {
-                color = '#00aa00'; // Green
-                text = 'Strong';
-            }
-            
-            return { percentage: strength, color, text };
+    // Login form handler
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      
+      // Hash input password
+      const hashedPassword = await hashPassword(password);
+      
+      // Check credentials
+      let users = JSON.parse(localStorage.getItem('niroboUsers') || '[]');
+      const user = users.find(u => u.email === email && u.password === hashedPassword);
+      
+      if(user) {
+        // Set current user in localStorage
+        localStorage.setItem('niroboCurrentUser', JSON.stringify({id: user.id, email: user.email}));
+        showNotification('Login successful!', 'success');
+        
+        // Redirect to dashboard or search page
+        setTimeout(() => {
+          window.location.href = 'dashboard.html'; // Or 'search.html' if you don't have a dashboard
+        }, 1500);
+      } else {
+        showNotification('Invalid email or password!', 'error');
+      }
+    });
+
+    // Forgot Password Handler
+    forgotPasswordLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      const email = prompt('Enter your email to reset password:');
+      if(email) {
+        let users = JSON.parse(localStorage.getItem('niroboUsers') || '[]');
+        const userExists = users.some(u => u.email === email);
+        
+        if(userExists) {
+          // In a real app, you would send a reset link to the email
+          // For this demo, we'll simulate sending an email
+          showNotification(`Password reset instructions sent to ${email}`, 'info');
+          // Simulate opening email client
+          setTimeout(() => {
+            const subject = encodeURIComponent('[Nirobo] Password Reset Request');
+            const body = encodeURIComponent(`
+PASSWORD RESET REQUEST
+=====================
+You have requested to reset your password for your Nirobo account.
+
+To proceed, please follow these steps:
+
+1. Open the following link in your browser: [Reset Password Link]
+2. Enter your new password.
+3. Confirm your new password.
+4. Click "Reset Password".
+
+If you did not request this, please ignore this email.
+
+⚠️ NOTE: This is a simulated request. In a real application, a secure reset link would be sent to your email.
+            `);
+            const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
+            window.open(mailtoLink, '_blank');
+          }, 2000);
+        } else {
+          showNotification('No account found with that email!', 'error');
         }
+      }
+    });
 
-        // Show Notification
-        function showNotification(message, type) {
-            notification.textContent = message;
-            notification.className = 'notification ' + type;
-            notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
+    // Simple password hashing simulation (NOT secure for production)
+    async function hashPassword(password) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(password);
+      const hash = await crypto.subtle.digest('SHA-256', data);
+      return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
 
-        // Signup Form Handler
-        signupForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const email = document.getElementById('signupEmail').value;
-            const password = passwordInput.value;
-            const confirmPassword = confirmPasswordInput.value;
-            
-            // Validation
-            if(password !== confirmPassword) {
-                showNotification('Passwords do not match!', 'error');
-                return;
-            }
-            
-            if(calculatePasswordStrength(password).percentage < 40) {
-                showNotification('Please use a stronger password!', 'error');
-                return;
-            }
-            
-            // Hash password (simulated for frontend demo)
-            const hashedPassword = await hashPassword(password);
-            
-            // Save to localStorage
-            const users = JSON.parse(localStorage.getItem('users') || '[]');
-            if(users.some(user => user.email === email)) {
-                showNotification('User already exists!', 'error');
-                return;
-            }
-            
-            users.push({
-                email,
-                password: hashedPassword,
-                createdAt: new Date().toISOString()
-            });
-            
-            localStorage.setItem('users', JSON.stringify(users));
-            showNotification('Account created successfully!', 'success');
-            
-            // Reset form
-            signupForm.reset();
-            strengthMeter.style.width = '0%';
-            strengthText.textContent = 'Password strength';
-            
-            // Redirect to dashboard
-            window.location.href = 'dashboard.html';
-        });
-
-        // Login Form Handler
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            // Hash input password
-            const hashedPassword = await hashPassword(password);
-            
-            // Check credentials
-            const users = JSON.parse(localStorage.getItem('users') || '[]');
-            const user = users.find(u => u.email === email && u.password === hashedPassword);
-            
-            if(user) {
-                localStorage.setItem('currentUser', JSON.stringify({email: user.email}));
-                showNotification('Login successful!', 'success');
-                
-                // Redirect to dashboard
-                window.location.href = 'dashboard.html';
-            } else {
-                showNotification('Invalid email or password!', 'error');
-            }
-        });
-
-        // Forgot Password Handler
-        forgotPasswordLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            const email = prompt('Enter your email to reset password:');
-            if(email) {
-                const users = JSON.parse(localStorage.getItem('users') || '[]');
-                const userExists = users.some(u => u.email === email);
-                
-                if(userExists) {
-                    alert(`Password reset link sent to ${email}`);
-                } else {
-                    showNotification('No account found with that email!', 'error');
-                }
-            }
-        });
-
-        // Simple password hashing simulation (NOT secure for production)
-        async function hashPassword(password) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(password);
-            const hash = await crypto.subtle.digest('SHA-256', data);
-            return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            // Check if user is already logged in
-            const currentUser = localStorage.getItem('currentUser');
-            if(currentUser) {
-                // Redirect to dashboard
-                window.location.href = 'dashboard.html';
-            }
-        });
-    </script>
+    // Initialize on Page Load
+    document.addEventListener("DOMContentLoaded", () => {
+      // Check if user is already logged in
+      const currentUser = localStorage.getItem('niroboCurrentUser');
+      if(currentUser) {
+        // Redirect to dashboard
+        window.location.href = 'dashboard.html'; // Or 'search.html'
+      }
+    });
+  </script>
 </body>
 </html>
