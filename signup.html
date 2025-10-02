@@ -603,7 +603,7 @@
       }
     });
 
-            // --- REAL Password Recovery Function (Calls Netlify Function) ---
+                // --- REAL Password Recovery Function (Calls Netlify Function) ---
     document.getElementById('forgotPasswordLink').addEventListener('click', async (e) => {
       e.preventDefault();
       
@@ -633,14 +633,18 @@
           // Success! Show confirmation.
           showNotification(data.message, 'success');
         } else {
+          // --- KEY CHANGE HERE ---
           // Handle specific error cases from the Netlify Function
-          if (response.status === 429) { // Too Many Requests
-            showNotification(`⏳ ${data.error}`, 'warning'); // Show warning for rate limits
+          // Show the EXACT message from the backend for better clarity, especially on rate limits
+          if (response.status === 429) { // Too Many Requests (Rate Limit)
+            // The backend sends a specific error message for rate limits
+            showNotification(data.error, 'warning'); // Show warning with the backend's exact message
           } else if (response.status === 404) { // Not Found
             showNotification(`❌ ${data.error}`, 'error');
           } else {
             showNotification(`❌ ${data.error || 'Failed to send reset email.'}`, 'error');
           }
+          // --- END KEY CHANGE ---
         }
       } catch (error) {
         // 5. Handle network errors or other problems
@@ -649,7 +653,7 @@
       }
     });
 
-    // Helper function to show notifications
+    // Helper function to show notifications (KEEP YOUR EXISTING ONE)
     function showNotification(message, type = 'info') {
       const notification = document.getElementById('notification');
       if (notification) {
