@@ -1,14 +1,101 @@
 // File: netlify/functions/forgot-password.js
-// Sends actual password (INSECURE) with rate limiting
+// Sends actual password with strict rate limiting
 
 const fetch = require('node-fetch');
+const fs = require('fs');
+const path = require('path');
 
-// --- INSECURE: Storing passwords in plain text ---
-// In a real app, passwords should be HASHED and NEVER sent via email.
-// This is for demonstration only based on your request.
+// --- INSECURE: Storing/Sending passwords in plain text ---
+// This is highly discouraged for production. Use hashed passwords and reset tokens.
 // --- END INSECURE WARNING ---
 
+// --- RATE LIMITING CONFIGURATION ---
+const RATE_LIMIT_USER_PER_DAY = 2;
+const RATE_LIMIT_MIN_INTERVAL_HOURS = 4;
+const RATE_LIMIT_GLOBAL_PER_DAY = 300;
+const RATE_WINDOW_MS = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+// File to store rate limit data (ephemeral on Netlify)
+const RATE_LIMIT_FILE = path.join('/tmp', 'nirobo_password_recovery_rates.json');
+
+// --- HELPER FUNCTIONS FOR RATE LIMITING ---
+function loadRateLimits() {
+  try {
+    if (fs.existsSync(RATE_LIMIT_FILE)) {
+      const data = fs.readFileSync(RATE_LIMIT_FILE, 'utf8');
+      return JSON.parse(data);
+    }
+  } catch (err) {
+    console.error("Error loading rate limits:", err.message);
+  }
+  // Return default structure if file doesn't exist or is corrupted
+  return { users: {}, global: [] };
+}
+
+function saveRateLimits(rateData) {
+  try {
+    fs.writeFileSync(RATE_LIMIT_FILE, JSON.stringify(rateData, null, 2));
+  } catch (err) {
+    console.error("Error saving rate limits:", err.message);
+    // Non-fatal, but means limits won't persist between function invocations reliably
+  }
+}
+
+function isWithinRateLimit(email, rateData) {
+  const now = Date.now();
+  
+  // 1. Check Global Limit
+  const recentGlobalRequests = rateData.global.filter(timestamp => (now - timestamp) < RATE_WINDOW_MS);
+  if (recentGlobalRequests.length >= RATE_LIMIT_GLOBAL_PER_DAY) {
+    return { allowed: false, reason: 'global_limit' };
+  }
+
+  // 2. Check Per-User Limit
+  const userRequests = rateData.users[email] || [];
+  const recentUserRequests = userRequests.filter(timestamp => (now - timestamp) < RATE_WINDOW_MS);
+  if (recentUserRequests.length >= RATE_LIMIT_USER_PER_DAY) {
+    return { allowed: false, reason: 'user_limit' };
+  }
+
+  // 3. Check Minimum Interval
+  if (recentUserRequests.length > 0) {
+    const lastRequestTime = Math.max(...recentUserRequests);
+    const timeSinceLastRequest = now - lastRequestTime;
+    const minIntervalMs = RATE_LIMIT_MIN_INTERVAL_HOURS * 60 * 60 * 1000;
+    if (timeSinceLastRequest < minIntervalMs) {
+      const waitHours = Math.ceil((minIntervalMs - timeSinceLastRequest) / (1000 * 60 * 60));
+      return { allowed: false, reason: 'interval', waitHours };
+    }
+  }
+
+  // If all checks pass
+  return { allowed: true };
+}
+
+function recordRequest(email, rateData) {
+  const now = Date.now();
+  
+  // Record for user
+  if (!rateData.users[email]) {
+    rateData.users[email] = [];
+  }
+  rateData.users[email].push(now);
+  
+  // Record globally
+  rateData.global.push(now);
+  
+  // Prune old timestamps to keep file size manageable
+  for (const user_email in rateData.users) {
+    rateData.users[user_email] = rateData.users[user_email].filter(ts => (now - ts) < RATE_WINDOW_MS);
+  }
+  rateData.global = rateData.global.filter(ts => (now - ts) < RATE_WINDOW_MS);
+  
+  saveRateLimits(rateData);
+}
+
+// --- MAIN HANDLER ---
 exports.handler = async (event, context) => {
+  // Only allow POST requests
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
@@ -17,6 +104,7 @@ exports.handler = async (event, context) => {
   }
 
   try {
+    // 1. Parse request body
     const { email } = JSON.parse(event.body);
 
     if (!email) {
@@ -26,96 +114,43 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // --- RATE LIMITING LOGIC ---
-    const now = Date.now();
-    const RATE_LIMIT_WINDOW_MS = 24 * 60 * 60 * 1000; // 24 hours
-    const MIN_REQUEST_INTERVAL_MS = 4 * 60 * 60 * 1000; // 4 hours
+    // 2. Load current rate limit data
+    let rateData = loadRateLimits();
 
-    // 1. Get rate limit data from Netlify Function's temporary file system
-    // Note: This is a SIMULATION. In production, use a proper database.
-    // For this demo, we'll use a simple file to track requests.
-    // This requires enabling Netlify's "Functions" file system access.
-    const fs = require('fs');
-    const path = require('path');
-    const RATE_LIMIT_FILE_PATH = path.join('/tmp', 'nirobo_rate_limits.json'); // Netlify's temp dir
-
-    let rateLimits = {};
-    try {
-        // Try to read existing rate limit data
-        if (fs.existsSync(RATE_FILE_PATH)) {
-            const data = fs.readFileSync(RATE_FILE_PATH, 'utf8');
-            rateLimits = JSON.parse(data);
-        }
-    } catch (err) {
-        console.warn("Could not read rate limit file, starting fresh:", err.message);
-        rateLimits = {};
+    // 3. Check rate limits
+    const rateCheck = isWithinRateLimit(email, rateData);
+    if (!rateCheck.allowed) {
+      let errorMessage = '';
+      switch (rateCheck.reason) {
+        case 'global_limit':
+          errorMessage = 'Daily email limit reached. Please try again tomorrow.';
+          break;
+        case 'user_limit':
+          errorMessage = `You have reached the limit of ${RATE_LIMIT_USER_PER_DAY} password recovery requests per day. Please try again tomorrow.`;
+          break;
+        case 'interval':
+          errorMessage = `Please wait at least ${RATE_LIMIT_MIN_INTERVAL_HOURS} hours between requests. You can try again in approximately ${rateCheck.waitHours} hours.`;
+          break;
+        default:
+          errorMessage = 'Rate limit exceeded.';
+      }
+      return {
+        statusCode: 429, // Too Many Requests
+        body: JSON.stringify({ error: errorMessage })
+      };
     }
 
-    // 2. Check global daily limit (300 emails)
-    const recentGlobalRequests = Object.values(rateLimits).flat().filter(ts => (now - ts) < RATE_LIMIT_WINDOW_MS);
-    if (recentGlobalRequests.length >= 300) {
-        return {
-            statusCode: 429, // Too Many Requests
-            body: JSON.stringify({ error: 'Daily email limit reached. Please try again tomorrow.' })
-        };
-    }
-
-    // 3. Check per-user limit (2 requests per day)
-    const userRequests = rateLimits[email] || [];
-    const recentUserRequests = userRequests.filter(ts => (now - ts) < RATE_LIMIT_WINDOW_MS);
-    if (recentUserRequests.length >= 2) {
-        return {
-            statusCode: 429,
-            body: JSON.stringify({ error: 'You have reached the limit of 2 password recovery requests per day. Please try again tomorrow.' })
-        };
-    }
-
-    // 4. Check minimum interval (4 hours)
-    if (recentUserRequests.length > 0) {
-        const lastRequestTime = Math.max(...recentUserRequests);
-        if ((now - lastRequestTime) < MIN_REQUEST_INTERVAL_MS) {
-            const waitHours = Math.ceil((MIN_REQUEST_INTERVAL_MS - (now - lastRequestTime)) / (1000 * 60 * 60));
-            return {
-                statusCode: 429,
-                body: JSON.stringify({ error: `Please wait at least 4 hours between requests. You can try again in approximately ${waitHours} hours.` })
-            };
-        }
-    }
-    // --- END RATE LIMITING LOGIC ---
-
-    // --- FIND USER & SEND PASSWORD ---
-    // Conceptual: Load user data (in a real app, from a database)
-    // For this demo, we'll simulate loading from a file or database
-    // Since we don't have a real database, we'll assume passwords are stored in plain text
-    // This is a MAJOR SECURITY FLAW. DO NOT DO THIS IN PRODUCTION.
-    let userData = [];
-    try {
-        // Simulate loading user data
-        // In a real backend, you'd query your user database
-        // For demo, let's assume we have a way to access user data
-        // This is a placeholder. You need a real user database.
-        const userResponse = await fetch('https://your-site.netlify.app/data/users.json'); // Hypothetical user data file
-        if (userResponse.ok) {
-            userData = await userResponse.json();
-        } else {
-            // Fallback: Check localStorage (conceptual, not possible directly in Netlify Function)
-            // This part is impossible in a Netlify Function without a database.
-            // We'll simulate finding the user.
-            userData = [
-                { email: "test@example.com", password: "plaintext_password_123" },
-                { email: "user@nirobo.net", password: "another_plaintext_pass" }
-                // Add more simulated users if needed for testing
-            ];
-        }
-    } catch (err) {
-        console.error("Error loading user data:", err);
-        userData = [
-             { email: "test@example.com", password: "plaintext_password_123" },
-             { email: "user@nirobo.net", password: "another_plaintext_pass" }
-        ];
-    }
-
-    const user = userData.find(u => u.email === email);
+    // 4. (Conceptual) Find user in database and get password
+    // In a real app, you would query your user database here.
+    // For this prototype, we'll simulate finding a user.
+    // *** IMPORTANT: This is insecure. Passwords should be hashed. ***
+    const users = [
+      // Example user data - replace with real database query
+      { email: "test@example.com", password: "mySecretPass123" },
+      { email: "user@nirobo.net", password: "anotherPass456" }
+      // Add more test users if needed
+    ];
+    const user = users.find(u => u.email === email);
 
     if (!user) {
       return {
@@ -124,7 +159,10 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // --- PREPARE EMAIL WITH ACTUAL PASSWORD (INSECURE) ---
+    // 5. Record this successful request for rate limiting
+    recordRequest(email, rateData);
+
+    // 6. Prepare email content with the ACTUAL PASSWORD (INSECURE!)
     const emailData = {
       sender: { email: "noreply@nirobo.netlify.app", name: "Nirobo Search" },
       to: [{ email: email }],
@@ -140,7 +178,9 @@ exports.handler = async (event, context) => {
                 .header { text-align: center; padding: 20px 0; border-bottom: 1px solid #333; }
                 .logo { font-size: 2rem; color: #d40000; }
                 .content { padding: 20px 0; }
-                .password-box { background: rgba(212, 0, 0, 0.2); padding: 15px; border-radius: 8px; margin: 20px 0; }
+                .password-box { background: rgba(212, 0, 0, 0.2); padding: 15px; border-radius: 8px; margin: 20px 0; text-align: center; }
+                .password { font-size: 1.5rem; font-weight: bold; color: #ff9999; }
+                .warning { background: rgba(255, 153, 0, 0.2); padding: 15px; border-radius: 8px; margin-top: 20px; }
                 .footer { text-align: center; padding: 20px 0; border-top: 1px solid #333; font-size: 0.8rem; color: #888; }
             </style>
         </head>
@@ -156,11 +196,13 @@ exports.handler = async (event, context) => {
               <p>You have requested to recover your password for your Nirobo account.</p>
               <div class="password-box">
                 <p><strong>Your Password is:</strong></p>
-                <p style="font-size: 1.5rem; font-weight: bold; color: #ff9999;">${user.password}</p> <!-- INSECURE!!! -->
+                <p class="password">${user.password}</p> <!-- INSECURE!!! -->
               </div>
-              <p><strong>⚠️ CRITICAL SECURITY WARNING:</strong></p>
-              <p>Sending passwords in plain text via email is extremely insecure. If this email is intercepted, your account is compromised. Please change your password immediately after logging in.</p>
-              <p>For better security, Nirobo recommends using a password reset link instead of sending passwords directly.</p>
+              <div class="warning">
+                <p><strong>⚠️ CRITICAL SECURITY WARNING:</strong></p>
+                <p>Sending passwords in plain text via email is extremely insecure. If this email is intercepted, your account is compromised. Please change your password immediately after logging in.</p>
+                <p>For better security, Nirobo recommends using a password reset link instead of sending passwords directly.</p>
+              </div>
               <a href="https://your-site.netlify.app/signup.html" style="display: inline-block; padding: 12px 24px; background: #d40000; color: white; text-decoration: none; border-radius: 30px; font-weight: bold; margin-top: 20px;">Log In & Change Password</a>
             </div>
             <div class="footer">
@@ -174,7 +216,7 @@ exports.handler = async (event, context) => {
       `
     };
 
-    // --- SEND EMAIL VIA BREVO ---
+    // 7. Send the email via Brevo API
     const response = await fetch('https://api.brevo.com/v3.1/smtp/email', {
       method: 'POST',
       headers: {
@@ -195,28 +237,7 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // --- UPDATE RATE LIMITS ---
-    // Record this request
-    if (!rateLimits[email]) {
-        rateLimits[email] = [];
-    }
-    rateLimits[email].push(now);
-    // Keep only timestamps within the window
-    rateLimits[email] = rateLimits[email].filter(ts => (now - ts) < RATE_LIMIT_WINDOW_MS);
-    // Update global requests list
-    // (This simplistic approach might not be perfectly accurate for global count,
-    // but it's a reasonable simulation for a prototype)
-    // A real DB would have a better way to track this.
-
-    try {
-        // Save updated rate limits
-        fs.writeFileSync(RATE_FILE_PATH, JSON.stringify(rateLimits, null, 2));
-    } catch (err) {
-        console.error("Failed to write rate limit file:", err);
-        // Non-fatal error, email was sent successfully
-    }
-    // --- END UPDATE RATE LIMITS ---
-
+    // 8. Success response
     return {
       statusCode: 200,
       body: JSON.stringify({ message: `Your password has been sent to ${email}. Please check your inbox/spam.` })
