@@ -603,7 +603,7 @@
       }
     });
 
-        // --- REAL Password Recovery Function (Calls Netlify Function) ---
+            // --- REAL Password Recovery Function (Calls Netlify Function) ---
     document.getElementById('forgotPasswordLink').addEventListener('click', async (e) => {
       e.preventDefault();
       
@@ -628,34 +628,40 @@
         // 3. Parse the response from the function
         const data = await response.json();
 
-        // 4. Check if the function was successful
+        // 4. Check the response status
         if (response.ok) {
           // Success! Show confirmation.
           showNotification(data.message, 'success');
         } else {
-          // Error from the function (e.g., email not found, Brevo API error)
-          showNotification(data.error || 'Failed to send reset email.', 'error');
+          // Handle specific error cases from the Netlify Function
+          if (response.status === 429) { // Too Many Requests
+            showNotification(`⏳ ${data.error}`, 'warning'); // Show warning for rate limits
+          } else if (response.status === 404) { // Not Found
+            showNotification(`❌ ${data.error}`, 'error');
+          } else {
+            showNotification(`❌ ${data.error || 'Failed to send reset email.'}`, 'error');
+          }
         }
       } catch (error) {
         // 5. Handle network errors or other problems
         console.error("Password recovery error:", error);
-        showNotification('An error occurred. Please try again.', 'error');
+        showNotification('An unexpected error occurred. Please try again later.', 'error');
       }
     });
 
-    // Helper function to show notifications (you might already have this, but including for completeness)
+    // Helper function to show notifications
     function showNotification(message, type = 'info') {
       const notification = document.getElementById('notification');
       if (notification) {
         notification.textContent = message;
         notification.className = 'notification ' + type;
         notification.classList.add('show');
-        setTimeout(() => notification.classList.remove('show'), 3000);
+        setTimeout(() => notification.classList.remove('show'), 5000); // Show longer for warnings/errors
       } else {
         alert(message); // Fallback if notification element is missing
       }
     }
-    });
+    // --- END REAL PASSWORD RECOVERY ---
   </script>
 </body>
 </html>
