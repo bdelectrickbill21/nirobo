@@ -89,7 +89,7 @@ exports.handler = async (event, context) => {
       method: 'POST',
       headers: {
         'accept': 'application/json',
-        'api-key': 'eyJhcGlfa2V5IjoieGtleXNpYi1kZjk5ZjM5Y2I4ZWQ1Njk1NzBlYTYyM2NiNmExZTU3Mjc5NmU4YWUxZjI1NWQ2ZjQxZDBhNGY3ZDVmODU5ZDcyLXZUb1FEN3lOZ1lSaG11ZUEifQ==', // <-- PASTE YOUR ACTUAL KEY HERE
+        'api-key': 'xkeysib-abcdefghijklmnopqrstuvwxyz1234567890abcdefabcdefabcdefab-qrstuvwxyz123456', // <-- PASTE YOUR ACTUAL KEY HERE
         'content-type': 'application/json'
       },
       body: JSON.stringify(emailData)
