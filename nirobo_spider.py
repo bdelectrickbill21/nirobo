@@ -260,6 +260,12 @@ class NiroboSpider(scrapy.Spider):
         output_file = 'result.json'
         os.makedirs(os.path.dirname(output_file) or '.', exist_ok=True)
 
+        # Check if URL already exists without loading entire file
+        if self._url_exists_in_file(output_file, result['url']):
+            print(f"URL already exists, skipping: {result['url']}")
+            return
+
+        # Load existing data only if we need to add new result
         data = []
         if os.path.exists(output_file):
             try:
@@ -269,23 +275,40 @@ class NiroboSpider(scrapy.Spider):
                 self.logger.error(f"Error reading existing result.json: {e}")
                 data = []
 
-        # Avoid duplicates
-        seen_urls = set()
-        unique_data = []
-        for item in data:
-            if item['url'] not in seen_urls:
-                unique_data.append(item)
-                seen_urls.add(item['url'])
-        
-        # Add new result if not already present
-        if result['url'] not in seen_urls:
-            unique_data.append(result)
-            seen_urls.add(result['url'])
+        # Add new result
+        data.append(result)
 
-        print(f"Saving {len(unique_data)} total entries to result.json")
+        # Write back to file
+        print(f"Saving {len(data)} total entries to result.json")
         try:
             with open(output_file, 'w', encoding='utf-8') as f:
-                json.dump(unique_data, f, ensure_ascii=False, indent=2)
+                json.dump(data, f, ensure_ascii=False, indent=2)
             print(f"Successfully saved result for: {result['title'][:50]}...")
         except Exception as e:
             self.logger.error(f"Error writing to result.json: {e}")
+
+    def _url_exists_in_file(self, filepath, url):
+        """Check if URL exists in file without loading entire file into memory"""
+        if not os.path.exists(filepath):
+            return False
+        
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                # Read file in chunks to avoid loading large files entirely
+                chunk_size = 8192
+                buffer = ""
+                while True:
+                    chunk = f.read(chunk_size)
+                    if not chunk:
+                        break
+                    buffer += chunk
+                    # Check if URL is in current buffer
+                    if f'"{url}"' in buffer:
+                        return True
+                    # Keep only last part of buffer to avoid missing URLs split across chunks
+                    if len(buffer) > chunk_size * 2:
+                        buffer = buffer[-chunk_size:]
+            return False
+        except Exception as e:
+            self.logger.error(f"Error checking URL existence: {e}")
+            return False
