@@ -7,6 +7,20 @@ import logging
 
 class NiroboSpider(scrapy.Spider):
     name = 'nirobo'
+    
+    # Configure spider settings for better performance
+    custom_settings = {
+        'CONCURRENT_REQUESTS': 16,  # Limit concurrent requests
+        'CONCURRENT_REQUESTS_PER_DOMAIN': 2,  # Be respectful to servers
+        'DOWNLOAD_DELAY': 1,  # 1 second delay between requests
+        'RANDOMIZE_DOWNLOAD_DELAY': 0.5,  # Randomize delay (0.5 * to 1.5 * DOWNLOAD_DELAY)
+        'DOWNLOAD_TIMEOUT': 30,  # 30 second timeout
+        'RETRY_TIMES': 2,  # Retry failed requests 2 times
+        'AUTOTHROTTLE_ENABLED': True,  # Enable AutoThrottle
+        'AUTOTHROTTLE_START_DELAY': 1,
+        'AUTOTHROTTLE_MAX_DELAY': 60,
+        'AUTOTHROTTLE_TARGET_CONCURRENCY': 2.0,
+    }
 
     start_urls = [
         'https://www.thedailystar.net/',
@@ -37,12 +51,23 @@ class NiroboSpider(scrapy.Spider):
     ]
 
     visited_urls = set()
+    max_visited_urls = 500  # Limit memory usage
+    processed_count = 0
 
     def parse(self, response):
         # Skip if already visited
         if response.url in self.visited_urls:
             return
+        
+        # Clean up visited_urls set if it gets too large
+        if len(self.visited_urls) >= self.max_visited_urls:
+            # Keep only the most recent half of URLs
+            urls_list = list(self.visited_urls)
+            self.visited_urls = set(urls_list[-self.max_visited_urls//2:])
+            self.logger.info(f"Cleaned visited_urls set, now has {len(self.visited_urls)} entries")
+        
         self.visited_urls.add(response.url)
+        self.processed_count += 1
         
         try:
             # Extract title
