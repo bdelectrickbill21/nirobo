@@ -36,7 +36,10 @@ class NiroboSpider(scrapy.Spider):
         'nytimes.com'
     ]
 
-    visited_urls = set()
+    def __init__(self, *args, **kwargs):
+        super(NiroboSpider, self).__init__(*args, **kwargs)
+        # Initialize visited_urls as an instance attribute to avoid sharing state between spider instances
+        self.visited_urls = set()
 
     def parse(self, response):
         # Skip if already visited
