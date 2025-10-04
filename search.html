@@ -795,6 +795,13 @@
       });
       return Array.from(suggestions).slice(0, 3); // Limit to 3 suggestions
     }
+
+    // HTML escape function to prevent XSS
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
     // --- Core Search Logic ---
     // Load data from result.json
     async function loadResultJson() {
@@ -928,7 +935,11 @@
             suggestionsHtml = `
               <p><strong>Did you mean:</strong></p>
               <ul style="list-style: none; padding: 0;">
-                ${suggestions.map(s => `<li style="margin-bottom: 5px;"><a href="#" onclick="searchInput.value='${s.replace(/'/g, "\\'")}'; searchForm.dispatchEvent(new Event('submit')); return false;" style="color: #ff9999;">${s}</a></li>`).join('')}
+                ${suggestions.map(s => {
+                  const escapedTitle = escapeHtml(s);
+                  const escapedForJs = s.replace(/'/g, "\\'").replace(/"/g, '\\"');
+                  return `<li style="margin-bottom: 5px;"><a href="#" onclick="searchInput.value='${escapedForJs}'; searchForm.dispatchEvent(new Event('submit')); return false;" style="color: #ff9999;">${escapedTitle}</a></li>`;
+                }).join('')}
               </ul>
             `;
         }
@@ -936,7 +947,7 @@
           <div class="no-results animated">
             <i class="fas fa-sad-tear"></i>
             <h3>We're Sorry</h3>
-            <p>We couldn't find any matches for "${query}".</p>
+            <p>We couldn't find any matches for "${escapeHtml(query)}".</p>
             ${suggestionsHtml}
           </div>
         `;
@@ -960,18 +971,18 @@
         resultElement.innerHTML = `
           <div class="result-header">
             <div class="favicon">
-              <img src="${faviconUrl}" alt="Favicon" onerror="this.parentElement.innerHTML='<i class=\'fas fa-link\'></i>'">
+              <img src="${escapeHtml(faviconUrl)}" alt="Favicon" onerror="this.parentElement.innerHTML='<i class=\'fas fa-link\'></i>'">
             </div>
             <div class="result-content">
               <h3 class="result-title">
-                <a href="${result.url}" target="_blank" rel="noopener">${result.title}</a>
+                <a href="${escapeHtml(result.url)}" target="_blank" rel="noopener">${escapeHtml(result.title)}</a>
               </h3>
-              <a href="${result.url}" class="result-url" target="_blank" rel="noopener">${truncatedUrl}</a>
-              <p class="result-description ${!result.description ? 'missing' : ''}">${displayDescription}</p>
+              <a href="${escapeHtml(result.url)}" class="result-url" target="_blank" rel="noopener">${escapeHtml(truncatedUrl)}</a>
+              <p class="result-description ${!result.description ? 'missing' : ''}">${escapeHtml(displayDescription)}</p>
               <div class="result-tags">
                 ${(Array.isArray(result.tags) ? result.tags : [])
                   .slice(0, 5)
-                  .map(tag => `<span class="result-tag">${tag}</span>`)
+                  .map(tag => `<span class="result-tag">${escapeHtml(tag)}</span>`)
                   .join('')}
               </div>
             </div>
@@ -981,10 +992,10 @@
               ${result.submittedAt ? `Submitted: ${new Date(result.submittedAt).toLocaleDateString()}` : 'Source: Database'}
             </div>
             <div class="result-actions">
-              <button class="action-btn report-btn" data-url="${result.url}" data-title="${result.title}">
+              <button class="action-btn report-btn" data-url="${escapeHtml(result.url)}" data-title="${escapeHtml(result.title)}">
                 <i class="fas fa-flag"></i> Report
               </button>
-              <button class="action-btn save-btn" data-url="${result.url}" data-title="${result.title}">
+              <button class="action-btn save-btn" data-url="${escapeHtml(result.url)}" data-title="${escapeHtml(result.title)}">
                 <i class="fas fa-bookmark"></i> Save
               </button>
             </div>

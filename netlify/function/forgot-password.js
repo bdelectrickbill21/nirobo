@@ -140,14 +140,13 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // 4. (Conceptual) Find user in database and get password
+    // 4. Generate secure password reset token
     // In a real app, you would query your user database here.
     // For this prototype, we'll simulate finding a user.
-    // *** IMPORTANT: This is insecure. Passwords should be hashed. ***
     const users = [
       // Example user data - replace with real database query
-      { email: "test@example.com", password: "mySecretPass123" },
-      { email: "user@nirobo.net", password: "anotherPass456" }
+      { email: "test@example.com", passwordHash: "$2b$10$example.hash.for.test@example.com" },
+      { email: "user@nirobo.net", passwordHash: "$2b$10$example.hash.for.user@nirobo.net" }
       // Add more test users if needed
     ];
     const user = users.find(u => u.email === email);
@@ -159,27 +158,35 @@ exports.handler = async (event, context) => {
       };
     }
 
+    // Generate secure reset token (in production, use crypto.randomBytes)
+    const resetToken = Math.random().toString(36).substring(2) + Date.now().toString(36);
+    const resetExpiry = Date.now() + (60 * 60 * 1000); // 1 hour expiry
+    
+    // In production, store this token in database with expiry
+    console.log(`Reset token for ${email}: ${resetToken} (expires: ${new Date(resetExpiry).toISOString()})`);
+
     // 5. Record this successful request for rate limiting
     recordRequest(email, rateData);
 
-    // 6. Prepare email content with the ACTUAL PASSWORD (INSECURE!)
+    // 6. Prepare secure password reset email
+    const resetUrl = `https://your-site.netlify.app/reset-password.html?token=${resetToken}&email=${encodeURIComponent(email)}`;
     const emailData = {
       sender: { email: "noreply@nirobo.netlify.app", name: "Nirobo Search" },
       to: [{ email: email }],
-      subject: "[Nirobo] Your Password Recovery Request",
+      subject: "[Nirobo] Password Reset Request",
       htmlContent: `
         <!DOCTYPE html>
         <html>
         <head>
-            <title>Password Recovery</title>
+            <title>Password Reset</title>
             <style>
                 body { font-family: Arial, sans-serif; background-color: #0a1f0a; color: #f5f5f5; }
                 .container { max-width: 600px; margin: 0 auto; padding: 20px; background: #1a1a1a; border-radius: 10px; }
                 .header { text-align: center; padding: 20px 0; border-bottom: 1px solid #333; }
                 .logo { font-size: 2rem; color: #d40000; }
                 .content { padding: 20px 0; }
-                .password-box { background: rgba(212, 0, 0, 0.2); padding: 15px; border-radius: 8px; margin: 20px 0; text-align: center; }
-                .password { font-size: 1.5rem; font-weight: bold; color: #ff9999; }
+                .reset-box { background: rgba(0, 100, 0, 0.2); padding: 15px; border-radius: 8px; margin: 20px 0; text-align: center; }
+                .reset-link { font-size: 1.2rem; font-weight: bold; color: #00ff00; word-break: break-all; }
                 .warning { background: rgba(255, 153, 0, 0.2); padding: 15px; border-radius: 8px; margin-top: 20px; }
                 .footer { text-align: center; padding: 20px 0; border-top: 1px solid #333; font-size: 0.8rem; color: #888; }
             </style>
@@ -191,19 +198,20 @@ exports.handler = async (event, context) => {
               <p>"Intelligent URL Discovery Powered by AI"</p>
             </div>
             <div class="content">
-              <h2>Password Recovery Request</h2>
+              <h2>Password Reset Request</h2>
               <p>Hello,</p>
-              <p>You have requested to recover your password for your Nirobo account.</p>
-              <div class="password-box">
-                <p><strong>Your Password is:</strong></p>
-                <p class="password">${user.password}</p> <!-- INSECURE!!! -->
+              <p>You have requested to reset your password for your Nirobo account.</p>
+              <div class="reset-box">
+                <p><strong>Click the link below to reset your password:</strong></p>
+                <p class="reset-link">${resetUrl}</p>
+                <p><em>This link will expire in 1 hour for security reasons.</em></p>
               </div>
               <div class="warning">
-                <p><strong>⚠️ CRITICAL SECURITY WARNING:</strong></p>
-                <p>Sending passwords in plain text via email is extremely insecure. If this email is intercepted, your account is compromised. Please change your password immediately after logging in.</p>
-                <p>For better security, Nirobo recommends using a password reset link instead of sending passwords directly.</p>
+                <p><strong>🔒 Security Notice:</strong></p>
+                <p>If you did not request this password reset, please ignore this email. Your account remains secure.</p>
+                <p>Never share this reset link with anyone. Nirobo will never ask for your password.</p>
               </div>
-              <a href="https://your-site.netlify.app/signup.html" style="display: inline-block; padding: 12px 24px; background: #d40000; color: white; text-decoration: none; border-radius: 30px; font-weight: bold; margin-top: 20px;">Log In & Change Password</a>
+              <a href="${resetUrl}" style="display: inline-block; padding: 12px 24px; background: #d40000; color: white; text-decoration: none; border-radius: 30px; font-weight: bold; margin-top: 20px;">Reset Password</a>
             </div>
             <div class="footer">
               <p>Made in Bangladesh 🇧🇩 | Curated by Nirobo</p>
@@ -240,7 +248,7 @@ exports.handler = async (event, context) => {
     // 8. Success response
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: `Your password has been sent to ${email}. Please check your inbox/spam.` })
+      body: JSON.stringify({ message: `Password reset link has been sent to ${email}. Please check your inbox/spam.` })
     };
 
   } catch (error) {
