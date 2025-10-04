@@ -132,131 +132,135 @@
       color: var(--text-secondary);
       margin-bottom: 10px;
     }
-    /* Submissions Section */
-    .submissions-list {
-      max-height: 400px;
-      overflow-y: auto;
+    /* Submissions Section - Library Shelf Style */
+    .submissions-library {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      margin-top: 20px;
     }
-    .submission-item {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 20px;
+    .shelf {
+      background: rgba(0, 100, 0, 0.1);
       border-radius: 10px;
-      margin-bottom: 20px;
-      border-left: 4px solid var(--accent);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      padding: 20px;
+      margin-bottom: 30px;
+      border: 1px solid rgba(212, 0, 0, 0.2);
+    }
+    .shelf-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(212, 0, 0, 0.2);
+    }
+    .shelf-title {
+      font-size: 1.4rem;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .shelf-count {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    .shelf-books {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .book-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     }
-    .submission-item:hover {
-      transform: translateY(-3px);
+    .book-card:hover {
+      transform: translateY(-5px);
       box-shadow: 0 8px 25px rgba(212, 0, 0, 0.3);
-      border-left-color: var(--accent-hover);
+      border-color: var(--accent-hover);
     }
-    .submission-item::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--accent), transparent);
-      transform: scaleX(0);
-      transition: transform 0.5s ease;
-    }
-    .submission-item:hover::before {
-      transform: scaleX(1);
-    }
-    .submission-header {
-      display: flex;
-      align-items: flex-start;
-      gap: 15px;
+    .book-cover {
+      width: 100%;
+      height: 120px;
+      background: rgba(212, 0, 0, 0.2);
+      border-radius: 4px;
       margin-bottom: 15px;
-    }
-    .favicon {
-      width: 32px;
-      height: 32px;
-      border-radius: 6px;
-      flex-shrink: 0;
-      background: #333;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      font-size: 3rem;
+      color: var(--accent);
     }
-    .submission-content {
-      flex: 1;
-    }
-    .submission-title {
-      font-size: 1.3rem;
+    .book-title {
+      font-size: 1.1rem;
       margin-bottom: 8px;
       color: #ff9999;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .submission-title a {
-      color: #ff9999;
-      text-decoration: none;
-    }
-    .submission-title a:hover {
-      text-decoration: underline;
-      color: var(--accent-hover);
-    }
-    .submission-url {
+    .book-url {
       color: #888;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       margin-bottom: 12px;
       display: block;
       word-break: break-all;
     }
-    .submission-description {
-      margin-bottom: 15px;
-      color: var(--text-secondary);
-      line-height: 1.7;
-    }
-    .submission-description.missing {
-        font-style: italic;
-        color: #888;
-    }
-    .submission-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 15px;
-    }
-    .submission-tag {
-      background: rgba(212, 0, 0, 0.2);
-      color: #ff9999;
-      padding: 4px 12px;
+    .book-status {
+      padding: 4px 10px;
       border-radius: 20px;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
+      font-weight: bold;
+      margin-bottom: 15px;
     }
-    .submission-meta {
+    .book-status.approved {
+      background: rgba(0, 170, 0, 0.3);
+      color: var(--success);
+    }
+    .book-status.rejected {
+      background: rgba(212, 0, 0, 0.3);
+      color: var(--danger);
+    }
+    .book-status.pending {
+      background: rgba(255, 153, 0, 0.3);
+      color: var(--warning);
+    }
+    .book-meta {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 15px;
-      font-size: 0.85rem;
-      color: #888;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
       padding-top: 15px;
       border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
-    .submission-actions {
+    .book-actions {
       display: flex;
-      gap: 10px;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 15px;
     }
-    .action-btn {
+    .book-action-btn {
       background: rgba(255, 255, 255, 0.1);
       color: var(--text);
       border: 1px solid var(--border);
-      padding: 6px 15px;
+      padding: 6px 12px;
       border-radius: 20px;
       cursor: pointer;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       transition: all 0.3s ease;
       display: flex;
       align-items: center;
       gap: 5px;
     }
-    .action-btn:hover {
+    .book-action-btn:hover {
       background: var(--accent);
       border-color: var(--accent);
     }
@@ -669,14 +673,14 @@
       </div>
     </section>
 
-    <!-- URL Submissions Section -->
+    <!-- URL Submissions Section - Library Shelf Style -->
     <section class="dashboard-section">
       <div class="section-header">
         <h2 class="section-title">
-          <i class="fas fa-upload"></i> Your URL Submissions
+          <i class="fas fa-book"></i> Your URL Library
         </h2>
       </div>
-      <div class="submissions-list" id="submissionsList">
+      <div class="submissions-library" id="submissionsLibrary">
         <p>Loading your submissions...</p>
       </div>
     </section>
@@ -745,6 +749,7 @@
   <script>
     // --- CONFIGURATION ---
     const RESULTS_PER_PAGE = 10;
+    const MAX_SUBMISSIONS_PER_USER = 1971; // Enforce the 1971 URL limit
     let currentPage = 1;
     let currentFilter = 'all';
     let allResults = [];
@@ -756,7 +761,7 @@
     // --- DOM Elements ---
     const userEmail = document.getElementById('userEmail');
     const logoutBtn = document.getElementById('logoutBtn');
-    const submissionsList = document.getElementById('submissionsList');
+    const submissionsLibrary = document.getElementById('submissionsLibrary');
     const notification = document.getElementById('notification');
     const newEmail = document.getElementById('newEmail');
     const oldPassword = document.getElementById('oldPassword');
@@ -773,7 +778,7 @@
       notification.classList.add('show');
       setTimeout(() => notification.classList.remove('show'), 3000);
     }
-    // Load data
+    // Load data from localStorage
     function loadData(key, defaultValue = []) {
       try {
         return JSON.parse(localStorage.getItem(key) || JSON.stringify(defaultValue));
@@ -782,7 +787,7 @@
         return defaultValue;
       }
     }
-    // Save data
+    // Save data to localStorage
     function saveData(key, data) {
       try {
         localStorage.setItem(key, JSON.stringify(data));
@@ -791,9 +796,9 @@
         showNotification('Failed to save data. Storage might be full.', 'error');
       }
     }
-    // Hash password (simple for demo)
+    // Hash password (simple for demo - NOT secure for production)
     function hashPassword(pw) {
-      return btoa(pw); // Not secure, but works for demo
+      return btoa(pw); // Base64 encoding (NOT secure)
     }
     // Format date
     function formatDate(isoString) {
@@ -894,73 +899,134 @@
       document.getElementById('totalSubmissions').textContent = userSubmissions.length;
       document.getElementById('approvedCount').textContent = userSubmissions.filter(s => s.status === 'approved').length;
     }
-    // --- URL SUBMISSIONS ---
+    // --- URL SUBMISSIONS - LIBRARY SHELF STYLE ---
     function displayUserSubmissions() {
       const currentUser = checkAuth();
       if (!currentUser) return;
       const allSubmissions = loadData('niroboAllSubmissions', []);
       const userSubmissions = allSubmissions.filter(sub => sub.userId === currentUser.id);
-      
+
+      // Group submissions by category
+      const categories = {
+        'websites': { title: 'Websites', icon: 'fas fa-window-maximize', submissions: [] },
+        'images': { title: 'Images', icon: 'fas fa-image', submissions: [] },
+        'videos': { title: 'Videos', icon: 'fas fa-video', submissions: [] },
+        'documents': { title: 'Documents', icon: 'fas fa-file-alt', submissions: [] },
+        'tools': { title: 'Tools', icon: 'fas fa-wrench', submissions: [] }
+      };
+
+      userSubmissions.forEach(sub => {
+        const categoryKey = sub.category || 'websites'; // Default to websites
+        if (categories[categoryKey]) {
+          categories[categoryKey].submissions.push(sub);
+        } else {
+          // Handle unknown categories by grouping them under 'websites'
+          categories['websites'].submissions.push(sub);
+        }
+      });
+
+      submissionsLibrary.innerHTML = '';
+
+      // Check if user has reached submission limit
+      if (userSubmissions.length >= MAX_SUBMISSIONS_PER_USER) {
+        const limitNotice = document.createElement('div');
+        limitNotice.className = 'empty-state';
+        limitNotice.innerHTML = `
+          <h3>⚠️ Submission Limit Reached</h3>
+          <p>You have submitted the maximum of ${MAX_SUBMISSIONS_PER_USER} URLs.</p>
+          <p>Please contact support if you need to submit more.</p>
+        `;
+        submissionsLibrary.appendChild(limitNotice);
+      }
+
+      // Render shelves for each category
+      Object.keys(categories).forEach(catKey => {
+        const category = categories[catKey];
+        if (category.submissions.length > 0) {
+          const shelfDiv = document.createElement('div');
+          shelfDiv.className = 'shelf';
+          shelfDiv.innerHTML = `
+            <div class="shelf-header">
+              <div class="shelf-title">
+                <i class="${category.icon}"></i> ${category.title}
+              </div>
+              <div class="shelf-count">${category.submissions.length} items</div>
+            </div>
+            <div class="shelf-books">
+              ${category.submissions.map(sub => {
+                const domain = getDomain(sub.url);
+                const cleanUrl = sub.url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+                const truncatedUrl = cleanUrl.length > 30 ? cleanUrl.substring(0, 30) + '...' : cleanUrl;
+                const statusClass = sub.status || 'pending';
+                const statusText = sub.status ? sub.status.toUpperCase() : 'PENDING';
+                
+                // Determine icon based on category
+                let iconClass = 'fas fa-link';
+                switch(catKey) {
+                  case 'websites': iconClass = 'fas fa-window-maximize'; break;
+                  case 'images': iconClass = 'fas fa-image'; break;
+                  case 'videos': iconClass = 'fas fa-video'; break;
+                  case 'documents': iconClass = 'fas fa-file-alt'; break;
+                  case 'tools': iconClass = 'fas fa-wrench'; break;
+                }
+
+                return `
+                  <div class="book-card ${statusClass}">
+                    <div class="book-cover">
+                      <i class="${iconClass}"></i>
+                    </div>
+                    <div class="book-title">${sub.title}</div>
+                    <a href="${sub.url}" class="book-url" target="_blank" rel="noopener">${truncatedUrl}</a>
+                    <div class="book-status ${statusClass}">${statusText}</div>
+                    <div class="book-meta">
+                      <div class="book-submitted">
+                        ${sub.submittedAt ? `Submitted: ${formatDate(sub.submittedAt)}` : 'Source: Database'}
+                      </div>
+                      <div class="book-views">
+                        👀 ${sub.viewCount || 0}
+                      </div>
+                    </div>
+                    ${sub.adminMessage ? `<div class="admin-message">💬 ${sub.adminMessage}</div>` : ''}
+                    <div class="book-actions">
+                      <button class="book-action-btn edit-btn" onclick="editSubmission('${sub.id}')">
+                        <i class="fas fa-edit"></i> Edit
+                      </button>
+                      <button class="book-action-btn delete-btn" onclick="deleteSubmission('${sub.id}')">
+                        <i class="fas fa-trash"></i> Delete
+                      </button>
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          `;
+          submissionsLibrary.appendChild(shelfDiv);
+        }
+      });
+
+      // If no submissions at all
       if (userSubmissions.length === 0) {
-        submissionsList.innerHTML = '<div class="empty-state"><h3>📭 No submissions yet</h3><p>Submit your first website above to get started!</p></div>';
+        submissionsLibrary.innerHTML = '<div class="empty-state"><h3>📭 Your Library is Empty</h3><p>Submit your first URL to start building your collection!</p></div>';
+      }
+    }
+    // Edit submission
+    window.editSubmission = function(id) {
+      const currentUser = checkAuth();
+      if (!currentUser) return;
+      const allSubmissions = loadData('niroboAllSubmissions', []);
+      const submission = allSubmissions.find(sub => sub.userId === currentUser.id && sub.id === id);
+      if (!submission) {
+        showNotification('❌ Submission not found.', 'error');
         return;
       }
-      
-      submissionsList.innerHTML = '';
-      userSubmissions.forEach(sub => {
-        const domain = getDomain(sub.url);
-        const div = document.createElement('div');
-        div.className = `submission-item ${sub.status}`;
-        const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
-        const cleanUrl = sub.url.replace(/^https?:\/\//, '').replace(/\/$/, '');
-        const truncatedUrl = cleanUrl.length > 50 ? cleanUrl.substring(0, 50) + '...' : cleanUrl;
-
-        // Determine description to display
-        let displayDescription = sub.description || 'The website owner did not provide a description or one was not found.';
-        // If Bangla translation is available in the data (conceptual), display it
-        // This assumes your data.json or submissions include a 'translatedDescriptionBn' field
-        // if (sub.translatedDescriptionBn && containsBangla(query)) {
-        //     displayDescription = sub.translatedDescriptionBn;
-        // }
-
-        div.innerHTML = `
-          <div class="submission-header">
-            <div class="favicon">
-              <img src="${faviconUrl}" alt="Favicon" onerror="this.parentElement.innerHTML='<i class=\'fas fa-link\'></i>'">
-            </div>
-            <div class="submission-content">
-              <h3 class="submission-title">
-                <a href="${sub.url}" target="_blank" rel="noopener">${sub.title}</a>
-              </h3>
-              <a href="${sub.url}" class="submission-url" target="_blank" rel="noopener">${truncatedUrl}</a>
-              <p class="submission-description ${!sub.description ? 'missing' : ''}">${displayDescription}</p>
-              <div class="submission-tags">
-                ${(Array.isArray(sub.tags) ? sub.tags : [])
-                  .slice(0, 5)
-                  .map(tag => `<span class="submission-tag">${tag}</span>`)
-                  .join('')}
-              </div>
-            </div>
-          </div>
-          <div class="submission-meta">
-            <div class="submission-source">
-              ${sub.submittedAt ? `Submitted: ${formatDate(sub.submittedAt)}` : 'Source: Database'}
-            </div>
-            <div class="submission-actions">
-              <button class="action-btn report-btn" data-url="${sub.url}" data-title="${sub.title}">
-                <i class="fas fa-flag"></i> Report
-              </button>
-              <button class="action-btn save-btn" data-url="${sub.url}" data-title="${sub.title}">
-                <i class="fas fa-bookmark"></i> Save
-              </button>
-            </div>
-          </div>
-        `;
-        submissionsList.appendChild(div);
-      });
-    }
+      // Redirect to signup.html with submission data (conceptual)
+      // In a real app, you'd pass data via URL params or localStorage
+      window.location.href = `signup.html?edit=${id}`;
+    };
     // Delete submission
     window.deleteSubmission = function(id) {
+      const currentUser = checkAuth();
+      if (!currentUser) return;
       if (!confirm('Are you sure you want to remove this submission?')) return;
       let allSubmissions = loadData('niroboAllSubmissions', []);
       const index = allSubmissions.findIndex(sub => sub.userId === currentUser.id && sub.id === id);
@@ -1054,8 +1120,7 @@
     deleteAccountBtn.addEventListener('click', () => {
       const currentUser = checkAuth();
       if (!currentUser) return;
-      
-      if (!confirm('⚠️ Are you absolutely sure you want to delete your account? This action is irreversible and all your data will be permanently deleted.')) {
+      if (!confirm('⚠️ Are you absolutely sure you want to delete your account? This action is irreversible and all your data will be permanently lost.')) {
         return;
       }
       
@@ -1080,7 +1145,7 @@
       }, 2000);
     });
     // --- INITIALIZATION ---
-    document.addEventListener("DOMContentLoaded", async () => {
+    document.addEventListener("DOMContentLoaded", () => {
       const user = checkAuth();
       if (user) {
         displayAnalytics();
