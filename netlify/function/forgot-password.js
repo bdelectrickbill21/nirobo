@@ -217,11 +217,21 @@ exports.handler = async (event, context) => {
     };
 
     // 7. Send the email via Brevo API
+    const BREVO_API_KEY = process.env.BREVO_API_KEY;
+    
+    if (!BREVO_API_KEY) {
+      console.error("BREVO_API_KEY environment variable is not set");
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ error: 'Email service is not configured properly' })
+      };
+    }
+    
     const response = await fetch('https://api.brevo.com/v3.1/smtp/email', {
       method: 'POST',
       headers: {
         'accept': 'application/json',
-        'api-key': 'YOUR_REAL_BREVO_API_KEY_HERE', // <-- REPLACE WITH YOUR ACTUAL KEY
+        'api-key': BREVO_API_KEY,
         'content-type': 'application/json'
       },
       body: JSON.stringify(emailData)
