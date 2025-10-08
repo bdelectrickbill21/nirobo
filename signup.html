@@ -118,6 +118,29 @@
       background: var(--accent);
       color: white;
     }
+    /* Guest Button */
+    .guest-button {
+      width: 100%;
+      padding: 15px 30px;
+      background: linear-gradient(45deg, var(--primary), var(--primary-light));
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+    }
+    .guest-button:hover {
+      background: linear-gradient(45deg, var(--primary-light), #00aa00);
+      box-shadow: 0 0 20px rgba(0, 128, 0, 0.7);
+      transform: translateY(-2px);
+    }
     /* Auth Forms */
     .auth-form {
       display: none;
@@ -261,10 +284,72 @@
       background: linear-gradient(45deg, var(--accent), #ff3333);
     }
     .notification.warning {
-      background: linear-gradient(45deg, var(--warning), #ffcc00);
+      background: linear-gradient(45deg, #ffaa00, #ffcc00);
     }
     .notification.info {
-      background: linear-gradient(45deg, var(--info), #0088ff);
+      background: linear-gradient(45deg, #0088ff, #33aaff);
+    }
+    /* Modal for Guest Actions */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(5px);
+    }
+    .modal-content {
+      background: rgba(26, 26, 26, 0.95);
+      margin: 10% auto;
+      padding: 30px;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 500px;
+      border: 1px solid rgba(212, 0, 0, 0.3);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      text-align: center;
+    }
+    .modal h3 {
+      color: var(--accent);
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+    .modal-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .modal-btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 25px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .modal-btn.signup {
+      background: var(--accent);
+      color: white;
+    }
+    .modal-btn.login {
+      background: var(--primary);
+      color: white;
+    }
+    .modal-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      color: var(--text-secondary);
+      font-size: 1.5rem;
+      cursor: pointer;
     }
     /* Footer */
     footer {
@@ -315,9 +400,13 @@
         padding: 12px 15px;
         font-size: 1rem;
       }
-      .submit-btn {
+      .submit-btn, .guest-button {
         padding: 12px 24px;
         font-size: 1rem;
+      }
+      .modal-content {
+        margin: 20% auto;
+        padding: 20px;
       }
     }
     /* Bangladesh Indicator */
@@ -351,6 +440,11 @@
         <div class="tagline">"Intelligent URL Discovery Powered by AI"</div>
         <a href="/" style="color: #ff9999; text-decoration: none;">← Back to Nirobo</a>
       </div>
+      
+      <!-- Guest Button -->
+      <button class="guest-button" id="guestButton">
+        <i class="fas fa-user"></i> Continue as Guest
+      </button>
       
       <!-- Auth Tabs -->
       <div class="auth-tabs">
@@ -431,6 +525,19 @@
     </footer>
   </div>
   
+  <!-- Guest Action Modal -->
+  <div class="modal" id="guestModal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeModal()">&times;</span>
+      <h3>Sign Up or Log In Required</h3>
+      <p>To access this feature, please create an account or log in to your existing account.</p>
+      <div class="modal-buttons">
+        <button class="modal-btn signup" onclick="switchToSignup()">Sign Up</button>
+        <button class="modal-btn login" onclick="switchToLogin()">Log In</button>
+      </div>
+    </div>
+  </div>
+  
   <div class="notification" id="notification"></div>
 
   <script>
@@ -439,6 +546,8 @@
     const loginForm = document.getElementById('loginForm');
     const authTabs = document.querySelectorAll('.auth-tab');
     const authForms = document.querySelectorAll('.auth-form');
+    const guestButton = document.getElementById('guestButton');
+    const guestModal = document.getElementById('guestModal');
     const forgotPasswordLink = document.getElementById('forgotPasswordLink');
     const passwordInput = document.getElementById('signupPassword');
     const confirmPasswordInput = document.getElementById('confirmPassword');
@@ -458,7 +567,7 @@
     // Toggle password visibility
     function togglePasswordVisibility(inputId) {
       const input = document.getElementById(inputId);
-      const toggleBtn = input.nextElementSibling; // Assuming the button is right after the input
+      const toggleBtn = input.nextElementSibling;
       const icon = toggleBtn.querySelector('i');
       
       if (input.type === 'password') {
@@ -495,17 +604,49 @@
       
       let color, text;
       if(strength < 40) {
-        color = '#f42a41'; // Red
+        color = '#f42a41';
         text = 'Weak';
       } else if(strength < 80) {
-        color = '#ffa500'; // Orange
+        color = '#ffa500';
         text = 'Medium';
       } else {
-        color = '#00aa00'; // Green
+        color = '#00aa00';
         text = 'Strong';
       }
       
       return { percentage: strength, color, text };
+    }
+
+    // Modal functions
+    function openModal() {
+      guestModal.style.display = 'block';
+    }
+
+    function closeModal() {
+      guestModal.style.display = 'none';
+    }
+
+    function switchToSignup() {
+      closeModal();
+      authTabs.forEach(t => t.classList.remove('active'));
+      document.querySelector('.auth-tab[data-tab="signup"]').classList.add('active');
+      authForms.forEach(form => form.classList.remove('active'));
+      signupForm.classList.add('active');
+    }
+
+    function switchToLogin() {
+      closeModal();
+      authTabs.forEach(t => t.classList.remove('active'));
+      document.querySelector('.auth-tab[data-tab="login"]').classList.add('active');
+      authForms.forEach(form => form.classList.remove('active'));
+      loginForm.classList.add('active');
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      if (event.target === guestModal) {
+        closeModal();
+      }
     }
 
     // --- Auth Logic ---
@@ -517,15 +658,25 @@
         
         authForms.forEach(form => form.classList.remove('active'));
         if(tab.dataset.tab === 'signup') {
-          document.getElementById('signupForm').classList.add('active');
+          signupForm.classList.add('active');
         } else {
-          document.getElementById('loginForm').classList.add('active');
+          loginForm.classList.add('active');
         }
       });
     });
 
-    // Signup form handler
-    signupForm.addEventListener('submit', async (e) => {
+    // Guest button handler
+    guestButton.addEventListener('click', () => {
+      // Simulate successful guest login
+      showNotification('Welcome as Guest! You can browse but need to sign up to submit content.', 'success');
+      setTimeout(() => {
+        // Redirect to main page with guest status
+        window.location.href = '/';
+      }, 2000);
+    });
+
+    // Signup form handler (simulated - no actual persistence)
+    signupForm.addEventListener('submit', (e) => {
       e.preventDefault();
       
       const email = document.getElementById('signupEmail').value.trim();
@@ -543,24 +694,7 @@
         return;
       }
       
-      // Hash password (simulated for frontend demo)
-      const hashedPassword = await hashPassword(password);
-      
-      // Save to localStorage
-      let users = JSON.parse(localStorage.getItem('niroboUsers') || '[]');
-      if(users.some(user => user.email === email)) {
-        showNotification('User already exists!', 'error');
-        return;
-      }
-      
-      users.push({
-        id: 'user_' + Date.now(),
-        email,
-        password: hashedPassword,
-        createdAt: new Date().toISOString()
-      });
-      
-      localStorage.setItem('niroboUsers', JSON.stringify(users));
+      // Simulate successful signup
       showNotification('Account created successfully! You can now log in.', 'success');
       
       // Reset form
@@ -575,97 +709,35 @@
       loginForm.classList.add('active');
     });
 
-    // Login form handler
-    loginForm.addEventListener('submit', async (e) => {
+    // Login form handler (simulated)
+    loginForm.addEventListener('submit', (e) => {
       e.preventDefault();
       
       const email = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPassword').value;
       
-      // Hash input password
-      const hashedPassword = await hashPassword(password);
+      // Simulate successful login
+      showNotification('Login successful!', 'success');
       
-      // Check credentials
-      let users = JSON.parse(localStorage.getItem('niroboUsers') || '[]');
-      const user = users.find(u => u.email === email && u.password === hashedPassword);
-      
-      if(user) {
-        // Set current user in localStorage
-        localStorage.setItem('niroboCurrentUser', JSON.stringify({id: user.id, email: user.email}));
-        showNotification('Login successful!', 'success');
-        
-        // Redirect to dashboard or search page
-        setTimeout(() => {
-          window.location.href = 'dashboard.html'; // Or 'search.html' if you don't have a dashboard
-        }, 1500);
-      } else {
-        showNotification('Invalid email or password!', 'error');
-      }
+      // Redirect to main page
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 1500);
     });
 
-                // --- REAL Password Recovery Function (Calls Netlify Function) ---
-    document.getElementById('forgotPasswordLink').addEventListener('click', async (e) => {
+    // Forgot password handler (simulated)
+    forgotPasswordLink.addEventListener('click', (e) => {
       e.preventDefault();
-      
-      // Ask user for their email
       const email = prompt('Enter your email to reset password:');
-      if (!email) return; // User cancelled
-
-      try {
-        // 1. Show loading message in the notification area
-        showNotification('Sending password reset email...', 'info');
-
-        // 2. Send a POST request to your Netlify Function
-        //    The URL /.netlify/functions/forgot-password maps to your forgot-password.js file
-        const response = await fetch('/.netlify/functions/forgot-password', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ email: email }) // Send the email in the request body
-        });
-
-        // 3. Parse the response from the function
-        const data = await response.json();
-
-        // 4. Check the response status
-        if (response.ok) {
-          // Success! Show confirmation.
-          showNotification(data.message, 'success');
-        } else {
-          // --- KEY CHANGE HERE ---
-          // Handle specific error cases from the Netlify Function
-          // Show the EXACT message from the backend for better clarity, especially on rate limits
-          if (response.status === 429) { // Too Many Requests (Rate Limit)
-            // The backend sends a specific error message for rate limits
-            showNotification(data.error, 'warning'); // Show warning with the backend's exact message
-          } else if (response.status === 404) { // Not Found
-            showNotification(`❌ ${data.error}`, 'error');
-          } else {
-            showNotification(`❌ ${data.error || 'Failed to send reset email.'}`, 'error');
-          }
-          // --- END KEY CHANGE ---
-        }
-      } catch (error) {
-        // 5. Handle network errors or other problems
-        console.error("Password recovery error:", error);
-        showNotification('An unexpected error occurred. Please try again later.', 'error');
-      }
+      if (!email) return;
+      
+      showNotification('Password reset email sent! Check your inbox.', 'success');
     });
 
-    // Helper function to show notifications (KEEP YOUR EXISTING ONE)
-    function showNotification(message, type = 'info') {
-      const notification = document.getElementById('notification');
-      if (notification) {
-        notification.textContent = message;
-        notification.className = 'notification ' + type;
-        notification.classList.add('show');
-        setTimeout(() => notification.classList.remove('show'), 5000); // Show longer for warnings/errors
-      } else {
-        alert(message); // Fallback if notification element is missing
-      }
-    }
-    // --- END REAL PASSWORD RECOVERY ---
+    // Function to trigger guest modal (for use when guest tries to submit content)
+    window.showGuestModal = function() {
+      openModal();
+    };
   </script>
 </body>
 </html>
