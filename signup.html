@@ -665,17 +665,16 @@
       });
     });
 
-    // Guest button handler
+    // Guest button handler - Redirect to dashboard as guest
     guestButton.addEventListener('click', () => {
-      // Simulate successful guest login
-      showNotification('Welcome as Guest! You can browse but need to sign up to submit content.', 'success');
+      showNotification('Welcome as Guest! You can view all content but need to sign up to submit.', 'success');
       setTimeout(() => {
-        // Redirect to main page with guest status
-        window.location.href = '/';
+        // Redirect to dashboard with guest parameter
+        window.location.href = 'dashboard.html?user=guest';
       }, 2000);
     });
 
-    // Signup form handler (simulated - no actual persistence)
+    // Signup form handler (simulated - no actual persistence needed)
     signupForm.addEventListener('submit', (e) => {
       e.preventDefault();
       
@@ -683,7 +682,12 @@
       const password = passwordInput.value;
       const confirmPassword = confirmPasswordInput.value;
       
-      // Validation
+      // Basic validation
+      if (!email || !password || !confirmPassword) {
+        showNotification('Please fill in all fields!', 'error');
+        return;
+      }
+      
       if(password !== confirmPassword) {
         showNotification('Passwords do not match!', 'error');
         return;
@@ -695,18 +699,17 @@
       }
       
       // Simulate successful signup
-      showNotification('Account created successfully! You can now log in.', 'success');
+      showNotification('Account created successfully! Redirecting to your dashboard...', 'success');
       
       // Reset form
       signupForm.reset();
       strengthMeter.style.width = '0%';
       strengthText.textContent = 'Password strength';
       
-      // Switch to login tab automatically
-      authTabs.forEach(t => t.classList.remove('active'));
-      document.querySelector('.auth-tab[data-tab="login"]').classList.add('active');
-      authForms.forEach(form => form.classList.remove('active'));
-      loginForm.classList.add('active');
+      // Redirect to dashboard with authenticated user parameter
+      setTimeout(() => {
+        window.location.href = `dashboard.html?user=authenticated&email=${encodeURIComponent(email)}`;
+      }, 2000);
     });
 
     // Login form handler (simulated)
@@ -716,13 +719,18 @@
       const email = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPassword').value;
       
-      // Simulate successful login
-      showNotification('Login successful!', 'success');
+      if (!email || !password) {
+        showNotification('Please fill in all fields!', 'error');
+        return;
+      }
       
-      // Redirect to main page
+      // Simulate successful login
+      showNotification('Login successful! Redirecting to your dashboard...', 'success');
+      
+      // Redirect to dashboard with authenticated user parameter
       setTimeout(() => {
-        window.location.href = '/';
-      }, 1500);
+        window.location.href = `dashboard.html?user=authenticated&email=${encodeURIComponent(email)}`;
+      }, 2000);
     });
 
     // Forgot password handler (simulated)
@@ -734,7 +742,7 @@
       showNotification('Password reset email sent! Check your inbox.', 'success');
     });
 
-    // Function to trigger guest modal (for use when guest tries to submit content)
+    // Function to trigger guest modal (for use in dashboard.html)
     window.showGuestModal = function() {
       openModal();
     };
