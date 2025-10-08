@@ -32,16 +32,89 @@
       background: linear-gradient(135deg, var(--background), #003300);
       color: var(--text);
       line-height: 1.6;
-      padding: 20px;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .dashboard-container {
+      display: flex;
       min-height: 100vh;
     }
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      position: relative;
+    /* Sidebar Styles */
+    .sidebar {
+      width: 280px;
+      background: rgba(26, 26, 26, 0.95);
+      border-right: 1px solid rgba(212, 0, 0, 0.3);
+      padding: 20px 0;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+      transition: transform 0.3s ease;
+      z-index: 100;
+    }
+    .sidebar-header {
+      text-align: center;
+      padding: 0 20px 20px;
+      border-bottom: 1px solid rgba(212, 0, 0, 0.2);
+      margin-bottom: 20px;
+    }
+    .sidebar-logo {
+      font-size: 2rem;
+      color: var(--accent);
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px rgba(212, 0, 0, 0.5);
+    }
+    .user-info-sidebar {
+      text-align: center;
+      padding: 0 20px;
+      color: #ffcccc;
+      font-size: 0.9rem;
+    }
+    .user-email {
+      font-weight: bold;
+      display: block;
+      margin: 5px 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .sidebar-menu {
+      list-style: none;
+      padding: 0 20px;
+    }
+    .menu-item {
+      margin-bottom: 8px;
+    }
+    .menu-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      color: var(--text);
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+    .menu-link:hover {
+      background: rgba(0, 100, 0, 0.3);
+      color: white;
+    }
+    .menu-link.active {
+      background: var(--accent);
+      color: white;
+    }
+    .menu-link i {
+      width: 24px;
+      text-align: center;
+    }
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      margin-left: 280px;
+      padding: 20px;
     }
     /* Header Styles */
-    header {
+    .main-header {
       text-align: center;
       padding: 30px 0;
       margin-bottom: 30px;
@@ -58,32 +131,6 @@
       color: #ffcccc;
       font-style: italic;
       margin-bottom: 20px;
-    }
-    /* User Info & Logout */
-    .user-info {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 15px;
-      border-radius: 10px;
-      display: inline-block;
-      margin-bottom: 30px;
-      color: #ffcccc;
-    }
-    .logout-btn {
-      background: var(--danger);
-      padding: 10px 20px;
-      font-size: 1rem;
-      display: inline-block;
-      margin-left: 15px;
-      text-align: center;
-      width: auto;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      color: white;
-      font-weight: bold;
-    }
-    .logout-btn:hover {
-      background: #ff3333;
     }
     /* Dashboard Sections */
     .dashboard-section {
@@ -264,6 +311,11 @@
       background: var(--accent);
       border-color: var(--accent);
     }
+    .book-action-btn.guest-disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
     /* Account Section */
     .account-form {
       display: grid;
@@ -308,6 +360,11 @@
       background: var(--accent-hover);
       box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
       transform: translateY(-2px);
+    }
+    button.main-btn.guest-disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
     }
     /* Policy Button */
     .policy-section {
@@ -373,54 +430,6 @@
     footer a:hover {
       text-decoration: underline;
     }
-    /* Loading State */
-    .loading {
-      text-align: center;
-      padding: 40px;
-    }
-    .spinner {
-      border: 4px solid rgba(255, 255, 255, 0.1);
-      border-radius: 50%;
-      border-top: 4px solid var(--accent);
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 20px;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    /* No Results with Animation */
-    .no-results {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--text-secondary);
-    }
-    .no-results i {
-      font-size: 3rem;
-      margin-bottom: 20px;
-      color: #555;
-      animation: shake 0.5s ease-in-out;
-    }
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-5px); }
-      75% { transform: translateX(5px); }
-    }
-    .no-results.animated {
-       animation: fadeIn 1s ease-out;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    /* Empty State */
-    .empty-state {
-      text-align: center;
-      padding: 50px 20px;
-      color: var(--text-secondary);
-    }
     /* Notification */
     .notification {
       position: fixed;
@@ -451,6 +460,68 @@
     .notification.info {
       background: linear-gradient(45deg, var(--info), #0088ff);
     }
+    /* Modal for Guest Actions */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(5px);
+    }
+    .modal-content {
+      background: rgba(26, 26, 26, 0.95);
+      margin: 10% auto;
+      padding: 30px;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 500px;
+      border: 1px solid rgba(212, 0, 0, 0.3);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      text-align: center;
+    }
+    .modal h3 {
+      color: var(--accent);
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+    .modal-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .modal-btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 25px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .modal-btn.signup {
+      background: var(--accent);
+      color: white;
+    }
+    .modal-btn.login {
+      background: var(--primary);
+      color: white;
+    }
+    .modal-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      color: var(--text-secondary);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
     /* Bangladesh Indicator */
     body::after {
       content: "";
@@ -467,689 +538,484 @@
     }
     /* Responsive Design */
     @media (max-width: 768px) {
-      body {
-        padding: 15px;
+      .sidebar {
+        width: 250px;
+        transform: translateX(-100%);
+      }
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      .main-content {
+        margin-left: 0;
+        padding: 20px 15px;
+      }
+      .menu-toggle {
+        display: block;
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 101;
+        background: var(--accent);
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .main-header {
+        padding: 20px 0;
+      }
+      .logo {
+        font-size: 2.2rem;
+      }
+      .tagline {
+        font-size: 1rem;
       }
       .dashboard-section {
         padding: 20px;
       }
-      #search-form {
-        flex-direction: column;
-      }
-      .search-header {
-        flex-direction: column;
-        text-align: center;
-      }
-      .result-header {
-        flex-direction: column;
-      }
-      .result-meta {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .result-actions {
-        width: 100%;
-        justify-content: flex-end;
-      }
-      /* Adjust tools popup for mobile */
-      #toolsPopup {
-        width: 95%;
-        padding: 20px;
-      }
-      .calculator-grid {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 5px;
-      }
-      .calc-btn {
-        padding: 12px;
-        font-size: 1rem;
-      }
-      .converter-form {
-        flex-direction: column;
-      }
-      .converter-form input,
-      .converter-form select,
-      .converter-form button {
-        width: 100%;
-      }
       .account-form {
         grid-template-columns: 1fr;
-      }
-      .policy-section {
-        margin: 20px 0;
-      }
-      .policy-button {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        padding: 12px 24px;
-        background: rgba(0, 100, 0, 0.3);
-        color: white;
-        text-decoration: none;
-        border-radius: 30px;
-        font-weight: bold;
-        transition: all 0.3s ease;
-        box-shadow: 0 5px 15px rgba(0, 100, 0, 0.3);
-      }
-      .policy-button:hover {
-        background: rgba(0, 128, 0, 0.5);
-        box-shadow: 0 8px 20px rgba(0, 128, 0, 0.5);
-        transform: translateY(-3px);
-      }
-      /* Submit URL Button at Bottom */
-      .submit-section {
-        text-align: center;
-        margin: 40px 0 20px;
-      }
-      .submit-button {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        padding: 12px 24px;
-        background: var(--primary);
-        color: white;
-        text-decoration: none;
-        border-radius: 30px;
-        font-weight: bold;
-        transition: all 0.3s ease;
-        box-shadow: 0 5px 15px rgba(0, 100, 0, 0.3);
-      }
-      .submit-button:hover {
-        background: var(--primary-light);
-        box-shadow: 0 8px 20px rgba(0, 128, 0, 0.5);
-        transform: translateY(-3px);
-      }
-      /* Footer */
-      footer {
-        background: rgba(26, 26, 26, 0.9);
-        color: #ccc;
-        padding: 30px;
-        text-align: center;
-        font-size: 0.9rem;
-        border-top: 1px solid var(--border);
-        margin-top: 50px;
-        border-radius: 10px;
-      }
-      footer a {
-        color: #ff9999;
-        text-decoration: none;
-      }
-      footer a:hover {
-        text-decoration: underline;
-      }
-      /* Empty State */
-      .empty-state {
-        text-align: center;
-        padding: 50px 20px;
-        color: var(--text-secondary);
-      }
-      /* Notification */
-      .notification {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 15px 20px;
-        border-radius: 8px;
-        color: white;
-        font-weight: 500;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        z-index: 1000;
-        transform: translateX(120%);
-        transition: transform 0.3s ease;
-        max-width: 300px;
-      }
-      .notification.show {
-        transform: translateX(0);
-      }
-      .notification.success {
-        background: linear-gradient(45deg, var(--success), #00cc00);
-      }
-      .notification.error {
-        background: linear-gradient(45deg, var(--danger), #ff3333);
-      }
-      .notification.warning {
-        background: linear-gradient(45deg, var(--warning), #ffcc00);
-      }
-      .notification.info {
-        background: linear-gradient(45deg, var(--info), #0088ff);
-      }
-      /* Bangladesh Indicator */
-      body::after {
-        content: "";
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: 
-          radial-gradient(circle at 20% 30%, rgba(212, 0, 0, 0.03) 0%, transparent 15%),
-          radial-gradient(circle at 80% 70%, rgba(0, 100, 0, 0.03) 0%, transparent 20%);
-        pointer-events: none;
-        z-index: -1;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="logo">
-        <i class="fas fa-brain"></i> NIROBO
-      </div>
-      <div class="tagline">"Intelligent URL Discovery Powered by AI"</div>
-      <a href="/" style="color: #ff9999; text-decoration: none;">← Back to Nirobo</a>
-    </header>
+  <!-- Mobile Menu Toggle -->
+  <button class="menu-toggle" id="menuToggle">
+    <i class="fas fa-bars"></i>
+  </button>
 
-    <!-- User Info & Logout -->
-    <div class="user-info">
-      Logged in as: <strong id="userEmail">loading...</strong>
-      <button id="logoutBtn" class="logout-btn">🚪 Logout</button>
-    </div>
-
-    <!-- Analytics Section -->
-    <section class="dashboard-section">
-      <div class="section-header">
-        <h2 class="section-title">
-          <i class="fas fa-chart-line"></i> Your Analytics
-        </h2>
+  <div class="dashboard-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <i class="fas fa-brain"></i> NIROBO
+        </div>
+        <div class="tagline" style="font-size: 0.9rem; margin: 0;">Intelligent URL Discovery</div>
       </div>
-      <div class="analytics-grid">
-        <div class="metric-card">
-          <div class="metric-value" id="totalClicks">0</div>
-          <div class="metric-label">Total Clicks Received</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-value" id="uniqueCountries">0</div>
-          <div class="metric-label">Unique Countries</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-value" id="totalSubmissions">0</div>
-          <div class="metric-label">Your Submissions</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-value" id="approvedCount">0</div>
-          <div class="metric-label">Approved</div>
-        </div>
+      
+      <div class="user-info-sidebar">
+        <div class="user-status" id="userStatus">Guest User</div>
+        <span class="user-email" id="sidebarUserEmail">guest@example.com</span>
+        <button id="sidebarLogoutBtn" class="logout-btn" style="margin-top: 10px; padding: 6px 12px; font-size: 0.8rem;">🚪 Logout</button>
       </div>
-    </section>
+      
+      <ul class="sidebar-menu">
+        <li class="menu-item">
+          <a href="#analytics" class="menu-link active">
+            <i class="fas fa-chart-line"></i> Analytics
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="#library" class="menu-link">
+            <i class="fas fa-book"></i> URL Library
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="#account" class="menu-link">
+            <i class="fas fa-user-cog"></i> Account
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="policy.html" class="menu-link">
+            <i class="fas fa-file-contract"></i> Policy & Terms
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="signup.html" class="menu-link">
+            <i class="fas fa-plus-circle"></i> Submit URL
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="/" class="menu-link">
+            <i class="fas fa-home"></i> Back to Nirobo
+          </a>
+        </li>
+      </ul>
+    </aside>
 
-    <!-- URL Submissions Section - Library Shelf Style -->
-    <section class="dashboard-section">
-      <div class="section-header">
-        <h2 class="section-title">
-          <i class="fas fa-book"></i> Your URL Library
-        </h2>
-      </div>
-      <div class="submissions-library" id="submissionsLibrary">
-        <p>Loading your submissions...</p>
-      </div>
-    </section>
-
-    <!-- Account Management Section -->
-    <section class="dashboard-section">
-      <div class="section-header">
-        <h2 class="section-title">
-          <i class="fas fa-user-cog"></i> Account Management
-        </h2>
-      </div>
-      <div class="account-form">
-        <!-- Change Email -->
-        <div class="form-group">
-          <label for="newEmail">Change Email Address</label>
-          <input type="email" id="newEmail" placeholder="Enter new email">
-          <button class="main-btn" id="changeEmailBtn">Update Email</button>
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="main-header">
+        <div class="logo">
+          <i class="fas fa-brain"></i> NIROBO
         </div>
-        
-        <!-- Change Password -->
-        <div class="form-group">
-          <label for="oldPassword">Old Password</label>
-          <input type="password" id="oldPassword" placeholder="Enter current password">
-          <label for="newPassword">New Password</label>
-          <input type="password" id="newPassword" placeholder="Enter new password">
-          <label for="confirmNewPassword">Confirm New Password</label>
-          <input type="password" id="confirmNewPassword" placeholder="Re-enter new password">
-          <button class="main-btn" id="changePasswordBtn">Update Password</button>
+        <div class="tagline">"Intelligent URL Discovery Powered by AI"</div>
+        <a href="/" style="color: #ff9999; text-decoration: none;">← Back to Nirobo</a>
+      </header>
+
+      <!-- Analytics Section -->
+      <section class="dashboard-section" id="analytics">
+        <div class="section-header">
+          <h2 class="section-title">
+            <i class="fas fa-chart-line"></i> Your Analytics
+          </h2>
         </div>
-        
-        <!-- Delete Account -->
-        <div class="form-group">
-          <label>Delete Your Account</label>
-          <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 15px;">
-            This action is irreversible. All your data will be permanently deleted.
-          </p>
-          <button class="main-btn" id="deleteAccountBtn" style="background: var(--danger);">Delete Account</button>
+        <div class="analytics-grid">
+          <div class="metric-card">
+            <div class="metric-value" id="totalClicks">247</div>
+            <div class="metric-label">Total Clicks Received</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="uniqueCountries">12</div>
+            <div class="metric-label">Unique Countries</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="totalSubmissions">8</div>
+            <div class="metric-label">Your Submissions</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="approvedCount">6</div>
+            <div class="metric-label">Approved</div>
+          </div>
         </div>
+      </section>
+
+      <!-- URL Submissions Section - Library Shelf Style -->
+      <section class="dashboard-section" id="library">
+        <div class="section-header">
+          <h2 class="section-title">
+            <i class="fas fa-book"></i> Your URL Library
+          </h2>
+        </div>
+        <div class="submissions-library" id="submissionsLibrary">
+          <!-- Websites Shelf -->
+          <div class="shelf">
+            <div class="shelf-header">
+              <div class="shelf-title">
+                <i class="fas fa-window-maximize"></i> Websites
+              </div>
+              <div class="shelf-count">3 items</div>
+            </div>
+            <div class="shelf-books">
+              <div class="book-card approved">
+                <div class="book-cover">
+                  <i class="fas fa-window-maximize"></i>
+                </div>
+                <div class="book-title">Nirobo AI Search</div>
+                <a href="https://nirobo.ai" class="book-url" target="_blank" rel="noopener">nirobo.ai</a>
+                <div class="book-status approved">APPROVED</div>
+                <div class="book-meta">
+                  <div class="book-submitted">Submitted: 15 Oct 2024</div>
+                  <div class="book-views">👀 156</div>
+                </div>
+                <div class="book-actions">
+                  <button class="book-action-btn edit-btn guest-action">
+                    <i class="fas fa-edit"></i> Edit
+                  </button>
+                  <button class="book-action-btn delete-btn guest-action">
+                    <i class="fas fa-trash"></i> Delete
+                  </button>
+                </div>
+              </div>
+              <div class="book-card pending">
+                <div class="book-cover">
+                  <i class="fas fa-window-maximize"></i>
+                </div>
+                <div class="book-title">Creative Portfolio</div>
+                <a href="https://portfolio.example.com" class="book-url" target="_blank" rel="noopener">portfolio.example.com</a>
+                <div class="book-status pending">PENDING</div>
+                <div class="book-meta">
+                  <div class="book-submitted">Submitted: 12 Oct 2024</div>
+                  <div class="book-views">👀 23</div>
+                </div>
+                <div class="book-actions">
+                  <button class="book-action-btn edit-btn guest-action">
+                    <i class="fas fa-edit"></i> Edit
+                  </button>
+                  <button class="book-action-btn delete-btn guest-action">
+                    <i class="fas fa-trash"></i> Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tools Shelf -->
+          <div class="shelf">
+            <div class="shelf-header">
+              <div class="shelf-title">
+                <i class="fas fa-wrench"></i> Tools
+              </div>
+              <div class="shelf-count">2 items</div>
+            </div>
+            <div class="shelf-books">
+              <div class="book-card approved">
+                <div class="book-cover">
+                  <i class="fas fa-wrench"></i>
+                </div>
+                <div class="book-title">URL Shortener Pro</div>
+                <a href="https://shorten.example.com" class="book-url" target="_blank" rel="noopener">shorten.example.com</a>
+                <div class="book-status approved">APPROVED</div>
+                <div class="book-meta">
+                  <div class="book-submitted">Submitted: 10 Oct 2024</div>
+                  <div class="book-views">👀 89</div>
+                </div>
+                <div class="book-actions">
+                  <button class="book-action-btn edit-btn guest-action">
+                    <i class="fas fa-edit"></i> Edit
+                  </button>
+                  <button class="book-action-btn delete-btn guest-action">
+                    <i class="fas fa-trash"></i> Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Documents Shelf -->
+          <div class="shelf">
+            <div class="shelf-header">
+              <div class="shelf-title">
+                <i class="fas fa-file-alt"></i> Documents
+              </div>
+              <div class="shelf-count">3 items</div>
+            </div>
+            <div class="shelf-books">
+              <div class="book-card approved">
+                <div class="book-cover">
+                  <i class="fas fa-file-alt"></i>
+                </div>
+                <div class="book-title">Research Paper PDF</div>
+                <a href="https://docs.example.com/paper.pdf" class="book-url" target="_blank" rel="noopener">docs.example.com/paper.pdf</a>
+                <div class="book-status approved">APPROVED</div>
+                <div class="book-meta">
+                  <div class="book-submitted">Submitted: 08 Oct 2024</div>
+                  <div class="book-views">👀 45</div>
+                </div>
+                <div class="book-actions">
+                  <button class="book-action-btn edit-btn guest-action">
+                    <i class="fas fa-edit"></i> Edit
+                  </button>
+                  <button class="book-action-btn delete-btn guest-action">
+                    <i class="fas fa-trash"></i> Delete
+                  </button>
+                </div>
+              </div>
+              <div class="book-card rejected">
+                <div class="book-cover">
+                  <i class="fas fa-file-alt"></i>
+                </div>
+                <div class="book-title">Outdated Documentation</div>
+                <a href="https://old-docs.example.com" class="book-url" target="_blank" rel="noopener">old-docs.example.com</a>
+                <div class="book-status rejected">REJECTED</div>
+                <div class="book-meta">
+                  <div class="book-submitted">Submitted: 05 Oct 2024</div>
+                  <div class="book-views">👀 12</div>
+                </div>
+                <div class="admin-message">💬 Content appears outdated</div>
+                <div class="book-actions">
+                  <button class="book-action-btn edit-btn guest-action">
+                    <i class="fas fa-edit"></i> Edit
+                  </button>
+                  <button class="book-action-btn delete-btn guest-action">
+                    <i class="fas fa-trash"></i> Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Account Management Section -->
+      <section class="dashboard-section" id="account">
+        <div class="section-header">
+          <h2 class="section-title">
+            <i class="fas fa-user-cog"></i> Account Management
+          </h2>
+        </div>
+        <div class="account-form">
+          <!-- Change Email -->
+          <div class="form-group">
+            <label for="newEmail">Change Email Address</label>
+            <input type="email" id="newEmail" placeholder="Enter new email">
+            <button class="main-btn guest-action" id="changeEmailBtn">Update Email</button>
+          </div>
+          
+          <!-- Change Password -->
+          <div class="form-group">
+            <label for="oldPassword">Old Password</label>
+            <input type="password" id="oldPassword" placeholder="Enter current password">
+            <label for="newPassword">New Password</label>
+            <input type="password" id="newPassword" placeholder="Enter new password">
+            <label for="confirmNewPassword">Confirm New Password</label>
+            <input type="password" id="confirmNewPassword" placeholder="Re-enter new password">
+            <button class="main-btn guest-action" id="changePasswordBtn">Update Password</button>
+          </div>
+          
+          <!-- Delete Account -->
+          <div class="form-group">
+            <label>Delete Your Account</label>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 15px;">
+              This action is irreversible. All your data will be permanently deleted.
+            </p>
+            <button class="main-btn guest-action" id="deleteAccountBtn" style="background: var(--danger);">Delete Account</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Policy & Terms Button -->
+      <div class="policy-section">
+        <a href="policy.html" class="policy-button">
+          <i class="fas fa-file-contract"></i> View Policy & Terms
+        </a>
       </div>
-    </section>
 
-    <!-- Policy & Terms Button -->
-    <div class="policy-section">
-      <a href="policy.html" class="policy-button">
-        <i class="fas fa-file-contract"></i> View Policy & Terms
-      </a>
-    </div>
+      <!-- Submit URL Button at the Bottom -->
+      <div class="submit-section">
+        <a href="signup.html" class="submit-button guest-action">
+          <i class="fas fa-plus-circle"></i> Submit Your URL
+        </a>
+      </div>
 
-    <!-- Submit URL Button at the Bottom -->
-    <div class="submit-section">
-      <a href="signup.html" class="submit-button">
-        <i class="fas fa-plus-circle"></i> Submit Your URL
-      </a>
-    </div>
-
-    <footer>
-      <p>Made in Bangladesh 🇧🇩 | Curated by Nirobo</p>
-      <p>Honoring the Language Movement and the Silent Legacy of Justice</p>
-      <p>Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity</p>
-      <p><a href="/">← Back to Nirobo</a></p>
-    </footer>
+      <footer>
+        <p>Made in Bangladesh 🇧🇩 | Curated by Nirobo</p>
+        <p>Honoring the Language Movement and the Silent Legacy of Justice</p>
+        <p>Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity</p>
+        <p><a href="/">← Back to Nirobo</a></p>
+      </footer>
+    </main>
   </div>
 
+  <!-- Guest Action Modal -->
+  <div class="modal" id="guestModal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeModal()">&times;</span>
+      <h3>Sign Up or Log In Required</h3>
+      <p>To access this feature, please create an account or log in to your existing account.</p>
+      <div class="modal-buttons">
+        <button class="modal-btn signup" onclick="goToSignup()">Sign Up</button>
+        <button class="modal-btn login" onclick="goToLogin()">Log In</button>
+      </div>
+    </div>
+  </div>
+  
   <div class="notification" id="notification"></div>
 
   <script>
-    // --- CONFIGURATION ---
-    const RESULTS_PER_PAGE = 10;
-    const MAX_SUBMISSIONS_PER_USER = 1971; // Enforce the 1971 URL limit
-    let currentPage = 1;
-    let currentFilter = 'all';
-    let allResults = [];
-    let filteredResults = [];
-    let query = '';
-    let searchHistory = [];
-    // Variable to hold the Fuse.js instance
-    let fuseInstance = null;
     // --- DOM Elements ---
-    const userEmail = document.getElementById('userEmail');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const submissionsLibrary = document.getElementById('submissionsLibrary');
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const guestModal = document.getElementById('guestModal');
     const notification = document.getElementById('notification');
-    const newEmail = document.getElementById('newEmail');
-    const oldPassword = document.getElementById('oldPassword');
-    const newPassword = document.getElementById('newPassword');
-    const confirmNewPassword = document.getElementById('confirmNewPassword');
-    const changeEmailBtn = document.getElementById('changeEmailBtn');
-    const changePasswordBtn = document.getElementById('changePasswordBtn');
-    const deleteAccountBtn = document.getElementById('deleteAccountBtn');
+    const userStatus = document.getElementById('userStatus');
+    const sidebarUserEmail = document.getElementById('sidebarUserEmail');
+    const sidebarLogoutBtn = document.getElementById('sidebarLogoutBtn');
+    
+    // Get URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const userType = urlParams.get('user') || 'guest';
+    const userEmail = urlParams.get('email') || 'guest@example.com';
+
     // --- Helper Functions ---
-    // Show notification
     function showNotification(message, type = 'info') {
       notification.textContent = message;
       notification.className = 'notification ' + type;
       notification.classList.add('show');
       setTimeout(() => notification.classList.remove('show'), 3000);
     }
-    // Load data from localStorage
-    function loadData(key, defaultValue = []) {
-      try {
-        return JSON.parse(localStorage.getItem(key) || JSON.stringify(defaultValue));
-      } catch (e) {
-        console.error(`Error loading ${key}:`, e);
-        return defaultValue;
+
+    function openModal() {
+      guestModal.style.display = 'block';
+    }
+
+    function closeModal() {
+      guestModal.style.display = 'none';
+    }
+
+    function goToSignup() {
+      window.location.href = 'signup.html';
+    }
+
+    function goToLogin() {
+      window.location.href = 'signup.html';
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      if (event.target === guestModal) {
+        closeModal();
       }
     }
-    // Save data to localStorage
-    function saveData(key, data) {
-      try {
-        localStorage.setItem(key, JSON.stringify(data));
-      } catch (e) {
-        console.error(`Error saving ${key}:`, e);
-        showNotification('Failed to save data. Storage might be full.', 'error');
+
+    // --- User Type Handling ---
+    function initializeDashboard() {
+      if (userType === 'authenticated') {
+        // Authenticated user
+        userStatus.textContent = 'Authenticated User';
+        sidebarUserEmail.textContent = userEmail;
+        sidebarLogoutBtn.style.display = 'inline-block';
+        
+        // Enable all functionality for authenticated users
+        document.querySelectorAll('.guest-action').forEach(el => {
+          el.classList.remove('guest-disabled');
+          if (el.classList.contains('guest-action')) {
+            // Remove guest action behavior for authenticated users
+            el.classList.remove('guest-action');
+          }
+        });
+      } else {
+        // Guest user
+        userStatus.textContent = 'Guest User';
+        sidebarUserEmail.textContent = 'guest@example.com';
+        sidebarLogoutBtn.style.display = 'none';
+        
+        // Add click handlers for guest actions
+        document.querySelectorAll('.guest-action').forEach(el => {
+          el.addEventListener('click', function(e) {
+            e.preventDefault();
+            openModal();
+          });
+        });
       }
     }
-    // Hash password (simple for demo - NOT secure for production)
-    function hashPassword(pw) {
-      return btoa(pw); // Base64 encoding (NOT secure)
-    }
-    // Format date
-    function formatDate(isoString) {
-      if (!isoString) return 'Unknown';
-      const date = new Date(isoString);
-      return date.toLocaleString('en-GB', {
-        timeZone: 'Asia/Dhaka',
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true
+
+    // --- Mobile Menu Toggle ---
+    if (menuToggle) {
+      menuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
       });
     }
-    // Get domain
-    function getDomain(url) {
-      try {
-        return new URL(url).hostname.replace('www.', '');
-      } catch {
-        return 'unknown';
-      }
-    }
-    // Check if user is banned
-    function isUserBanned(userId) {
-      const punishments = loadData('niroboPunishments', {});
-      const userPunishment = punishments[userId];
-      if (!userPunishment) return false;
-      if (userPunishment.banStatus === "perm_ban") {
-        return true;
-      }
-      if (userPunishment.banStatus === "temp_ban" && userPunishment.banUntil) {
-        const banUntil = new Date(userPunishment.banUntil);
-        if (new Date() < banUntil) {
-          return true;
-        } else {
-          // Ban expired - remove it
-          delete punishments[userId];
-          saveData('niroboPunishments', punishments);
-          return false;
-        }
-      }
-      return false;
-    }
-    // --- AUTHENTICATION ---
-    // Check if user is logged in
-    function checkAuth() {
-      const currentUser = loadData('niroboCurrentUser', null);
-      if (!currentUser) {
-        // Not logged in, redirect to login
-        window.location.href = 'login.html';
-        return null;
-      }
-      // Check ban status
-      if (isUserBanned(currentUser.id)) {
-        showNotification('❌ Your account has been banned. Please contact support.', 'error');
-        localStorage.removeItem('niroboCurrentUser');
-        setTimeout(() => {
-           window.location.href = 'signup.html';
-        }, 2000);
-        return null;
-      }
-      // User is logged in and not banned
-      userEmail.textContent = currentUser.email;
-      return currentUser;
-    }
-    // Logout button handler
-    logoutBtn.addEventListener('click', () => {
-      localStorage.removeItem('niroboCurrentUser');
+
+    // --- Logout Handler ---
+    sidebarLogoutBtn.addEventListener('click', () => {
       showNotification('✅ Logged out successfully.', 'success');
-      // Redirect to login page
-      setTimeout(() => {
-        window.location.href = 'login.html';
-      }, 1000);
-    });
-    // --- ANALYTICS ---
-    function displayAnalytics() {
-      const currentUser = checkAuth();
-      if (!currentUser) return;
-      const allSubmissions = loadData('niroboAllSubmissions', []);
-      const userSubmissions = allSubmissions.filter(sub => sub.userId === currentUser.id);
-      
-      // Simulate analytics data
-      let totalClicks = 0;
-      let uniqueCountries = new Set();
-      userSubmissions.forEach(sub => {
-        totalClicks += sub.viewCount || 0;
-        // Simulate country data (would come from real IP geolocation in backend)
-        if (sub.viewCount > 0) {
-          // Add some simulated countries
-          const countries = ['BD', 'IN', 'PK', 'US', 'UK', 'CA', 'AU'];
-          const randomCountry = countries[Math.floor(Math.random() * countries.length)];
-          uniqueCountries.add(randomCountry);
-        }
-      });
-      document.getElementById('totalClicks').textContent = totalClicks;
-      document.getElementById('uniqueCountries').textContent = uniqueCountries.size;
-      document.getElementById('totalSubmissions').textContent = userSubmissions.length;
-      document.getElementById('approvedCount').textContent = userSubmissions.filter(s => s.status === 'approved').length;
-    }
-    // --- URL SUBMISSIONS - LIBRARY SHELF STYLE ---
-    function displayUserSubmissions() {
-      const currentUser = checkAuth();
-      if (!currentUser) return;
-      const allSubmissions = loadData('niroboAllSubmissions', []);
-      const userSubmissions = allSubmissions.filter(sub => sub.userId === currentUser.id);
-
-      // Group submissions by category
-      const categories = {
-        'websites': { title: 'Websites', icon: 'fas fa-window-maximize', submissions: [] },
-        'images': { title: 'Images', icon: 'fas fa-image', submissions: [] },
-        'videos': { title: 'Videos', icon: 'fas fa-video', submissions: [] },
-        'documents': { title: 'Documents', icon: 'fas fa-file-alt', submissions: [] },
-        'tools': { title: 'Tools', icon: 'fas fa-wrench', submissions: [] }
-      };
-
-      userSubmissions.forEach(sub => {
-        const categoryKey = sub.category || 'websites'; // Default to websites
-        if (categories[categoryKey]) {
-          categories[categoryKey].submissions.push(sub);
-        } else {
-          // Handle unknown categories by grouping them under 'websites'
-          categories['websites'].submissions.push(sub);
-        }
-      });
-
-      submissionsLibrary.innerHTML = '';
-
-      // Check if user has reached submission limit
-      if (userSubmissions.length >= MAX_SUBMISSIONS_PER_USER) {
-        const limitNotice = document.createElement('div');
-        limitNotice.className = 'empty-state';
-        limitNotice.innerHTML = `
-          <h3>⚠️ Submission Limit Reached</h3>
-          <p>You have submitted the maximum of ${MAX_SUBMISSIONS_PER_USER} URLs.</p>
-          <p>Please contact support if you need to submit more.</p>
-        `;
-        submissionsLibrary.appendChild(limitNotice);
-      }
-
-      // Render shelves for each category
-      Object.keys(categories).forEach(catKey => {
-        const category = categories[catKey];
-        if (category.submissions.length > 0) {
-          const shelfDiv = document.createElement('div');
-          shelfDiv.className = 'shelf';
-          shelfDiv.innerHTML = `
-            <div class="shelf-header">
-              <div class="shelf-title">
-                <i class="${category.icon}"></i> ${category.title}
-              </div>
-              <div class="shelf-count">${category.submissions.length} items</div>
-            </div>
-            <div class="shelf-books">
-              ${category.submissions.map(sub => {
-                const domain = getDomain(sub.url);
-                const cleanUrl = sub.url.replace(/^https?:\/\//, '').replace(/\/$/, '');
-                const truncatedUrl = cleanUrl.length > 30 ? cleanUrl.substring(0, 30) + '...' : cleanUrl;
-                const statusClass = sub.status || 'pending';
-                const statusText = sub.status ? sub.status.toUpperCase() : 'PENDING';
-                
-                // Determine icon based on category
-                let iconClass = 'fas fa-link';
-                switch(catKey) {
-                  case 'websites': iconClass = 'fas fa-window-maximize'; break;
-                  case 'images': iconClass = 'fas fa-image'; break;
-                  case 'videos': iconClass = 'fas fa-video'; break;
-                  case 'documents': iconClass = 'fas fa-file-alt'; break;
-                  case 'tools': iconClass = 'fas fa-wrench'; break;
-                }
-
-                return `
-                  <div class="book-card ${statusClass}">
-                    <div class="book-cover">
-                      <i class="${iconClass}"></i>
-                    </div>
-                    <div class="book-title">${sub.title}</div>
-                    <a href="${sub.url}" class="book-url" target="_blank" rel="noopener">${truncatedUrl}</a>
-                    <div class="book-status ${statusClass}">${statusText}</div>
-                    <div class="book-meta">
-                      <div class="book-submitted">
-                        ${sub.submittedAt ? `Submitted: ${formatDate(sub.submittedAt)}` : 'Source: Database'}
-                      </div>
-                      <div class="book-views">
-                        👀 ${sub.viewCount || 0}
-                      </div>
-                    </div>
-                    ${sub.adminMessage ? `<div class="admin-message">💬 ${sub.adminMessage}</div>` : ''}
-                    <div class="book-actions">
-                      <button class="book-action-btn edit-btn" onclick="editSubmission('${sub.id}')">
-                        <i class="fas fa-edit"></i> Edit
-                      </button>
-                      <button class="book-action-btn delete-btn" onclick="deleteSubmission('${sub.id}')">
-                        <i class="fas fa-trash"></i> Delete
-                      </button>
-                    </div>
-                  </div>
-                `;
-              }).join('')}
-            </div>
-          `;
-          submissionsLibrary.appendChild(shelfDiv);
-        }
-      });
-
-      // If no submissions at all
-      if (userSubmissions.length === 0) {
-        submissionsLibrary.innerHTML = '<div class="empty-state"><h3>📭 Your Library is Empty</h3><p>Submit your first URL to start building your collection!</p></div>';
-      }
-    }
-    // Edit submission
-    window.editSubmission = function(id) {
-      const currentUser = checkAuth();
-      if (!currentUser) return;
-      const allSubmissions = loadData('niroboAllSubmissions', []);
-      const submission = allSubmissions.find(sub => sub.userId === currentUser.id && sub.id === id);
-      if (!submission) {
-        showNotification('❌ Submission not found.', 'error');
-        return;
-      }
-      // Redirect to signup.html with submission data (conceptual)
-      // In a real app, you'd pass data via URL params or localStorage
-      window.location.href = `signup.html?edit=${id}`;
-    };
-    // Delete submission
-    window.deleteSubmission = function(id) {
-      const currentUser = checkAuth();
-      if (!currentUser) return;
-      if (!confirm('Are you sure you want to remove this submission?')) return;
-      let allSubmissions = loadData('niroboAllSubmissions', []);
-      const index = allSubmissions.findIndex(sub => sub.userId === currentUser.id && sub.id === id);
-      if (index !== -1) {
-        allSubmissions.splice(index, 1);
-        saveData('niroboAllSubmissions', allSubmissions);
-        showNotification('🗑️ Submission removed.', 'info');
-        displayUserSubmissions();
-        displayAnalytics(); // Update analytics after deletion
-      }
-    };
-    // --- ACCOUNT MANAGEMENT ---
-    // Change Email
-    changeEmailBtn.addEventListener('click', () => {
-      const currentUser = checkAuth();
-      if (!currentUser) return;
-      const newEmailValue = newEmail.value.trim();
-      if (!newEmailValue) {
-        showNotification('Please enter a new email address.', 'error');
-        return;
-      }
-      
-      // Check if email is already taken
-      const users = loadData('niroboUsers', []);
-      const emailExists = users.some(u => u.email === newEmailValue && u.id !== currentUser.id);
-      if (emailExists) {
-        showNotification('❌ This email is already in use.', 'error');
-        return;
-      }
-      
-      // Update user email
-      const userIndex = users.findIndex(u => u.id === currentUser.id);
-      if (userIndex !== -1) {
-        users[userIndex].email = newEmailValue;
-        saveData('niroboUsers', users);
-        
-        // Update current user session
-        currentUser.email = newEmailValue;
-        saveData('niroboCurrentUser', currentUser);
-        userEmail.textContent = newEmailValue;
-        
-        showNotification('✅ Email updated successfully!', 'success');
-        newEmail.value = '';
-      } else {
-        showNotification('❌ User not found.', 'error');
-      }
-    });
-    
-    // Change Password
-    changePasswordBtn.addEventListener('click', () => {
-      const currentUser = checkAuth();
-      if (!currentUser) return;
-      const oldPw = oldPassword.value;
-      const newPw = newPassword.value;
-      const confirmPw = confirmNewPassword.value;
-      
-      if (!oldPw || !newPw || !confirmPw) {
-        showNotification('Please fill in all password fields.', 'error');
-        return;
-      }
-      
-      if (newPw !== confirmPw) {
-        showNotification('❌ New passwords do not match.', 'error');
-        return;
-      }
-      
-      // Verify old password
-      const users = loadData('niroboUsers', []);
-      const user = users.find(u => u.id === currentUser.id);
-      if (!user || user.password !== hashPassword(oldPw)) {
-        showNotification('❌ Incorrect old password.', 'error');
-        return;
-      }
-      
-      // Update password
-      const userIndex = users.findIndex(u => u.id === currentUser.id);
-      if (userIndex !== -1) {
-        users[userIndex].password = hashPassword(newPw);
-        saveData('niroboUsers', users);
-        
-        showNotification('✅ Password updated successfully!', 'success');
-        oldPassword.value = '';
-        newPassword.value = '';
-        confirmNewPassword.value = '';
-      } else {
-        showNotification('❌ User not found.', 'error');
-      }
-    });
-    
-    // Delete Account
-    deleteAccountBtn.addEventListener('click', () => {
-      const currentUser = checkAuth();
-      if (!currentUser) return;
-      if (!confirm('⚠️ Are you absolutely sure you want to delete your account? This action is irreversible and all your data will be permanently lost.')) {
-        return;
-      }
-      
-      // Remove user from users list
-      let users = loadData('niroboUsers', []);
-      users = users.filter(u => u.id !== currentUser.id);
-      saveData('niroboUsers', users);
-      
-      // Remove user's submissions
-      let allSubmissions = loadData('niroboAllSubmissions', []);
-      allSubmissions = allSubmissions.filter(sub => sub.userId !== currentUser.id);
-      saveData('niroboAllSubmissions', allSubmissions);
-      
-      // Remove current user session
-      localStorage.removeItem('niroboCurrentUser');
-      
-      showNotification('🗑️ Your account has been deleted.', 'info');
-      
-      // Redirect to signup page
       setTimeout(() => {
         window.location.href = 'signup.html';
-      }, 2000);
+      }, 1000);
     });
-    // --- INITIALIZATION ---
-    document.addEventListener("DOMContentLoaded", () => {
-      const user = checkAuth();
-      if (user) {
-        displayAnalytics();
-        displayUserSubmissions();
+
+    // --- Navigation Smooth Scrolling ---
+    document.querySelectorAll('.menu-link').forEach(link => {
+      link.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (href.startsWith('#')) {
+          e.preventDefault();
+          const target = document.querySelector(href);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+            // Update active menu item
+            document.querySelectorAll('.menu-link').forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+          }
+        }
+      });
+    });
+
+    // --- Initialize Dashboard ---
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeDashboard();
+      
+      // Close sidebar on larger screens after clicking
+      if (window.innerWidth > 768) {
+        document.querySelectorAll('.menu-link').forEach(link => {
+          link.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+          });
+        });
       }
     });
   </script>
