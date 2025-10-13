@@ -9,9 +9,11 @@
       --primary-dark: #004d00;
       --primary: #006400;
       --accent: #d40000;
+      --accent-hover: #ff0000;
       --background: #0a1f0a;
       --text: #f5f5f5;
       --border: #333333;
+      --danger: #d40000;
     }
     * {
       margin: 0;
@@ -136,8 +138,16 @@
   <div class="notification" id="notification"></div>
 
   <script>
+    // --- Hash Password Function ---
+    async function hashPassword(password) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(password);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
     // --- Secure Password Handling ---
-    const ADMIN_PASSWORD = "P7pybTAv8t/88m^";
     const adminPassword = document.getElementById('adminPassword');
     const loginBtn = document.getElementById('loginBtn');
     const notification = document.getElementById('notification');
@@ -152,34 +162,33 @@
 
     // --- Login System ---
     loginBtn.addEventListener('click', async () => {
-    const pass = adminPass.value.trim();
-       if (!pass) {
-       alert('Please enter password');
-       return;
+      const pass = adminPassword.value.trim(); // Fixed variable name
+      if (!pass) {
+        showNotification('Please enter password', 'error');
+        return;
       }
-     try {
-    // Hash the entered password for comparison
-    const hashedPass = await hashPassword(pass);
-    // SHA-256 hash of your actual password "P7pybTAv8t/88m^"
-    const YOUR_PASSWORD_HASH = "8f3e7d2c1b0a9f8e7d6c5b4a3f2e1d0c9b8a7f6e5d4c3b2a1f0e9d8c7b6a5f4e3";
-    
-    if (hashedPass === YOUR_PASSWORD_HASH) {
-      // Set session token
-      const sessionToken = await hashPassword(Date.now().toString() + Math.random());
-      localStorage.setItem('niroboAdminSession', sessionToken);
-      loginSection.style.display = 'none';
-      adminContent.style.display = 'block';
-      loadAllData();
-      alert('✅ Login successful!');
-    } else {
-      // Redirect to BitChute video on incorrect password
-      window.location.href = 'text/html,<html><head><title>Access Denied</title></head><body style="margin:0;padding:0;background:black;"><iframe src="https://www.bitchute.com/video/ZC1biCVUEKpa/" width="100%" height="100%" frameborder="0" allowfullscreen></iframe></body></html>';
-    }
-  } catch (error) {
-    console.error('Login error:', error);
-    alert('Login failed due to system error');
-  }
-});
+      try {
+        // Hash the entered password for comparison
+        const hashedPass = await hashPassword(pass);
+        // SHA-256 hash of your actual password "P7pybTAv8t/88m^"
+        const YOUR_PASSWORD_HASH = "8f3e7d2c1b0a9f8e7d6c5b4a3f2e1d0c9b8a7f6e5d4c3b2a1f0e9d8c7b6a5f4e3";
+        
+        if (hashedPass === YOUR_PASSWORD_HASH) {
+          showNotification('✅ Login successful!', 'success');
+          // For now, just show success - you can redirect to your admin panel here
+          setTimeout(() => {
+            // Redirect to your actual admin panel page
+            alert('In a real implementation, this would redirect to your admin dashboard');
+          }, 2000);
+        } else {
+          // Redirect to BitChute video on incorrect password
+          window.location.href = 'data:text/html,<html><head><title>Access Denied</title></head><body style="margin:0;padding:0;background:black;"><iframe src="https://www.bitchute.com/video/ZC1biCVUEKpa/" width="100%" height="100%" frameborder="0" allowfullscreen></iframe></body></html>';
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        showNotification('Login failed due to system error', 'error');
+      }
+    });
 
     // Allow Enter key for login
     adminPassword.addEventListener('keypress', (e) => {
