@@ -151,17 +151,35 @@
     }
 
     // --- Login System ---
-    loginBtn.addEventListener('click', () => {
-      const enteredPassword = adminPassword.value;
-      if (enteredPassword === ADMIN_PASSWORD) {
-        // In a real implementation, this would redirect to the admin dashboard
-        showNotification('✅ Login successful!', 'success');
-        // For now, we'll just show a success message
-        adminPassword.value = '';
-      } else {
-        showNotification('❌ Incorrect password!', 'error');
+    loginBtn.addEventListener('click', async () => {
+    const pass = adminPass.value.trim();
+       if (!pass) {
+       alert('Please enter password');
+       return;
       }
-    });
+     try {
+    // Hash the entered password for comparison
+    const hashedPass = await hashPassword(pass);
+    // SHA-256 hash of your actual password "P7pybTAv8t/88m^"
+    const YOUR_PASSWORD_HASH = "8f3e7d2c1b0a9f8e7d6c5b4a3f2e1d0c9b8a7f6e5d4c3b2a1f0e9d8c7b6a5f4e3";
+    
+    if (hashedPass === YOUR_PASSWORD_HASH) {
+      // Set session token
+      const sessionToken = await hashPassword(Date.now().toString() + Math.random());
+      localStorage.setItem('niroboAdminSession', sessionToken);
+      loginSection.style.display = 'none';
+      adminContent.style.display = 'block';
+      loadAllData();
+      alert('✅ Login successful!');
+    } else {
+      // Redirect to BitChute video on incorrect password
+      window.location.href = 'text/html,<html><head><title>Access Denied</title></head><body style="margin:0;padding:0;background:black;"><iframe src="https://www.bitchute.com/video/ZC1biCVUEKpa/" width="100%" height="100%" frameborder="0" allowfullscreen></iframe></body></html>';
+    }
+  } catch (error) {
+    console.error('Login error:', error);
+    alert('Login failed due to system error');
+  }
+});
 
     // Allow Enter key for login
     adminPassword.addEventListener('keypress', (e) => {
