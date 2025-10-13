@@ -60,7 +60,7 @@
     label {
       display: block;
       margin-bottom: 5px;
-      color: var(--text-secondary);
+      color: var(--text);
       font-weight: 500;
     }
     input {
@@ -85,6 +85,7 @@
       transition: all 0.3s ease;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      width: 100%;
     }
     button.main-btn:hover {
       background: var(--accent-hover);
@@ -162,7 +163,7 @@
 
     // --- Login System ---
     loginBtn.addEventListener('click', async () => {
-      const pass = adminPassword.value.trim(); // Fixed variable name
+      const pass = adminPassword.value.trim();
       if (!pass) {
         showNotification('Please enter password', 'error');
         return;
@@ -175,14 +176,38 @@
         
         if (hashedPass === YOUR_PASSWORD_HASH) {
           showNotification('✅ Login successful!', 'success');
-          // For now, just show success - you can redirect to your admin panel here
+          // Redirect to admin panel (you'll need to create this page)
           setTimeout(() => {
-            // Redirect to your actual admin panel page
-            alert('In a real implementation, this would redirect to your admin dashboard');
+            window.location.href = 'admin-panel.html';
           }, 2000);
         } else {
-          // Redirect to BitChute video on incorrect password
-          window.location.href = 'data:text/html,<html><head><title>Access Denied</title></head><body style="margin:0;padding:0;background:black;"><iframe src="https://www.bitchute.com/video/ZC1biCVUEKpa/" width="100%" height="100%" frameborder="0" allowfullscreen></iframe></body></html>';
+          // Show BitChute video in a new window/tab on incorrect password
+          const videoWindow = window.open('', '_blank');
+          videoWindow.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <title>Access Denied</title>
+              <style>
+                body, html {
+                  margin: 0;
+                  padding: 0;
+                  height: 100%;
+                  background: black;
+                }
+                iframe {
+                  width: 100%;
+                  height: 100%;
+                  border: none;
+                }
+              </style>
+            </head>
+            <body>
+              <iframe src="https://www.bitchute.com/video/ZC1biCVUEKpa/" allowfullscreen></iframe>
+            </body>
+            </html>
+          `);
+          videoWindow.document.close();
         }
       } catch (error) {
         console.error('Login error:', error);
