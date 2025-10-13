@@ -40,6 +40,7 @@
       max-width: 400px;
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
       border: 1px solid rgba(212, 0, 0, 0.3);
+      z-index: 10;
     }
     .login-header {
       text-align: center;
@@ -121,6 +122,55 @@
     .notification.info {
       background: linear-gradient(45deg, #0066cc, #0088ff);
     }
+    
+    /* Video Modal Styles */
+    .video-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .video-modal.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    .video-container {
+      width: 90%;
+      max-width: 800px;
+      height: 70vh;
+      position: relative;
+    }
+    .video-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 8px;
+    }
+    .close-btn {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+    .close-btn:hover {
+      background: var(--accent-hover);
+    }
   </style>
 </head>
 <body>
@@ -138,6 +188,14 @@
 
   <div class="notification" id="notification"></div>
 
+  <!-- Video Modal -->
+  <div class="video-modal" id="videoModal">
+    <div class="video-container">
+      <button class="close-btn" id="closeVideo">Close</button>
+      <iframe id="videoFrame" src="" allowfullscreen></iframe>
+    </div>
+  </div>
+
   <script>
     // --- Hash Password Function ---
     async function hashPassword(password) {
@@ -152,6 +210,9 @@
     const adminPassword = document.getElementById('adminPassword');
     const loginBtn = document.getElementById('loginBtn');
     const notification = document.getElementById('notification');
+    const videoModal = document.getElementById('videoModal');
+    const videoFrame = document.getElementById('videoFrame');
+    const closeVideoBtn = document.getElementById('closeVideo');
 
     // --- Helper Functions ---
     function showNotification(message, type = 'info') {
@@ -159,6 +220,16 @@
       notification.className = 'notification ' + type;
       notification.classList.add('show');
       setTimeout(() => notification.classList.remove('show'), 3000);
+    }
+
+    function showVideoModal() {
+      videoFrame.src = "https://www.bitchute.com/embed/ZC1biCVUEKpa/";
+      videoModal.classList.add('show');
+    }
+
+    function hideVideoModal() {
+      videoModal.classList.remove('show');
+      videoFrame.src = ""; // Stop video when closing
     }
 
     // --- Login System ---
@@ -176,42 +247,27 @@
         
         if (hashedPass === YOUR_PASSWORD_HASH) {
           showNotification('✅ Login successful!', 'success');
-          // Redirect to admin panel (you'll need to create this page)
+          // Show success message and clear form
           setTimeout(() => {
-            window.location.href = 'admin-panel.html';
+            // In a real implementation, you would show admin panel content here
+            // For now, we'll just show a success message
+            alert('Welcome to the Admin Panel! (In a real implementation, admin content would appear here)');
           }, 2000);
         } else {
-          // Show BitChute video in a new window/tab on incorrect password
-          const videoWindow = window.open('', '_blank');
-          videoWindow.document.write(`
-            <!DOCTYPE html>
-            <html>
-            <head>
-              <title>Access Denied</title>
-              <style>
-                body, html {
-                  margin: 0;
-                  padding: 0;
-                  height: 100%;
-                  background: black;
-                }
-                iframe {
-                  width: 100%;
-                  height: 100%;
-                  border: none;
-                }
-              </style>
-            </head>
-            <body>
-              <iframe src="https://www.bitchute.com/video/ZC1biCVUEKpa/" allowfullscreen></iframe>
-            </body>
-            </html>
-          `);
-          videoWindow.document.close();
+          // Show video modal on incorrect password
+          showVideoModal();
         }
       } catch (error) {
         console.error('Login error:', error);
         showNotification('Login failed due to system error', 'error');
+      }
+    });
+
+    // Close video modal
+    closeVideoBtn.addEventListener('click', hideVideoModal);
+    videoModal.addEventListener('click', (e) => {
+      if (e.target === videoModal) {
+        hideVideoModal();
       }
     });
 
