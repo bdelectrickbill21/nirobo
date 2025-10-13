@@ -3,277 +3,170 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Panel - Sonar Bangla Search</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            'brand-green': '#006a4e',
-            'brand-red': '#f42a41',
-          },
-        },
-      },
-    }
-  </script>
+  <title>Nirobo Admin Panel</title>
   <style>
-    .sidebar-link.active {
-      background-color: #006a4e;
-      color: white;
+    :root {
+      --primary-dark: #004d00;
+      --primary: #006400;
+      --accent: #d40000;
+      --background: #0a1f0a;
+      --text: #f5f5f5;
+      --border: #333333;
     }
-    .sidebar-link.active i {
-      color: white;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     }
-    .admin-section {
-      display: none;
-      animation: fadeIn 0.5s ease-in-out;
+    body {
+      background: linear-gradient(135deg, var(--background), #003300);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
     }
-    .admin-section.active {
+    .login-container {
+      background: rgba(26, 26, 26, 0.8);
+      border-radius: 15px;
+      padding: 40px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(212, 0, 0, 0.3);
+    }
+    .login-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .login-header h2 {
+      color: var(--accent);
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+    .login-header p {
+      color: #ffcccc;
+      font-style: italic;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
       display: block;
+      margin-bottom: 5px;
+      color: var(--text-secondary);
+      font-weight: 500;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.3);
+      color: var(--text);
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    button.main-btn {
+      padding: 12px 20px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    button.main-btn:hover {
+      background: var(--accent-hover);
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+      transform: translateY(-2px);
+    }
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 12px 15px;
+      border-radius: 6px;
+      color: white;
+      font-weight: 500;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      z-index: 1000;
+      transform: translateX(120%);
+      transition: transform 0.3s ease;
+      max-width: 300px;
+    }
+    .notification.show {
+      transform: translateX(0);
+    }
+    .notification.success {
+      background: linear-gradient(45deg, #00aa00, #00cc00);
+    }
+    .notification.error {
+      background: linear-gradient(45deg, var(--danger), #ff3333);
+    }
+    .notification.warning {
+      background: linear-gradient(45deg, #ff9900, #ffcc00);
+    }
+    .notification.info {
+      background: linear-gradient(45deg, #0066cc, #0088ff);
     }
   </style>
 </head>
-<body class="bg-gray-100">
-
-  <!-- Login Modal -->
-  <div id="login-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
-    <div class="bg-white p-8 rounded-lg shadow-2xl w-full max-w-sm">
-      <h2 class="text-2xl font-bold text-brand-green mb-4 text-center">Admin Access</h2>
-      <p class="text-gray-600 mb-6 text-center">Please enter the password to continue.</p>
-      <div class="mb-4">
-        <label for="adminPassword" class="block text-sm font-medium text-gray-700">Password</label>
-        <input type="password" id="adminPassword" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-brand-green focus:border-brand-green">
-      </div>
-      <button id="loginBtn" class="w-full bg-brand-green text-white py-2 px-4 rounded-md hover:bg-green-800 transition-colors">Login</button>
-      <p id="login-error" class="text-brand-red text-sm mt-2 text-center hidden">Incorrect password.</p>
-      <p class="text-xs text-gray-500 mt-4 text-center">
-        Note: The admin password is set in the <code>admin.html</code> file. Contact the administrator to change it.
-      </p>
+<body>
+  <div class="login-container">
+    <div class="login-header">
+      <h2>🔐 Admin Login</h2>
+      <p>Access Restricted Area</p>
     </div>
-  </div>
-
-  <!-- Main Admin Content -->
-  <div id="admin-content" class="hidden">
-    <div class="flex h-screen bg-gray-200">
-      <!-- Sidebar -->
-      <aside class="w-64 bg-white shadow-md flex-shrink-0">
-        <div class="p-4 bg-brand-green text-white text-center">
-          <h1 class="text-2xl font-bold tracking-tight">Sonar Bangla</h1>
-          <p class="text-sm">Admin Panel</p>
-        </div>
-        <nav class="mt-5">
-          <a href="#" class="sidebar-link active flex items-center py-3 px-4 text-gray-700 hover:bg-gray-200" data-section="dashboard">
-            <i class="fas fa-tachometer-alt w-6 text-brand-green"></i>
-            <span class="ml-3">Dashboard</span>
-          </a>
-          <a href="#" class="sidebar-link flex items-center py-3 px-4 text-gray-700 hover:bg-gray-200" data-section="moderation">
-            <i class="fas fa-shield-halved w-6 text-brand-green"></i>
-            <span class="ml-3">Content Moderation</span>
-          </a>
-          <a href="#" class="sidebar-link flex items-center py-3 px-4 text-gray-700 hover:bg-gray-200" data-section="settings">
-            <i class="fas fa-cog w-6 text-brand-green"></i>
-            <span class="ml-3">Settings</span>
-          </a>
-          <a href="/index.html" class="sidebar-link flex items-center py-3 px-4 text-gray-700 hover:bg-gray-200 mt-8 border-t">
-             <i class="fas fa-arrow-left w-6 text-brand-green"></i>
-             <span class="ml-3">Back to Search</span>
-          </a>
-        </nav>
-      </aside>
-
-      <!-- Main content -->
-      <main class="flex-1 p-6 sm:p-10 overflow-y-auto">
-        <!-- Dashboard Section -->
-        <section id="dashboard" class="admin-section active">
-          <h2 class="text-3xl font-bold text-gray-800 mb-6">Dashboard</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-brand-green">
-              <h3 class="text-lg font-semibold text-gray-500">Total Searches</h3>
-              <p class="text-3xl font-bold text-gray-800 mt-2">1,971</p>
-            </div>
-            <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-blue-500">
-              <h3 class="text-lg font-semibold text-gray-500">Unique Visitors</h3>
-              <p class="text-3xl font-bold text-gray-800 mt-2">250</p>
-            </div>
-            <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-yellow-500">
-              <h3 class="text-lg font-semibold text-gray-500">API Calls Today</h3>
-              <p class="text-3xl font-bold text-gray-800 mt-2">450</p>
-            </div>
-            <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-brand-red">
-              <h3 class="text-lg font-semibold text-gray-500">Avg. Sources/Query</h3>
-              <p class="text-3xl font-bold text-gray-800 mt-2">3.2</p>
-            </div>
-          </div>
-        </section>
-
-        <!-- Content Moderation Section -->
-        <section id="moderation" class="admin-section">
-          <h2 class="text-3xl font-bold text-gray-800 mb-6">Content Moderation</h2>
-          <div class="bg-white p-6 rounded-lg shadow-lg">
-            <h3 class="text-xl font-semibold text-gray-700 mb-4">Blocked Keywords</h3>
-            <p class="text-gray-600 mb-4">Searches containing these keywords will be filtered. Keywords are case-insensitive.</p>
-            <div class="flex items-center space-x-2 mb-6">
-              <input type="text" id="newKeyword" placeholder="Enter a keyword to block" class="flex-grow mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-brand-green focus:border-brand-green">
-              <button id="addKeywordBtn" class="bg-brand-green text-white py-2 px-5 rounded-md hover:bg-green-800 transition-colors">Add</button>
-            </div>
-            <div id="keywordsList" class="space-y-2">
-              <!-- Keywords will be added here -->
-            </div>
-          </div>
-        </section>
-
-        <!-- Settings Section -->
-        <section id="settings" class="admin-section">
-          <h2 class="text-3xl font-bold text-gray-800 mb-6">Settings</h2>
-          <div class="bg-white p-6 rounded-lg shadow-lg max-w-2xl">
-            <div class="space-y-6">
-              <div>
-                <label for="siteTitle" class="block text-lg font-medium text-gray-700">Site Title</label>
-                <input type="text" id="siteTitle" value="Sonar Bangla Search" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-green focus:border-brand-green">
-              </div>
-              <div>
-                <label for="siteSubtitle" class="block text-lg font-medium text-gray-700">Homepage Subtitle</label>
-                <input type="text" id="siteSubtitle" value="Your AI-powered gateway to Bangladesh" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-green focus:border-brand-green">
-              </div>
-              <div class="flex justify-end">
-                <button id="saveSettingsBtn" class="bg-brand-green text-white py-2 px-6 rounded-md hover:bg-green-800 transition-colors">Save Settings</button>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
+    <div class="form-group">
+      <label for="adminPassword">Admin Password</label>
+      <input type="password" id="adminPassword" placeholder="Enter admin password">
     </div>
+    <button class="main-btn" id="loginBtn">Login</button>
   </div>
-  
-  <!-- Notification Toast -->
-  <div id="notification" class="fixed top-5 right-5 bg-brand-green text-white py-2 px-4 rounded-lg shadow-lg transition-transform transform translate-x-full">
-    Notification message
-  </div>
+
+  <div class="notification" id="notification"></div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const ADMIN_PASSWORD = "sonar_bangla_71"; // You should change this to a more secure password
-      
-      const loginModal = document.getElementById('login-modal');
-      const adminContent = document.getElementById('admin-content');
-      const adminPasswordInput = document.getElementById('adminPassword');
-      const loginBtn = document.getElementById('loginBtn');
-      const loginError = document.getElementById('login-error');
-      
-      let blockedKeywords = ['badword1', 'badword2', 'inappropriate'];
+    // --- Secure Password Handling ---
+    const ADMIN_PASSWORD = "P7pybTAv8t/88m^";
+    const adminPassword = document.getElementById('adminPassword');
+    const loginBtn = document.getElementById('loginBtn');
+    const notification = document.getElementById('notification');
 
-      // --- LOGIN LOGIC ---
-      function attemptLogin() {
-        if (adminPasswordInput.value === ADMIN_PASSWORD) {
-          loginModal.style.display = 'none';
-          adminContent.style.display = 'block';
-          initializeAdminPanel();
-        } else {
-          loginError.classList.remove('hidden');
-        }
+    // --- Helper Functions ---
+    function showNotification(message, type = 'info') {
+      notification.textContent = message;
+      notification.className = 'notification ' + type;
+      notification.classList.add('show');
+      setTimeout(() => notification.classList.remove('show'), 3000);
+    }
+
+    // --- Login System ---
+    loginBtn.addEventListener('click', () => {
+      const enteredPassword = adminPassword.value;
+      if (enteredPassword === ADMIN_PASSWORD) {
+        // In a real implementation, this would redirect to the admin dashboard
+        showNotification('✅ Login successful!', 'success');
+        // For now, we'll just show a success message
+        adminPassword.value = '';
+      } else {
+        showNotification('❌ Incorrect password!', 'error');
       }
-      
-      loginBtn.addEventListener('click', attemptLogin);
-      adminPasswordInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-          attemptLogin();
-        }
-      });
+    });
 
-      // --- NOTIFICATION LOGIC ---
-      const notification = document.getElementById('notification');
-      function showNotification(message, isError = false) {
-        notification.textContent = message;
-        notification.classList.toggle('bg-brand-red', isError);
-        notification.classList.toggle('bg-brand-green', !isError);
-        notification.classList.remove('translate-x-full');
-        setTimeout(() => {
-          notification.classList.add('translate-x-full');
-        }, 3000);
-      }
-
-      function initializeAdminPanel() {
-        // --- NAVIGATION LOGIC ---
-        const sidebarLinks = document.querySelectorAll('.sidebar-link');
-        const sections = document.querySelectorAll('.admin-section');
-
-        sidebarLinks.forEach(link => {
-          link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const sectionId = this.dataset.section;
-
-            if (!sectionId) return;
-
-            sidebarLinks.forEach(l => l.classList.remove('active'));
-            this.classList.add('active');
-
-            sections.forEach(section => {
-              if (section.id === sectionId) {
-                section.classList.add('active');
-              } else {
-                section.classList.remove('active');
-              }
-            });
-          });
-        });
-
-        // --- MODERATION LOGIC ---
-        const keywordsList = document.getElementById('keywordsList');
-        const newKeywordInput = document.getElementById('newKeyword');
-        const addKeywordBtn = document.getElementById('addKeywordBtn');
-
-        function renderKeywords() {
-          keywordsList.innerHTML = '';
-          if (blockedKeywords.length === 0) {
-            keywordsList.innerHTML = `<p class="text-gray-500">No keywords are currently blocked.</p>`;
-          }
-          blockedKeywords.forEach((keyword, index) => {
-            const div = document.createElement('div');
-            div.className = 'flex items-center justify-between bg-gray-100 p-2 rounded';
-            div.innerHTML = `
-              <span>${keyword}</span>
-              <button class="remove-keyword-btn text-brand-red hover:text-red-700" data-index="${index}"><i class="fas fa-trash"></i></button>
-            `;
-            keywordsList.appendChild(div);
-          });
-        }
-        
-        addKeywordBtn.addEventListener('click', () => {
-          const keyword = newKeywordInput.value.trim().toLowerCase();
-          if (keyword && !blockedKeywords.includes(keyword)) {
-            blockedKeywords.push(keyword);
-            renderKeywords();
-            newKeywordInput.value = '';
-            showNotification('Keyword added.');
-          } else if (blockedKeywords.includes(keyword)) {
-             showNotification('Keyword is already blocked.', true);
-          }
-        });
-
-        keywordsList.addEventListener('click', (e) => {
-          const removeBtn = e.target.closest('.remove-keyword-btn');
-          if (removeBtn) {
-            const index = parseInt(removeBtn.dataset.index, 10);
-            blockedKeywords.splice(index, 1);
-            renderKeywords();
-            showNotification('Keyword removed.');
-          }
-        });
-
-        renderKeywords();
-
-        // --- SETTINGS LOGIC ---
-        const saveSettingsBtn = document.getElementById('saveSettingsBtn');
-        saveSettingsBtn.addEventListener('click', () => {
-            // In a real app, you would save these values
-            showNotification('Settings saved successfully!');
-        });
+    // Allow Enter key for login
+    adminPassword.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        loginBtn.click();
       }
     });
   </script>
