@@ -1006,30 +1006,34 @@ window.analytics = analytics;
     }
 
     // --- Navigation Smooth Scrolling ---
-    document.querySelectorAll('.menu-link').forEach(link => {
-      link.addEventListener('click', function(e) {
-        e.preventDefault();
-        const href = this.getAttribute('href');
-        
-        // Hide all sections first
-        document.querySelectorAll('.dashboard-section').forEach(section => {
-          section.style.display = 'none';
-        });
-        
-        // Show the selected section
-        const targetSection = document.querySelector(href);
-        if (targetSection) {
-          targetSection.style.display = 'block';
-          
-          // Update active menu item
-          document.querySelectorAll('.menu-link').forEach(l => l.classList.remove('active'));
-          this.classList.add('active');
-          
-          // Scroll to top of section
-          targetSection.scrollIntoView({ behavior: 'smooth' });
-        }
-      });
+document.querySelectorAll('.menu-link').forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    // Track dashboard navigation
+    if (window.analytics) analytics.trackDashboardAction('view_' + this.getAttribute('href').replace('#', ''));
+    
+    const href = this.getAttribute('href');
+    
+    // Hide all sections first
+    document.querySelectorAll('.dashboard-section').forEach(section => {
+      section.style.display = 'none';
     });
+    
+    // Show the selected section
+    const targetSection = document.querySelector(href);
+    if (targetSection) {
+      targetSection.style.display = 'block';
+      
+      // Update active menu item
+      document.querySelectorAll('.menu-link').forEach(l => l.classList.remove('active'));
+      this.classList.add('active');
+      
+      // Scroll to top of section
+      targetSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+});
 
     // --- Initialize Dashboard ---
     document.addEventListener('DOMContentLoaded', () => {
