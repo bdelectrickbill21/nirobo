@@ -1,6 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+class AnalyticsTracker {
+  constructor() {
+    this.sessionId = this.getSessionId();
+  }
+  getSessionId() {
+    let sessionId = localStorage.getItem('analytics_session_id');
+    if (!sessionId) {
+      sessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      localStorage.setItem('analytics_session_id', sessionId);
+    }
+    return sessionId;
+  }
+  trackPageView() {
+    const eventData = {
+      event: 'page_view',
+      sessionId: this.sessionId,
+      timestamp: new Date().toISOString(),
+      url: window.location.href,
+      title: document.title,
+      referrer: document.referrer,
+      userAgent: navigator.userAgent
+    };
+    fetch('/api/analytics/track', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(eventData)
+    }).catch(error => console.warn('Tracking failed:', error));
+  }
+  trackSearch(query, resultsCount) {
+    fetch('/api/analytics/track', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        event: 'search',
+        sessionId: this.sessionId,
+        timestamp: new Date().toISOString(),
+        query: query,
+        resultsCount: resultsCount,
+        page: 'search'
+      })
+    }).catch(error => console.warn('Search tracking failed:', error));
+  }
+}
+const analytics = new AnalyticsTracker();
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => analytics.trackPageView());
+} else {
+  analytics.trackPageView();
+}
+window.analytics = analytics;
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nirobo Search - Intelligent URL Discovery</title>
