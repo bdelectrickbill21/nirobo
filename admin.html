@@ -242,6 +242,10 @@
       try {
         // Hash the entered password for comparison
         const hashedPass = await hashPassword(pass);
+        console.log("Password entered:", pass);
+        console.log("Hash generated:", hashedPass);
+        console.log("Expected hash:", YOUR_PASSWORD_HASH);
+        console.log("Hashes match:", hashedPass === YOUR_PASSWORD_HASH);
         console.log("Your entered password hash:", hashedPass);
         // SHA-256 hash of your actual password "P7pybTAv8t/88m^"
          const YOUR_PASSWORD_HASH = "a7c8b9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8";
