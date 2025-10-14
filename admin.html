@@ -232,56 +232,50 @@
       videoFrame.src = ""; // Stop video when closing
     }
 
-    // --- Login System ---
-    loginBtn.addEventListener('click', async () => {
+        // --- Login System (Simplified) ---
+    loginBtn.addEventListener('click', () => {
       const pass = adminPassword.value.trim();
       if (!pass) {
         showNotification('Please enter password', 'error');
         return;
       }
-      try {
-        // Hash the entered password for comparison
-        const hashedPass = await hashPassword(pass);
-        console.log("Password entered:", pass);
-        console.log("Hash generated:", hashedPass);
-        console.log("Expected hash:", YOUR_PASSWORD_HASH);
-        console.log("Hashes match:", hashedPass === YOUR_PASSWORD_HASH);
-        console.log("Your entered password hash:", hashedPass);
-        // SHA-256 hash of your actual password "P7pybTAv8t/88m^"
-         const YOUR_PASSWORD_HASH = "a7c8b9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8";
-        
-                if (hashedPass === YOUR_PASSWORD_HASH) {
-          showNotification('✅ Login successful!', 'success');
-          // Hide login form and show admin panel
-          setTimeout(() => {
-            document.querySelector('.login-container').style.display = 'none';
-            document.body.innerHTML = `
-              <div class="admin-panel" style="background: rgba(26, 26, 26, 0.9); border-radius: 15px; padding: 40px; width: 90%; max-width: 1200px; margin: 20px auto; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); border: 1px solid rgba(0, 100, 0, 0.3);">
-                <div style="text-align: center; margin-bottom: 30px;">
-                  <h2 style="color: #00cc00; font-size: 2rem;">🔐 Admin Panel</h2>
-                  <p style="color: #ffcccc;">Welcome! Add your artifacts and batons here.</p>
+      
+      // Use simple string comparison instead of hashing
+      const CORRECT_PASSWORD = "P7pybTAv8t/88m^";
+      
+      if (pass === CORRECT_PASSWORD) {
+        showNotification('✅ Login successful!', 'success');
+        // Hide login form and show admin panel
+        setTimeout(() => {
+          document.querySelector('.login-container').style.display = 'none';
+          document.body.innerHTML = `
+            <div class="admin-panel" style="background: rgba(26, 26, 26, 0.9); border-radius: 15px; padding: 40px; width: 90%; max-width: 1200px; margin: 20px auto; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); border: 1px solid rgba(0, 100, 0, 0.3);">
+              <div style="text-align: center; margin-bottom: 30px;">
+                <h2 style="color: #00cc00; font-size: 2rem;">🔐 Admin Panel</h2>
+                <p style="color: #ffcccc;">Welcome! Add your artifacts and batons here.</p>
+              </div>
+              <div class="admin-content" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                <!-- You can add your artifacts and batons here later -->
+                <div style="background: rgba(0, 50, 0, 0.5); padding: 20px; border-radius: 8px; text-align: center;">
+                  <h3 style="color: #00ff00; margin-bottom: 10px;">Artifact 1</h3>
+                  <p style="color: #cccccc;">Add your content here</p>
                 </div>
-                <div class="admin-content" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px;">
-                  <!-- You can add your artifacts and batons here later -->
-                  <div style="background: rgba(0, 50, 0, 0.5); padding: 20px; border-radius: 8px; text-align: center;">
-                    <h3 style="color: #00ff00; margin-bottom: 10px;">Artifact 1</h3>
-                    <p style="color: #cccccc;">Add your content here</p>
-                  </div>
-                  <div style="background: rgba(0, 50, 0, 0.5); padding: 20px; border-radius: 8px; text-align: center;">
-                    <h3 style="color: #00ff00; margin-bottom: 10px;">Artifact 2</h3>
-                    <p style="color: #cccccc;">Add your content here</p>
-                  </div>
-                </div>
-                <div style="text-align: center;">
-                  <button class="main-btn" onclick="location.reload()" style="width: auto; padding: 12px 24px;">Logout</button>
+                <div style="background: rgba(0, 50, 0, 0.5); padding: 20px; border-radius: 8px; text-align: center;">
+                  <h3 style="color: #00ff00; margin-bottom: 10px;">Artifact 2</h3>
+                  <p style="color: #cccccc;">Add your content here</p>
                 </div>
               </div>
-            `;
-          }, 2000);
-        } else {
-          // Show video modal on incorrect password
-          showVideoModal();
-    }
+              <div style="text-align: center;">
+                <button class="main-btn" onclick="location.reload()" style="width: auto; padding: 12px 24px;">Logout</button>
+              </div>
+            </div>
+          `;
+        }, 2000);
+      } else {
+        // Show video modal on incorrect password
+        showVideoModal();
+      }
+    });
       } catch (error) {
         console.error('Login error:', error);
         showNotification('Login failed due to system error', 'error');
