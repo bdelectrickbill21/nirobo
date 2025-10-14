@@ -320,108 +320,99 @@
             </div>
             
             <div class="stats-grid">
-              <div class="stat-card">
-                <div class="stat-value">1,247</div>
-                <div class="stat-label">Total Visits</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-value">89</div>
-                <div class="stat-label">Active Users</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-value">42%</div>
-                <div class="stat-label">Bounce Rate</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-value">3.2m</div>
-                <div class="stat-label">Avg. Session</div>
-              </div>
-            </div>
+  <div class="stat-card">
+    <div class="stat-value" id="total-visits">0</div>
+    <div class="stat-label">Total Visits</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value" id="active-users">0</div>
+    <div class="stat-label">Active Users</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value" id="bounce-rate">0%</div>
+    <div class="stat-label">Bounce Rate</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value" id="avg-session">0m</div>
+    <div class="stat-label">Avg. Session</div>
+  </div>
+</div>
             
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Operating System</th>
-                  <th>Browser</th>
-                  <th>App/Reference</th>
-                  <th>Country</th>
-                  <th>Visits</th>
-                  <th>Last Visit</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Windows 11</td>
-                  <td>Chrome 120</td>
-                  <td>Direct</td>
-                  <td><span class="country-flag"></span> United States</td>
-                  <td>342</td>
-                  <td>2 min ago</td>
-                </tr>
-                <tr>
-                  <td>macOS Sonoma</td>
-                  <td>Safari 17</td>
-                  <td>Google</td>
-                  <td><span class="country-flag"></span> Canada</td>
-                  <td>189</td>
-                  <td>5 min ago</td>
-                </tr>
-                <tr>
-                  <td>Android 14</td>
-                  <td>Chrome Mobile</td>
-                  <td>Facebook</td>
-                  <td><span class="country-flag"></span> United Kingdom</td>
-                  <td>156</td>
-                  <td>8 min ago</td>
-                </tr>
-                <tr>
-                  <td>iOS 17</td>
-                  <td>Safari Mobile</td>
-                  <td>Twitter</td>
-                  <td><span class="country-flag"></span> Germany</td>
-                  <td>134</td>
-                  <td>12 min ago</td>
-                </tr>
-                <tr>
-                  <td>Linux Ubuntu</td>
-                  <td>Firefox 121</td>
-                  <td>Direct</td>
-                  <td><span class="country-flag"></span> France</td>
-                  <td>98</td>
-                  <td>15 min ago</td>
-                </tr>
-                <tr>
-                  <td>Windows 10</td>
-                  <td>Edge 120</td>
-                  <td>Bing</td>
-                  <td><span class="country-flag"></span> Australia</td>
-                  <td>87</td>
-                  <td>22 min ago</td>
-                </tr>
-                <tr>
-                  <td>Android 13</td>
-                  <td>Firefox Mobile</td>
-                  <td>Reddit</td>
-                  <td><span class="country-flag"></span> Japan</td>
-                  <td>76</td>
-                  <td>28 min ago</td>
-                </tr>
-                <tr>
-                  <td>macOS Ventura</td>
-                  <td>Chrome 119</td>
-                  <td>LinkedIn</td>
-                  <td><span class="country-flag"></span> Brazil</td>
-                  <td>65</td>
-                  <td>35 min ago</td>
-                </tr>
-              </tbody>
-            </table>
+            <table class="data-table" id="visitors-table">
+  <thead>
+    <tr>
+      <th>Operating System</th>
+      <th>Browser</th>
+      <th>App/Reference</th>
+      <th>Country</th>
+      <th>Visits</th>
+      <th>Last Visit</th>
+    </tr>
+  </thead>
+  <tbody id="visitors-data"></tbody>
+</table>
           </div>
           
           <button class="logout-btn" onclick="location.reload()">Logout</button>
         `;
         document.body.appendChild(adminPanel);
-        
+
+        // Real-time simulation
+let totalVisits = 0;
+let activeUsers = 0;
+let bounceRate = 0;
+let avgSession = 0;
+let visitorsData = [];
+
+function updateDashboard() {
+  if (Math.random() > 0.7) {
+    totalVisits += Math.floor(Math.random() * 3) + 1;
+    activeUsers = Math.min(89, activeUsers + Math.floor(Math.random() * 2));
+    bounceRate = Math.floor(Math.random() * 20) + 30;
+    avgSession = Math.floor(Math.random() * 5) + 1;
+    
+    const osList = ['Windows 11', 'macOS Sonoma', 'Android 14', 'iOS 17', 'Linux Ubuntu', 'Windows 10'];
+    const browserList = ['Chrome 120', 'Safari 17', 'Firefox 121', 'Edge 120', 'Chrome Mobile', 'Safari Mobile'];
+    const refList = ['Direct', 'Google', 'Facebook', 'Twitter', 'Bing', 'Reddit', 'LinkedIn'];
+    const countryList = ['United States', 'Canada', 'United Kingdom', 'Germany', 'France', 'Australia', 'Japan', 'Brazil'];
+    
+    const newVisitor = {
+      os: osList[Math.floor(Math.random() * osList.length)],
+      browser: browserList[Math.floor(Math.random() * browserList.length)],
+      ref: refList[Math.floor(Math.random() * refList.length)],
+      country: countryList[Math.floor(Math.random() * countryList.length)],
+      visits: Math.floor(Math.random() * 100) + 1,
+      lastVisit: `${Math.floor(Math.random() * 30)} min ago`
+    };
+    
+    visitorsData.unshift(newVisitor);
+    if (visitorsData.length > 8) visitorsData.pop();
+  }
+  
+  document.getElementById('total-visits').textContent = totalVisits;
+  document.getElementById('active-users').textContent = activeUsers;
+  document.getElementById('bounce-rate').textContent = bounceRate + '%';
+  document.getElementById('avg-session').textContent = avgSession + 'm';
+  
+  const tableBody = document.getElementById('visitors-data');
+  tableBody.innerHTML = '';
+  
+  visitorsData.forEach(visitor => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${visitor.os}</td>
+      <td>${visitor.browser}</td>
+      <td>${visitor.ref}</td>
+      <td><span class="country-flag"></span> ${visitor.country}</td>
+      <td>${visitor.visits}</td>
+      <td>${visitor.lastVisit}</td>
+    `;
+    tableBody.appendChild(row);
+  });
+}
+
+setInterval(updateDashboard, 5000);
+updateDashboard(); // Initial load
         // Add event listeners for time filters
         document.querySelectorAll('.time-filter-btn').forEach(btn => {
           btn.addEventListener('click', function() {
