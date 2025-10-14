@@ -810,13 +810,19 @@ window.analytics = analytics;
       console.log("Fuse.js initialized.");
     }
     // Perform search using Fuse.js
-    function performSearchFuse(searchTerm) {
+      function performSearchFuse(searchTerm) {
       if (!fuseInstance || !searchTerm) {
-        return [];
-      }
-      console.log("Performing Fuse.js search for:", searchTerm);
-      const fuseResults = fuseInstance.search(searchTerm);
-      console.log("Fuse.js found", fuseResults.length, "results");
+    return [];
+  }
+  console.log("Performing Fuse.js search for:", searchTerm);
+  const fuseResults = fuseInstance.search(searchTerm);
+  console.log("Fuse.js found", fuseResults.length, "results");
+  
+  // ADD THIS LINE HERE:
+  analytics.trackSearch(searchTerm, fuseResults.length);
+  
+  return fuseResults;
+}
       // Sort by score (lower is better) and extract items
       return fuseResults
         .sort((a, b) => (a.score || 1) - (b.score || 1))
