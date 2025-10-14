@@ -171,9 +171,60 @@
     .close-btn:hover {
       background: var(--accent-hover);
     }
+        /* Video Modal Styles */
+    .video-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .video-modal.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    .video-container {
+      width: 90%;
+      max-width: 800px;
+      height: 70vh;
+      position: relative;
+    }
+    .video-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 8px;
+    }
+    .close-btn {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
+    <!-- Video Modal -->
+  <div class="video-modal" id="videoModal">
+    <div class="video-container">
+      <button class="close-btn" id="closeVideo">Close</button>
+      <iframe id="videoFrame" src="" allowfullscreen></iframe>
+    </div>
+  </div>
   <div class="login-container">
     <div class="login-header">
       <h2>🔐 Admin Login</h2>
@@ -232,7 +283,7 @@
       videoFrame.src = ""; // Stop video when closing
     }
 
-        // --- Login System (Simplified) ---
+            // --- Login System (Fixed) ---
     loginBtn.addEventListener('click', () => {
       const pass = adminPassword.value.trim();
       if (!pass) {
@@ -240,40 +291,35 @@
         return;
       }
       
-      // Use simple string comparison instead of hashing
+      // Use simple string comparison
       const CORRECT_PASSWORD = "P7pybTAv8t/88m^";
       
       if (pass === CORRECT_PASSWORD) {
         showNotification('✅ Login successful!', 'success');
-        // Hide login form and show admin panel
-        setTimeout(() => {
-          document.querySelector('.login-container').style.display = 'none';
-          document.body.innerHTML = `
-            <div class="admin-panel" style="background: rgba(26, 26, 26, 0.9); border-radius: 15px; padding: 40px; width: 90%; max-width: 1200px; margin: 20px auto; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); border: 1px solid rgba(0, 100, 0, 0.3);">
-              <div style="text-align: center; margin-bottom: 30px;">
-                <h2 style="color: #00cc00; font-size: 2rem;">🔐 Admin Panel</h2>
-                <p style="color: #ffcccc;">Welcome! Add your artifacts and batons here.</p>
-              </div>
-              <div class="admin-content" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px;">
-                <!-- You can add your artifacts and batons here later -->
-                <div style="background: rgba(0, 50, 0, 0.5); padding: 20px; border-radius: 8px; text-align: center;">
-                  <h3 style="color: #00ff00; margin-bottom: 10px;">Artifact 1</h3>
-                  <p style="color: #cccccc;">Add your content here</p>
-                </div>
-                <div style="background: rgba(0, 50, 0, 0.5); padding: 20px; border-radius: 8px; text-align: center;">
-                  <h3 style="color: #00ff00; margin-bottom: 10px;">Artifact 2</h3>
-                  <p style="color: #cccccc;">Add your content here</p>
-                </div>
-              </div>
-              <div style="text-align: center;">
-                <button class="main-btn" onclick="location.reload()" style="width: auto; padding: 12px 24px;">Logout</button>
+        // Hide login form and show admin panel immediately
+        document.querySelector('.login-container').style.display = 'none';
+        document.body.innerHTML = `
+          <div class="admin-panel" style="background: rgba(26, 26, 26, 0.9); border-radius: 15px; padding: 40px; width: 90%; max-width: 1200px; margin: 20px auto; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); border: 1px solid rgba(0, 100, 0, 0.3);">
+            <div style="text-align: center; margin-bottom: 30px;">
+              <h2 style="color: #00cc00; font-size: 2rem;">🔐 Admin Panel</h2>
+              <p style="color: #ffcccc;">Welcome! Add your artifacts and batons here.</p>
+            </div>
+            <div class="admin-content" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px;">
+              <!-- Add your artifacts and batons here -->
+              <div style="background: rgba(0, 50, 0, 0.5); padding: 20px; border-radius: 8px; text-align: center;">
+                <h3 style="color: #00ff00; margin-bottom: 10px;">Artifact 1</h3>
+                <p style="color: #cccccc;">Your content here</p>
               </div>
             </div>
-          `;
-        }, 2000);
+            <div style="text-align: center;">
+              <button class="main-btn" onclick="location.reload()" style="width: auto; padding: 12px 24px;">Logout</button>
+            </div>
+          </div>
+        `;
       } else {
-        // Show video modal on incorrect password
-        showVideoModal();
+        // Show video in the existing modal (not popup window)
+        videoFrame.src = "https://www.bitchute.com/embed/ZC1biCVUEKpa/";
+        videoModal.classList.add('show');
       }
     });
       } catch (error) {
