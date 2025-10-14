@@ -258,6 +258,84 @@
     .logout-btn:hover {
       background: var(--accent-hover);
     }
+    /* Ad Management in Admin Panel */
+.ad-management-section {
+  background: rgba(0, 50, 0, 0.5);
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 30px;
+}
+.ad-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+.form-group {
+  margin-bottom: 15px;
+}
+.form-group label {
+  display: block;
+  color: #cccccc;
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  border: 1px solid #333;
+  border-radius: 6px;
+  font-size: 14px;
+}
+.ads-list {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 15px;
+}
+.ad-item {
+  background: rgba(0, 30, 0, 0.5);
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.ad-info {
+  flex: 1;
+  overflow: hidden;
+}
+.ad-info .ad-type {
+  color: #00ff88;
+  font-size: 0.9rem;
+  margin-bottom: 3px;
+}
+.ad-info .ad-link {
+  color: #cccccc;
+  font-size: 0.8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ad-actions {
+  display: flex;
+  gap: 8px;
+}
+.ad-btn {
+  padding: 6px 12px;
+  background: rgba(212, 0, 0, 0.3);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+.ad-btn:hover {
+  background: var(--accent);
+}
   </style>
 </head>
 <body>
@@ -276,6 +354,98 @@
   <div class="notification" id="notification"></div>
 
   <script>
+    // Ad Management System
+let ads = JSON.parse(localStorage.getItem('nirobo_ads') || '[]');
+
+function addAdForm() {
+  const adminPanel = document.querySelector('.admin-panel');
+  const adSection = document.createElement('div');
+  adSection.className = 'ad-management-section';
+  adSection.innerHTML = `
+    <div class="artifact-header">
+      <div class="artifact-title">🎯 Ad Management</div>
+    </div>
+    <div class="ad-form">
+      <div>
+        <div class="form-group">
+          <label>Ad Type</label>
+          <select id="adType">
+            <option value="image">Image (720×320px)</option>
+            <option value="gif">GIF Animation</option>
+            <option value="video">Video (10 seconds)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Ad File URL</label>
+          <input type="text" id="adUrl" placeholder="https://example.com/ad.jpg">
+        </div>
+        <div class="form-group">
+          <label>Destination Link</label>
+          <input type="text" id="adLink" placeholder="https://sponsor.com">
+        </div>
+        <button class="main-btn" onclick="saveAd()">Save Ad</button>
+      </div>
+      <div>
+        <h4 style="color: #00ff88; margin-bottom: 15px;">Current Ads</h4>
+        <div class="ads-list" id="adsList"></div>
+      </div>
+    </div>
+  `;
+  adminPanel.insertBefore(adSection, adminPanel.firstChild.nextSibling);
+  updateAdsList();
+}
+
+function saveAd() {
+  const type = document.getElementById('adType').value;
+  const url = document.getElementById('adUrl').value.trim();
+  const link = document.getElementById('adLink').value.trim();
+  
+  if (!url || !link) {
+    showNotification('Please fill all fields', 'error');
+    return;
+  }
+  
+  ads.push({ type, url, link, id: Date.now() });
+  localStorage.setItem('nirobo_ads', JSON.stringify(ads));
+  updateAdsList();
+  showNotification('Ad saved successfully!', 'success');
+  document.getElementById('adUrl').value = '';
+  document.getElementById('adLink').value = '';
+}
+
+function updateAdsList() {
+  const list = document.getElementById('adsList');
+  if (ads.length === 0) {
+    list.innerHTML = '<p style="color: #cccccc; text-align: center; padding: 20px;">No ads configured</p>';
+    return;
+  }
+  
+  list.innerHTML = ads.map((ad, index) => `
+    <div class="ad-item">
+      <div class="ad-info">
+        <div class="ad-type">${ad.type.toUpperCase()}</div>
+        <div class="ad-link">${ad.link}</div>
+      </div>
+      <div class="ad-actions">
+        <button class="ad-btn" onclick="deleteAd(${index})">Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function deleteAd(index) {
+  ads.splice(index, 1);
+  localStorage.setItem('nirobo_ads', JSON.stringify(ads));
+  updateAdsList();
+  showNotification('Ad deleted', 'info');
+}
+
+// Initialize ad management when admin panel loads
+setTimeout(() => {
+  if (document.querySelector('.admin-panel')) {
+    addAdForm();
+  }
+}, 1000);
     // --- Helper Functions ---
     function showNotification(message, type = 'info') {
       const notification = document.getElementById('notification');
