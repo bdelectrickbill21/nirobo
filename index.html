@@ -354,6 +354,34 @@ window.analytics = analytics;
         alert("Please enter a search term.");
       }
     };
+    
+    <!-- Replace your current search form in index.html with this -->
+<form id="indexSearchForm" style="display: flex; gap: 15px; margin: 20px 0;">
+  <input 
+    type="text" 
+    id="indexSearchInput" 
+    placeholder="Search the web intelligently..." 
+    style="flex: 1; padding: 15px 20px; font-size: 1.1rem; border: 2px solid #d40000; border-radius: 30px; background: rgba(0, 0, 0, 0.3); color: white; outline: none;"
+  >
+  <button 
+    type="submit"
+    style="padding: 15px 30px; background: #d40000; color: white; border: none; border-radius: 30px; font-size: 1.1rem; font-weight: bold; cursor: pointer;"
+  >
+    <i class="fas fa-search"></i> Search
+  </button>
+</form>
+
+<script>
+// Handle search form submission in index.html
+document.getElementById('indexSearchForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const query = document.getElementById('indexSearchInput').value.trim();
+  if (query) {
+    // Redirect to search.html with query parameter
+    window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+  }
+});
+</script>
   </script>
   <script>
 // Simple Visitor Tracking
