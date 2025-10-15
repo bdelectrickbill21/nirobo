@@ -144,13 +144,7 @@
     .admin-header p {
       color: #ffcccc;
     }
-    .analytics-artifact {
-      background: rgba(0, 30, 0, 0.7);
-      border-radius: 12px;
-      padding: 25px;
-      margin-bottom: 30px;
-    }
-    .artifact-header {
+    .section-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -158,34 +152,106 @@
       flex-wrap: wrap;
       gap: 15px;
     }
-    .artifact-title {
+    .section-title {
       color: #00ff88;
       font-size: 1.5rem;
       font-weight: bold;
     }
-    .time-filters {
+    .artifact-buttons {
       display: flex;
-      gap: 10px;
+      gap: 15px;
+      margin-bottom: 30px;
       flex-wrap: wrap;
     }
-    .time-filter-btn {
-      padding: 8px 16px;
+    .artifact-btn {
+      padding: 12px 24px;
       background: rgba(0, 100, 0, 0.3);
       color: #00ff88;
       border: 1px solid #008844;
       border-radius: 6px;
       cursor: pointer;
-      transition: all 0.2s ease;
-      font-size: 12px;
-      font-weight: 500;
+      transition: all 0.3s ease;
+      font-weight: bold;
+      font-size: 14px;
     }
-    .time-filter-btn:hover {
+    .artifact-btn:hover {
       background: rgba(0, 150, 0, 0.5);
     }
-    .time-filter-btn.active {
+    .artifact-btn.active {
       background: #008844;
       color: white;
       border-color: #00cc66;
+    }
+    
+    /* Ad Management Section */
+    .ad-management-section {
+      background: rgba(0, 30, 0, 0.7);
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 30px;
+      display: none;
+    }
+    .ad-form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      color: #cccccc;
+      margin-bottom: 5px;
+      font-size: 0.9rem;
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.3);
+      color: white;
+      border: 1px solid #333;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    .ads-list {
+      max-height: 300px;
+      overflow-y: auto;
+      margin-top: 10px;
+    }
+    .ad-item {
+      background: rgba(0, 20, 0, 0.5);
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .ad-info {
+      flex: 1;
+      overflow: hidden;
+    }
+    .ad-info .ad-type {
+      color: #00ff88;
+      font-size: 0.9rem;
+      margin-bottom: 3px;
+    }
+    .ad-info .ad-link {
+      color: #cccccc;
+      font-size: 0.8rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    /* Analytics Section */
+    .analytics-section {
+      background: rgba(0, 30, 0, 0.7);
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 30px;
     }
     .stats-grid {
       display: grid;
@@ -243,6 +309,31 @@
       margin-right: 8px;
       vertical-align: middle;
     }
+    .time-filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+    }
+    .time-filter-btn {
+      padding: 8px 16px;
+      background: rgba(0, 100, 0, 0.3);
+      color: #00ff88;
+      border: 1px solid #008844;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .time-filter-btn:hover {
+      background: rgba(0, 150, 0, 0.5);
+    }
+    .time-filter-btn.active {
+      background: #008844;
+      color: white;
+      border-color: #00cc66;
+    }
     .logout-btn {
       display: block;
       margin: 20px auto 0;
@@ -258,69 +349,6 @@
     }
     .logout-btn:hover {
       background: var(--accent-hover);
-    }
-    
-    /* Ad Management Styles */
-    .ad-management-section {
-      background: rgba(0, 50, 0, 0.5);
-      border-radius: 12px;
-      padding: 25px;
-      margin: 30px 0;
-      border: 1px solid rgba(212, 0, 0, 0.3);
-    }
-    .ad-form {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-      margin-top: 20px;
-    }
-    .form-group {
-      margin-bottom: 15px;
-    }
-    .form-group label {
-      display: block;
-      color: #cccccc;
-      margin-bottom: 5px;
-      font-size: 0.9rem;
-    }
-    .form-group input,
-    .form-group select {
-      width: 100%;
-      padding: 10px;
-      background: rgba(0, 0, 0, 0.3);
-      color: white;
-      border: 1px solid #333;
-      border-radius: 6px;
-      font-size: 14px;
-    }
-    .ads-list {
-      max-height: 300px;
-      overflow-y: auto;
-      margin-top: 10px;
-    }
-    .ad-item {
-      background: rgba(0, 20, 0, 0.5);
-      padding: 12px;
-      margin: 8px 0;
-      border-radius: 6px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .ad-info {
-      flex: 1;
-      overflow: hidden;
-    }
-    .ad-info .ad-type {
-      color: #00ff88;
-      font-size: 0.9rem;
-      margin-bottom: 3px;
-    }
-    .ad-info .ad-link {
-      color: #cccccc;
-      font-size: 0.8rem;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
   </style>
 </head>
@@ -402,19 +430,19 @@
       adminPanel.innerHTML = `
         <div class="admin-header">
           <h2>🔐 Admin Panel</h2>
-          <p>Welcome! Real-time Analytics & Ad Management</p>
+          <p>Welcome! Real-Time Analytics & Ad Management</p>
         </div>
         
-        <!-- Ads Management Button -->
-        <div style="text-align: center; margin: 20px 0;">
-          <button class="main-btn" onclick="showAdsManagement()" style="width: auto; padding: 12px 24px;">
-            🎯 Manage Sponsor Ads
-          </button>
+        <!-- Artifact Buttons -->
+        <div class="artifact-buttons">
+          <button class="artifact-btn active" onclick="showAnalytics()">📊 Real-Time Analytics</button>
+          <button class="artifact-btn" onclick="showAdManagement()">🎯 Sponsor Ad Management</button>
         </div>
         
-        <div class="analytics-artifact">
-          <div class="artifact-header">
-            <div class="artifact-title">📊 Real-Time Analytics</div>
+        <!-- Analytics Section -->
+        <div class="analytics-section" id="analyticsSection">
+          <div class="section-header">
+            <div class="section-title">📊 Real-Time Analytics</div>
             <div class="time-filters">
               <button class="time-filter-btn active" data-time="1h">1 Hour</button>
               <button class="time-filter-btn" data-time="24h">24 Hours</button>
@@ -461,6 +489,38 @@
           </table>
         </div>
         
+        <!-- Ad Management Section -->
+        <div class="ad-management-section" id="adManagementSection" style="display: none;">
+          <div class="section-header">
+            <div class="section-title">🎯 Sponsor Ad Management</div>
+          </div>
+          <div class="ad-form">
+            <div>
+              <div class="form-group">
+                <label>Ad Type:</label>
+                <select id="adType">
+                  <option value="image">Image (720×320px)</option>
+                  <option value="gif">GIF Animation</option>
+                  <option value="video">Video (10 seconds)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Ad File URL:</label>
+                <input type="text" id="adUrl" placeholder="https://example.com/ad.jpg">
+              </div>
+              <div class="form-group">
+                <label>Destination Link:</label>
+                <input type="text" id="adLink" placeholder="https://sponsor.com">
+              </div>
+              <button class="main-btn" onclick="saveAd()">Save Ad</button>
+            </div>
+            <div>
+              <h4 style="color: #00ff88; margin-bottom: 15px;">📋 Current Ads</h4>
+              <div class="ads-list" id="adsList">${getAdsListHTML()}</div>
+            </div>
+          </div>
+        </div>
+        
         <button class="logout-btn" onclick="logout()">Logout</button>
       `;
       document.body.appendChild(adminPanel);
@@ -483,6 +543,20 @@
       localStorage.removeItem('admin_logged_in');
       localStorage.removeItem('nirobo_analytics');
       location.reload();
+    }
+
+    function showAnalytics() {
+      document.getElementById('analyticsSection').style.display = 'block';
+      document.getElementById('adManagementSection').style.display = 'none';
+      document.querySelector('.artifact-btn:nth-child(1)').classList.add('active');
+      document.querySelector('.artifact-btn:nth-child(2)').classList.remove('active');
+    }
+
+    function showAdManagement() {
+      document.getElementById('analyticsSection').style.display = 'none';
+      document.getElementById('adManagementSection').style.display = 'block';
+      document.querySelector('.artifact-btn:nth-child(1)').classList.remove('active');
+      document.querySelector('.artifact-btn:nth-child(2)').classList.add('active');
     }
 
     // --- Real-Time Analytics ---
@@ -538,46 +612,6 @@
     }
 
     // --- Ads Management ---
-    function showAdsManagement() {
-      const existing = document.querySelector('.ad-management-section');
-      if (existing) existing.remove();
-      
-      const adminPanel = document.querySelector('.admin-panel');
-      const adsSection = document.createElement('div');
-      adsSection.className = 'ad-management-section';
-      adsSection.innerHTML = `
-        <div class="artifact-header">
-          <div class="artifact-title">🎯 Sponsor Ad Management</div>
-        </div>
-        <div class="ad-form">
-          <div>
-            <div class="form-group">
-              <label>Ad Type:</label>
-              <select id="adType">
-                <option value="image">Image (720×320px)</option>
-                <option value="gif">GIF Animation</option>
-                <option value="video">Video (10 seconds)</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Ad File URL:</label>
-              <input type="text" id="adUrl" placeholder="https://example.com/ad.jpg">
-            </div>
-            <div class="form-group">
-              <label>Destination Link:</label>
-              <input type="text" id="adLink" placeholder="https://sponsor.com">
-            </div>
-            <button class="main-btn" onclick="saveAd()">Save Ad</button>
-          </div>
-          <div>
-            <h4 style="color: #00ff88; margin-bottom: 15px;">📋 Current Ads</h4>
-            <div class="ads-list" id="adsList">${getAdsListHTML()}</div>
-          </div>
-        </div>
-      `;
-      adminPanel.insertBefore(adsSection, adminPanel.querySelector('.analytics-artifact'));
-    }
-
     function getAdsListHTML() {
       const ads = JSON.parse(localStorage.getItem('nirobo_ads') || '[]');
       if (ads.length === 0) {
