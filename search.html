@@ -459,6 +459,25 @@
           return 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="%23444" rx="4"/><text x="50%" y="50%" fill="white" font-size="16" font-family="Arial" text-anchor="middle" dominant-baseline="middle">?</text></svg>';
         }
       }
+
+      <!-- Filter Tabs (already in your search.html) -->
+<div class="filter-tabs">
+  <button class="filter-tab active" data-filter="all">
+    <i class="fas fa-globe"></i> All
+  </button>
+  <button class="filter-tab" data-filter="websites">
+    <i class="fas fa-window-maximize"></i> Websites
+  </button>
+  <button class="filter-tab" data-filter="images">
+    <i class="fas fa-image"></i> Images
+  </button>
+  <button class="filter-tab" data-filter="videos">
+    <i class="fas fa-video"></i> Videos
+  </button>
+  <button class="filter-tab" data-filter="documents">
+    <i class="fas fa-file-alt"></i> Documents
+  </button>
+</div>
       
       // Render search results
       renderResults(results) {
