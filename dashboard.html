@@ -579,10 +579,103 @@ window.analytics = analytics;
       .url-card {
         padding: 10px;
       }
+      /* Sponsor Ads Styles */
+.sponsor-ads-container {
+  width: 100%;
+  overflow: hidden;
+  margin: 20px 0;
+  padding: 20px 0;
+  background: rgba(0, 30, 0, 0.3);
+  border-radius: 12px;
+  border: 1px solid rgba(212, 0, 0, 0.2);
+}
+
+.sponsor-ads-wrapper {
+  display: flex;
+  animation: scrollAds 30s linear infinite;
+  width: max-content;
+  min-width: 100%;
+}
+
+@keyframes scrollAds {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.ad-item {
+  min-width: 720px;
+  height: 320px;
+  margin: 0 20px;
+  background: rgba(0, 20, 0, 0.5);
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ad-content {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.ad-image, .ad-gif {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ad-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sponsor-notice {
+  text-align: center;
+  padding: 40px 20px;
+  color: #ff9999;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.sponsor-notice a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.sponsor-notice a:hover {
+  color: var(--accent-hover);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .ad-item {
+    min-width: 100%;
+    height: 200px;
+    margin: 0 10px;
+  }
+  
+  .sponsor-ads-wrapper {
+    animation: scrollAdsMobile 30s linear infinite;
+  }
+  
+  @keyframes scrollAdsMobile {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+  }
     }
   </style>
 </head>
 <body>
+<!-- Sponsor Ads -->
+<div class="sponsor-ads-container" id="sponsorAds">
+  <!-- Ads will be loaded here dynamically -->
+</div>
+  
   <!-- Mobile Menu Toggle -->
   <button class="menu-toggle" id="menuToggle">
     <i class="fas fa-bars"></i>
@@ -1051,6 +1144,73 @@ document.querySelectorAll('.menu-link').forEach(link => {
         });
       }
     });
+
+    // Sponsor Ads System
+function loadSponsorAds() {
+  const ads = JSON.parse(localStorage.getItem('nirobo_ads') || '[]');
+  const container = document.getElementById('sponsorAds');
+  
+  if (!container) return;
+  
+  if (ads.length === 0) {
+    container.innerHTML = `
+      <div class="sponsor-notice">
+        <h3>🚀 Sponsorship Opportunities Available!</h3>
+        <p>Advertise your brand to our growing audience of intelligent search users.</p>
+        <p>Available ad formats: Images (720×320px), GIFs, and 10-second Videos</p>
+        <p><strong>Contact us today:</strong> 
+          <a href="mailto:infinitealphas0602@outlook.com" target="_blank">infinitealphas0602@outlook.com</a>
+        </p>
+        <p>${3 - Math.min(ads.length, 3)} out of 3 premium ad spots available</p>
+      </div>
+    `;
+    return;
+  }
+  
+  // Create ads wrapper
+  const wrapper = document.createElement('div');
+  wrapper.className = 'sponsor-ads-wrapper';
+  
+  // Create ad items (duplicate ads to ensure smooth scrolling)
+  const totalAds = Math.max(6, ads.length * 2); // Ensure at least 6 ads for smooth scrolling
+  
+  for (let i = 0; i < totalAds; i++) {
+    const ad = ads[i % ads.length];
+    const adItem = document.createElement('div');
+    adItem.className = 'ad-item';
+    
+    const adContent = document.createElement('div');
+    adContent.className = 'ad-content';
+    
+    if (ad.type === 'video') {
+      const video = document.createElement('video');
+      video.src = ad.url;
+      video.className = 'ad-video';
+      video.muted = true;
+      video.playsInline = true;
+      video.loop = true;
+      adContent.appendChild(video);
+    } else {
+      const img = document.createElement('img');
+      img.src = ad.url;
+      img.className = ad.type === 'gif' ? 'ad-gif' : 'ad-image';
+      adContent.appendChild(img);
+    }
+    
+    adContent.addEventListener('click', () => {
+      window.open(ad.link, '_blank');
+    });
+    
+    adItem.appendChild(adContent);
+    wrapper.appendChild(adItem);
+  }
+  
+  container.innerHTML = '';
+  container.appendChild(wrapper);
+}
+
+// Initialize sponsor ads when page loads
+document.addEventListener('DOMContentLoaded', loadSponsorAds);
   </script>
 </body>
 </html>
