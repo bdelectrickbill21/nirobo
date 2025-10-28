@@ -1,13 +1,14 @@
 // File: netlify/functions/forgot-password.js
-// Sends actual password with strict rate limiting
+// Secure password reset with token-based system
 
 const fetch = require('node-fetch');
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
-// --- INSECURE: Storing/Sending passwords in plain text ---
-// This is highly discouraged for production. Use hashed passwords and reset tokens.
-// --- END INSECURE WARNING ---
+// --- SECURE: Using reset tokens instead of plain text passwords ---
+// This implements proper security practices for password recovery.
+// --- END SECURITY NOTE ---
 
 // --- RATE LIMITING CONFIGURATION ---
 const RATE_LIMIT_USER_PER_DAY = 2;
@@ -17,6 +18,12 @@ const RATE_WINDOW_MS = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
 // File to store rate limit data (ephemeral on Netlify)
 const RATE_LIMIT_FILE = path.join('/tmp', 'nirobo_password_recovery_rates.json');
+
+// File to store password reset tokens (ephemeral on Netlify)
+const RESET_TOKENS_FILE = path.join('/tmp', 'nirobo_reset_tokens.json');
+
+// Token expiration time (24 hours)
+const TOKEN_EXPIRY_MS = 24 * 60 * 60 * 1000;
 
 // --- HELPER FUNCTIONS FOR RATE LIMITING ---
 function loadRateLimits() {
@@ -93,6 +100,78 @@ function recordRequest(email, rateData) {
   saveRateLimits(rateData);
 }
 
+// --- HELPER FUNCTIONS FOR RESET TOKENS ---
+function loadResetTokens() {
+  try {
+    if (fs.existsSync(RESET_TOKENS_FILE)) {
+      const data = fs.readFileSync(RESET_TOKENS_FILE, 'utf8');
+      return JSON.parse(data);
+    }
+  } catch (err) {
+    console.error("Error loading reset tokens:", err.message);
+  }
+  return {};
+}
+
+function saveResetTokens(tokenData) {
+  try {
+    fs.writeFileSync(RESET_TOKENS_FILE, JSON.stringify(tokenData, null, 2));
+  } catch (err) {
+    console.error("Error saving reset tokens:", err.message);
+  }
+}
+
+function generateResetToken() {
+  return crypto.randomBytes(32).toString('hex');
+}
+
+function createResetToken(email, tokenData) {
+  const token = generateResetToken();
+  const expiresAt = Date.now() + TOKEN_EXPIRY_MS;
+
+  if (!tokenData[email]) {
+    tokenData[email] = [];
+  }
+
+  // Remove expired tokens for this user
+  tokenData[email] = tokenData[email].filter(t => t.expiresAt > Date.now());
+
+  tokenData[email].push({
+    token: token,
+    expiresAt: expiresAt,
+    used: false
+  });
+
+  saveResetTokens(tokenData);
+  return token;
+}
+
+function isValidResetToken(email, token, tokenData) {
+  const userTokens = tokenData[email] || [];
+
+  for (const tokenEntry of userTokens) {
+    if (tokenEntry.token === token &&
+        tokenEntry.expiresAt > Date.now() &&
+        !tokenEntry.used) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function markTokenAsUsed(email, token, tokenData) {
+  const userTokens = tokenData[email] || [];
+
+  for (let i = 0; i < userTokens.length; i++) {
+    if (userTokens[i].token === token) {
+      userTokens[i].used = true;
+      break;
+    }
+  }
+
+  saveResetTokens(tokenData);
+}
+
 // --- MAIN HANDLER ---
 exports.handler = async (event, context) => {
   // Only allow POST requests
@@ -140,10 +219,8 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // 4. (Conceptual) Find user in database and get password
+    // 4. Find user in database (conceptual)
     // In a real app, you would query your user database here.
-    // For this prototype, we'll simulate finding a user.
-    // *** IMPORTANT: This is insecure. Passwords should be hashed. ***
     const users = [
       // Example user data - replace with real database query
       { email: "test@example.com", password: "mySecretPass123" },
@@ -159,27 +236,33 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // 5. Record this successful request for rate limiting
+    // 5. Generate secure reset token
+    let tokenData = loadResetTokens();
+    const resetToken = createResetToken(email, tokenData);
+
+    // 6. Record this successful request for rate limiting
     recordRequest(email, rateData);
 
-    // 6. Prepare email content with the ACTUAL PASSWORD (INSECURE!)
+    // 7. Prepare secure email content with reset link
+    const resetLink = `https://your-site.netlify.app/reset-password.html?token=${resetToken}&email=${encodeURIComponent(email)}`;
+
     const emailData = {
       sender: { email: "noreply@nirobo.netlify.app", name: "Nirobo Search" },
       to: [{ email: email }],
-      subject: "[Nirobo] Your Password Recovery Request",
+      subject: "[Nirobo] Password Reset Request",
       htmlContent: `
         <!DOCTYPE html>
         <html>
         <head>
-            <title>Password Recovery</title>
+            <title>Password Reset</title>
             <style>
                 body { font-family: Arial, sans-serif; background-color: #0a1f0a; color: #f5f5f5; }
                 .container { max-width: 600px; margin: 0 auto; padding: 20px; background: #1a1a1a; border-radius: 10px; }
                 .header { text-align: center; padding: 20px 0; border-bottom: 1px solid #333; }
                 .logo { font-size: 2rem; color: #d40000; }
                 .content { padding: 20px 0; }
-                .password-box { background: rgba(212, 0, 0, 0.2); padding: 15px; border-radius: 8px; margin: 20px 0; text-align: center; }
-                .password { font-size: 1.5rem; font-weight: bold; color: #ff9999; }
+                .reset-box { background: rgba(0, 100, 0, 0.2); padding: 15px; border-radius: 8px; margin: 20px 0; text-align: center; }
+                .reset-button { display: inline-block; padding: 15px 30px; background: #00aa00; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 10px 0; }
                 .warning { background: rgba(255, 153, 0, 0.2); padding: 15px; border-radius: 8px; margin-top: 20px; }
                 .footer { text-align: center; padding: 20px 0; border-top: 1px solid #333; font-size: 0.8rem; color: #888; }
             </style>
@@ -191,19 +274,21 @@ exports.handler = async (event, context) => {
               <p>"Intelligent URL Discovery Powered by AI"</p>
             </div>
             <div class="content">
-              <h2>Password Recovery Request</h2>
+              <h2>Password Reset Request</h2>
               <p>Hello,</p>
-              <p>You have requested to recover your password for your Nirobo account.</p>
-              <div class="password-box">
-                <p><strong>Your Password is:</strong></p>
-                <p class="password">${user.password}</p> <!-- INSECURE!!! -->
+              <p>You have requested to reset your password for your Nirobo account.</p>
+              <div class="reset-box">
+                <p><strong>Click the button below to reset your password:</strong></p>
+                <a href="${resetLink}" class="reset-button">Reset Password</a>
+                <p><small>This link will expire in 24 hours for security reasons.</small></p>
               </div>
               <div class="warning">
-                <p><strong>⚠️ CRITICAL SECURITY WARNING:</strong></p>
-                <p>Sending passwords in plain text via email is extremely insecure. If this email is intercepted, your account is compromised. Please change your password immediately after logging in.</p>
-                <p>For better security, Nirobo recommends using a password reset link instead of sending passwords directly.</p>
+                <p><strong>🔒 Security Information:</strong></p>
+                <p>If you didn't request this password reset, please ignore this email. Your password remains secure.</p>
+                <p>For additional security, this reset link can only be used once and expires after 24 hours.</p>
               </div>
-              <a href="https://your-site.netlify.app/signup.html" style="display: inline-block; padding: 12px 24px; background: #d40000; color: white; text-decoration: none; border-radius: 30px; font-weight: bold; margin-top: 20px;">Log In & Change Password</a>
+              <p>If the button doesn't work, you can copy and paste this link into your browser:</p>
+              <p style="word-break: break-all; color: #aaa;">${resetLink}</p>
             </div>
             <div class="footer">
               <p>Made in Bangladesh 🇧🇩 | Curated by Nirobo</p>
@@ -216,7 +301,7 @@ exports.handler = async (event, context) => {
       `
     };
 
-    // 7. Send the email via Brevo API
+    // 8. Send the email via Brevo API
     const response = await fetch('https://api.brevo.com/v3.1/smtp/email', {
       method: 'POST',
       headers: {
@@ -237,10 +322,10 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // 8. Success response
+    // 9. Success response
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: `Your password has been sent to ${email}. Please check your inbox/spam.` })
+      body: JSON.stringify({ message: `A password reset link has been sent to ${email}. Please check your inbox/spam and use the link within 24 hours.` })
     };
 
   } catch (error) {

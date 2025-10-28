@@ -2,6 +2,8 @@
 import os
 import json
 import argparse
+import time
+import random
 from google.cloud import translate_v2 as translate
 
 # --- Configuration ---
@@ -9,28 +11,56 @@ from google.cloud import translate_v2 as translate
 # Make sure this file is in the same directory as this script or provide the full path
 CREDENTIALS_FILE = "google-credentials.json"
 
+# --- Retry Configuration ---
+MAX_RETRIES = 3
+BASE_DELAY = 1  # seconds
+MAX_DELAY = 60  # seconds
+BACKOFF_FACTOR = 2
+
 def translate_text(client, text, target_language):
-    """Helper function to translate a single piece of text."""
+    """Helper function to translate a single piece of text with retry logic."""
     if not text:
         return ""
-    try:
-        # Detect source language automatically
-        detection_result = client.detect_language(text)
-        source_lang = detection_result['language']
-        print(f"  Detected source language: {source_lang}")
 
-        # Perform translation
-        translation_result = client.translate(
-            text,
-            target_language=target_language,
-            source_language=source_lang # Providing source improves accuracy
-        )
-        translated_text = translation_result['translatedText']
-        print(f"  Translated: '{text[:50]}...' -> '{translated_text[:50]}...'")
-        return translated_text
-    except Exception as e:
-        print(f"  Error translating text: {e}")
-        return f"[Translation Error: {str(e)}]" # Or return original text
+    for attempt in range(MAX_RETRIES):
+        try:
+            # Detect source language automatically
+            detection_result = client.detect_language(text)
+            source_lang = detection_result['language']
+            print(f"  Detected source language: {source_lang}")
+
+            # Perform translation
+            translation_result = client.translate(
+                text,
+                target_language=target_language,
+                source_language=source_lang # Providing source improves accuracy
+            )
+            translated_text = translation_result['translatedText']
+            print(f"  Translated: '{text[:50]}...' -> '{translated_text[:50]}...'")
+            return translated_text
+
+        except Exception as e:
+            error_msg = str(e).lower()
+            print(f"  Error translating text (attempt {attempt + 1}/{MAX_RETRIES}): {e}")
+
+            # Check if it's a rate limit error (429) or server error (5xx)
+            if any(code in error_msg for code in ['429', 'rate limit', 'quota exceeded']) or \
+               (hasattr(e, 'code') and e.code >= 500):
+                if attempt < MAX_RETRIES - 1:
+                    # Exponential backoff with jitter
+                    delay = min(BASE_DELAY * (BACKOFF_FACTOR ** attempt) + random.uniform(0, 1), MAX_DELAY)
+                    print(f"  Retrying in {delay:.1f} seconds...")
+                    time.sleep(delay)
+                    continue
+                else:
+                    print("  Max retries exceeded for rate limit error")
+                    return f"[Rate Limit Error: {str(e)}]"
+            else:
+                # For other errors (auth, invalid input, etc.), don't retry
+                return f"[Translation Error: {str(e)}]"
+
+    # If we get here, all retries failed
+    return f"[Translation Failed after {MAX_RETRIES} attempts]"
 
 def main(input_file_path, target_language_code, output_file_path=None):
     """
@@ -79,25 +109,54 @@ def main(input_file_path, target_language_code, output_file_path=None):
 
     # 4. Translate Data
     print("\nStarting translation process...")
+    print(f"Processing {len(data)} entries...")
+
     translated_count = 0
+    failed_count = 0
+    start_time = time.time()
+
     for i, entry in enumerate(data):
-        print(f"Processing entry {i+1}/{len(data)}: {entry.get('url', 'N/A')}")
+        if (i + 1) % 10 == 0 or i == 0:  # Progress update every 10 entries
+            elapsed = time.time() - start_time
+            rate = (i + 1) / elapsed if elapsed > 0 else 0
+            print(f"  Progress: {i+1}/{len(data)} ({rate:.1f} entries/sec)")
+
+        url = entry.get('url', 'N/A')
+        print(f"  Processing entry {i+1}: {url}")
+
         original_title = entry.get('title', '')
         original_description = entry.get('description', '')
 
         # Translate Title
-        if original_title:
+        if original_title and original_title.strip():
             translated_title_key = f"translated_title_{target_language_code}"
-            entry[translated_title_key] = translate_text(translate_client, original_title, target_language_code)
-            translated_count += 1
+            translated_title = translate_text(translate_client, original_title, target_language_code)
+            if not translated_title.startswith('['):  # Check if translation was successful
+                entry[translated_title_key] = translated_title
+                translated_count += 1
+            else:
+                failed_count += 1
+                print(f"    Title translation failed: {translated_title}")
 
         # Translate Description
-        if original_description:
+        if original_description and original_description.strip():
             translated_desc_key = f"translated_description_{target_language_code}"
-            entry[translated_desc_key] = translate_text(translate_client, original_description, target_language_code)
-            translated_count += 1
+            translated_desc = translate_text(translate_client, original_description, target_language_code)
+            if not translated_desc.startswith('['):  # Check if translation was successful
+                entry[translated_desc_key] = translated_desc
+                translated_count += 1
+            else:
+                failed_count += 1
+                print(f"    Description translation failed: {translated_desc}")
 
-    print(f"\nTranslation process completed. Total fields translated: {translated_count}")
+    elapsed_time = time.time() - start_time
+    print("
+Translation process completed!")
+    print(f"  Total entries processed: {len(data)}")
+    print(f"  Successful translations: {translated_count}")
+    print(f"  Failed translations: {failed_count}")
+    print(f"  Processing time: {elapsed_time:.1f} seconds")
+    print(f"  Average rate: {len(data)/elapsed_time:.1f} entries/sec")
 
     # 5. Save Translated Data
     try:

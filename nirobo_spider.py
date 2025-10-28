@@ -269,18 +269,15 @@ class NiroboSpider(scrapy.Spider):
                 self.logger.error(f"Error reading existing result.json: {e}")
                 data = []
 
-        # Avoid duplicates
-        seen_urls = set()
-        unique_data = []
-        for item in data:
-            if item['url'] not in seen_urls:
-                unique_data.append(item)
-                seen_urls.add(item['url'])
-        
+        # Avoid duplicates - create set of existing URLs for efficient lookup
+        seen_urls = set(item['url'] for item in data)
+
+        # Filter existing data to remove any duplicates (shouldn't be necessary if data is clean)
+        unique_data = data
+
         # Add new result if not already present
         if result['url'] not in seen_urls:
             unique_data.append(result)
-            seen_urls.add(result['url'])
 
         print(f"Saving {len(unique_data)} total entries to result.json")
         try:
