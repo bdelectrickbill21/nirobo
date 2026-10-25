@@ -1,13 +1,36 @@
 [
 {
- "title": "ভূমি উন্নয়ন কর",
- "url": "https://ldtax.gov.bd/",
- "description": "Land Development Tax Management Project",
- "source": "Land Development Tax",
+ "title": "হোম | স্বাস্থ্য অধিদপ্তর",
+ "url": "https://dghs.gov.bd/",
+ "description": "প্রত্যেক কর্মদিবসে অফিসে যথা সময়ে উপস্থিত হয়ে বায়োমেট্রিক হাজিরা (Biometric attendance) প্রদানের জন্য নির্দেশনা",
+ "source": "DGHS",
+ "tags": [
+  "health",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "হোম | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
+ "url": "https://bangladesh.gov.bd/",
+ "description": "সাইটটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ১৭ অক্টোবর, ২০২৬ এ ১০:৫৩:৩২",
+ "source": "National Portal",
  "tags": [
   "government",
-  "land",
-  "tax",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "হোমপেজ",
+ "url": "https://bdris.gov.bd/",
+ "description": "Birth and Death Registration Information System (BDRIS)",
+ "source": "BDRIS",
+ "tags": [
+  "government",
+  "birth-registration",
   "bangladesh"
  ],
  "lang": "bn",
@@ -65,50 +88,14 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "হোমপেজ",
- "url": "https://bdris.gov.bd/",
- "description": "Birth and Death Registration Information System (BDRIS)",
- "source": "BDRIS",
+ "title": "ভূমি উন্নয়ন কর",
+ "url": "https://ldtax.gov.bd/",
+ "description": "Land Development Tax Management Project",
+ "source": "Land Development Tax",
  "tags": [
   "government",
-  "birth-registration",
-  "bangladesh"
- ],
- "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
- "title": "হোম | স্বাস্থ্য অধিদপ্তর",
- "url": "https://dghs.gov.bd/",
- "description": "প্রত্যেক কর্মদিবসে অফিসে যথা সময়ে উপস্থিত হয়ে বায়োমেট্রিক হাজিরা (Biometric attendance) প্রদানের জন্য নির্দেশনা",
- "source": "DGHS",
- "tags": [
-  "health",
-  "bangladesh"
- ],
- "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
- "title": "প্রথম আলো | বাংলা নিউজ পেপার",
- "url": "https://www.prothomalo.com/",
- "description": "বাংলাদেশসহ বিশ্বের সর্বশেষ সংবাদ শিরোনাম, প্রতিবেদন, বিশ্লেষণ, খেলা, বিনোদন, চাকরি, রাজনীতি ও বাণিজ্যের বাংলা নিউজ পড়তে ভিজিট করুন।",
- "source": "Prothom Alo",
- "tags": [
-  "news",
-  "bangla",
-  "bangladesh"
- ],
- "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
- "title": "হোম | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
- "url": "https://bangladesh.gov.bd/",
- "description": "সাইটটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ১৭ অক্টোবর, ২০২৬ এ ১০:৫৩:৩২",
- "source": "National Portal",
- "tags": [
-  "government",
+  "land",
+  "tax",
   "bangladesh"
  ],
  "lang": "bn",
@@ -127,29 +114,6 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "Welcome to the United Nations",
- "url": "https://www.un.org/",
- "description": "",
- "source": "United Nations",
- "tags": [
-  "international"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "The Daily Star - Bangladesh's National and International Breaking News",
- "url": "https://www.thedailystar.net/",
- "description": "The Daily Star, Bangladeshi leading English newspaper updates 24/7 national & international breaking News. Get latest news from credible English newspaper.",
- "source": "The Daily Star",
- "tags": [
-  "news",
-  "bangladesh"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
  "title": "World Health Organization (WHO)",
  "url": "https://www.who.int/",
  "description": "The United Nations agency working to promote health, keep the world safe and serve the vulnerable",
@@ -159,6 +123,19 @@
   "international"
  ],
  "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "প্রথম আলো | বাংলা নিউজ পেপার",
+ "url": "https://www.prothomalo.com/",
+ "description": "বাংলাদেশসহ বিশ্বের সর্বশেষ সংবাদ শিরোনাম, প্রতিবেদন, বিশ্লেষণ, খেলা, বিনোদন, চাকরি, রাজনীতি ও বাণিজ্যের বাংলা নিউজ পড়তে ভিজিট করুন।",
+ "source": "Prothom Alo",
+ "tags": [
+  "news",
+  "bangla",
+  "bangladesh"
+ ],
+ "lang": "bn",
  "crawled": "2026-10-25"
 },
 {
@@ -174,6 +151,17 @@
  "crawled": "2026-10-25"
 },
 {
+ "title": "Welcome to the United Nations",
+ "url": "https://www.un.org/",
+ "description": "",
+ "source": "United Nations",
+ "tags": [
+  "international"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
  "title": "হোম | বাংলাদেশ বিশ্ববিদ্যালয় মঞ্জুরী কমিশন",
  "url": "https://www.ugc.gov.bd/",
  "description": "Official portal of the University Grants Commission of Bangladesh — news, notices, events, services, universities and gallery updates.",
@@ -186,6 +174,18 @@
  "crawled": "2026-10-25"
 },
 {
+ "title": "The Daily Star - Bangladesh's National and International Breaking News",
+ "url": "https://www.thedailystar.net/",
+ "description": "The Daily Star, Bangladeshi leading English newspaper updates 24/7 national & international breaking News. Get latest news from credible English newspaper.",
+ "source": "The Daily Star",
+ "tags": [
+  "news",
+  "bangladesh"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
  "title": "English Newspaper | Most Popular English News in BD | Prothom Alo",
  "url": "https://en.prothomalo.com",
  "description": "Most Popular English News Paper in Bangladesh. Get Latest English Breaking News, Sports, Crime, Entertainment, Business, Politics, Education, Opinion, Lifestyle, Photo Galleries, Science & Technology",
@@ -193,6 +193,30 @@
  "tags": [
   "news",
   "bangla",
+  "bangladesh"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "eVLMIS | Electronic Vaccine and Logistics Management Information System",
+ "url": "https://evlmis.dghs.gov.bd/",
+ "description": "eVLMIS is UNICEF & Bangladesh's Electronic Vaccine and Logistics Management Information System for efficient vaccine management, tracking, distribution, and reporting.",
+ "source": "DGHS",
+ "tags": [
+  "health",
+  "bangladesh"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "Experience",
+ "url": "https://gis.dghs.gov.bd/portal/apps/experiencebuilder/experience/?id=e4deae91ae744fa991fd60388df5a381",
+ "description": "",
+ "source": "DGHS",
+ "tags": [
+  "health",
   "bangladesh"
  ],
  "lang": "en",
@@ -212,36 +236,12 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "eVLMIS | Electronic Vaccine and Logistics Management Information System",
- "url": "https://evlmis.dghs.gov.bd/",
- "description": "eVLMIS is UNICEF & Bangladesh's Electronic Vaccine and Logistics Management Information System for efficient vaccine management, tracking, distribution, and reporting.",
- "source": "DGHS",
- "tags": [
-  "health",
-  "bangladesh"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
  "title": "Hello - bdnews24.com",
  "url": "https://hello.bdnews24.com/english",
  "description": "Acting Editor-in-Chief: Biswadip Das",
  "source": "bdnews24",
  "tags": [
   "news",
-  "bangladesh"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "Experience",
- "url": "https://gis.dghs.gov.bd/portal/apps/experiencebuilder/experience/?id=e4deae91ae744fa991fd60388df5a381",
- "description": "",
- "source": "DGHS",
- "tags": [
-  "health",
   "bangladesh"
  ],
  "lang": "en",
@@ -269,6 +269,18 @@
   "bangladesh"
  ],
  "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "স্বাস্থ্য বাতায়ন:১৬২৬৩",
+ "url": "https://16263.dghs.gov.bd/",
+ "description": "স্বাস্থ্য বাতায়ন গণপ্রজাতন্ত্রী বাংলাদেশ সরকারের স্বাস্থ্য ও পরিবার কল্যাণমন্ত্রনালয়ের আওতাধীন স্বাস্থ্য অধিদপ্তরের এমআইএস বিভাগ কর্তৃক পরিচালিত একটি সেবা। সিনেসিস আইটি লিমিটেড নামে একটি মোবাইল স্বাস্থ্যসেবা প্রদানকারী প্রতিষ্ঠান স্বাস্থ্য বাতায়ন সেবাটির ব্যবস্থাপনার দায়িত্বে রয়েছে। এই স্বাস্থ্...",
+ "source": "DGHS",
+ "tags": [
+  "health",
+  "bangladesh"
+ ],
+ "lang": "bn",
  "crawled": "2026-10-25"
 },
 {
@@ -304,30 +316,6 @@
  "tags": [
   "government",
   "birth-registration",
-  "bangladesh"
- ],
- "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
- "title": "University of Dhaka| DU",
- "url": "https://apa.du.ac.bd/get_content/6/21",
- "description": "",
- "source": "University of Dhaka",
- "tags": [
-  "education",
-  "bangladesh"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "bdnews24.com - Latest News | বাংলা খবর ও সর্বশেষ সংবাদ",
- "url": "https://bangla.bdnews24.com",
- "description": "বাংলাদেশ ও বিশ্বের ব্রেকিং নিউজ সবার আগে পেতে ভিজিট করুন bdnews24.com. Read trusted, 24/7 live bilingual news, business, and entertainment updates.",
- "source": "bdnews24",
- "tags": [
-  "news",
   "bangladesh"
  ],
  "lang": "bn",
@@ -382,26 +370,13 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "- Birth and Death Verification",
- "url": "https://everify.bdris.gov.bd/UDRNVerification",
+ "title": "University of Dhaka| DU",
+ "url": "https://apa.du.ac.bd/get_content/6/21",
  "description": "",
- "source": "BDRIS",
+ "source": "University of Dhaka",
  "tags": [
-  "government",
-  "birth-registration",
+  "education",
   "bangladesh"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "Regional Health Data Hub",
- "url": "https://data.afro.who.int/",
- "description": "",
- "source": "World Health Organization",
- "tags": [
-  "health",
-  "international"
  ],
  "lang": "en",
  "crawled": "2026-10-25"
@@ -419,13 +394,14 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "BBC News Channel | Watch Live Breaking News",
- "url": "https://www.bbc.com/watch-live-news",
- "description": "Watch live breaking news from around the world 24 hours a day every day on the BBC News channel",
- "source": "BBC News",
+ "title": "- Birth and Death Verification",
+ "url": "https://everify.bdris.gov.bd/UDRNVerification",
+ "description": "",
+ "source": "BDRIS",
  "tags": [
-  "news",
-  "international"
+  "government",
+  "birth-registration",
+  "bangladesh"
  ],
  "lang": "en",
  "crawled": "2026-10-25"
@@ -443,6 +419,18 @@
  "crawled": "2026-10-25"
 },
 {
+ "title": "BBC News Channel | Watch Live Breaking News",
+ "url": "https://www.bbc.com/watch-live-news",
+ "description": "Watch live breaking news from around the world 24 hours a day every day on the BBC News channel",
+ "source": "BBC News",
+ "tags": [
+  "news",
+  "international"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
  "title": "ভূমি উন্নয়ন কর",
  "url": "https://ldtax.gov.bd/vumiseba-form",
  "description": "",
@@ -451,18 +439,6 @@
   "government",
   "land",
   "tax",
-  "bangladesh"
- ],
- "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
- "title": "বাংলাদেশ ও বিশ্বের সর্বশেষ সংবাদ | দ্য ডেইলি স্টার বাংলা",
- "url": "https://bangla.thedailystar.net",
- "description": "বাংলাদেশ এবং বিশ্বের সর্বশেষ খবর, বিশ্লেষণ, সাক্ষাৎকার, খেলা, বিনোদন, চাকরি, রাজনীতি, বাণিজ্য, ভিডিও এবং ফিচারের জন্য দ্য ডেইলি স্টার বাংলার ওয়েবসাইট ভিজিট করুন।",
- "source": "The Daily Star",
- "tags": [
-  "news",
   "bangladesh"
  ],
  "lang": "bn",
@@ -481,22 +457,22 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "University of Dhaka| DU",
- "url": "https://apa.du.ac.bd",
- "description": "",
- "source": "University of Dhaka",
+ "title": "bdnews24.com - Latest News | বাংলা খবর ও সর্বশেষ সংবাদ",
+ "url": "https://bangla.bdnews24.com",
+ "description": "বাংলাদেশ ও বিশ্বের ব্রেকিং নিউজ সবার আগে পেতে ভিজিট করুন bdnews24.com. Read trusted, 24/7 live bilingual news, business, and entertainment updates.",
+ "source": "bdnews24",
  "tags": [
-  "education",
+  "news",
   "bangladesh"
  ],
- "lang": "en",
+ "lang": "bn",
  "crawled": "2026-10-25"
 },
 {
- "title": "মতামত | bdnews24.com",
- "url": "https://bangla.bdnews24.com/opinion",
- "description": "আজ যে রেমিটেন্স আসছে, তা যারা আগে থেকেই বিদেশে আছেন তাদের আয়। আগামী বছরের প্রবাহ নির্ভর করবে আজ কত নতুন কর্মী যেতে পারছেন তার ওপর, আর বিমানের ফ্লাইট বাতিলের এই সময়ে ওই যাত্রা থমকে আছে।",
- "source": "bdnews24",
+ "title": "বাংলাদেশ ও বিশ্বের সর্বশেষ সংবাদ | দ্য ডেইলি স্টার বাংলা",
+ "url": "https://bangla.thedailystar.net",
+ "description": "বাংলাদেশ এবং বিশ্বের সর্বশেষ খবর, বিশ্লেষণ, সাক্ষাৎকার, খেলা, বিনোদন, চাকরি, রাজনীতি, বাণিজ্য, ভিডিও এবং ফিচারের জন্য দ্য ডেইলি স্টার বাংলার ওয়েবসাইট ভিজিট করুন।",
+ "source": "The Daily Star",
  "tags": [
   "news",
   "bangladesh"
@@ -514,6 +490,30 @@
   "bangladesh"
  ],
  "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "University of Dhaka| DU",
+ "url": "https://apa.du.ac.bd",
+ "description": "",
+ "source": "University of Dhaka",
+ "tags": [
+  "education",
+  "bangladesh"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "জাতীয় সংসদ | পাতা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
+ "url": "https://bangladesh.gov.bd/pages/static-pages/69a55ba386514399668e4e94",
+ "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: বৃহস্পতিবার, ২১ মে, ২০১৫ এ ০৬:২২ AM",
+ "source": "National Portal",
+ "tags": [
+  "government",
+  "bangladesh"
+ ],
+ "lang": "bn",
  "crawled": "2026-10-25"
 },
 {
@@ -542,12 +542,12 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "এমআইএস (Mis) | পাতা | স্বাস্থ্য অধিদপ্তর",
- "url": "https://dghs.gov.bd/pages/static-pages/6922db96933eb65569e0b13f",
- "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: মঙ্গলবার, ১৬ জুন, ২০২৬ এ ১২:১৫ PM",
- "source": "DGHS",
+ "title": "মতামত | bdnews24.com",
+ "url": "https://bangla.bdnews24.com/opinion",
+ "description": "আজ যে রেমিটেন্স আসছে, তা যারা আগে থেকেই বিদেশে আছেন তাদের আয়। আগামী বছরের প্রবাহ নির্ভর করবে আজ কত নতুন কর্মী যেতে পারছেন তার ওপর, আর বিমানের ফ্লাইট বাতিলের এই সময়ে ওই যাত্রা থমকে আছে।",
+ "source": "bdnews24",
  "tags": [
-  "health",
+  "news",
   "bangladesh"
  ],
  "lang": "bn",
@@ -567,15 +567,27 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "সৌদিতে মৃত্যুদণ্ড পাওয়া ২ বাংলাদেশির বিষয়ে ‘গোপনীয়’ চিঠিতে যা আছে",
- "url": "https://bangla.thedailystar.net/news/bangladesh/news-3972751",
- "description": "জেদ্দার বাংলাদেশ কনস্যুলেট থেকে পাঠানো চিঠিতে নজরুল ও সুইটির বিরুদ্ধে পৃথক অভিযোগের কথা বলা হয়েছে",
- "source": "The Daily Star",
+ "title": "এমআইএস (Mis) | পাতা | স্বাস্থ্য অধিদপ্তর",
+ "url": "https://dghs.gov.bd/pages/static-pages/6922db96933eb65569e0b13f",
+ "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: মঙ্গলবার, ১৬ জুন, ২০২৬ এ ১২:১৫ PM",
+ "source": "DGHS",
  "tags": [
-  "news",
+  "health",
   "bangladesh"
  ],
  "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "Regional Health Data Hub",
+ "url": "https://data.afro.who.int/",
+ "description": "",
+ "source": "World Health Organization",
+ "tags": [
+  "health",
+  "international"
+ ],
+ "lang": "en",
  "crawled": "2026-10-25"
 },
 {
@@ -588,18 +600,6 @@
   "bangladesh"
  ],
  "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "ব্যবহারকারী লগইন",
- "url": "https://aisdashboard.its.du.ac.bd/bn/b45de047fde9788cadae3cfe8e88dcc2",
- "description": "",
- "source": "University of Dhaka",
- "tags": [
-  "education",
-  "bangladesh"
- ],
- "lang": "bn",
  "crawled": "2026-10-25"
 },
 {
@@ -641,12 +641,13 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "স্বাস্থ্য বাতায়ন:১৬২৬৩",
- "url": "https://16263.dghs.gov.bd/",
- "description": "স্বাস্থ্য বাতায়ন গণপ্রজাতন্ত্রী বাংলাদেশ সরকারের স্বাস্থ্য ও পরিবার কল্যাণমন্ত্রনালয়ের আওতাধীন স্বাস্থ্য অধিদপ্তরের এমআইএস বিভাগ কর্তৃক পরিচালিত একটি সেবা। সিনেসিস আইটি লিমিটেড নামে একটি মোবাইল স্বাস্থ্যসেবা প্রদানকারী প্রতিষ্ঠান স্বাস্থ্য বাতায়ন সেবাটির ব্যবস্থাপনার দায়িত্বে রয়েছে। এই স্বাস্থ্...",
- "source": "DGHS",
+ "title": "আজকের খবর | আজকের ব্রেকিং নিউজ বাংলাদেশ",
+ "url": "https://www.prothomalo.com/collection/latest",
+ "description": "আজকের সর্বশেষ খবর - বাংলাদেশসহ সারা বিশ্বে ঘটে যাওয়া আজকের সর্বশেষ সকল গুরুত্বপূর্ণ নতুন খবর, ব্রেকিং নিউজ, ছবি, ভিডিও প্রতিবেদন ও প্রধান প্রধান সংবাদ শিরোনাম পেতে ভিজিট করুন প্রথম আলো",
+ "source": "Prothom Alo",
  "tags": [
-  "health",
+  "news",
+  "bangla",
   "bangladesh"
  ],
  "lang": "bn",
@@ -664,19 +665,6 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "আজকের খবর | আজকের ব্রেকিং নিউজ বাংলাদেশ",
- "url": "https://www.prothomalo.com/collection/latest",
- "description": "আজকের সর্বশেষ খবর - বাংলাদেশসহ সারা বিশ্বে ঘটে যাওয়া আজকের সর্বশেষ সকল গুরুত্বপূর্ণ নতুন খবর, ব্রেকিং নিউজ, ছবি, ভিডিও প্রতিবেদন ও প্রধান প্রধান সংবাদ শিরোনাম পেতে ভিজিট করুন প্রথম আলো",
- "source": "Prothom Alo",
- "tags": [
-  "news",
-  "bangla",
-  "bangladesh"
- ],
- "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
  "title": "Home :: Dhaka University",
  "url": "https://www.du.ac.bd/university/HistoricalOutline",
  "description": "",
@@ -686,6 +674,18 @@
   "bangladesh"
  ],
  "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "আর্টস | bdnews24.com",
+ "url": "https://bangla.bdnews24.com/arts",
+ "description": "পাহাড়ে অশান্তির পেছনে কথিত বন্ধু রাষ্ট্র, সরকার ‘আঁতাত’ করেছে: নাহিদ",
+ "source": "bdnews24",
+ "tags": [
+  "news",
+  "bangladesh"
+ ],
+ "lang": "bn",
  "crawled": "2026-10-25"
 },
 {
@@ -701,39 +701,15 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "WHO EMRO - Home",
- "url": "https://www.emro.who.int/",
- "description": "The World Health Organization (WHO) is the directing and coordinating authority for public health within the United Nations system. The WHO Regional Office for the Eastern Mediterranean is one of WHO’s 6 regional offices around the world. It serves the WHO Eastern Mediterranean Region, which compris...",
- "source": "World Health Organization",
+ "title": "স্বাস্থ্য বাতায়ন:১৬২৬৩",
+ "url": "https://16263.dghs.gov.bd/report/report.php",
+ "description": "",
+ "source": "DGHS",
  "tags": [
   "health",
-  "international"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "আর্টস | bdnews24.com",
- "url": "https://bangla.bdnews24.com/arts",
- "description": "এএফসি কংগ্রেসকে ‘রাজনৈতিক উদ্দেশ্যে ব্যবহারের’ অভিযোগ ইনফান্তিনোর বিরুদ্ধে",
- "source": "bdnews24",
- "tags": [
-  "news",
   "bangladesh"
  ],
  "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
- "title": "Preparations to send 10,000 workers to Malaysia at no cost: Who can apply?",
- "url": "https://www.thedailystar.net/star-multimedia/news/preparations-send-10000-workers-malaysia-no-cost-who-can-apply-4291846",
- "description": ".",
- "source": "The Daily Star",
- "tags": [
-  "news",
-  "bangladesh"
- ],
- "lang": "en",
  "crawled": "2026-10-25"
 },
 {
@@ -743,6 +719,31 @@
  "source": "bdnews24",
  "tags": [
   "news",
+  "bangladesh"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "ব্যবহারকারী লগইন",
+ "url": "https://aisdashboard.its.du.ac.bd/bn/b45de047fde9788cadae3cfe8e88dcc2",
+ "description": "",
+ "source": "University of Dhaka",
+ "tags": [
+  "education",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "Login",
+ "url": "https://bdris.gov.bd/login",
+ "description": "",
+ "source": "BDRIS",
+ "tags": [
+  "government",
+  "birth-registration",
   "bangladesh"
  ],
  "lang": "en",
@@ -762,25 +763,12 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "Health Emergency Control Center",
- "url": "https://etracker.dghs.gov.bd/fdmnnew/dhis-web-commons/security/login.action",
- "description": "",
- "source": "DGHS",
+ "title": "Preparations to send 10,000 workers to Malaysia at no cost: Who can apply?",
+ "url": "https://www.thedailystar.net/star-multimedia/news/preparations-send-10000-workers-malaysia-no-cost-who-can-apply-4291846",
+ "description": ".",
+ "source": "The Daily Star",
  "tags": [
-  "health",
-  "bangladesh"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "Login",
- "url": "https://bdris.gov.bd/login",
- "description": "",
- "source": "BDRIS",
- "tags": [
-  "government",
-  "birth-registration",
+  "news",
   "bangladesh"
  ],
  "lang": "en",
@@ -800,8 +788,8 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "Training Server - National Community Health Information System of Bangladesh",
- "url": "https://dhis2training.dghs.gov.bd/nationalcc/dhis-web-commons/security/login.action",
+ "title": "Health Emergency Control Center",
+ "url": "https://etracker.dghs.gov.bd/fdmnnew/dhis-web-commons/security/login.action",
  "description": "",
  "source": "DGHS",
  "tags": [
@@ -809,18 +797,6 @@
   "bangladesh"
  ],
  "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "দ্রুত বদলে যাওয়া ৫ শহর, কেন ঘুরতে যাবেন",
- "url": "https://bangla.thedailystar.net/life-living/travel/news-3972636",
- "description": "এবার ভ্রমণের তালিকায় রাখতে পারেন তুলুজ, হো চি মিন সিটি কিংবা মেডেলিনের মতো শহর।",
- "source": "The Daily Star",
- "tags": [
-  "news",
-  "bangladesh"
- ],
- "lang": "bn",
  "crawled": "2026-10-25"
 },
 {
@@ -836,12 +812,60 @@
  "crawled": "2026-10-25"
 },
 {
+ "title": "WHO EMRO - Home",
+ "url": "https://www.emro.who.int/",
+ "description": "The World Health Organization (WHO) is the directing and coordinating authority for public health within the United Nations system. The WHO Regional Office for the Eastern Mediterranean is one of WHO’s 6 regional offices around the world. It serves the WHO Eastern Mediterranean Region, which compris...",
+ "source": "World Health Organization",
+ "tags": [
+  "health",
+  "international"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
  "title": "বিভিন্ন সিস্টেমের সাপোর্ট সংক্রান্ত যোগাযোগের তালিকা | পাতা | স্বাস্থ্য অধিদপ্তর",
  "url": "https://dghs.gov.bd/pages/static-pages/%E0%A6%AC%E0%A6%BF%E0%A6%AD%E0%A6%BF%E0%A6%A8%E0%A7%8D%E0%A6%A8-%E0%A6%B8%E0%A6%BF%E0%A6%B8%E0%A7%8D%E0%A6%9F%E0%A7%87%E0%A6%AE-%E0%A6%B8%E0%A6%BE%E0%A6%AA%E0%A7%8B%E0%A6%B0%E0%A7%8D%E0%A6%9F-%E0%A6%B8%E0%A6%82%E0%A6%95%E0%A7%8D%E0%A6%B0%E0%A6%BE%E0%A6%A8%E0%A7%8D%E0%A6%A4-%E0%A6%AF%E0%A7%8B%E0%A6%97%E0%A6%BE%E0%A6%AF%E0%A7%8B%E0%A6%97%E0%A7%87%E0%A6%B0-%E0%A6%A4%E0%A6%BE%E0%A6%B2%E0%A6%BF%E0%A6%95%E0%A6%BE-d4gzto-6a7e94c411b786c498449caa",
  "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ২৪ অক্টোবর, ২০২৬ এ ০২:৩৭ PM",
  "source": "DGHS",
  "tags": [
   "health",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "অধিদপ্তর এবং অন্যান্য অফিস | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
+ "url": "https://bangladesh.gov.bd/views/directorates-n-others",
+ "description": "সাইটটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ১৭ অক্টোবর, ২০২৬ এ ১০:৫৩:৩২",
+ "source": "National Portal",
+ "tags": [
+  "government",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "ঢাকা বিশ্ববিদ্যালয়ের রেজিস্টার্ড গ্র্যাজুয়েট তালিকাভুক্তির মেয়াদ ৩০ অক্টোবর পর্যন্ত বর্ধিতকরণ",
+ "url": "https://reggrad.du.ac.bd/notices/11",
+ "description": "ঢাকা বিশ্ববিদ্যালয় সিনেটে ২৫ জন প্রতিনিধি নির্বাচনের জন্য রেজিস্টার্ড গ্র্যাজুয়েট হিসেবে তালিকাভুক্তির সময়সীমা বাড়ানোর ঘোষণা দেওয়া হয়েছে। নতুন সময়সূচী অনুযায়ী, তালিকাভুক্তির মেয়াদ ৩০ অক্টোবর, ২০২৬, বিকাল ৩টা পর্যন্ত বর্ধিত করা হয়েছে। এ বিষয়ে পূর্বে প্রচারিত বিজ্ঞপ্তির অন্যান্য সকল শর্ত অপ...",
+ "source": "University of Dhaka",
+ "tags": [
+  "education",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "সৌদিতে মৃত্যুদণ্ড পাওয়া ২ বাংলাদেশির বিষয়ে ‘গোপনীয়’ চিঠিতে যা আছে",
+ "url": "https://bangla.thedailystar.net/news/bangladesh/news-3972751",
+ "description": "জেদ্দার বাংলাদেশ কনস্যুলেট থেকে পাঠানো চিঠিতে নজরুল ও সুইটির বিরুদ্ধে পৃথক অভিযোগের কথা বলা হয়েছে",
+ "source": "The Daily Star",
+ "tags": [
+  "news",
   "bangladesh"
  ],
  "lang": "bn",
@@ -862,12 +886,13 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "ঢাকা বিশ্ববিদ্যালয়ের রেজিস্টার্ড গ্র্যাজুয়েট তালিকাভুক্তির মেয়াদ ৩০ অক্টোবর পর্যন্ত বর্ধিতকরণ",
- "url": "https://reggrad.du.ac.bd/notices/11",
- "description": "ঢাকা বিশ্ববিদ্যালয় সিনেটে ২৫ জন প্রতিনিধি নির্বাচনের জন্য রেজিস্টার্ড গ্র্যাজুয়েট হিসেবে তালিকাভুক্তির সময়সীমা বাড়ানোর ঘোষণা দেওয়া হয়েছে। নতুন সময়সূচী অনুযায়ী, তালিকাভুক্তির মেয়াদ ৩০ অক্টোবর, ২০২৬, বিকাল ৩টা পর্যন্ত বর্ধিত করা হয়েছে। এ বিষয়ে পূর্বে প্রচারিত বিজ্ঞপ্তির অন্যান্য সকল শর্ত অপ...",
- "source": "University of Dhaka",
+ "title": "বাংলাদেশের খবর | Bangladesh News Update | Prothom Alo",
+ "url": "https://www.prothomalo.com/bangladesh",
+ "description": "বাংলাদেশের আজকের খবর সর্বশেষ সংবাদ শিরোনাম, প্রতিবেদন, বিশ্লেষণ, রাজনীতি, খেলাধুলা, বিনোদন, ব্যবসা-বাণিজ্য, সড়ক, ছবি, ভিডিও খবর দেখতে ভিজিট করুন প্রথম আলো",
+ "source": "Prothom Alo",
  "tags": [
-  "education",
+  "news",
+  "bangla",
   "bangladesh"
  ],
  "lang": "bn",
@@ -886,16 +911,15 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "বাংলাদেশের খবর | Bangladesh News Update | Prothom Alo",
- "url": "https://www.prothomalo.com/bangladesh",
- "description": "বাংলাদেশের আজকের খবর সর্বশেষ সংবাদ শিরোনাম, প্রতিবেদন, বিশ্লেষণ, রাজনীতি, খেলাধুলা, বিনোদন, ব্যবসা-বাণিজ্য, সড়ক, ছবি, ভিডিও খবর দেখতে ভিজিট করুন প্রথম আলো",
- "source": "Prothom Alo",
+ "title": "WHO/Europe | Home",
+ "url": "https://www.who.int/europe/home?v=welcome",
+ "description": "The WHO Regional Office for Europe (WHO/Europe) is one of WHO’s six regional offices around the world. It serves the WHO European Region, which comprises 53 countries, covering a vast geographical region from the Atlantic to the Pacific oceans.",
+ "source": "World Health Organization",
  "tags": [
-  "news",
-  "bangla",
-  "bangladesh"
+  "health",
+  "international"
  ],
- "lang": "bn",
+ "lang": "en",
  "crawled": "2026-10-25"
 },
 {
@@ -911,27 +935,15 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "WHO/Europe | Home",
- "url": "https://www.who.int/europe/home?v=welcome",
- "description": "The WHO Regional Office for Europe (WHO/Europe) is one of WHO’s six regional offices around the world. It serves the WHO European Region, which comprises 53 countries, covering a vast geographical region from the Atlantic to the Pacific oceans.",
- "source": "World Health Organization",
+ "title": "স্বাস্থ্য বাতায়ন:১৬২৬৩",
+ "url": "https://16263.dghs.gov.bd/ambulance/ambulance/",
+ "description": "",
+ "source": "DGHS",
  "tags": [
   "health",
-  "international"
+  "bangladesh"
  ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "Health topics",
- "url": "https://www.emro.who.int/health-topics.html",
- "description": "Links to WHO health topic pages",
- "source": "World Health Organization",
- "tags": [
-  "health",
-  "international"
- ],
- "lang": "en",
+ "lang": "bn",
  "crawled": "2026-10-25"
 },
 {
@@ -959,18 +971,6 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "Health Emergency Control Center",
- "url": "https://etracker.dghs.gov.bd/fdmnnew/dhis-web-commons/security/recovery.action",
- "description": "",
- "source": "DGHS",
- "tags": [
-  "health",
-  "bangladesh"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
  "title": "Entertainment | bdnews24.com",
  "url": "https://bdnews24.com/entertainment",
  "description": "Entertainment category all news - bdnews24.com",
@@ -978,55 +978,6 @@
  "tags": [
   "news",
   "bangladesh"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "জাতীয় সংসদ | পাতা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
- "url": "https://bangladesh.gov.bd/pages/static-pages/69a55ba386514399668e4e94",
- "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: বৃহস্পতিবার, ২১ মে, ২০১৫ এ ০৬:২২ AM",
- "source": "National Portal",
- "tags": [
-  "government",
-  "bangladesh"
- ],
- "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
- "title": "পাসওয়ার্ড পরিবর্তন",
- "url": "https://aisdashboard.its.du.ac.bd/bn/ce5a4e149e53882976aa7610c92b45fc",
- "description": "আপনার অ্যাকাউন্ট সুরক্ষিত রাখতে, নিশ্চিত করুন যে আপনিই পাসওয়ার্ড আপডেট করার চেষ্টা করছেন।",
- "source": "University of Dhaka",
- "tags": [
-  "education",
-  "bangladesh"
- ],
- "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
- "title": "Sports News BD | Latest News of Cricket, Football & Others",
- "url": "https://en.prothomalo.com/sports",
- "description": "Get latest bd sports news of Cricket, Football, T20, BPL, IPL, PCL, La Liga, Champion League, FIFA, ICC World Cup Match, Trophy & others Sport News in English",
- "source": "Prothom Alo",
- "tags": [
-  "news",
-  "bangla",
-  "bangladesh"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "WHO Multimedia Library",
- "url": "https://multimedia.who.int/",
- "description": "We use essential and non-essential cookies. By using our website, you agree to our use of cookies as described in Cookie Policy.",
- "source": "World Health Organization",
- "tags": [
-  "health",
-  "international"
  ],
  "lang": "en",
  "crawled": "2026-10-25"
@@ -1045,6 +996,55 @@
  "crawled": "2026-10-25"
 },
 {
+ "title": "Health topics",
+ "url": "https://www.emro.who.int/health-topics.html",
+ "description": "Links to WHO health topic pages",
+ "source": "World Health Organization",
+ "tags": [
+  "health",
+  "international"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "Sports News BD | Latest News of Cricket, Football & Others",
+ "url": "https://en.prothomalo.com/sports",
+ "description": "Get latest bd sports news of Cricket, Football, T20, BPL, IPL, PCL, La Liga, Champion League, FIFA, ICC World Cup Match, Trophy & others Sport News in English",
+ "source": "Prothom Alo",
+ "tags": [
+  "news",
+  "bangla",
+  "bangladesh"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "সকল ই-সেবা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
+ "url": "https://bangladesh.gov.bd/views/all-eservices-in-bangladesh",
+ "description": "সাইটটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ১৭ অক্টোবর, ২০২৬ এ ১০:৫৩:৩২",
+ "source": "National Portal",
+ "tags": [
+  "government",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "Training Server - National Community Health Information System of Bangladesh",
+ "url": "https://dhis2training.dghs.gov.bd/nationalcc/dhis-web-commons/security/login.action",
+ "description": "",
+ "source": "DGHS",
+ "tags": [
+  "health",
+  "bangladesh"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
  "title": "Interviews - bdnews24.com",
  "url": "https://hello.bdnews24.com/english/interviews",
  "description": "\"As lawyers, we work on various social issues. We have laws to restrain child marriage and there are ways for people to file cases.\"",
@@ -1057,24 +1057,14 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "ডাকের শহর, স্মৃতির শহর...",
- "url": "https://bangla.thedailystar.net/life-living/diary/news-3971466",
- "description": "একটা সময় সকালে আমাদের ঘুম ভাঙত অ্যালার্মের শব্দে নয়, হকারের ডাকে। ‘পুরোনো লোহা-ভাঙারি!’, ‘তরকারি নেবেন?’, ‘ছাই লাগবে ছাইই?’, ‘ডিম...’ কিংবা ‘আইসক্রিমমম...’—এসব ছিল আমাদের শহুরে জীবনের এক অদৃশ্য সুর। দিনজুড়ে এই হকারদের ডাক শুধু পণ্য বিক্রির আহ্বান ছিল না, ছিল একেকটি সময়ের চিহ্ন।",
- "source": "The Daily Star",
+ "title": "ভূমি উন্নয়ন কর",
+ "url": "https://ldtax.gov.bd/nitimala",
+ "description": "অটোমেটেড ভূমি সেবা প্ল্যাটফরমে আপনাকে স্বাগতম। অনলাইনে সেবার আবেদন গ্রহণ, আবেদনের সর্বশেষ অবস্থা জানানো এবং সর্বোপরি জনভোগান্তি হ্রাসের উদ্দেশ্যে এই প্ল্যাটফরম প্রস্তুত করা হয়েছে। নাগরিক, ব্যবসায়ী, সরকারি ও বেসরকারি প্রতিষ্ঠান এবং সরকারি কর্মকর্তা-কর্মচারিগণ এই প্ল্যাটফরমের সুবিধা গ্রহণ করতে পারবেন।...",
+ "source": "Land Development Tax",
  "tags": [
-  "news",
-  "bangladesh"
- ],
- "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
- "title": "ঢাকা বিশ্ববিদ্যালয়ের আজীবন রেজিস্টার্ড গ্র্যাজুয়েট তালিকাভুক্তি ও রেজিস্ট্রেশন সংক্রান্ত বিজ্ঞপ্তি",
- "url": "https://reggrad.du.ac.bd/notices/10",
- "description": "ঢাকা বিশ্ববিদ্যালয়ের আসন্ন সিনেট নির্বাচনে রেজিস্টার্ড গ্র্যাজুয়েট প্রতিনিধি নির্বাচনের জন্য আজীবন রেজিস্টার্ড গ্র্যাজুয়েট হিসেবে তালিকাভুক্তি, রেজিস্ট্রেশন ফি, আবেদনপত্র সংগ্রহ ও জমাদানের সময়সূচি এবং প্রয়োজনীয় কাগজপত্র সম্পর্কিত বিস্তারিত তথ্য সংযুক্ত বিজ্ঞপ্তিতে দেওয়া হয়েছে।",
- "source": "University of Dhaka",
- "tags": [
-  "education",
+  "government",
+  "land",
+  "tax",
   "bangladesh"
  ],
  "lang": "bn",
@@ -1093,6 +1083,18 @@
  "crawled": "2026-10-25"
 },
 {
+ "title": "ঢাকা বিশ্ববিদ্যালয়ের আজীবন রেজিস্টার্ড গ্র্যাজুয়েট তালিকাভুক্তি ও রেজিস্ট্রেশন সংক্রান্ত বিজ্ঞপ্তি",
+ "url": "https://reggrad.du.ac.bd/notices/10",
+ "description": "ঢাকা বিশ্ববিদ্যালয়ের আসন্ন সিনেট নির্বাচনে রেজিস্টার্ড গ্র্যাজুয়েট প্রতিনিধি নির্বাচনের জন্য আজীবন রেজিস্টার্ড গ্র্যাজুয়েট হিসেবে তালিকাভুক্তি, রেজিস্ট্রেশন ফি, আবেদনপত্র সংগ্রহ ও জমাদানের সময়সূচি এবং প্রয়োজনীয় কাগজপত্র সম্পর্কিত বিস্তারিত তথ্য সংযুক্ত বিজ্ঞপ্তিতে দেওয়া হয়েছে।",
+ "source": "University of Dhaka",
+ "tags": [
+  "education",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
  "title": "BBC Sport - Scores, Fixtures, News - Live Sport",
  "url": "https://www.bbc.com/sport",
  "description": "Sports news and live sports coverage including scores, results, video, audio and analysis on Football, F1, Cricket, Rugby Union and all other UK sports.",
@@ -1100,6 +1102,18 @@
  "tags": [
   "news",
   "international"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "TheDailyStar.net - User Portal",
+ "url": "https://profile.thedailystar.net/login?redirect_to=https://epaper.thedailystar.net/Login/LandingPage",
+ "description": "After a decade of delivering high-quality news in our e-paper free of charge, we are going behind a paywall. In today's rapidly changing media landscape, sustainable revenue models are crucial. Your subscription helps us invest in talented journalists, in-depth investigations, innovative storytellin...",
+ "source": "The Daily Star",
+ "tags": [
+  "news",
+  "bangladesh"
  ],
  "lang": "en",
  "crawled": "2026-10-25"
@@ -1114,20 +1128,6 @@
   "international"
  ],
  "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "ভূমি উন্নয়ন কর",
- "url": "https://ldtax.gov.bd/nitimala",
- "description": "অটোমেটেড ভূমি সেবা প্ল্যাটফরমে আপনাকে স্বাগতম। অনলাইনে সেবার আবেদন গ্রহণ, আবেদনের সর্বশেষ অবস্থা জানানো এবং সর্বোপরি জনভোগান্তি হ্রাসের উদ্দেশ্যে এই প্ল্যাটফরম প্রস্তুত করা হয়েছে। নাগরিক, ব্যবসায়ী, সরকারি ও বেসরকারি প্রতিষ্ঠান এবং সরকারি কর্মকর্তা-কর্মচারিগণ এই প্ল্যাটফরমের সুবিধা গ্রহণ করতে পারবেন।...",
- "source": "Land Development Tax",
- "tags": [
-  "government",
-  "land",
-  "tax",
-  "bangladesh"
- ],
- "lang": "bn",
  "crawled": "2026-10-25"
 },
 {
@@ -1156,39 +1156,15 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "স্বাস্থ্য বাতায়ন:১৬২৬৩",
- "url": "https://16263.dghs.gov.bd/report/report.php",
+ "title": "Health Emergency Control Center",
+ "url": "https://etracker.dghs.gov.bd/fdmnnew/dhis-web-commons/security/recovery.action",
  "description": "",
  "source": "DGHS",
  "tags": [
   "health",
   "bangladesh"
  ],
- "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
- "title": "TheDailyStar.net - User Portal",
- "url": "https://profile.thedailystar.net/login?redirect_to=https://epaper.thedailystar.net/Login/LandingPage",
- "description": "After a decade of delivering high-quality news in our e-paper free of charge, we are going behind a paywall. In today's rapidly changing media landscape, sustainable revenue models are crucial. Your subscription helps us invest in talented journalists, in-depth investigations, innovative storytellin...",
- "source": "The Daily Star",
- "tags": [
-  "news",
-  "bangladesh"
- ],
  "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "ছবির গল্প | bdnews24.com",
- "url": "https://bangla.bdnews24.com/photostory",
- "description": "ঢাকার যাত্রাবাড়ীর মাতুয়াইলে ময়লা ভাগাড়ের (স্যানিটরি ল্যান্ডফিল) একটি অংশ ঢেকে গেছে সবুজে। স্থানীয় কিছু লোকজন সেখানে জায়গা সমান করে চাষ করেছেন সবজি। পাট শাক, লাল শাক, পুঁইশাক, কলমি শাকসহ নানা রকমের সবজি চাষ হচ্ছে ময়লার স্তূপ ও তার তার আশপাশে।",
- "source": "bdnews24",
- "tags": [
-  "news",
-  "bangladesh"
- ],
- "lang": "bn",
  "crawled": "2026-10-25"
 },
 {
@@ -1216,6 +1192,43 @@
  "crawled": "2026-10-25"
 },
 {
+ "title": "দ্রুত বদলে যাওয়া ৫ শহর, কেন ঘুরতে যাবেন",
+ "url": "https://bangla.thedailystar.net/life-living/travel/news-3972636",
+ "description": "এবার ভ্রমণের তালিকায় রাখতে পারেন তুলুজ, হো চি মিন সিটি কিংবা মেডেলিনের মতো শহর।",
+ "source": "The Daily Star",
+ "tags": [
+  "news",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "ছবির গল্প | bdnews24.com",
+ "url": "https://bangla.bdnews24.com/photostory",
+ "description": "ঢাকার যাত্রাবাড়ীর মাতুয়াইলে ময়লা ভাগাড়ের (স্যানিটরি ল্যান্ডফিল) একটি অংশ ঢেকে গেছে সবুজে। স্থানীয় কিছু লোকজন সেখানে জায়গা সমান করে চাষ করেছেন সবজি। পাট শাক, লাল শাক, পুঁইশাক, কলমি শাকসহ নানা রকমের সবজি চাষ হচ্ছে ময়লার স্তূপ ও তার তার আশপাশে।",
+ "source": "bdnews24",
+ "tags": [
+  "news",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "Opinion and Op-Ed on Current National, World Issues",
+ "url": "https://en.prothomalo.com/opinion",
+ "description": "Opinion and Op-Ed on Current National, International Politics Discussion Research, Analysis on Business, Science, Current Issues, English Newspaper in BD",
+ "source": "Prothom Alo",
+ "tags": [
+  "news",
+  "bangla",
+  "bangladesh"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
  "title": "Data and statistics",
  "url": "https://www.emro.who.int/entity/statistics/statistics.html",
  "description": "Links to WHO regional health observatory and statistics",
@@ -1223,18 +1236,6 @@
  "tags": [
   "health",
   "international"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "Politics",
- "url": "https://www.thedailystar.net/news/politics",
- "description": "is strictly prohibited and constitutes copyright infringement liable to legal action.",
- "source": "The Daily Star",
- "tags": [
-  "news",
-  "bangladesh"
  ],
  "lang": "en",
  "crawled": "2026-10-25"
@@ -1253,19 +1254,6 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "Opinion and Op-Ed on Current National, World Issues",
- "url": "https://en.prothomalo.com/opinion",
- "description": "Opinion and Op-Ed on Current National, International Politics Discussion Research, Analysis on Business, Science, Current Issues, English Newspaper in BD",
- "source": "Prothom Alo",
- "tags": [
-  "news",
-  "bangla",
-  "bangladesh"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
  "title": "Snapshots - bdnews24.com",
  "url": "https://hello.bdnews24.com/english/snapshots",
  "description": "A year has gone by since a student-led mass uprising toppled the government. Rangpur was decorated with lights as the people of the city prepared to celebrate the July Uprising Day.",
@@ -1273,18 +1261,6 @@
  "tags": [
   "news",
   "bangladesh"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "WHO | Programme Budget Web Portal",
- "url": "https://open.who.int/2024-25/budget-and-financing/funding-situation",
- "description": "",
- "source": "World Health Organization",
- "tags": [
-  "health",
-  "international"
  ],
  "lang": "en",
  "crawled": "2026-10-25"
@@ -1314,6 +1290,18 @@
  "crawled": "2026-10-25"
 },
 {
+ "title": "জাতীয় পোর্টাল পরিষেবা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
+ "url": "https://bangladesh.gov.bd/pages/np-services",
+ "description": "সাইটটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ১৭ অক্টোবর, ২০২৬ এ ১০:৫৩:৩২",
+ "source": "National Portal",
+ "tags": [
+  "government",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
  "title": "ভূমি উন্নয়ন কর",
  "url": "https://ldtax.gov.bd/manual",
  "description": "অটোমেটেড ভূমি সেবা প্ল্যাটফরমে আপনাকে স্বাগতম।অনলাইনে সেবার আবেদন গ্রহণ, আবেদনের সর্বশেষ অবস্থা জানানো এবং সর্বোপরি জনভোগান্তি হ্রাসের উদ্দেশ্যে এই প্ল্যাটফরম প্রস্তুত করা হয়েছে।নাগরিক, ব্যবসায়ী, সরকারি ও বেসরকারি প্রতিষ্ঠান এবং সরকারি কর্মকর্তা-কর্মচারিগণ এই প্ল্যাটফরমের সুবিধা গ্রহণ করতে পারবেন।এই...",
@@ -1322,6 +1310,19 @@
   "government",
   "land",
   "tax",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "আজকের আন্তর্জাতিক খবর - বিশ্ব সংবাদ | World News প্রথম আলো",
+ "url": "https://www.prothomalo.com/world",
+ "description": "সারাবিশ্বের আন্তর্জাতিক সংবাদ ভারত, পাকিস্তান, চীন, এশিয়া, যুক্তরাষ্ট্র, উত্তর আমেরিকা, ইউরোপ, আফ্রিকা, দক্ষিণ আমেরিকার আন্তর্জাতিক খবর দেখতে ক্লিক করুন",
+ "source": "Prothom Alo",
+ "tags": [
+  "news",
+  "bangla",
   "bangladesh"
  ],
  "lang": "bn",
@@ -1340,16 +1341,15 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "আজকের আন্তর্জাতিক খবর - বিশ্ব সংবাদ | World News প্রথম আলো",
- "url": "https://www.prothomalo.com/world",
- "description": "সারাবিশ্বের আন্তর্জাতিক সংবাদ ভারত, পাকিস্তান, চীন, এশিয়া, যুক্তরাষ্ট্র, উত্তর আমেরিকা, ইউরোপ, আফ্রিকা, দক্ষিণ আমেরিকার আন্তর্জাতিক খবর দেখতে ক্লিক করুন",
- "source": "Prothom Alo",
+ "title": "Politics",
+ "url": "https://www.thedailystar.net/news/politics",
+ "description": "is strictly prohibited and constitutes copyright infringement liable to legal action.",
+ "source": "The Daily Star",
  "tags": [
   "news",
-  "bangla",
   "bangladesh"
  ],
- "lang": "bn",
+ "lang": "en",
  "crawled": "2026-10-25"
 },
 {
@@ -1371,18 +1371,6 @@
  "source": "bdnews24",
  "tags": [
   "news",
-  "bangladesh"
- ],
- "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
- "title": "অধিদপ্তর এবং অন্যান্য অফিস | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
- "url": "https://bangladesh.gov.bd/views/directorates-n-others",
- "description": "সাইটটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ১৭ অক্টোবর, ২০২৬ এ ১০:৫৩:৩২",
- "source": "National Portal",
- "tags": [
-  "government",
   "bangladesh"
  ],
  "lang": "bn",
@@ -1414,19 +1402,6 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "Trustee Board Certificate",
- "url": "https://bsp.brta.gov.bd/tbc/",
- "description": "",
- "source": "BRTA",
- "tags": [
-  "government",
-  "driving",
-  "bangladesh"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
  "title": "Archives - bdnews24.com",
  "url": "https://hello.bdnews24.com/english/archive",
  "description": "",
@@ -1451,6 +1426,19 @@
  "crawled": "2026-10-25"
 },
 {
+ "title": "Trustee Board Certificate",
+ "url": "https://bsp.brta.gov.bd/tbc/",
+ "description": "",
+ "source": "BRTA",
+ "tags": [
+  "government",
+  "driving",
+  "bangladesh"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
  "title": "BBC Technology | Technology, Health, Environment, AI",
  "url": "https://www.bbc.com/technology",
  "description": "BBC Technology brings you the latest in Technology news and coverage from around the world, including health, environment, AI, and more",
@@ -1463,6 +1451,30 @@
  "crawled": "2026-10-25"
 },
 {
+ "title": "চিকিৎসা জীব প্রযুক্তি | পাতা | স্বাস্থ্য অধিদপ্তর",
+ "url": "https://dghs.gov.bd/pages/static-pages/6922dca0933eb65569e11582",
+ "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: বৃহস্পতিবার, ১১ ডিসেম্বর, ২০১৪ এ ০৭:৩৯ AM",
+ "source": "DGHS",
+ "tags": [
+  "health",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "প্রয়োজনীয় তথ্য ও সেবা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
+ "url": "https://bangladesh.gov.bd/views/service-sectors",
+ "description": "সাইটটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ১৭ অক্টোবর, ২০২৬ এ ১০:৫৩:৩২",
+ "source": "National Portal",
+ "tags": [
+  "government",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
  "title": "ভূমি উন্নয়ন কর",
  "url": "https://ldtax.gov.bd/privacy-policy",
  "description": "ভূমি উন্নয়ন কর (এলডি ট্যাক্স) সিস্টেম, যা https://ldtax.gov.bd এ পাওয়া যায়, এটি গণপ্রজাতন্ত্রী বাংলাদেশ সরকারের ভূমি মন্ত্রণালয়ের আওতাধীন একটি অফিসিয়াল ডিজিটাল প্ল্যাটফর্ম। এই প্ল্যাটফর্মের উদ্দেশ্য হলো নাগরিকদের জন্য ভূমি উন্নয়ন কর পরিশোধ ও সংশ্লিষ্ট সেবা অনলাইনে সহজ ও স্বচ্ছভাবে প্রদান করা।",
@@ -1471,18 +1483,6 @@
   "government",
   "land",
   "tax",
-  "bangladesh"
- ],
- "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
- "title": "চিকিৎসা জীব প্রযুক্তি | পাতা | স্বাস্থ্য অধিদপ্তর",
- "url": "https://dghs.gov.bd/pages/static-pages/6922dca0933eb65569e11582",
- "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: বৃহস্পতিবার, ১১ ডিসেম্বর, ২০১৪ এ ০৭:৩৯ AM",
- "source": "DGHS",
- "tags": [
-  "health",
   "bangladesh"
  ],
  "lang": "bn",
@@ -1514,18 +1514,6 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "বাংলাদেশ",
- "url": "https://bangla.thedailystar.net/news/bangladesh",
- "description": "is strictly prohibited and constitutes copyright infringement liable to legal action.",
- "source": "The Daily Star",
- "tags": [
-  "news",
-  "bangladesh"
- ],
- "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
  "title": "Health topics",
  "url": "https://www.who.int/health-topics",
  "description": "Health topics",
@@ -1538,15 +1526,15 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "বাজেট ২০২৬-২৭ | bdnews24.com",
- "url": "https://bangla.bdnews24.com/budget2026-27",
- "description": "নির্দিষ্টকরণ বিলে সংযুক্ত তহবিল থেকে ১৫ লাখ ১৫ হাজার ৪৩৯ কোটি টাকা ব্যয়ের কর্তৃত্ব পেল সরকার",
- "source": "bdnews24",
+ "title": "WHO Multimedia Library",
+ "url": "https://multimedia.who.int/",
+ "description": "We use essential and non-essential cookies. By using our website, you agree to our use of cookies as described in Cookie Policy.",
+ "source": "World Health Organization",
  "tags": [
-  "news",
-  "bangladesh"
+  "health",
+  "international"
  ],
- "lang": "bn",
+ "lang": "en",
  "crawled": "2026-10-25"
 },
 {
@@ -1556,18 +1544,6 @@
  "source": "University of Dhaka",
  "tags": [
   "education",
-  "bangladesh"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "Governance",
- "url": "https://www.thedailystar.net/news/governance",
- "description": "is strictly prohibited and constitutes copyright infringement liable to legal action.",
- "source": "The Daily Star",
- "tags": [
-  "news",
   "bangladesh"
  ],
  "lang": "en",
@@ -1586,38 +1562,12 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "Online latest Education, Jobs, Career news in English",
- "url": "https://en.prothomalo.com/youth",
- "description": "English News on Education, Higher Education, Jobs, Youth Lifestyle, Success Stories, Student Life, Discussion, Youth Dreams, Debates in Prothom Alo English",
- "source": "Prothom Alo",
+ "title": "ডাকের শহর, স্মৃতির শহর...",
+ "url": "https://bangla.thedailystar.net/life-living/diary/news-3971466",
+ "description": "একটা সময় সকালে আমাদের ঘুম ভাঙত অ্যালার্মের শব্দে নয়, হকারের ডাকে। ‘পুরোনো লোহা-ভাঙারি!’, ‘তরকারি নেবেন?’, ‘ছাই লাগবে ছাইই?’, ‘ডিম...’ কিংবা ‘আইসক্রিমমম...’—এসব ছিল আমাদের শহুরে জীবনের এক অদৃশ্য সুর। দিনজুড়ে এই হকারদের ডাক শুধু পণ্য বিক্রির আহ্বান ছিল না, ছিল একেকটি সময়ের চিহ্ন।",
+ "source": "The Daily Star",
  "tags": [
   "news",
-  "bangla",
-  "bangladesh"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "Vehicle Fitness Result/Certificate",
- "url": "https://bsp.brta.gov.bd/vfc/",
- "description": "",
- "source": "BRTA",
- "tags": [
-  "government",
-  "driving",
-  "bangladesh"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "স্বাস্থ্য বাতায়ন:১৬২৬৩",
- "url": "https://16263.dghs.gov.bd/ambulance/ambulance/",
- "description": "",
- "source": "DGHS",
- "tags": [
-  "health",
   "bangladesh"
  ],
  "lang": "bn",
@@ -1636,12 +1586,50 @@
  "crawled": "2026-10-25"
 },
 {
+ "title": "Vehicle Fitness Result/Certificate",
+ "url": "https://bsp.brta.gov.bd/vfc/",
+ "description": "",
+ "source": "BRTA",
+ "tags": [
+  "government",
+  "driving",
+  "bangladesh"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
  "title": "হ্যালো - bdnews24.com",
  "url": "https://hello.bdnews24.com",
  "description": "ভারপ্রাপ্ত প্রধান সম্পাদক: বিশ্বদীপ দাশ",
  "source": "bdnews24",
  "tags": [
   "news",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "Online latest Education, Jobs, Career news in English",
+ "url": "https://en.prothomalo.com/youth",
+ "description": "English News on Education, Higher Education, Jobs, Youth Lifestyle, Success Stories, Student Life, Discussion, Youth Dreams, Debates in Prothom Alo English",
+ "source": "Prothom Alo",
+ "tags": [
+  "news",
+  "bangla",
+  "bangladesh"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "পাসওয়ার্ড পরিবর্তন",
+ "url": "https://aisdashboard.its.du.ac.bd/bn/ce5a4e149e53882976aa7610c92b45fc",
+ "description": "আপনার অ্যাকাউন্ট সুরক্ষিত রাখতে, নিশ্চিত করুন যে আপনিই পাসওয়ার্ড আপডেট করার চেষ্টা করছেন।",
+ "source": "University of Dhaka",
+ "tags": [
+  "education",
   "bangladesh"
  ],
  "lang": "bn",
@@ -1698,9 +1686,33 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "সকল ই-সেবা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
- "url": "https://bangladesh.gov.bd/views/all-eservices-in-bangladesh",
- "description": "সাইটটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ১৭ অক্টোবর, ২০২৬ এ ১০:৫৩:৩২",
+ "title": "Governance",
+ "url": "https://www.thedailystar.net/news/governance",
+ "description": "is strictly prohibited and constitutes copyright infringement liable to legal action.",
+ "source": "The Daily Star",
+ "tags": [
+  "news",
+  "bangladesh"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "বাজেট ২০২৬-২৭ | bdnews24.com",
+ "url": "https://bangla.bdnews24.com/budget2026-27",
+ "description": "নির্দিষ্টকরণ বিলে সংযুক্ত তহবিল থেকে ১৫ লাখ ১৫ হাজার ৪৩৯ কোটি টাকা ব্যয়ের কর্তৃত্ব পেল সরকার",
+ "source": "bdnews24",
+ "tags": [
+  "news",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "নতুন উদ্যোক্তাদের জন্য তথ্যাবলী | পাতা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
+ "url": "https://bangladesh.gov.bd/pages/static-pages/69a55ba386514399668e4e7a",
+ "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: শুক্রবার, ৮ মে, ২০১৫ এ ০১:১৫ PM",
  "source": "National Portal",
  "tags": [
   "government",
@@ -1723,18 +1735,6 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "সমগ্র বাংলাদেশ | bdnews24.com",
- "url": "https://bangla.bdnews24.com/samagrabangladesh",
- "description": "দুপুরে শিশু দুটির মা পিংকী রানী শৌচাগারে থাকার সময় স্বর্ণা ও রূপা বাড়ির পুকুরে গোসল করতে যায়।",
- "source": "bdnews24",
- "tags": [
-  "news",
-  "bangladesh"
- ],
- "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
  "title": "Cricket | bdnews24.com",
  "url": "https://bdnews24.com/cricket",
  "description": "Cricket category all news - bdnews24.com",
@@ -1744,31 +1744,6 @@
   "bangladesh"
  ],
  "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "জাতীয় পোর্টাল পরিষেবা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
- "url": "https://bangladesh.gov.bd/pages/np-services",
- "description": "সাইটটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ১৭ অক্টোবর, ২০২৬ এ ১০:৫৩:৩২",
- "source": "National Portal",
- "tags": [
-  "government",
-  "bangladesh"
- ],
- "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
- "title": "জন্ম তথ্য সংশোধনের জন্য আবেদন",
- "url": "https://bdris.gov.bd/br/correction",
- "description": "",
- "source": "BDRIS",
- "tags": [
-  "government",
-  "birth-registration",
-  "bangladesh"
- ],
- "lang": "bn",
  "crawled": "2026-10-25"
 },
 {
@@ -1797,36 +1772,12 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "Is summer break actually overrated? - bdnews24.com",
- "url": "https://hello.bdnews24.com/english/in-my-eyes/e8de57190602",
- "description": "On schooldays, we dream of the endless stretch of holiday freedom. But is there a thing as too much freedom?",
- "source": "bdnews24",
- "tags": [
-  "news",
-  "bangladesh"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
  "title": "BBC Culture | Arts, Film & TV, Reviews, Books, Music, Style",
  "url": "https://www.bbc.com/culture",
  "description": "BBC Culture brings you the latest in Arts and Culture news and coverage from around the world, including film and TV reviews, books, art, music, style and more",
  "source": "BBC News",
  "tags": [
   "news",
-  "international"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "Countries",
- "url": "https://www.emro.who.int/countries.html",
- "description": "Landing page for WHO country office web sites of the WHO Regional Office for the Eastern Mediterranean: Afghanistan; Bahrain; Djibouti; Egypt; Iran, Islamic Rep",
- "source": "World Health Organization",
- "tags": [
-  "health",
   "international"
  ],
  "lang": "en",
@@ -1845,10 +1796,22 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "Crime & Justice",
- "url": "https://www.thedailystar.net/news/crime-justice",
- "description": "is strictly prohibited and constitutes copyright infringement liable to legal action.",
- "source": "The Daily Star",
+ "title": "WHO | Programme Budget Web Portal",
+ "url": "https://open.who.int/2024-25/budget-and-financing/funding-situation",
+ "description": "",
+ "source": "World Health Organization",
+ "tags": [
+  "health",
+  "international"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "Is summer break actually overrated? - bdnews24.com",
+ "url": "https://hello.bdnews24.com/english/in-my-eyes/e8de57190602",
+ "description": "On schooldays, we dream of the endless stretch of holiday freedom. But is there a thing as too much freedom?",
+ "source": "bdnews24",
  "tags": [
   "news",
   "bangladesh"
@@ -1883,36 +1846,10 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "খেলার খবর | খেলা - সর্বশেষ Sports News Bangla | প্রথম আলো",
- "url": "https://www.prothomalo.com/sports",
- "description": "ক্রিকেট, ফুটবল, টেনিস ও অন্যান্য খেলার খবর, টিভিতে আজকের খেলার সময় সূচি ও সর্বশেষ সংবাদ পেতে ভিজিট করুন প্রথম আলো স্পোর্টস নিউজ",
- "source": "Prothom Alo",
- "tags": [
-  "news",
-  "bangla",
-  "bangladesh"
- ],
- "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
- "title": "Lifestyle news - Beauty tips, fashion, recipe, health",
- "url": "https://en.prothomalo.com/lifestyle",
- "description": "News on Recipes, Beauty Tips, Fashion Trends, Style, Relationship, Advice, My Doctor, Traveling, Furnishing, Profession, Horoscope & more on Prothom Alo",
- "source": "Prothom Alo",
- "tags": [
-  "news",
-  "bangla",
-  "bangladesh"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "আন্তর্জাতিক",
- "url": "https://bangla.thedailystar.net/international",
- "description": "Get all latest internation news.",
- "source": "The Daily Star",
+ "title": "সমগ্র বাংলাদেশ | bdnews24.com",
+ "url": "https://bangla.bdnews24.com/samagrabangladesh",
+ "description": "আমঝোল সীমান্ত এলাকায় এ ঘটনা ঘটে বলে গোতামারী ইউনিয়ন পরিষদের চেয়ারম্যান মোনাব্বেরুল হক মোনা জানান।",
+ "source": "bdnews24",
  "tags": [
   "news",
   "bangladesh"
@@ -1929,6 +1866,19 @@
   "international"
  ],
  "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "খেলার খবর | খেলা - সর্বশেষ Sports News Bangla | প্রথম আলো",
+ "url": "https://www.prothomalo.com/sports",
+ "description": "ক্রিকেট, ফুটবল, টেনিস ও অন্যান্য খেলার খবর, টিভিতে আজকের খেলার সময় সূচি ও সর্বশেষ সংবাদ পেতে ভিজিট করুন প্রথম আলো স্পোর্টস নিউজ",
+ "source": "Prothom Alo",
+ "tags": [
+  "news",
+  "bangla",
+  "bangladesh"
+ ],
+ "lang": "bn",
  "crawled": "2026-10-25"
 },
 {
@@ -1957,6 +1907,44 @@
  "crawled": "2026-10-25"
 },
 {
+ "title": "Lifestyle news - Beauty tips, fashion, recipe, health",
+ "url": "https://en.prothomalo.com/lifestyle",
+ "description": "News on Recipes, Beauty Tips, Fashion Trends, Style, Relationship, Advice, My Doctor, Traveling, Furnishing, Profession, Horoscope & more on Prothom Alo",
+ "source": "Prothom Alo",
+ "tags": [
+  "news",
+  "bangla",
+  "bangladesh"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "জন্ম তথ্য সংশোধনের জন্য আবেদন",
+ "url": "https://bdris.gov.bd/br/correction",
+ "description": "",
+ "source": "BDRIS",
+ "tags": [
+  "government",
+  "birth-registration",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "Crime & Justice",
+ "url": "https://www.thedailystar.net/news/crime-justice",
+ "description": "is strictly prohibited and constitutes copyright infringement liable to legal action.",
+ "source": "The Daily Star",
+ "tags": [
+  "news",
+  "bangladesh"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
  "title": "BBC Arts | Theatre, Music, Visual Arts, Opera, Dance",
  "url": "https://www.bbc.com/arts",
  "description": "She seemed destined to become queen – then was convicted of witchcraft, a scandal that led to the Wars of the Roses. Was Eleanor Cobham a scheming satanist or a political pawn?",
@@ -1969,9 +1957,21 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "প্রয়োজনীয় তথ্য ও সেবা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
- "url": "https://bangladesh.gov.bd/views/service-sectors",
- "description": "সাইটটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ১৭ অক্টোবর, ২০২৬ এ ১০:৫৩:৩২",
+ "title": "ভার্বাল অটোপসি | ফাইল সমূহ | স্বাস্থ্য অধিদপ্তর",
+ "url": "https://dghs.gov.bd/pages/files/6922dbcf933eb65569e0cb16",
+ "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: সোমবার, ২১ মার্চ, ২০২২ এ ১০:২৭ PM",
+ "source": "DGHS",
+ "tags": [
+  "health",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "পাতা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
+ "url": "https://bangladesh.gov.bd/pages/static-pages/69a55ba386514399668e4e5a",
+ "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: রবিবার, ২৪ মে, ২০১৫ এ ১১:৪৯ AM",
  "source": "National Portal",
  "tags": [
   "government",
@@ -1981,16 +1981,27 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "আবেদনপত্র প্রিন্ট",
- "url": "https://bdris.gov.bd/application/print",
- "description": "",
- "source": "BDRIS",
+ "title": "Countries",
+ "url": "https://www.emro.who.int/countries.html",
+ "description": "Landing page for WHO country office web sites of the WHO Regional Office for the Eastern Mediterranean: Afghanistan; Bahrain; Djibouti; Egypt; Iran, Islamic Rep",
+ "source": "World Health Organization",
  "tags": [
-  "government",
-  "birth-registration",
+  "health",
+  "international"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "Administration",
+ "url": "https://www.du.ac.bd/leadership",
+ "description": "Bangladesh stands at a pivotal moment in its development, and the University of Dhaka has a responsibility to be at the heart of that journey. Research is how we fulfill that responsibility. Our faculty and researchers are doing work that matters. From designing renewable energy systems for off-grid...",
+ "source": "University of Dhaka",
+ "tags": [
+  "education",
   "bangladesh"
  ],
- "lang": "bn",
+ "lang": "en",
  "crawled": "2026-10-25"
 },
 {
@@ -2006,12 +2017,12 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "ভার্বাল অটোপসি | ফাইল সমূহ | স্বাস্থ্য অধিদপ্তর",
- "url": "https://dghs.gov.bd/pages/files/6922dbcf933eb65569e0cb16",
- "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: সোমবার, ২১ মার্চ, ২০২২ এ ১০:২৭ PM",
- "source": "DGHS",
+ "title": "বাংলাদেশ",
+ "url": "https://bangla.thedailystar.net/news/bangladesh",
+ "description": "is strictly prohibited and constitutes copyright infringement liable to legal action.",
+ "source": "The Daily Star",
  "tags": [
-  "health",
+  "news",
   "bangladesh"
  ],
  "lang": "bn",
@@ -2031,30 +2042,6 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "Resources",
- "url": "https://www.who.int/resources",
- "description": "From facts and general information to data and current global public health guidance, the World Health Organization has produced a variety of resources available for anyone.",
- "source": "World Health Organization",
- "tags": [
-  "health",
-  "international"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "নতুন উদ্যোক্তাদের জন্য তথ্যাবলী | পাতা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
- "url": "https://bangladesh.gov.bd/pages/static-pages/69a55ba386514399668e4e7a",
- "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: শুক্রবার, ৮ মে, ২০১৫ এ ০১:১৫ PM",
- "source": "National Portal",
- "tags": [
-  "government",
-  "bangladesh"
- ],
- "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
  "title": "Claim vs Fact | Prothom Alo",
  "url": "https://en.prothomalo.com/collection/claim-vs-fact",
  "description": "",
@@ -2068,9 +2055,9 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "Programmes",
- "url": "https://www.emro.who.int/programmes.html",
- "description": "List of WHO Regional Office for the Eastern Mediterranean (EMRO) programmes",
+ "title": "Resources",
+ "url": "https://www.who.int/resources",
+ "description": "From facts and general information to data and current global public health guidance, the World Health Organization has produced a variety of resources available for anyone.",
  "source": "World Health Organization",
  "tags": [
   "health",
@@ -2093,18 +2080,6 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "Accidents and Fires",
- "url": "https://www.thedailystar.net/news/accidents-and-fires",
- "description": "is strictly prohibited and constitutes copyright infringement liable to legal action.",
- "source": "The Daily Star",
- "tags": [
-  "news",
-  "bangladesh"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
  "title": "BBC Travel | Food & drink, History, Destinations, Road trips",
  "url": "https://www.bbc.com/travel",
  "description": "BBC Travel brings you the latest travel news and coverage from around the world, including culture, identity, food & drink, sustainability, adventure, experiences, destinations and more",
@@ -2117,27 +2092,15 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "Malaria",
- "url": "https://www.afro.who.int/health-topics/malaria",
- "description": "The WHO African Region continues to bear the brunt of the global burden of malaria. In 2015, 88% of global cases and 90% of global deaths occurred in the African Region.",
- "source": "World Health Organization",
+ "title": "বৈদেশিক বিনিয়োগ সুবিধা | পাতা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
+ "url": "https://bangladesh.gov.bd/pages/static-pages/69a55ba386514399668e4e5b",
+ "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: বুধবার, ৭ এপ্রিল, ২০২১ এ ১১:৪১ AM",
+ "source": "National Portal",
  "tags": [
-  "health",
-  "international"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "Administration",
- "url": "https://www.du.ac.bd/leadership",
- "description": "Bangladesh stands at a pivotal moment in its development, and the University of Dhaka has a responsibility to be at the heart of that journey. Research is how we fulfill that responsibility. Our faculty and researchers are doing work that matters. From designing renewable energy systems for off-grid...",
- "source": "University of Dhaka",
- "tags": [
-  "education",
+  "government",
   "bangladesh"
  ],
- "lang": "en",
+ "lang": "bn",
  "crawled": "2026-10-25"
 },
 {
@@ -2147,6 +2110,19 @@
  "source": "DGHS",
  "tags": [
   "health",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "আবেদনপত্র প্রিন্ট",
+ "url": "https://bdris.gov.bd/application/print",
+ "description": "",
+ "source": "BDRIS",
+ "tags": [
+  "government",
+  "birth-registration",
   "bangladesh"
  ],
  "lang": "bn",
@@ -2166,16 +2142,39 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "মৃত্যু নিবন্ধনের জন্য আবেদন",
- "url": "https://bdris.gov.bd/dr/application",
- "description": "",
- "source": "BDRIS",
+ "title": "Professor Dr. A. B. M. Obaidul Islam:: University of Dhaka",
+ "url": "https://www.du.ac.bd/leadership/vc",
+ "description": "Prof. Dr. A.B.M. Obaidul Islam is a distinguished academic, researcher, and higher education leader in Bangladesh. With a career spanning several decades, he has made significant contributions to physics research, university teaching, and academic administration. His expertise lies in materials scie...",
+ "source": "University of Dhaka",
  "tags": [
-  "government",
-  "birth-registration",
+  "education",
   "bangladesh"
  ],
- "lang": "bn",
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "Malaria",
+ "url": "https://www.afro.who.int/health-topics/malaria",
+ "description": "The WHO African Region continues to bear the brunt of the global burden of malaria. In 2015, 88% of global cases and 90% of global deaths occurred in the African Region.",
+ "source": "World Health Organization",
+ "tags": [
+  "health",
+  "international"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "Accidents and Fires",
+ "url": "https://www.thedailystar.net/news/accidents-and-fires",
+ "description": "is strictly prohibited and constitutes copyright infringement liable to legal action.",
+ "source": "The Daily Star",
+ "tags": [
+  "news",
+  "bangladesh"
+ ],
+ "lang": "en",
  "crawled": "2026-10-25"
 },
 {
@@ -2206,8 +2205,8 @@
 },
 {
  "title": "পাতা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
- "url": "https://bangladesh.gov.bd/pages/static-pages/69a55ba386514399668e4e5a",
- "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: রবিবার, ২৪ মে, ২০১৫ এ ১১:৪৯ AM",
+ "url": "https://bangladesh.gov.bd/pages/static-pages/69a55ba386514399668e4e60",
+ "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ৯ মে, ২০১৫ এ ১২:০৬ PM",
  "source": "National Portal",
  "tags": [
   "government",
@@ -2229,18 +2228,6 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "Professor Dr. A. B. M. Obaidul Islam:: University of Dhaka",
- "url": "https://www.du.ac.bd/leadership/vc",
- "description": "Prof. Dr. A.B.M. Obaidul Islam is a distinguished academic, researcher, and higher education leader in Bangladesh. With a career spanning several decades, he has made significant contributions to physics research, university teaching, and academic administration. His expertise lies in materials scie...",
- "source": "University of Dhaka",
- "tags": [
-  "education",
-  "bangladesh"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
  "title": "Technology",
  "url": "https://www.thedailystar.net/news/technology",
  "description": "is strictly prohibited and constitutes copyright infringement liable to legal action.",
@@ -2253,14 +2240,13 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "BSP.Bank List",
- "url": "https://bsp.brta.gov.bd/bankList",
- "description": "",
- "source": "BRTA",
+ "title": "Programmes",
+ "url": "https://www.emro.who.int/programmes.html",
+ "description": "List of WHO Regional Office for the Eastern Mediterranean (EMRO) programmes",
+ "source": "World Health Organization",
  "tags": [
-  "government",
-  "driving",
-  "bangladesh"
+  "health",
+  "international"
  ],
  "lang": "en",
  "crawled": "2026-10-25"
@@ -2279,18 +2265,6 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "মতামত",
- "url": "https://bangla.thedailystar.net/opinion/views",
- "description": "is strictly prohibited and constitutes copyright infringement liable to legal action.",
- "source": "The Daily Star",
- "tags": [
-  "news",
-  "bangladesh"
- ],
- "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
  "title": "HSC results to be published on 29 October, details on 26 October",
  "url": "https://en.prothomalo.com/youth/education/s133co1qkz",
  "description": "The results of the HSC and equivalent examinations for 2026 will be published on 29 October. The Inter-Education Board Coordination Committee will provide detailed information about the publication of results and the process to check them on Monday, 26 October 2026. According to a notification issue...",
@@ -2301,18 +2275,6 @@
   "bangladesh"
  ],
  "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "বৈদেশিক বিনিয়োগ সুবিধা | পাতা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
- "url": "https://bangladesh.gov.bd/pages/static-pages/69a55ba386514399668e4e5b",
- "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: বুধবার, ৭ এপ্রিল, ২০২১ এ ১১:৪১ AM",
- "source": "National Portal",
- "tags": [
-  "government",
-  "bangladesh"
- ],
- "lang": "bn",
  "crawled": "2026-10-25"
 },
 {
@@ -2340,15 +2302,53 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "কীভাবে নতুন ব্যবসা শুরু করবেন | পাতা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
- "url": "https://bangladesh.gov.bd/pages/static-pages/69a55ba386514399668e4e60",
- "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ৯ মে, ২০১৫ এ ১২:০৬ PM",
+ "title": "BSP.Bank List",
+ "url": "https://bsp.brta.gov.bd/bankList",
+ "description": "",
+ "source": "BRTA",
+ "tags": [
+  "government",
+  "driving",
+  "bangladesh"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "কীভাবে নতুন ব্যাংক হিসাব খুলবেন | পাতা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
+ "url": "https://bangladesh.gov.bd/pages/static-pages/69a55ba386514399668e4e92",
+ "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ৯ মে, ২০১৫ এ ১২:২০ PM",
  "source": "National Portal",
  "tags": [
   "government",
   "bangladesh"
  ],
  "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "মৃত্যু নিবন্ধনের জন্য আবেদন",
+ "url": "https://bdris.gov.bd/dr/application",
+ "description": "",
+ "source": "BDRIS",
+ "tags": [
+  "government",
+  "birth-registration",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "Dr. Abdus Salam:: University of Dhaka",
+ "url": "https://www.du.ac.bd/leadership/provca",
+ "description": "Professor Abdus Salam has started his journey as Pro-Vice Chancellor (Academic) on April 15, 2026. He completed his Bachelor of Science (BSc) in Chemistry, and Master of Science (MSc) in Physical-Inorganic Chemistry from University of Dhaka. He pursued his PhD in Atmospheric Analytical Chemistry fro...",
+ "source": "University of Dhaka",
+ "tags": [
+  "education",
+  "bangladesh"
+ ],
+ "lang": "en",
  "crawled": "2026-10-25"
 },
 {
@@ -2365,28 +2365,15 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "BSP. DCTB Result",
- "url": "https://bsp.brta.gov.bd/dctbResult",
- "description": "",
- "source": "BRTA",
- "tags": [
-  "government",
-  "driving",
-  "bangladesh"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "Education",
- "url": "https://www.thedailystar.net/news/education",
- "description": "is strictly prohibited and constitutes copyright infringement liable to legal action.",
+ "title": "আন্তর্জাতিক",
+ "url": "https://bangla.thedailystar.net/international",
+ "description": "Get all latest internation news.",
  "source": "The Daily Star",
  "tags": [
   "news",
   "bangladesh"
  ],
- "lang": "en",
+ "lang": "bn",
  "crawled": "2026-10-25"
 },
 {
@@ -2403,12 +2390,13 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "Dr. Abdus Salam:: University of Dhaka",
- "url": "https://www.du.ac.bd/leadership/provca",
- "description": "Professor Abdus Salam has started his journey as Pro-Vice Chancellor (Academic) on April 15, 2026. He completed his Bachelor of Science (BSc) in Chemistry, and Master of Science (MSc) in Physical-Inorganic Chemistry from University of Dhaka. He pursued his PhD in Atmospheric Analytical Chemistry fro...",
- "source": "University of Dhaka",
+ "title": "BSP. DCTB Result",
+ "url": "https://bsp.brta.gov.bd/dctbResult",
+ "description": "",
+ "source": "BRTA",
  "tags": [
-  "education",
+  "government",
+  "driving",
   "bangladesh"
  ],
  "lang": "en",
@@ -2427,41 +2415,27 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "Welcome to BRTA Service Portal",
- "url": "https://bsp.brta.gov.bd/?lan=bn",
- "description": "বিআরটিএ সার্ভিস পোর্টাল (বিএসপি) বাংলাদেশ রোড ট্রান্সপোর্ট অথরিটি (বিআরটিএ) এর একটি অনলাইন সেবা প্রদানের মাধ্যম যেখানে ড্রাইভার, মোটরযান মালিক, মোটরযান বিক্রেতাদের নিবন্ধিত করা হয় এবং শিক্ষানবিশ ড্রাইভিং লাইসেন্স, স্মার্ট কার্ড ড্রাইভিং লাইসেন্স, ড্রাইভিং লাইসেন্স নবায়ন, ডুপ্লিকেট ড্রাইভিং লাইসেন্স...",
- "source": "BRTA",
- "tags": [
-  "government",
-  "driving",
-  "bangladesh"
- ],
- "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
- "title": "ব্যবহারকারী সংযোজন",
- "url": "https://bdris.gov.bd/user/create",
- "description": "",
- "source": "BDRIS",
- "tags": [
-  "government",
-  "birth-registration",
-  "bangladesh"
- ],
- "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
- "title": "কীভাবে নতুন ব্যাংক হিসাব খুলবেন | পাতা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
- "url": "https://bangladesh.gov.bd/pages/static-pages/69a55ba386514399668e4e92",
- "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ৯ মে, ২০১৫ এ ১২:২০ PM",
+ "title": "শেয়ার মার্কেট | পাতা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
+ "url": "https://bangladesh.gov.bd/pages/static-pages/69a55ba386514399668e4e7c",
+ "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ৯ মে, ২০১৫ এ ১২:২৫ PM",
  "source": "National Portal",
  "tags": [
   "government",
   "bangladesh"
  ],
  "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "Education",
+ "url": "https://www.thedailystar.net/news/education",
+ "description": "is strictly prohibited and constitutes copyright infringement liable to legal action.",
+ "source": "The Daily Star",
+ "tags": [
+  "news",
+  "bangladesh"
+ ],
+ "lang": "en",
  "crawled": "2026-10-25"
 },
 {
@@ -2477,15 +2451,74 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "খেলা",
- "url": "https://bangla.thedailystar.net/sports",
- "description": "Get খেলার খবর/সংবাদ - খেলাধুলা, ক্রীড়া ও ক্রিকেট - Bangla Sports News। ফুটবল, ক্রিকেট, টেনিস, বিশ্বকাপ, শিরোপা, টি-টোয়েন্টি, বল, সেমি-ফাইনাল, বোলার বিষয়ক ফিচার",
- "source": "The Daily Star",
+ "title": "BBC Live & Breaking World and U.S. News",
+ "url": "https://www.bbc.com/live",
+ "description": "Live journalism from around the world",
+ "source": "BBC News",
  "tags": [
   "news",
+  "international"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "বাংলাদেশের ব্যবসায়িক সংগঠনসমূহ | পাতা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
+ "url": "https://bangladesh.gov.bd/pages/static-pages/69a55ba386514399668e4e5e",
+ "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: মঙ্গলবার, ২৬ মে, ২০১৫ এ ১২:০৪ PM",
+ "source": "National Portal",
+ "tags": [
+  "government",
   "bangladesh"
  ],
  "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "Welcome to BRTA Service Portal",
+ "url": "https://bsp.brta.gov.bd/?lan=bn",
+ "description": "বিআরটিএ সার্ভিস পোর্টাল (বিএসপি) বাংলাদেশ রোড ট্রান্সপোর্ট অথরিটি (বিআরটিএ) এর একটি অনলাইন সেবা প্রদানের মাধ্যম যেখানে ড্রাইভার, মোটরযান মালিক, মোটরযান বিক্রেতাদের নিবন্ধিত করা হয় এবং শিক্ষানবিশ ড্রাইভিং লাইসেন্স, স্মার্ট কার্ড ড্রাইভিং লাইসেন্স, ড্রাইভিং লাইসেন্স নবায়ন, ডুপ্লিকেট ড্রাইভিং লাইসেন্স...",
+ "source": "BRTA",
+ "tags": [
+  "government",
+  "driving",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "A to Z Site Index | United Nations",
+ "url": "https://www.un.org/en/site-index",
+ "description": "",
+ "source": "United Nations",
+ "tags": [
+  "international"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "University Ordinance",
+ "url": "https://www.du.ac.bd/university/UniversityOrdinance",
+ "description": "",
+ "source": "University of Dhaka",
+ "tags": [
+  "education",
+  "bangladesh"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "Home",
+ "url": "https://webtv.un.org/en",
+ "description": "UN Web TV is available 24 hours a day with selected LIVE programming of United Nations meetings and events as well as with pre-recorded video features and documentaries on various global issues.",
+ "source": "United Nations",
+ "tags": [
+  "international"
+ ],
+ "lang": "en",
  "crawled": "2026-10-25"
 },
 {
@@ -2501,20 +2534,9 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "A to Z Site Index | United Nations",
- "url": "https://www.un.org/en/site-index",
- "description": "",
- "source": "United Nations",
- "tags": [
-  "international"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "BBC Live & Breaking World and U.S. News",
- "url": "https://www.bbc.com/live",
- "description": "Live journalism from around the world",
+ "title": "BBC Documentaries - Watch in the US",
+ "url": "https://www.bbc.com/video/docs",
+ "description": "Watch critically acclaimed and award-winning documentaries from the BBC, including History, Nature, True Crime & more.",
  "source": "BBC News",
  "tags": [
   "news",
@@ -2537,20 +2559,9 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "Home",
- "url": "https://webtv.un.org/en",
- "description": "UN Web TV is available 24 hours a day with selected LIVE programming of United Nations meetings and events as well as with pre-recorded video features and documentaries on various global issues.",
- "source": "United Nations",
- "tags": [
-  "international"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "শেয়ার মার্কেট | পাতা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
- "url": "https://bangladesh.gov.bd/pages/static-pages/69a55ba386514399668e4e7c",
- "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ৯ মে, ২০১৫ এ ১২:২৫ PM",
+ "title": "মন্ত্রণালয় হতে ইউনিয়ন পর্যায় পর্যন্ত সরকারি অফিসের তথ্য বাতায়নের সংখ্যা | পাতা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
+ "url": "https://bangladesh.gov.bd/pages/static-pages/69a55ba386514399668e4e6b",
+ "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: রবিবার, ১৪ জুন, ২০২৬ এ ০৯:৫৫ AM",
  "source": "National Portal",
  "tags": [
   "government",
@@ -2560,15 +2571,28 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "University Ordinance",
- "url": "https://www.du.ac.bd/university/UniversityOrdinance",
+ "title": "ব্যবহারকারী সংযোজন",
+ "url": "https://bdris.gov.bd/user/create",
  "description": "",
- "source": "University of Dhaka",
+ "source": "BDRIS",
  "tags": [
-  "education",
+  "government",
+  "birth-registration",
   "bangladesh"
  ],
- "lang": "en",
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "মতামত",
+ "url": "https://bangla.thedailystar.net/opinion/views",
+ "description": "is strictly prohibited and constitutes copyright infringement liable to legal action.",
+ "source": "The Daily Star",
+ "tags": [
+  "news",
+  "bangladesh"
+ ],
+ "lang": "bn",
  "crawled": "2026-10-25"
 },
 {
@@ -2583,9 +2607,70 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "BBC Documentaries - Watch in the US",
- "url": "https://www.bbc.com/video/docs",
- "description": "Watch critically acclaimed and award-winning documentaries from the BBC, including History, Nature, True Crime & more.",
+ "title": "US & Canada | Latest News & Updates | BBC News",
+ "url": "https://www.bbc.com/news/us-canada",
+ "description": "Get all the latest news, live updates and content about the US & Canada from across the BBC.",
+ "source": "BBC News",
+ "tags": [
+  "news",
+  "international"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "জেলা বাতায়ন | পাতা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
+ "url": "https://bangladesh.gov.bd/pages/static-pages/69a55ba386514399668e4e9f",
+ "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: রবিবার, ১৫ মার্চ, ২০২৬ এ ১১:০০ AM",
+ "source": "National Portal",
+ "tags": [
+  "government",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "Company Enlistment",
+ "url": "https://bsp.brta.gov.bd/companyEnlistment?lan=bn",
+ "description": "",
+ "source": "BRTA",
+ "tags": [
+  "government",
+  "driving",
+  "bangladesh"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "Observances | United Nations",
+ "url": "https://www.un.org/en/observances",
+ "description": "The United Nations observes designated days, weeks, years, and decades, each with a theme, or topic. By creating special observances, the United Nations promotes international awareness and action on these issues. The majority of observances have been established by resolutions of the United Nations...",
+ "source": "United Nations",
+ "tags": [
+  "international"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "BSP. Feedback Form",
+ "url": "https://bsp.brta.gov.bd/feedbackForm?lan=bn",
+ "description": "",
+ "source": "BRTA",
+ "tags": [
+  "government",
+  "driving",
+  "bangladesh"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "UK | Latest News & Updates | BBC News",
+ "url": "https://www.bbc.com/news/uk",
+ "description": "Get all the latest news, live updates and content about the UK from across the BBC.",
  "source": "BBC News",
  "tags": [
   "news",
@@ -2607,45 +2692,9 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "Observances | United Nations",
- "url": "https://www.un.org/en/observances",
- "description": "The United Nations observes designated days, weeks, years, and decades, each with a theme, or topic. By creating special observances, the United Nations promotes international awareness and action on these issues. The majority of observances have been established by resolutions of the United Nations...",
- "source": "United Nations",
- "tags": [
-  "international"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "Company Enlistment",
- "url": "https://bsp.brta.gov.bd/companyEnlistment?lan=bn",
- "description": "",
- "source": "BRTA",
- "tags": [
-  "government",
-  "driving",
-  "bangladesh"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "US & Canada | Latest News & Updates | BBC News",
- "url": "https://www.bbc.com/news/us-canada",
- "description": "Get all the latest news, live updates and content about the US & Canada from across the BBC.",
- "source": "BBC News",
- "tags": [
-  "news",
-  "international"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "বাংলাদেশের ব্যবসায়িক সংগঠনসমূহ | পাতা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
- "url": "https://bangladesh.gov.bd/pages/static-pages/69a55ba386514399668e4e5e",
- "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: মঙ্গলবার, ২৬ মে, ২০১৫ এ ১২:০৪ PM",
+ "title": "ডিজিটাল গার্ড ফাইল | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
+ "url": "https://bangladesh.gov.bd/views/gurd-files-category",
+ "description": "সাইটটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ১৭ অক্টোবর, ২০২৬ এ ১০:৫৩:৩২",
  "source": "National Portal",
  "tags": [
   "government",
@@ -2655,8 +2704,8 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "BSP. Feedback Form",
- "url": "https://bsp.brta.gov.bd/feedbackForm?lan=bn",
+ "title": "BSP. User Mannul",
+ "url": "https://bsp.brta.gov.bd/manual/usermanual?lan=bn",
  "description": "",
  "source": "BRTA",
  "tags": [
@@ -2665,54 +2714,6 @@
   "bangladesh"
  ],
  "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "World",
- "url": "https://www.thedailystar.net/news/world",
- "description": "is strictly prohibited and constitutes copyright infringement liable to legal action.",
- "source": "The Daily Star",
- "tags": [
-  "news",
-  "bangladesh"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "UK | Latest News & Updates | BBC News",
- "url": "https://www.bbc.com/news/uk",
- "description": "Get all the latest news, live updates and content about the UK from across the BBC.",
- "source": "BBC News",
- "tags": [
-  "news",
-  "international"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "বাণিজ্য",
- "url": "https://bangla.thedailystar.net/business",
- "description": "is strictly prohibited and constitutes copyright infringement liable to legal action.",
- "source": "The Daily Star",
- "tags": [
-  "news",
-  "bangladesh"
- ],
- "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
- "title": "পাতা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
- "url": "https://bangladesh.gov.bd/pages/static-pages/69a55ba386514399668e4e6b",
- "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: রবিবার, ১৪ জুন, ২০২৬ এ ০৯:৫৫ AM",
- "source": "National Portal",
- "tags": [
-  "government",
-  "bangladesh"
- ],
- "lang": "bn",
  "crawled": "2026-10-25"
 },
 {
@@ -2728,20 +2729,32 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "Opinion",
- "url": "https://www.thedailystar.net/opinion",
- "description": "Read the latest opinions, commentary, op-ed articles, news analysis and discussions.",
+ "title": "প্রয়োজনীয় অ্যাপস | পাতা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
+ "url": "https://bangladesh.gov.bd/pages/static-pages/69a55ba386514399668e4e6e",
+ "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: রবিবার, ২০ জুলাই, ২০২৫ এ ০৯:১৬ PM",
+ "source": "National Portal",
+ "tags": [
+  "government",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "খেলা",
+ "url": "https://bangla.thedailystar.net/sports",
+ "description": "Get খেলার খবর/সংবাদ - খেলাধুলা, ক্রীড়া ও ক্রিকেট - Bangla Sports News। ফুটবল, ক্রিকেট, টেনিস, বিশ্বকাপ, শিরোপা, টি-টোয়েন্টি, বল, সেমি-ফাইনাল, বোলার বিষয়ক ফিচার",
  "source": "The Daily Star",
  "tags": [
   "news",
   "bangladesh"
  ],
- "lang": "en",
+ "lang": "bn",
  "crawled": "2026-10-25"
 },
 {
- "title": "BSP. User Mannul",
- "url": "https://bsp.brta.gov.bd/manual/usermanual?lan=bn",
+ "title": "Trustee Board Certificate",
+ "url": "https://bsp.brta.gov.bd/tbc/?lan=bn",
  "description": "",
  "source": "BRTA",
  "tags": [
@@ -2764,6 +2777,18 @@
  "crawled": "2026-10-25"
 },
 {
+ "title": "World",
+ "url": "https://www.thedailystar.net/news/world",
+ "description": "is strictly prohibited and constitutes copyright infringement liable to legal action.",
+ "source": "The Daily Star",
+ "tags": [
+  "news",
+  "bangladesh"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
  "title": "Asia | Latest News & Updates | BBC News",
  "url": "https://www.bbc.com/news/world/asia",
  "description": "Get all the latest news, live updates and content about Asia from across the BBC.",
@@ -2776,8 +2801,8 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "Trustee Board Certificate",
- "url": "https://bsp.brta.gov.bd/tbc/?lan=bn",
+ "title": "Vehicle Fitness Result/Certificate",
+ "url": "https://bsp.brta.gov.bd/vfc/?lan=bn",
  "description": "",
  "source": "BRTA",
  "tags": [
@@ -2789,9 +2814,9 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "জেলা বাতায়ন | পাতা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
- "url": "https://bangladesh.gov.bd/pages/static-pages/69a55ba386514399668e4e9f",
- "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: রবিবার, ১৫ মার্চ, ২০২৬ এ ১১:০০ AM",
+ "title": "৩৩৩ কল সেন্টার | পাতা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
+ "url": "https://bangladesh.gov.bd/pages/static-pages/69a55ba386514399668e4e73",
+ "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: বুধবার, ১৩ ডিসেম্বর, ২০১৭ এ ০৬:১৫ PM",
  "source": "National Portal",
  "tags": [
   "government",
@@ -2812,12 +2837,60 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "ডিজিটাল গার্ড ফাইল | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
- "url": "https://bangladesh.gov.bd/views/gurd-files-category",
- "description": "সাইটটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ১৭ অক্টোবর, ২০২৬ এ ১০:৫৩:৩২",
- "source": "National Portal",
+ "title": "Australia | Latest News & Updates | BBC News",
+ "url": "https://www.bbc.com/news/world/australia",
+ "description": "Get all the latest news, live updates and content about Australia from across the BBC.",
+ "source": "BBC News",
+ "tags": [
+  "news",
+  "international"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "Opinion",
+ "url": "https://www.thedailystar.net/opinion",
+ "description": "Read the latest opinions, commentary, op-ed articles, news analysis and discussions.",
+ "source": "The Daily Star",
+ "tags": [
+  "news",
+  "bangladesh"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "Qr Scanner",
+ "url": "https://bsp.brta.gov.bd/qr/qrScanner?lan=bn",
+ "description": "BSP থেকে জেনারেটকৃত QR Code সম্বলিত সার্টিফিকেট (ই-ট্যাক্স টোকেন,ই-ড্রাইভিং লাইসেন্স, ই-ফিটনেস) যাচাইয়ের জন্য নিচের \"Open QR Code Scanner\" বাটনে ক্লিক করুন অথবা পিডিএফ/ছবি আপলোড করুন।",
+ "source": "BRTA",
  "tags": [
   "government",
+  "driving",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "The United Nations Pulse | United Nations",
+ "url": "https://www.un.org/en/live/daily-pulse",
+ "description": "The UN Pulse gives you a front-row look at the UN in action. Follow us as we spotlight the many issues the United Nations is working on around the world.",
+ "source": "United Nations",
+ "tags": [
+  "international"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "বাণিজ্য",
+ "url": "https://bangla.thedailystar.net/business",
+ "description": "is strictly prohibited and constitutes copyright infringement liable to legal action.",
+ "source": "The Daily Star",
+ "tags": [
+  "news",
   "bangladesh"
  ],
  "lang": "bn",
@@ -2836,8 +2909,20 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "Vehicle Fitness Result/Certificate",
- "url": "https://bsp.brta.gov.bd/vfc/?lan=bn",
+ "title": "Europe | Latest News & Updates | BBC News",
+ "url": "https://www.bbc.com/news/world/europe",
+ "description": "Get all the latest news, live updates and content about Europe from across the BBC.",
+ "source": "BBC News",
+ "tags": [
+  "news",
+  "international"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "Driving License Verification",
+ "url": "https://bsp.brta.gov.bd/dlVerification?lan=bn",
  "description": "",
  "source": "BRTA",
  "tags": [
@@ -2849,32 +2934,9 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "The United Nations Pulse | United Nations",
- "url": "https://www.un.org/en/live/daily-pulse",
- "description": "The UN Pulse gives you a front-row look at the UN in action. Follow us as we spotlight the many issues the United Nations is working on around the world.",
- "source": "United Nations",
- "tags": [
-  "international"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "Australia | Latest News & Updates | BBC News",
- "url": "https://www.bbc.com/news/world/australia",
- "description": "Get all the latest news, live updates and content about Australia from across the BBC.",
- "source": "BBC News",
- "tags": [
-  "news",
-  "international"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "প্রয়োজনীয় অ্যাপস | পাতা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
- "url": "https://bangladesh.gov.bd/pages/static-pages/69a55ba386514399668e4e6e",
- "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: রবিবার, ২০ জুলাই, ২০২৫ এ ০৯:১৬ PM",
+ "title": "মন্ত্রণালয় ও বিভাগসমূহ | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
+ "url": "https://bangladesh.gov.bd/views/ministry-and-directorate-list",
+ "description": "সাইটটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ১৭ অক্টোবর, ২০২৬ এ ১০:৫৩:৩২",
  "source": "National Portal",
  "tags": [
   "government",
@@ -2895,73 +2957,12 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "Qr Scanner",
- "url": "https://bsp.brta.gov.bd/qr/qrScanner?lan=bn",
- "description": "BSP থেকে জেনারেটকৃত QR Code সম্বলিত সার্টিফিকেট (ই-ট্যাক্স টোকেন,ই-ড্রাইভিং লাইসেন্স, ই-ফিটনেস) যাচাইয়ের জন্য নিচের \"Open QR Code Scanner\" বাটনে ক্লিক করুন অথবা পিডিএফ/ছবি আপলোড করুন।",
- "source": "BRTA",
- "tags": [
-  "government",
-  "driving",
-  "bangladesh"
- ],
- "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
- "title": "Europe | Latest News & Updates | BBC News",
- "url": "https://www.bbc.com/news/world/europe",
- "description": "Get all the latest news, live updates and content about Europe from across the BBC.",
- "source": "BBC News",
- "tags": [
-  "news",
-  "international"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "৩৩৩ কল সেন্টার | পাতা | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
- "url": "https://bangladesh.gov.bd/pages/static-pages/69a55ba386514399668e4e73",
- "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: বুধবার, ১৩ ডিসেম্বর, ২০১৭ এ ০৬:১৫ PM",
- "source": "National Portal",
- "tags": [
-  "government",
-  "bangladesh"
- ],
- "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
- "title": "Driving License Verification",
- "url": "https://bsp.brta.gov.bd/dlVerification?lan=bn",
- "description": "",
- "source": "BRTA",
- "tags": [
-  "government",
-  "driving",
-  "bangladesh"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
  "title": "Latin America | Latest News & Updates | BBC News",
  "url": "https://www.bbc.com/news/world/latin_america",
  "description": "Get all the latest news, live updates and content about Latin America from across the BBC.",
  "source": "BBC News",
  "tags": [
   "news",
-  "international"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "UN System | United Nations",
- "url": "https://www.un.org/en/about-us/un-system",
- "description": "The United Nations is part of the UN system, which, in addition to the UN itself, comprises many funds, programmes and specialized agencies, each of which have their own area of work, leadership and budget. The programmes and funds are financed through voluntary rather than assessed contributions. T...",
- "source": "United Nations",
- "tags": [
   "international"
  ],
  "lang": "en",
@@ -2993,8 +2994,8 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "মন্ত্রণালয় ও বিভাগসমূহ | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
- "url": "https://bangladesh.gov.bd/views/ministry-and-directorate-list",
+ "title": "অন্যান্য অফিস | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
+ "url": "https://bangladesh.gov.bd/views/other-offices-list",
  "description": "সাইটটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ১৭ অক্টোবর, ২০২৬ এ ১০:৫৩:৩২",
  "source": "National Portal",
  "tags": [
@@ -3002,6 +3003,17 @@
   "bangladesh"
  ],
  "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "UN System | United Nations",
+ "url": "https://www.un.org/en/about-us/un-system",
+ "description": "The United Nations is part of the UN system, which, in addition to the UN itself, comprises many funds, programmes and specialized agencies, each of which have their own area of work, leadership and budget. The programmes and funds are financed through voluntary rather than assessed contributions. T...",
+ "source": "United Nations",
+ "tags": [
+  "international"
+ ],
+ "lang": "en",
  "crawled": "2026-10-25"
 },
 {
@@ -3018,23 +3030,24 @@
  "crawled": "2026-10-25"
 },
 {
+ "title": "বিভাগসমূহ | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
+ "url": "https://bangladesh.gov.bd/views/division-list",
+ "description": "সাইটটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ১৭ অক্টোবর, ২০২৬ এ ১০:৫৩:৩২",
+ "source": "National Portal",
+ "tags": [
+  "government",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
  "title": "In Pictures | Latest News & Updates | BBC News",
  "url": "https://www.bbc.com/news/in_pictures",
  "description": "Get all the latest news, live updates and content about In Pictures from across the BBC.",
  "source": "BBC News",
  "tags": [
   "news",
-  "international"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "The Essential UN | United Nations",
- "url": "https://www.un.org/en/essential-un/",
- "description": "What is the United Nations? This site is a primer for those who want to understand the fundamentals of this intergovernmental organization born out of the ashes of the Second World War. Explained are: the main areas of the UN’s activities; how it makes a difference to the world’s people; and how eve...",
- "source": "United Nations",
- "tags": [
   "international"
  ],
  "lang": "en",
@@ -3054,17 +3067,6 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "Global Issues | United Nations",
- "url": "https://www.un.org/en/global-issues",
- "description": "As the world’s only truly universal global organization, the United Nations has become the foremost forum to address issues that transcend national boundaries and cannot be resolved by any one country acting alone.",
- "source": "United Nations",
- "tags": [
-  "international"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
  "title": "BBC InDepth - In depth and expert analysis from BBC News",
  "url": "https://www.bbc.com/news/bbcindepth",
  "description": "Thought-provoking analysis from our top journalists that informs, feeds your curiosity, and helps you make sense of a complex world.",
@@ -3077,31 +3079,55 @@
  "crawled": "2026-10-25"
 },
 {
+ "title": "জেলাসমূহ | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
+ "url": "https://bangladesh.gov.bd/views/district-list",
+ "description": "সাইটটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ১৭ অক্টোবর, ২০২৬ এ ১০:৫৩:৩২",
+ "source": "National Portal",
+ "tags": [
+  "government",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "The Essential UN | United Nations",
+ "url": "https://www.un.org/en/essential-un/",
+ "description": "What is the United Nations? This site is a primer for those who want to understand the fundamentals of this intergovernmental organization born out of the ashes of the Second World War. Explained are: the main areas of the UN’s activities; how it makes a difference to the world’s people; and how eve...",
+ "source": "United Nations",
+ "tags": [
+  "international"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "উপজেলাসমূহ | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
+ "url": "https://bangladesh.gov.bd/views/upazila-list",
+ "description": "সাইটটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ১৭ অক্টোবর, ২০২৬ এ ১০:৫৩:৩২",
+ "source": "National Portal",
+ "tags": [
+  "government",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "Global Issues | United Nations",
+ "url": "https://www.un.org/en/global-issues",
+ "description": "As the world’s only truly universal global organization, the United Nations has become the foremost forum to address issues that transcend national boundaries and cannot be resolved by any one country acting alone.",
+ "source": "United Nations",
+ "tags": [
+  "international"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
  "title": "United Nations Anniversaries | United Nations",
  "url": "https://www.un.org/en/observances/un-anniversaries",
  "description": "The United Nations observes milestone anniversaries of key events in its history.",
- "source": "United Nations",
- "tags": [
-  "international"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "UN 80th anniversary | United Nations",
- "url": "https://www.un.org/en/UN80",
- "description": "In 2025, the United Nations marks its 80th anniversary, celebrating eight decades of promoting peace, human rights, social progress, and sustainable development worldwide. The theme of the celebration \"Building Our Future Together\" underscores the Organization’s evolution, its continued relevance, a...",
- "source": "United Nations",
- "tags": [
-  "international"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
- "title": "Home - United Nations Sustainable Development",
- "url": "https://www.un.org/sustainabledevelopment/",
- "description": "United Nations Sustainable Development Goals - Time for Global Action for People and Planet",
  "source": "United Nations",
  "tags": [
   "international"
@@ -3122,17 +3148,6 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "The San Francisco Conference | United Nations",
- "url": "https://www.un.org/en/about-us/history-of-the-un/san-francisco-conference",
- "description": "Delegates of fifty nations met in San Francisco, California, USA, between 25 April and 26 June 1945 at the United Nations Conference on International Organization. Working on the Dumbarton Oaks proposals, the Yalta Agreement, and amendments proposed by various governments, the Conference agreed upon...",
- "source": "United Nations",
- "tags": [
-  "international"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
  "title": "হোম | প্ল্যানিং, মনিটরিং এন্ড রিসার্চ, স্বাস্থ্য অধিদপ্তর",
  "url": "https://pmr.dghs.gov.bd",
  "description": "সাইটটি শেষ হাল-নাগাদ করা হয়েছে: বুধবার, ২৫ মার্চ, ২০২৬ এ ০৯:৪২:৩৩",
@@ -3142,6 +3157,63 @@
   "bangladesh"
  ],
  "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "UN 80th anniversary | United Nations",
+ "url": "https://www.un.org/en/UN80",
+ "description": "In 2025, the United Nations marks its 80th anniversary, celebrating eight decades of promoting peace, human rights, social progress, and sustainable development worldwide. The theme of the celebration \"Building Our Future Together\" underscores the Organization’s evolution, its continued relevance, a...",
+ "source": "United Nations",
+ "tags": [
+  "international"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "ইউনিয়নসমূহ | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
+ "url": "https://bangladesh.gov.bd/views/union-list",
+ "description": "সাইটটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ১৭ অক্টোবর, ২০২৬ এ ১০:৫৩:৩২",
+ "source": "National Portal",
+ "tags": [
+  "government",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "Home - United Nations Sustainable Development",
+ "url": "https://www.un.org/sustainabledevelopment/",
+ "description": "United Nations Sustainable Development Goals - Time for Global Action for People and Planet",
+ "source": "United Nations",
+ "tags": [
+  "international"
+ ],
+ "lang": "en",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "ফটোগ্যালারি | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
+ "url": "https://bangladesh.gov.bd/pages/photo-galleries/%E0%A6%A6%E0%A6%B0%E0%A7%8D%E0%A6%B6%E0%A6%A8%E0%A7%80%E0%A7%9F-%E0%A6%B8%E0%A7%8D%E0%A6%A5%E0%A6%BE%E0%A6%A8-nkxan2-6a829da00d57305e407bd3d9",
+ "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: বৃহস্পতিবার, ২৭ আগস্ট, ২০২৬ এ ০৯:৫০ AM",
+ "source": "National Portal",
+ "tags": [
+  "government",
+  "bangladesh"
+ ],
+ "lang": "bn",
+ "crawled": "2026-10-25"
+},
+{
+ "title": "The San Francisco Conference | United Nations",
+ "url": "https://www.un.org/en/about-us/history-of-the-un/san-francisco-conference",
+ "description": "Delegates of fifty nations met in San Francisco, California, USA, between 25 April and 26 June 1945 at the United Nations Conference on International Organization. Working on the Dumbarton Oaks proposals, the Yalta Agreement, and amendments proposed by various governments, the Conference agreed upon...",
+ "source": "United Nations",
+ "tags": [
+  "international"
+ ],
+ "lang": "en",
  "crawled": "2026-10-25"
 },
 {
@@ -3200,17 +3272,6 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "Privacy Notice | United Nations",
- "url": "https://www.un.org/en/about-us/privacy-notice",
- "description": "This notice applies to all websites within the UN.ORG domain name (“UN websites”). Your privacy and the protection of personal data are important to the United Nations (UN). This data protection and privacy notice describes the UN’s policy concerning the gathering and sharing of personal data throug...",
- "source": "United Nations",
- "tags": [
-  "international"
- ],
- "lang": "en",
- "crawled": "2026-10-25"
-},
-{
  "title": "Terms of Use | United Nations",
  "url": "https://www.un.org/en/about-us/terms-of-use",
  "description": "The use of this web site constitutes agreement with the following terms and conditions:",
@@ -3222,75 +3283,14 @@
  "crawled": "2026-10-25"
 },
 {
- "title": "অন্যান্য অফিস | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
- "url": "https://bangladesh.gov.bd/views/other-offices-list",
- "description": "সাইটটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ১৭ অক্টোবর, ২০২৬ এ ১০:৫৩:৩২",
- "source": "National Portal",
+ "title": "Member States | United Nations",
+ "url": "https://www.un.org/en/about-us/member-states",
+ "description": "For addresses and other contact information please refer to the",
+ "source": "United Nations",
  "tags": [
-  "government",
-  "bangladesh"
+  "international"
  ],
- "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
- "title": "বিভাগসমূহ | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
- "url": "https://bangladesh.gov.bd/views/division-list",
- "description": "সাইটটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ১৭ অক্টোবর, ২০২৬ এ ১০:৫৩:৩২",
- "source": "National Portal",
- "tags": [
-  "government",
-  "bangladesh"
- ],
- "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
- "title": "জেলাসমূহ | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
- "url": "https://bangladesh.gov.bd/views/district-list",
- "description": "সাইটটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ১৭ অক্টোবর, ২০২৬ এ ১০:৫৩:৩২",
- "source": "National Portal",
- "tags": [
-  "government",
-  "bangladesh"
- ],
- "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
- "title": "উপজেলাসমূহ | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
- "url": "https://bangladesh.gov.bd/views/upazila-list",
- "description": "সাইটটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ১৭ অক্টোবর, ২০২৬ এ ১০:৫৩:৩২",
- "source": "National Portal",
- "tags": [
-  "government",
-  "bangladesh"
- ],
- "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
- "title": "ইউনিয়নসমূহ | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
- "url": "https://bangladesh.gov.bd/views/union-list",
- "description": "সাইটটি শেষ হাল-নাগাদ করা হয়েছে: শনিবার, ১৭ অক্টোবর, ২০২৬ এ ১০:৫৩:৩২",
- "source": "National Portal",
- "tags": [
-  "government",
-  "bangladesh"
- ],
- "lang": "bn",
- "crawled": "2026-10-25"
-},
-{
- "title": "কক্সবাজার | ফটোগ্যালারি | বাংলাদেশ জাতীয় তথ্য বাতায়ন",
- "url": "https://bangladesh.gov.bd/pages/photo-galleries/bnagladesh-suoxg2-6a82a1422adbdef9eae7e3d0",
- "description": "কনটেন্টটি শেষ হাল-নাগাদ করা হয়েছে: বৃহস্পতিবার, ২৭ আগস্ট, ২০২৬ এ ১০:০৫ AM",
- "source": "National Portal",
- "tags": [
-  "government",
-  "bangladesh"
- ],
- "lang": "bn",
+ "lang": "en",
  "crawled": "2026-10-25"
 }
 ]
