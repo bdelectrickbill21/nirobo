@@ -85,7 +85,7 @@ function host(u){try{return new URL(u).hostname.replace(/^www\./,"")}catch(e){re
 function rank(data,toks){if(!toks.length)return[];
  return data.map(function(p){var t=(p.title||"").toLowerCase(),d=(p.description||"").toLowerCase(),g=(p.tags||[]).join(" "),n=0,m=0;
   toks.forEach(function(k){var h=0;if(t.indexOf(k)>-1)h+=3;if(d.indexOf(k)>-1)h+=1;if(g.indexOf(k)>-1)h+=2;if(h){n+=h;m++}});
-  return{p:p,n:m===toks.length?n+5:n,m:m}}).filter(function(x){return x.m*2>=toks.length&&x.n>0}).sort(function(a,b){return b.n-a.n}).slice(0,10).map(function(x){return x.p})}
+  return{p:p,n:m===toks.length?n+5:n,m:m}}).filter(function(x){return x.m*2>=toks.length&&x.n>0}).sort(function(a,b){return b.n-a.n}).map(function(x){return x.p}).filter(function(p,i,a){var k=function(z){return host(z.url)+"|"+(z.title||"").toLowerCase()};return a.findIndex(function(q){return k(q)===k(p)})===i}).slice(0,10)}
 function hideSug(){$("sug").hidden=true}
 function sugg(v){var s=$("sug");s.innerHTML="";v=v.trim().toLowerCase();if(!v)return hideSug();
  var l=[],toks=tokens(v);
