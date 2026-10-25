@@ -6,6 +6,7 @@ Run it with:   scrapy runspider crawler.py
 """
 import datetime
 import re
+from urllib.parse import urlsplit
 
 import scrapy
 from scrapy.http import TextResponse
@@ -55,6 +56,20 @@ def site_for(host):
     return None
 
 
+def normalize(url):
+    """Same page, different link (www, http/https, trailing slash, #part) -> same key."""
+    p = urlsplit(url)
+    host = p.netloc.lower()
+    if host.startswith("www."):
+        host = host[4:]
+    return host + p.path.rstrip("/") + ("?" + p.query if p.query else "")
+
+
+def junk(text):
+    t = text.lower()
+    return t.startswith(("©", "copyright", "all rights")) or "all rights reserved" in t
+
+
 def clean(text, limit):
     text = re.sub(r"\s+", " ", text or "").strip()
     return text[:limit].rstrip() + ("..." if len(text) > limit else "")
@@ -89,6 +104,8 @@ class NiroboCrawler(scrapy.Spider):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.counts = {}
+        self.seen = set()
+        self.desc_seen = {}
         self.links = LinkExtractor(allow_domains=allowed_domains_list(), deny=SKIP, unique=True)
 
     def parse(self, response):
@@ -98,19 +115,30 @@ class NiroboCrawler(scrapy.Spider):
         domain = site_for(response.url.split("/")[2].lower())
         if not domain or self.counts.get(domain, 0) >= MAX_PER_SITE:
             return
+        key = normalize(response.url)
+        if key in self.seen:
+            return  # already saved this page
+        self.seen.add(key)
 
         title = (response.xpath('//meta[@property="og:title"]/@content').get()
                  or response.css("h1::text").get()
                  or response.css("title::text").get())
-        description = (response.xpath('//meta[@name="description"]/@content').get()
-                       or response.xpath('//meta[@property="og:description"]/@content').get())
-        if not description:
+        meta = clean(response.xpath('//meta[@name="description"]/@content').get()
+                     or response.xpath('//meta[@property="og:description"]/@content').get(), 300)
+        used = self.desc_seen.setdefault(domain, set())
+        description = ""
+        if meta and not junk(meta) and meta not in used:
+            description = meta  # good, page-specific description
+        else:  # missing, junk, or the same text on every page of the site: use the page's own text
             for p in response.css("p::text").getall():
-                if len(p.strip()) > 60:
+                p = clean(p, 300)
+                if len(p) > 60 and not junk(p):
                     description = p
                     break
+        if description:
+            used.add(description)
 
-        title, description = clean(title, 140), clean(description, 300)
+        title = clean(title, 140)
         if len(title) > 3:
             name, tags, _ = SITES[domain]
             self.counts[domain] = self.counts.get(domain, 0) + 1
@@ -127,6 +155,11 @@ class NiroboCrawler(scrapy.Spider):
         if self.counts.get(domain, 0) < MAX_PER_SITE:
             for link in self.links.extract_links(response)[:40]:
                 yield response.follow(link.url, self.parse)
+
+    def closed(self, reason):
+        # Search the log for REPORT to see how many pages each site gave.
+        for domain in SITES:
+            self.logger.info("REPORT %s: %d pages", domain, self.counts.get(domain, 0))
 
 
 def allowed_domains_list():
