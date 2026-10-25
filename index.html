@@ -1,487 +1,150 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nirobo — Curated Search for Bangladesh</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
-      color: #222;
-    }
-
-    .intro {
-      background: linear-gradient(135deg, #004d00, #006400);
-      color: white;
-      padding: 30px 20px;
-      text-align: center;
-    }
-
-    .intro h1 {
-      font-size: 48px;
-      letter-spacing: 2px;
-      margin: 10px 0;
-    }
-
-    .intro h1 span {
-      color: #ffffff;
-    }
-
-    .intro h1 .green {
-      color: #00ff00;
-    }
-
-    .intro h1 .red {
-      color: #ff6666;
-    }
-
-    .intro p {
-      font-size: 16px;
-      margin-top: 10px;
-      font-style: italic;
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .search-bar {
-      display: flex;
-      justify-content: center;
-      padding: 20px;
-      background-color: #e6ffe6;
-      border-bottom: 2px solid #d40000;
-    }
-
-    .search-bar input {
-      width: 60%;
-      padding: 12px 15px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 6px 0 0 6px;
-      outline: none;
-    }
-
-    .search-bar input:focus {
-      border-color: #d40000;
-    }
-
-    .search-bar button {
-      padding: 12px 20px;
-      background-color: #d40000;
-      color: white;
-      border: none;
-      border-radius: 0 6px 6px 0;
-      cursor: pointer;
-      font-size: 16px;
-      transition: background-color 0.3s;
-    }
-
-    .search-bar button:hover {
-      background-color: #ff0000;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 20px;
-      padding: 30px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .card {
-      background: linear-gradient(135deg, #228B22, #006400);
-      color: white;
-      padding: 20px;
-      border-radius: 8px;
-      text-align: center;
-      font-weight: bold;
-      cursor: pointer;
-      margin: 10px 0;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 8px rgba(0,0,0,0.15);
-    }
-
-    footer {
-      position: relative;
-      background-color: #1a1a1a;
-      color: #ccc;
-      padding: 20px;
-      text-align: center;
-      font-size: 0.9rem;
-      border-top: 1px solid #333;
-      margin-top: 40px;
-    }
-
-    footer a {
-      color: #ff9999;
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
-
-    .ai-chat-button {
-      background-color: #ff0000;
-      color: #fff;
-      padding: 15px;
-      font-weight: bold;
-      border: none;
-      border-radius: 6px;
-      box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
-    }
-
-    .unique-value {
-      background-color: #fff8f0;
-      padding: 20px;
-      text-align: center;
-      margin: 20px 0;
-      border-left: 4px solid #d40000;
-    }
-
-    .unique-value h2 {
-      color: #d40000;
-      margin-bottom: 10px;
-    }
-
-    .unique-value p {
-      font-size: 1.1em;
-      color: #555;
-    }
-    
-    /* Sponsor Ads Styles */
-    .sponsor-ads-container {
-      width: 100%;
-      overflow: hidden;
-      margin: 20px 0;
-      padding: 20px 0;
-      background: rgba(0, 30, 0, 0.3);
-      border-radius: 12px;
-      border: 1px solid rgba(212, 0, 0, 0.2);
-    }
-
-    .sponsor-ads-wrapper {
-      display: flex;
-      animation: scrollAds 30s linear infinite;
-      width: max-content;
-      min-width: 100%;
-    }
-
-    @keyframes scrollAds {
-      0% { transform: translateX(100%); }
-      100% { transform: translateX(-100%); }
-    }
-
-    .ad-item {
-      min-width: 720px;
-      height: 320px;
-      margin: 0 20px;
-      background: rgba(0, 20, 0, 0.5);
-      border: 2px solid #333;
-      border-radius: 8px;
-      overflow: hidden;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .ad-content {
-      width: 100%;
-      height: 100%;
-      cursor: pointer;
-    }
-
-    .ad-image, .ad-gif {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .ad-video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .sponsor-notice {
-      text-align: center;
-      padding: 40px 20px;
-      color: #ff9999;
-      font-size: 1.1rem;
-      line-height: 1.6;
-    }
-
-    .sponsor-notice a {
-      color: #d40000;
-      text-decoration: underline;
-    }
-
-    .sponsor-notice a:hover {
-      color: #ff0000;
-    }
-
-    @media (max-width: 768px) {
-      .ad-item {
-        min-width: 100%;
-        height: 200px;
-        margin: 0 10px;
-      }
-      
-      .sponsor-ads-wrapper {
-        animation: scrollAdsMobile 30s linear infinite;
-      }
-      
-      @keyframes scrollAdsMobile {
-        0% { transform: translateX(100%); }
-        100% { transform: translateX(-100%); }
-      }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>নিরবো - বাংলাদেশের সরকারি সেবা খুঁজুন</title>
+<meta name="description" content="বাংলা বা Banglish-এ লিখে এনআইডি, পাসপোর্ট, জন্ম নিবন্ধন, খতিয়ানসহ সরকারি সেবার ধাপে ধাপে গাইড পান।">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--green:#0E3B2C;--paper:#F5F7F4;--ink:#17211C;--muted:#55665D;--red:#C8323C;--line:#D5DDD7}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Hind Siliguri","Noto Sans Bengali","Nirmala UI",system-ui,sans-serif;font-size:18px;line-height:1.65}
+.wrap{max-width:680px;margin:0 auto;padding:20px 18px 48px}
+.brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:22px;color:var(--green)}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--red)}
+h1{font-size:clamp(28px,7vw,40px);line-height:1.25;margin:36px 0 8px;color:var(--green)}
+.sub{margin:0 0 24px;color:var(--muted)}
+label{display:block;font-weight:500;margin-bottom:6px}
+.box{display:flex;border:2px solid var(--green);background:#fff;border-radius:4px}
+.box input{flex:1;min-width:0;border:0;padding:14px;font:inherit;background:transparent;color:var(--ink)}
+.box input:focus{outline:none}
+.box:focus-within{outline:3px solid var(--red);outline-offset:2px}
+.box button{border:0;background:var(--green);color:#fff;font:inherit;font-weight:500;padding:0 20px;cursor:pointer}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0;padding:0;list-style:none}
+.chips button{font:inherit;font-size:15px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:20px;padding:4px 14px;cursor:pointer}
+.chips button:hover{border-color:var(--green)}
+button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+#status{margin:28px 0 10px;color:var(--muted);font-size:16px}
+details{background:#fff;border:1px solid var(--line);border-left:5px solid var(--green);border-radius:4px;margin:0 0 12px}
+summary{cursor:pointer;padding:12px 16px;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary small{display:block;font-weight:400;color:var(--muted);font-size:15px}
+summary::after{content:"+";color:var(--red);font-size:24px;line-height:1.2}
+details[open] summary::after{content:"\2212"}
+.body{padding:0 16px 16px}
+.body h3{font-size:17px;margin:14px 0 4px;color:var(--green)}
+.body ol,.body ul{margin:0;padding-left:22px}
+.body li{margin-bottom:4px}
+.go{display:inline-block;margin-top:14px;background:var(--green);color:#fff;text-decoration:none;padding:8px 16px;border-radius:4px;font-weight:500}
+.note{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:15px}
+</style>
 </head>
 <body>
+<div class="wrap">
+  <div class="brand"><span class="dot" aria-hidden="true"></span>নিরবো</div>
 
-  <!-- Sponsor Ads -->
-  <div class="sponsor-ads-container" id="sponsorAds">
-    <!-- Ads will be loaded here dynamically -->
-  </div>
+  <h1>সরকারি সেবা, ধাপে ধাপে বাংলায়</h1>
+  <p class="sub">বাংলা বা Banglish-এ লিখুন। কী কাগজ লাগবে, কোথায় যেতে হবে, কোন অফিসিয়াল সাইটে আবেদন করবেন, সব এক জায়গায়।</p>
 
-  <!-- Cinematic Intro -->
-  <div class="intro">
-    <h1>
-      <span class="green">N</span>
-      <span class="green">I</span>
-      <span class="green">R</span>
-      <span class="red">O</span>
-      <span class="green">B</span>
-      <span class="green">O</span>
-    </h1>
-    <p>A new journey born from invisible sound, shaped by red struggle, echoing the outcry of rights, bound by language, and united in the oneness of silence.</p>
-  </div>
+  <form id="f" role="search">
+    <label for="q">কী খুঁজছেন?</label>
+    <div class="box">
+      <input id="q" type="search" autocomplete="off" placeholder="যেমন: passport renew korbo kivabe">
+      <button type="submit">খুঁজুন</button>
+    </div>
+  </form>
+  <ul class="chips" id="chips"></ul>
 
-  <!-- Unique Value Proposition -->
-  <div class="unique-value">
-    <h2>Why Nirobo?</h2>
-    <p>Unlike general search engines, Nirobo focuses on <strong>Bangladesh</strong> - its culture, language, and people. We curate quality Bangla content, prioritize local sources, and provide tools relevant to life here.</p>
-  </div>
+  <p id="status" aria-live="polite"></p>
+  <div id="out"></div>
 
-  <!-- Search Form -->
-  <div class="search-bar">
-    <input id="searchInput" type="text" placeholder="Search the web of Bangladesh... (Try in Bangla!)" />
-    <button id="searchBtn">Search</button>
-  </div>
+  <p class="note">এই গাইডগুলো সাধারণ ধারণা দেওয়ার জন্য। ফি, নিয়ম ও ওয়েবসাইট বদলাতে পারে, তাই আবেদনের আগে সবসময় অফিসিয়াল সাইট দেখে নিন। নিরবো কোনো সরকারি প্রতিষ্ঠান নয়।</p>
+</div>
 
-  <!-- Category Grid -->
-  <div class="grid">
-    <div class="card" onclick="window.location.href='search.html?q=local+news'">Local News</div>
-    <div class="card" onclick="window.location.href='search.html?q=education'">Education</div>
-    <div class="card" onclick="window.location.href='search.html?q=healthcare'">Healthcare</div>
-    <div class="card" onclick="window.location.href='search.html?q=bangla+literature'">Bangla Literature</div>
-    <div class="card" onclick="window.location.href='search.html?q=jobs'">Jobs</div>
-    <div class="card" onclick="window.location.href='chat.html'">Local AI Chat</div>
-  </div>
+<script>
+var SERVICES=[
+{t:"জাতীয় পরিচয়পত্র (NID) সংশোধন",s:"নাম, জন্ম তারিখ, ঠিকানা ইত্যাদি ঠিক করা",
+ kw:"nid national id card porichoy porichay potro pottro songshodhon songshodon shongshodhon correction correct vul bhul ভুল জাতীয় পরিচয়পত্র এনআইডি সংশোধন পরিচয় পত্র voter id ভোটার আইডি",
+ steps:["nidw.gov.bd সাইটে গিয়ে অ্যাকাউন্টে লগইন করুন (না থাকলে নিবন্ধন করুন)।","সংশোধনের আবেদন বেছে নিন এবং যে তথ্য ঠিক করতে চান তা লিখুন।","প্রমাণের কাগজের স্ক্যান কপি আপলোড করুন।","নির্ধারিত ফি দিয়ে আবেদন জমা দিন।","সাইটে আবেদনের অবস্থা দেখুন। দরকার হলে উপজেলা বা থানা নির্বাচন অফিসে যোগাযোগ করুন।"],
+ docs:["বর্তমান এনআইডির কপি","জন্ম নিবন্ধন সনদ","এসএসসি সনদ (নাম বা জন্ম তারিখ ঠিক করতে)","পিতা-মাতার এনআইডি"],
+ link:"https://nidw.gov.bd"},
+{t:"ই-পাসপোর্ট আবেদন ও নবায়ন",s:"নতুন, নবায়ন বা হারানো পাসপোর্ট",
+ kw:"passport pasport paspor epassport e-passport renew nobayon nobayan nobayn new notun hariye lost পাসপোর্ট ই-পাসপোর্ট নবায়ন নতুন হারানো",
+ steps:["epassport.gov.bd সাইটে আবেদন ফরম পূরণ করুন (নতুন, নবায়ন বা হারানো)।","অনলাইনে ফি পরিশোধ করুন।","ছবি ও আঙুলের ছাপের জন্য নিজের সুবিধামতো সময় (অ্যাপয়েন্টমেন্ট) বেছে নিন।","নির্ধারিত দিনে মূল কাগজসহ আঞ্চলিক পাসপোর্ট অফিসে যান।","ডেলিভারির তারিখ জেনে নিয়ে পাসপোর্ট সংগ্রহ করুন।"],
+ docs:["এনআইডি বা জন্ম নিবন্ধন সনদ","আগের পাসপোর্ট (নবায়নের ক্ষেত্রে)","ফি পরিশোধের রসিদ","আবেদনের প্রিন্ট কপি"],
+ link:"https://www.epassport.gov.bd"},
+{t:"জন্ম নিবন্ধন",s:"নতুন নিবন্ধন বা সনদ তোলা",
+ kw:"jonmo jonno nibondhon nibondon nibondhan birth certificate registration bdris sonod sanad জন্ম নিবন্ধন সনদ জন্মনিবন্ধন",
+ steps:["bdris.gov.bd সাইটে অনলাইন আবেদন ফরম পূরণ করুন।","আবেদনকারী এবং পিতা-মাতার তথ্য দিন।","দরকারি কাগজ আপলোড করুন এবং ফি থাকলে পরিশোধ করুন।","আবেদনের প্রিন্ট নিয়ে ইউনিয়ন পরিষদ, পৌরসভা বা সিটি কর্পোরেশন অফিসে যান।","সনদ সংগ্রহ করুন এবং অনলাইনে যাচাই করে দেখুন।"],
+ docs:["টিকার কার্ড বা হাসপাতালের সনদ","পিতা-মাতার এনআইডি বা জন্ম নিবন্ধন","স্কুলের সনদ (বড়দের ক্ষেত্রে)","বাসস্থানের প্রমাণ"],
+ link:"https://bdris.gov.bd"},
+{t:"খতিয়ান ও পর্চা (ই-পর্চা)",s:"জমির খতিয়ান অনলাইনে দেখা ও কপি নেওয়া",
+ kw:"khatian khotian khatiyan porcha porca purcha eporcha e-porcha land jomi jomir record খতিয়ান পর্চা ই-পর্চা জমি জমির",
+ steps:["eporcha.gov.bd সাইটে যান।","বিভাগ, জেলা, উপজেলা ও মৌজা বেছে নিন।","খতিয়ানের ধরন (সিএস, এসএ, আরএস, বিএস) বেছে নিন।","খতিয়ান বা দাগ নম্বর দিয়ে খুঁজুন।","সার্টিফাইড কপি লাগলে ফি দিয়ে আবেদন করুন। পরে কোড দিয়ে কপি যাচাই করা যায়।"],
+ docs:["জেলা, উপজেলা ও মৌজার নাম","খতিয়ান বা দাগ নম্বর"],
+ link:"https://eporcha.gov.bd"},
+{t:"ভূমি উন্নয়ন কর (খাজনা)",s:"অনলাইনে জমির কর দেওয়া",
+ kw:"khajna khazna khajana land tax bhumi vumi jomi kor ldtax dakhila dakhila ভূমি উন্নয়ন কর খাজনা দাখিলা জমির",
+ steps:["ldtax.gov.bd সাইটে নিবন্ধন করুন (এনআইডি ও মোবাইল নম্বর লাগে)।","আপনার জমির হোল্ডিং বা খতিয়ান যোগ করুন।","কত কর বকেয়া আছে তা দেখুন।","অনলাইনে কর পরিশোধ করুন।","দাখিলা (রসিদ) ডাউনলোড করে রেখে দিন।"],
+ docs:["এনআইডি","মোবাইল নম্বর","খতিয়ান বা হোল্ডিং নম্বর"],
+ link:"https://ldtax.gov.bd"},
+{t:"টিআইএন (ই-টিআইএন)",s:"কর শনাক্তকরণ নম্বর নেওয়া",
+ kw:"tin e-tin etin taxpayer tax income kor ay kar certificate nbr টিআইএন ই-টিআইএন কর আয়কর",
+ steps:["etaxnbr.gov.bd সাইটে নিবন্ধন করুন।","মোবাইল নম্বর ও ইমেইল দিয়ে অ্যাকাউন্ট যাচাই করুন।","এনআইডির তথ্য ও নিজের বিবরণ দিন।","আবেদন জমা দিন।","টিআইএন সনদ ডাউনলোড করুন।"],
+ docs:["এনআইডি","মোবাইল নম্বর","ইমেইল ঠিকানা","পেশা বা আয়ের উৎসের তথ্য"],
+ link:"https://etaxnbr.gov.bd"},
+{t:"ড্রাইভিং লাইসেন্স",s:"লার্নার ও স্মার্ট কার্ড লাইসেন্স",
+ kw:"driving license licence lisense lysence brta learner driver gari ড্রাইভিং লাইসেন্স বিআরটিএ লার্নার গাড়ি",
+ steps:["bsp.brta.gov.bd সাইটে আবেদন করুন (প্রথমে লার্নার লাইসেন্স)।","ফি পরিশোধ করুন এবং পরীক্ষার তারিখ নিন।","নির্ধারিত দিনে লিখিত ও ড্রাইভিং পরীক্ষা দিন।","পাস করলে স্মার্ট কার্ডের জন্য আবেদন এগিয়ে নিন।","কার্ড তৈরি হলে নির্ধারিত অফিস থেকে সংগ্রহ করুন।"],
+ docs:["এনআইডি বা জন্ম নিবন্ধন","ছবি","মেডিকেল সনদ (প্রয়োজনে)","ফি পরিশোধের রসিদ"],
+ link:"https://bsp.brta.gov.bd"},
+{t:"পুলিশ ক্লিয়ারেন্স সনদ",s:"বিদেশে যাওয়া বা চাকরির জন্য",
+ kw:"police clearance pcc clearence potro sonod certificate পুলিশ ক্লিয়ারেন্স সনদ",
+ steps:["pcc.police.gov.bd সাইটে আবেদন ফরম পূরণ করুন।","পাসপোর্ট বা এনআইডির তথ্য দিন।","অনলাইনে ফি পরিশোধ করুন।","দরকার হলে নির্ধারিত অফিসে গিয়ে পরিচয় যাচাই করান।","সনদ ডাউনলোড বা সংগ্রহ করুন।"],
+ docs:["পাসপোর্ট বা এনআইডি","ছবি","ফি পরিশোধের রসিদ"],
+ link:"https://pcc.police.gov.bd"}
+];
+var STOP="korbo korbo? kivabe kibhabe kemne kemon kore kora korte how to ki kit ta er ei ami amar chai jante করব করবো কিভাবে কীভাবে কি কী করতে কেমনে আমি আমার চাই জানতে".split(" ");
+var CHIPS=["passport renew korbo kivabe","nid songshodhon","jonmo nibondhon","khatian dekhbo kivabe","khajna kivabe dibo"];
+SERVICES.forEach(function(s){s.words=s.kw.toLowerCase().split(/\s+/).concat(s.t.toLowerCase().split(/[\s()]+/))});
 
-  <!-- User Portal Button -->
-  <div style="text-align: center; padding: 20px;">
-    <a href="signup.html" style="background: #006400; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; transition: background-color 0.3s;">
-      👤 My Submissions & Account
-    </a>
-    <p style="margin-top: 10px; font-size: 0.9em; color: #666;">
-      Submit your website, track approval status, and manage your submissions.
-    </p>
-  </div>
+function lev(a,b){if(Math.abs(a.length-b.length)>1)return 2;var p=[],i,j;for(j=0;j<=b.length;j++)p[j]=j;
+ for(i=1;i<=a.length;i++){var c=[i];for(j=1;j<=b.length;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}return p[b.length]}
+function tokens(q){return q.toLowerCase().replace(/[^\p{L}\p{M}\p{N}\s-]/gu," ").split(/\s+/).filter(function(t){return t.length>1&&STOP.indexOf(t)<0})}
+function score(s,toks){var n=0;toks.forEach(function(t){var hit=0;
+ s.words.forEach(function(w){if(!w)return;
+  if(w===t)hit=Math.max(hit,3);
+  else if(t.length>=3&&w.length>=3&&(w.indexOf(t)>-1||t.indexOf(w)>-1))hit=Math.max(hit,2);
+  else if(t.length>=5&&w.length>=5&&lev(w,t)<=1)hit=Math.max(hit,1)});n+=hit});return n}
 
-  <!-- Footer -->
-  <footer>
-    <p>Made in Bangladesh 🇧🇩 | Curated by Nirobo</p>
-    <p>Honoring the Language Movement and the Silent Legacy of Justice</p>
-    <p>Crafted by KH. AL SHAIF — for truth, clarity, and cultural dignity</p>
-    <p><a href="signup.html">Submit Your Site</a> | <a href="admin.html">Admin</a></p>
-  </footer>
+function card(s,open){var d=document.createElement("details");if(open)d.open=true;
+ var sm=document.createElement("summary"),box=document.createElement("span");
+ box.textContent=s.t;var sub=document.createElement("small");sub.textContent=s.s;box.appendChild(sub);sm.appendChild(box);d.appendChild(sm);
+ var b=document.createElement("div");b.className="body";
+ var h=document.createElement("h3");h.textContent="যা করতে হবে";b.appendChild(h);
+ var ol=document.createElement("ol");s.steps.forEach(function(x){var li=document.createElement("li");li.textContent=x;ol.appendChild(li)});b.appendChild(ol);
+ h=document.createElement("h3");h.textContent="যে কাগজ লাগতে পারে";b.appendChild(h);
+ var ul=document.createElement("ul");s.docs.forEach(function(x){var li=document.createElement("li");li.textContent=x;ul.appendChild(li)});b.appendChild(ul);
+ var a=document.createElement("a");a.className="go";a.href=s.link;a.target="_blank";a.rel="noopener noreferrer";a.textContent="অফিসিয়াল সাইটে যান";b.appendChild(a);
+ d.appendChild(b);return d}
 
-  <script>
-    // Analytics Tracker
-    class AnalyticsTracker {
-      constructor() {
-        this.sessionId = this.getSessionId();
-      }
-      getSessionId() {
-        let sessionId = localStorage.getItem('analytics_session_id');
-        if (!sessionId) {
-          sessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-          localStorage.setItem('analytics_session_id', sessionId);
-        }
-        return sessionId;
-      }
-      trackPageView() {
-        const eventData = {
-          event: 'page_view',
-          sessionId: this.sessionId,
-          timestamp: new Date().toISOString(),
-          url: window.location.href,
-          title: document.title,
-          referrer: document.referrer,
-          userAgent: navigator.userAgent
-        };
-        fetch('/api/analytics/track', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(eventData)
-        }).catch(error => console.warn('Tracking failed:', error));
-      }
-    }
-    
-    const analytics = new AnalyticsTracker();
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', () => analytics.trackPageView());
-    } else {
-      analytics.trackPageView();
-    }
-    window.analytics = analytics;
+function render(q){var out=document.getElementById("out"),st=document.getElementById("status");out.innerHTML="";
+ var toks=tokens(q);
+ if(!toks.length){st.textContent="সব গাইড";SERVICES.forEach(function(s){out.appendChild(card(s,false))});return}
+ var r=SERVICES.map(function(s){return{s:s,n:score(s,toks)}}).filter(function(x){return x.n>0}).sort(function(a,b){return b.n-a.n});
+ if(!r.length){st.textContent="\"" + q + "\" নিয়ে কোনো গাইড পাওয়া যায়নি। অন্যভাবে লিখে দেখুন, যেমন: passport, nid, jonmo nibondhon।";SERVICES.forEach(function(s){out.appendChild(card(s,false))});return}
+ st.textContent=r.length+"টি গাইড পাওয়া গেছে";r.forEach(function(x,i){out.appendChild(card(x.s,i===0))})}
 
-    // Search functionality
-    document.getElementById('searchBtn').onclick = () => {
-      const query = document.getElementById('searchInput').value.trim();
-      if (query) {
-        window.location.href = `search.html?q=${encodeURIComponent(query)}`;
-      } else {
-        alert("Please enter a search term.");
-      }
-    };
-
-    // Handle Enter key in search input
-    document.getElementById('searchInput').addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        document.getElementById('searchBtn').click();
-      }
-    });
-
-    // Simple Visitor Tracking
-    (function() {
-      if (sessionStorage.getItem('niroboTracked')) return;
-      
-      function getBrowser() {
-        const ua = navigator.userAgent;
-        if (ua.includes('Firefox')) return 'Firefox';
-        if (ua.includes('Chrome') && !ua.includes('Edg')) return 'Chrome';
-        if (ua.includes('Safari') && !ua.includes('Chrome')) return 'Safari';
-        if (ua.includes('Edg')) return 'Edge';
-        return 'Other';
-      }
-
-      function getDevice() {
-        const ua = navigator.userAgent;
-        if (/Mobile|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua)) {
-          return 'Mobile';
-        }
-        return 'Desktop';
-      }
-
-      async function getCountry() {
-        try {
-          const response = await fetch('https://ipapi.co/json/');
-          const data = await response.json();
-          return data.country_name || 'Unknown';
-        } catch (error) {
-          console.warn('Could not get country:', error);
-          return 'Unknown';
-        }
-      }
-
-      getCountry().then(country => {
-        const visitorInfo = {
-          timestamp: new Date().toISOString(),
-          url: window.location.href,
-          referrer: document.referrer || 'Direct',
-          userAgent: navigator.userAgent,
-          browser: getBrowser(),
-          device: getDevice(),
-          country: country
-        };
-        
-        const visits = JSON.parse(localStorage.getItem('niroboVisits') || '[]');
-        visits.push(visitorInfo);
-        localStorage.setItem('niroboVisits', JSON.stringify(visits));
-        sessionStorage.setItem('niroboTracked', 'true');
-        console.log('✅ Visit tracked:', visitorInfo);
-      });
-    })();
-
-    // Sponsor Ads System
-    function loadSponsorAds() {
-      const ads = JSON.parse(localStorage.getItem('nirobo_ads') || '[]');
-      const container = document.getElementById('sponsorAds');
-      
-      if (!container) return;
-      
-      if (ads.length === 0) {
-        container.innerHTML = `
-          <div class="sponsor-notice">
-            <h3>🚀 Sponsorship Opportunities Available!</h3>
-            <p>Advertise your brand to our growing audience of intelligent search users.</p>
-            <p>Available ad formats: Images (720×320px), GIFs, and 10-second Videos</p>
-            <p><strong>Contact us today:</strong> 
-              <a href="mailto:infinitealphas0602@outlook.com" target="_blank">infinitealphas0602@outlook.com</a>
-            </p>
-            <p>${3 - Math.min(ads.length, 3)} out of 3 premium ad spots available</p>
-          </div>
-        `;
-        return;
-      }
-      
-      const wrapper = document.createElement('div');
-      wrapper.className = 'sponsor-ads-wrapper';
-      
-      const totalAds = Math.max(6, ads.length * 2);
-      
-      for (let i = 0; i < totalAds; i++) {
-        const ad = ads[i % ads.length];
-        const adItem = document.createElement('div');
-        adItem.className = 'ad-item';
-        
-        const adContent = document.createElement('div');
-        adContent.className = 'ad-content';
-        
-        if (ad.type === 'video') {
-          const video = document.createElement('video');
-          video.src = ad.url;
-          video.className = 'ad-video';
-          video.muted = true;
-          video.playsInline = true;
-          video.loop = true;
-          adContent.appendChild(video);
-        } else {
-          const img = document.createElement('img');
-          img.src = ad.url;
-          img.className = ad.type === 'gif' ? 'ad-gif' : 'ad-image';
-          adContent.appendChild(img);
-        }
-        
-        adContent.addEventListener('click', () => {
-          window.open(ad.link, '_blank');
-        });
-        
-        adItem.appendChild(adContent);
-        wrapper.appendChild(adItem);
-      }
-      
-      container.innerHTML = '';
-      container.appendChild(wrapper);
-    }
-
-    // Initialize everything when page loads
-    document.addEventListener('DOMContentLoaded', () => {
-      loadSponsorAds();
-    });
-  </script>
+var q=document.getElementById("q");
+document.getElementById("f").addEventListener("submit",function(e){e.preventDefault();render(q.value)});
+q.addEventListener("input",function(){render(q.value)});
+CHIPS.forEach(function(c){var li=document.createElement("li"),b=document.createElement("button");b.type="button";b.textContent=c;
+ b.addEventListener("click",function(){q.value=c;render(c)});li.appendChild(b);document.getElementById("chips").appendChild(li)});
+render("");
+</script>
 </body>
 </html>
