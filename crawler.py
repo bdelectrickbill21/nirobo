@@ -5,12 +5,14 @@ link and short description into data/index.json (Nirobo's own search index).
 Run it with:   scrapy runspider crawler.py
 """
 import datetime
+import os
 import re
 from urllib.parse import urlsplit
 
 import scrapy
 from scrapy.http import TextResponse
 from scrapy.linkextractors import LinkExtractor
+from scrapy.spidermiddlewares.httperror import HttpError
 
 # ---------------------------------------------------------------------------
 # Websites to crawl. To add a site, add one line: domain -> (name, tags, start page)
@@ -106,11 +108,31 @@ class NiroboCrawler(scrapy.Spider):
         self.counts = {}
         self.seen = set()
         self.desc_seen = {}
+        self.fail = {}
         self.links = LinkExtractor(allow_domains=allowed_domains_list(), deny=SKIP, unique=True)
+
+    def start_requests(self):
+        for domain, (_, _, url) in SITES.items():
+            yield scrapy.Request(url, callback=self.parse, errback=self.failed,
+                                 meta={"site": domain}, dont_filter=True)
+
+    def failed(self, failure):
+        """Remember why a site's start page could not be opened (for the report)."""
+        domain = failure.request.meta.get("site")
+        if failure.check(HttpError):
+            why = "website answered with error %d" % failure.value.response.status
+        elif failure.type.__name__ == "IgnoreRequest":
+            why = "blocked by the site's robots.txt (we obey it)"
+        else:
+            why = failure.type.__name__
+        self.fail[domain] = why
 
     def parse(self, response):
         if not isinstance(response, TextResponse):
             return  # skip PDFs, images and other non-page files
+        lang = (response.xpath("/html/@lang").get() or "").lower()
+        if lang and not lang.startswith(("en", "bn")):
+            return  # only keep English and Bangla pages
 
         domain = site_for(response.url.split("/")[2].lower())
         if not domain or self.counts.get(domain, 0) >= MAX_PER_SITE:
@@ -157,9 +179,17 @@ class NiroboCrawler(scrapy.Spider):
                 yield response.follow(link.url, self.parse)
 
     def closed(self, reason):
-        # Search the log for REPORT to see how many pages each site gave.
+        # Writes data/report.txt: how many pages each site gave, and why a site failed.
+        lines = []
         for domain in SITES:
-            self.logger.info("REPORT %s: %d pages", domain, self.counts.get(domain, 0))
+            line = "%s: %d pages" % (domain, self.counts.get(domain, 0))
+            if domain in self.fail:
+                line += "   <-- start page problem: " + self.fail[domain]
+            lines.append(line)
+            self.logger.info("REPORT %s", line)
+        os.makedirs("data", exist_ok=True)
+        with open("data/report.txt", "w", encoding="utf-8") as f:
+            f.write("\n".join(lines) + "\n")
 
 
 def allowed_domains_list():
