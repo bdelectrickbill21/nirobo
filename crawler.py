@@ -109,6 +109,7 @@ class NiroboCrawler(scrapy.Spider):
         self.seen = set()
         self.desc_seen = {}
         self.fail = {}
+        self.info = {}
         self.links = LinkExtractor(allow_domains=allowed_domains_list(), deny=SKIP, unique=True)
 
     def start_requests(self):
@@ -131,6 +132,9 @@ class NiroboCrawler(scrapy.Spider):
         if not isinstance(response, TextResponse):
             return  # skip PDFs, images and other non-page files
         lang = (response.xpath("/html/@lang").get() or "").lower()
+        site = response.meta.get("site")  # set only on each site's start page
+        if site:
+            self.info[site] = "status %s, ended at %s, page language '%s'" % (response.status, response.url, lang)
         if lang and not lang.startswith(("en", "bn")):
             return  # only keep English and Bangla pages
 
@@ -161,6 +165,8 @@ class NiroboCrawler(scrapy.Spider):
             used.add(description)
 
         title = clean(title, 140)
+        if site:
+            self.info[site] += ", title '%s'" % title[:40]
         if len(title) > 3:
             name, tags, _ = SITES[domain]
             self.counts[domain] = self.counts.get(domain, 0) + 1
@@ -185,6 +191,8 @@ class NiroboCrawler(scrapy.Spider):
             line = "%s: %d pages" % (domain, self.counts.get(domain, 0))
             if domain in self.fail:
                 line += "   <-- start page problem: " + self.fail[domain]
+            elif self.counts.get(domain, 0) == 0:
+                line += "   <-- start page: " + self.info.get(domain, "never answered")
             lines.append(line)
             self.logger.info("REPORT %s", line)
         os.makedirs("data", exist_ok=True)
