@@ -41,6 +41,7 @@ var SERVICES=[
  link:"https://pcc.police.gov.bd"}
 ];
 var STOP="korbo korbo? kivabe kibhabe kemne kemon kore kora korte how to ki kit ta er ei ami amar chai jante করব করবো কিভাবে কীভাবে কি কী করতে কেমনে আমি আমার চাই জানতে".split(" ");
+STOP=STOP.concat("korte kono ache achhe hobe hoy dibo dekhbo jabo nibo kothay kothae koto kon".split(" "));
 var CHIPS=["passport renew korbo kivabe","nid songshodhon","jonmo nibondhon","khatian dekhbo kivabe","khajna kivabe dibo"];
 SERVICES.forEach(function(s){s.words=s.kw.toLowerCase().split(/\s+/).concat(s.t.toLowerCase().split(/[\s()]+/))});
 
@@ -51,5 +52,19 @@ function score(s,toks){var n=0;toks.forEach(function(t){var hit=0;
  s.words.forEach(function(w){if(!w)return;
   if(w===t)hit=Math.max(hit,3);
   else if(t.length>=3&&w.length>=3&&(w.indexOf(t)>-1||t.indexOf(w)>-1))hit=Math.max(hit,2);
-  else if(t.length>=5&&w.length>=5&&lev(w,t)<=1)hit=Math.max(hit,1)});n+=hit});return n}
+  else if(t.length>=5&&w.length>=5&&lev(w,t)<=1)hit=Math.max(hit,1)});if(hit<2){var q=skL(t);if(okq(q,t))s.sk.forEach(function(k,i){if(k===q&&(/[\u0980-\u09FF]/.test(s.words[i])||ed(s.words[i],t)<=3))hit=2})}n+=hit});return n}
 
+/* Banglish: compare words by how they sound (consonant skeleton), so
+   "nibondhon", "nibondon" and "নিবন্ধন" all match each other. */
+var BK={"ক":"k","খ":"k","গ":"g","ঘ":"g","ঙ":"n","চ":"C","ছ":"C","জ":"j","ঝ":"j","ঞ":"n","ট":"t","ঠ":"t","ড":"d","ঢ":"d","ণ":"n","ত":"t","থ":"t","দ":"d","ধ":"d","ন":"n","প":"p","ফ":"f","ব":"b","ভ":"b","ম":"m","য":"j","র":"r","ল":"l","শ":"s","ষ":"s","স":"s","ৎ":"t","ং":"n","\u09DC":"r","\u09DD":"r"};
+function skB(w){var o="",i,c;for(i=0;i<w.length;i++){c=w[i];
+ if(c==="\u09BC"){if(o.slice(-1)==="d")o=o.slice(0,-1)+"r";else if(o.slice(-1)==="j")o=o.slice(0,-1);continue}
+ if(BK[c])o+=BK[c]}return o.replace(/(.)\1+/g,"$1")}
+function skL(w){return w.toLowerCase().replace(/chh?/g,"C").replace(/sh/g,"s").replace(/ph/g,"f").replace(/([kgtdbj])h/g,"$1").replace(/ng/g,"n").replace(/[cq]/g,"k").replace(/x/g,"ks").replace(/z/g,"j").replace(/v/g,"b").replace(/[aeiouyhw]/g,"").replace(/(.)\1+/g,"$1")}
+function sk(w){return /[\u0980-\u09FF]/.test(w)?skB(w):skL(w)}
+function okq(q,t){return q.length>=3||(q.length===2&&t.length>=4)}
+function words(x){return (x||"").toLowerCase().split(/[^\p{L}\p{M}\p{N}]+/u).filter(Boolean).map(function(w){var b=/[\u0980-\u09FF]/.test(w);return{b:b,o:w,k:b?skB(w):skL(w)}}).filter(function(z){return z.k.length>=2})}
+function pw(p){return p._w||(p._w={t:words(p.title),d:words(p.description)})}
+function ph(a,q,t){return a.some(function(w){return w.b?w.k.indexOf(q)===0:(q.length>=3&&w.k===q&&ed(w.o,t)<=3)})}
+SERVICES.forEach(function(s){s.sk=s.words.map(sk)});
+function ed(a,b){var p=[],i,j,c;for(j=0;j<=b.length;j++)p[j]=j;for(i=1;i<=a.length;i++){c=[i];for(j=1;j<=b.length;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}return p[b.length]}

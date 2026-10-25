@@ -90,10 +90,11 @@ class NiroboCrawler(scrapy.Spider):
         "CONCURRENT_REQUESTS": 16,
         "CONCURRENT_REQUESTS_PER_DOMAIN": 2,
         "AUTOTHROTTLE_ENABLED": True,
-        "DOWNLOAD_TIMEOUT": 20,
-        "RETRY_TIMES": 1,
+        "DOWNLOAD_TIMEOUT": 30,
+        "RETRY_TIMES": 2,
+        "RETRY_PRIORITY_ADJUST": 5,  # retry slow or failed pages first, so no site gets forgotten
         "DEPTH_LIMIT": 2,
-        "CLOSESPIDER_PAGECOUNT": 800,
+        "CLOSESPIDER_PAGECOUNT": 1500,
         "LOG_LEVEL": "INFO",
         # Visit all sites evenly (breadth-first) instead of finishing one first.
         "DEPTH_PRIORITY": 1,
@@ -111,6 +112,10 @@ class NiroboCrawler(scrapy.Spider):
         self.fail = {}
         self.info = {}
         self.links = LinkExtractor(allow_domains=allowed_domains_list(), deny=SKIP, unique=True)
+
+    async def start(self):  # used by Scrapy 2.13 and newer
+        for request in self.start_requests():
+            yield request
 
     def start_requests(self):
         for domain, (_, _, url) in SITES.items():
@@ -192,7 +197,7 @@ class NiroboCrawler(scrapy.Spider):
             if domain in self.fail:
                 line += "   <-- start page problem: " + self.fail[domain]
             elif self.counts.get(domain, 0) == 0:
-                line += "   <-- start page: " + self.info.get(domain, "never answered")
+                line += "   <-- start page: " + self.info.get(domain, "no answer before the crawl ended (site is slow or blocking us)")
             lines.append(line)
             self.logger.info("REPORT %s", line)
         os.makedirs("data", exist_ok=True)
