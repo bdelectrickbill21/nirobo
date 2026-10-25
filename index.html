@@ -79,6 +79,13 @@ function guide(s){var a=el("section","ans");a.appendChild(el("b","lb","নির
  list("ধাপ",a,s.steps);list("যে কাগজ লাগতে পারে",a,s.docs);
  var b=el("a","btn","অফিসিয়াল সাইটে যান");b.href=s.link;b.target="_blank";b.rel="noopener noreferrer";a.appendChild(b);
  a.appendChild(el("small",0,"ফি ও নিয়ম বদলাতে পারে। আবেদনের আগে অফিসিয়াল সাইটে মিলিয়ে নিন।"));return a}
+var INDEX=null;
+function loadIndex(){if(!INDEX)INDEX=fetch("/data/index.json").then(function(r){if(!r.ok)throw 0;return r.json()}).catch(function(e){INDEX=null;throw e});return INDEX}
+function host(u){try{return new URL(u).hostname.replace(/^www\./,"")}catch(e){return ""}}
+function rank(data,toks){if(!toks.length)return[];
+ return data.map(function(p){var t=(p.title||"").toLowerCase(),d=(p.description||"").toLowerCase(),g=(p.tags||[]).join(" "),n=0,m=0;
+  toks.forEach(function(k){var h=0;if(t.indexOf(k)>-1)h+=3;if(d.indexOf(k)>-1)h+=1;if(g.indexOf(k)>-1)h+=2;if(h){n+=h;m++}});
+  return{p:p,n:m===toks.length?n+5:n,m:m}}).filter(function(x){return x.m*2>=toks.length&&x.n>0}).sort(function(a,b){return b.n-a.n}).slice(0,10).map(function(x){return x.p})}
 function hideSug(){$("sug").hidden=true}
 function sugg(v){var s=$("sug");s.innerHTML="";v=v.trim().toLowerCase();if(!v)return hideSug();
  var l=[],toks=tokens(v);
@@ -94,17 +101,15 @@ function run(q,push){q=(q||"").trim();$("q").value=q;hideSug();
  var toks=tokens(q),best=null,bn=0;
  SERVICES.forEach(function(s){var n=score(s,toks);if(n>bn){bn=n;best=s}});
  if(best&&bn>=2)g.appendChild(guide(best));
- var id=++req,off="ওয়েব ফলাফল এখনো চালু হয়নি। সার্চ API কী যোগ করলে এখানে ফলাফল আসবে।";
- st.textContent="খুঁজছি...";
- fetch("/.netlify/functions/search?q="+encodeURIComponent(q)).then(function(r){return r.json()}).then(function(d){
+ var id=++req;st.textContent="খুঁজছি...";
+ loadIndex().then(function(data){
   if(id!==req)return;
-  if(d.error){st.textContent=d.error==="no_key"?off:"ফলাফল আনতে সমস্যা হয়েছে। একটু পরে আবার চেষ্টা করুন।";return}
-  st.textContent=d.results.length?"":"কিছু পাওয়া যায়নি। অন্য শব্দ দিয়ে চেষ্টা করুন।";
-  d.results.forEach(function(x){if(!/^https?:\/\//.test(x.url))return;
-   var r=el("div","r"),h="";try{h=new URL(x.url).hostname.replace(/^www\./,"")}catch(e){}
-   r.appendChild(el("div","u",h));var a=el("a",0,plain(x.title)||x.url);a.href=x.url;a.target="_blank";a.rel="noopener noreferrer";r.appendChild(a);
-   r.appendChild(el("p",0,plain(x.description)));w.appendChild(r)})
- }).catch(function(){if(id===req)st.textContent=off})}
+  var hits=rank(data,toks);
+  st.textContent=hits.length?"":"কিছু পাওয়া যায়নি। অন্য শব্দ দিয়ে চেষ্টা করুন।";
+  hits.forEach(function(x){var r=el("div","r");r.appendChild(el("div","u",x.source+" · "+host(x.url)));
+   var a=el("a",0,x.title);a.href=x.url;a.target="_blank";a.rel="noopener noreferrer";r.appendChild(a);
+   r.appendChild(el("p",0,x.description));w.appendChild(r)})
+ }).catch(function(){if(id===req)st.textContent="সার্চ ইনডেক্স লোড করা যায়নি। একটু পরে আবার চেষ্টা করুন।"})}
 $("f").addEventListener("submit",function(e){e.preventDefault();run($("q").value,true)});
 $("q").addEventListener("input",function(){sugg(this.value)});
 $("q").addEventListener("blur",function(){setTimeout(hideSug,120)});
