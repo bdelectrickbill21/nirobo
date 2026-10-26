@@ -47,7 +47,8 @@ body.res .bar{margin-top:10px}
 .r a:hover{text-decoration:underline}
 .r p{margin:2px 0 0;font-size:16px;color:#3F4D45}
 .foot{text-align:center;color:var(--muted);font-size:14px;padding:30px 18px}
-body.res .foot{display:none}
+.foot a{color:inherit}
+.r a.rep{display:inline;font-size:13px;color:var(--muted);text-decoration:underline}
 </style>
 </head>
 <body>
@@ -67,7 +68,7 @@ body.res .foot{display:none}
   <div id="guide"></div>
   <div id="web"></div>
 </main>
-<footer class="foot">বাংলাদেশে তৈরি</footer>
+<footer class="foot">বাংলাদেশে তৈরি · <a href="/submit.html">ওয়েবসাইট জমা দিন বা সমস্যা জানান</a></footer>
 
 <script src="search-core.js"></script>
 <script>
@@ -108,7 +109,7 @@ function run(q,push){q=(q||"").trim();$("q").value=q;hideSug();
   if(id!==req)return;
   var hits=rank(data,toks);
   st.textContent=hits.length||g.firstChild?"":"কিছু পাওয়া যায়নি। অন্যভাবে লিখে দেখুন, যেমন: passport, nid, jonmo nibondon।";
-  hits.forEach(function(x){var r=el("div","r");r.appendChild(el("div","u",x.source+" · "+host(x.url)));
+  hits.forEach(function(x){var r=el("div","r");var u=el("div","u",x.source+" · "+host(x.url)+" · "),rp=el("a","rep","রিপোর্ট");rp.href="submit.html?report="+encodeURIComponent(x.url)+"#report";u.appendChild(rp);r.appendChild(u);
    var a=el("a",0,x.title);a.href=x.url;a.target="_blank";a.rel="noopener noreferrer";r.appendChild(a);
    r.appendChild(el("p",0,x.description));w.appendChild(r)})
  }).catch(function(){if(id===req)st.textContent="সার্চ ইনডেক্স লোড করা যায়নি। একটু পরে আবার চেষ্টা করুন।"})}
