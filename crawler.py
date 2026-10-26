@@ -63,11 +63,24 @@ SKIP = [r"login", r"signin", r"signup", r"register", r"logout", r"/cart", r"subs
 BANGLA = re.compile(r"[\u0980-\u09FF]")
 
 
-def site_for(host):
-    for domain in SITES:
-        if host == domain or host.endswith("." + domain):
-            return domain
-    return None
+def load_json(path, default):
+    try:
+        with open(path, encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return default
+
+
+# Sites that people submitted and YOU approved by hand (data/community_sites.json).
+# Each one has a secret code that the owner must put on their homepage:
+#   <meta name="nirobo-verify" content="THE-CODE">
+COMMUNITY = load_json("data/community_sites.json", [])
+# Domains that must never be crawled (data/blocked.json): {"domains": ["bad.example"]}
+BLOCKED = [d.lower() for d in load_json("data/blocked.json", {}).get("domains", [])]
+# Community pages with these words in the title or description are NOT indexed.
+BAD_WORDS = re.compile("|".join(map(re.escape, [
+    "casino", "sportsbook", "betting", "bet365", "jackpot", "poker", "porn", "xxx", "nude", "escort",
+    "জুয়া", "ক্যাসিনো", "বেটিং", "পর্ন"])), re.I)
 
 
 def normalize(url):
@@ -92,7 +105,7 @@ def clean(text, limit):
 class NiroboCrawler(scrapy.Spider):
     name = "nirobo"
     start_urls = [v[2] for v in SITES.values()]
-    allowed_domains = list(SITES)
+    allowed_domains = list(SITES) + [c["host"] for c in COMMUNITY]
 
     custom_settings = {
         # Be polite: follow robots.txt, go slowly, say who we are.
@@ -128,7 +141,10 @@ class NiroboCrawler(scrapy.Spider):
         except Exception:
             pass
         self.info = {}
-        self.links = LinkExtractor(allow_domains=allowed_domains_list(), deny=SKIP, unique=True)
+        self.sites = dict(SITES)   # trusted sites now; verified community sites are added during the crawl
+        self.ok = set()            # community hosts that passed verification
+        self.flagged = []
+        self.links = LinkExtractor(allow_domains=allowed_domains_list(), deny_domains=BLOCKED, deny=SKIP, unique=True)
 
     async def start(self):  # used by Scrapy 2.13 and newer
         for request in self.start_requests():
@@ -138,6 +154,33 @@ class NiroboCrawler(scrapy.Spider):
         for domain, (_, _, url) in SITES.items():
             yield scrapy.Request(url, callback=self.parse, errback=self.failed,
                                  meta={"site": domain}, dont_filter=True)
+        for c in COMMUNITY:
+            host = c.get("host", "").lower()
+            if host and c.get("code") and host not in BLOCKED:
+                yield scrapy.Request(c.get("start") or "https://%s/" % host, callback=self.verify_site,
+                                     errback=self.failed, meta={"site": host, "community": c}, dont_filter=True)
+
+    def verify_site(self, response):
+        """Only crawl a community site if its homepage carries the owner's secret code."""
+        c = response.meta["community"]
+        host = c["host"].lower()
+        if not isinstance(response, TextResponse):
+            self.fail[host] = "homepage is not a web page"
+            return
+        found = (response.xpath('//meta[@name="nirobo-verify"]/@content').get() or "").strip()
+        if found != c["code"]:
+            self.fail[host] = "ownership code not found on the homepage (not added)"
+            return
+        self.sites[host] = (c.get("name") or host, ["community"] + list(c.get("tags", [])), response.url)
+        self.ok.add(host)
+        yield from self.parse(response)
+    def site_for(self, host):
+        if any(host == b or host.endswith("." + b) for b in BLOCKED):
+            return None
+        for domain in self.sites:
+            if host == domain or host.endswith("." + domain):
+                return domain
+        return None
 
     def failed(self, failure):
         """Remember why a site's start page could not be opened (for the report)."""
@@ -160,7 +203,7 @@ class NiroboCrawler(scrapy.Spider):
         if lang and not lang.startswith(("en", "bn")):
             return  # only keep English and Bangla pages
 
-        domain = site_for(response.url.split("/")[2].lower())
+        domain = self.site_for(response.url.split("/")[2].lower())
         if not domain or self.counts.get(domain, 0) >= MAX_PER_SITE:
             return
         key = normalize(response.url)
@@ -190,7 +233,10 @@ class NiroboCrawler(scrapy.Spider):
         if site:
             self.info[site] += ", title '%s'" % title[:40]
         if len(title) > 3:
-            name, tags, _ = SITES[domain]
+            name, tags, _ = self.sites[domain]
+            if domain in self.ok and BAD_WORDS.search(title + " " + description):
+                self.flagged.append(response.url)  # community page with banned words: never indexed
+                return
             self.counts[domain] = self.counts.get(domain, 0) + 1
             self.items.append({
                 "title": title,
@@ -217,6 +263,16 @@ class NiroboCrawler(scrapy.Spider):
                 line += "   <-- start page: " + self.info.get(domain, "no answer before the crawl ended (site is slow or blocking us)")
             lines.append(line)
             self.logger.info("REPORT %s", line)
+        for c in COMMUNITY:
+            host = c.get("host", "").lower()
+            if host in self.ok:
+                line = "%s: %d pages [community, verified]" % (host, self.counts.get(host, 0))
+            else:
+                line = "%s: NOT added [community] <-- %s" % (host, self.fail.get(host, "no answer"))
+            lines.append(line)
+            self.logger.info("REPORT %s", line)
+        for url in self.flagged:
+            lines.append("FLAGGED (banned words, not indexed): " + url)
         os.makedirs("data", exist_ok=True)
         self.save_index()
         with open("data/report.txt", "w", encoding="utf-8") as f:
@@ -230,10 +286,10 @@ class NiroboCrawler(scrapy.Spider):
         have = {normalize(i["url"]) for i in self.items}
         old_count = {}
         for page in self.old:
-            d = site_for(urlsplit(page["url"]).netloc.lower())
+            d = self.site_for(urlsplit(page["url"]).netloc.lower())
             old_count[d] = old_count.get(d, 0) + 1
         for page in self.old:
-            d = site_for(urlsplit(page["url"]).netloc.lower())
+            d = self.site_for(urlsplit(page["url"]).netloc.lower())
             if d and self.counts.get(d, 0) * 2 < old_count[d] and normalize(page["url"]) not in have:
                 merged.append(page)
         with open("data/index.json", "w", encoding="utf-8") as f:
@@ -242,4 +298,4 @@ class NiroboCrawler(scrapy.Spider):
 
 
 def allowed_domains_list():
-    return list(SITES)
+    return list(SITES) + [c["host"] for c in COMMUNITY]
