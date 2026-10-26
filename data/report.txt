@@ -1,21 +1,31 @@
 bangladesh.gov.bd: 25 pages
-nidw.gov.bd: 0 pages   <-- start page problem: DownloadTimeoutError
-epassport.gov.bd: 1 pages
+nidw.gov.bd: 0 pages   <-- start page problem: DownloadFailedError
+epassport.gov.bd: 2 pages
 bdris.gov.bd: 9 pages
 eporcha.gov.bd: 0 pages   <-- start page problem: CannotResolveHostError
 ldtax.gov.bd: 9 pages
 etaxnbr.gov.bd: 1 pages
-bsp.brta.gov.bd: 1 pages
+bsp.brta.gov.bd: 25 pages
 thedailystar.net: 25 pages
 prothomalo.com: 25 pages
-dhakatribune.com: 0 pages   <-- start page problem: website answered with error 403
 bdnews24.com: 25 pages
 ugc.gov.bd: 1 pages
 educationboard.gov.bd: 0 pages   <-- start page problem: DownloadTimeoutError
 du.ac.bd: 25 pages
 buet.ac.bd: 0 pages   <-- start page problem: DownloadFailedError
 dghs.gov.bd: 24 pages
-bdjobs.com: 0 pages   <-- start page problem: blocked by the site's robots.txt (we obey it)
+nu.ac.bd: 25 pages
+dshe.gov.bd: 25 pages
+dpe.gov.bd: 25 pages
+bteb.gov.bd: 25 pages
+teachers.gov.bd: 25 pages
+bb.org.bd: 25 pages
+tbsnews.net: 25 pages
+newagebd.net: 0 pages   <-- start page problem: website answered with error 403
+jagonews24.com: 0 pages   <-- start page problem: website answered with error 403
+kalerkantho.com: 0 pages   <-- start page problem: website answered with error 403
+samakal.com: 0 pages   <-- start page problem: website answered with error 403
+jugantor.com: 25 pages
 who.int: 25 pages
 un.org: 25 pages
 bbc.com: 25 pages
