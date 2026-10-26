@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ওয়েবসাইট জমা দিন - নিরবো</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--green:#0E3B2C;--red:#C8323C;--ink:#17211C;--muted:#5B6B62;--line:#CFD6D1}
+*{box-sizing:border-box}
+body{margin:0;border-top:5px solid var(--green);background:#fff;color:var(--ink);font-family:"Hind Siliguri","Noto Sans Bengali","Nirmala UI",system-ui,sans-serif;font-size:18px;line-height:1.6}
+.wrap{max-width:680px;margin:0 auto;padding:16px 18px 48px}
+.logo{font-size:30px;font-weight:700;color:var(--green);text-decoration:none}
+.logo i{display:inline-block;width:.56em;height:.56em;border-radius:50%;background:var(--red);margin-left:.04em}
+h1{font-size:28px;line-height:1.3;color:var(--green);margin:22px 0 10px}
+h2{font-size:22px;color:var(--green);margin:36px 0 8px}
+.rules{background:#F6FAF7;border:1px solid var(--line);border-left:5px solid var(--green);border-radius:6px;padding:4px 16px 12px}
+.rules h3{font-size:17px;margin:12px 0 2px;color:var(--green)}
+.rules ul{margin:0;padding-left:22px}
+label{display:block;font-weight:500;margin:14px 0 4px}
+input,select,textarea{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink)}
+textarea{min-height:90px}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:3px solid var(--red);outline-offset:1px}
+.chk{display:flex;gap:10px;align-items:flex-start;font-weight:400}
+.chk input{width:auto;margin-top:7px}
+button{margin-top:18px;border:0;background:var(--green);color:#fff;font:inherit;font-weight:500;padding:10px 26px;border-radius:4px;cursor:pointer}
+button:disabled{opacity:.6}
+.msg{margin:12px 0 0;color:var(--green);font-weight:500}
+.small{color:var(--muted);font-size:15px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="logo" href="/">nirob<i></i></a>
+  <h1>ওয়েবসাইট জমা দিন বা সমস্যা জানান</h1>
+
+  <div class="rules">
+    <h3>নিরবোতে কী থাকবে</h3>
+    <ul>
+      <li>বাংলাদেশের মানুষের কাজে লাগে এমন সাইট: সরকারি সেবা, শিক্ষা, খবর, স্বাস্থ্য, চাকরি, ব্যবসা।</li>
+      <li>প্রতিটি আবেদন হাতে দেখে যাচাই করা হয়। যাচাইয়ের আগে কিছুই যোগ হয় না।</li>
+    </ul>
+    <h3>যা থাকবে না</h3>
+    <ul>
+      <li>ফিশিং বা প্রতারণার লিংক।</li>
+      <li>জুয়া, প্রাপ্তবয়স্কদের কনটেন্ট বা অবৈধ জিনিস।</li>
+      <li>বিরক্তিকর রিডাইরেক্ট বা শুধু বিজ্ঞাপনে ভরা সাইট।</li>
+      <li>মালিকের অনুমতি ছাড়া অন্যের সাইট।</li>
+    </ul>
+    <h3>আপনার তথ্য</h3>
+    <p style="margin:0">ইমেইল শুধু আপনার আবেদনের বিষয়ে যোগাযোগের জন্য ব্যবহার হবে। নিরবো ভিজিটরদের ট্র্যাক করে না।</p>
+  </div>
+
+  <h2>একটি ওয়েবসাইট জমা দিন</h2>
+  <form name="suggest-site" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+    <input type="hidden" name="form-name" value="suggest-site">
+    <p hidden><label>এটি খালি রাখুন <input name="bot-field"></label></p>
+    <label for="s-url">ওয়েবসাইটের ঠিকানা</label>
+    <input id="s-url" name="url" type="url" required placeholder="https://example.com.bd" maxlength="300">
+    <label for="s-name">সাইটের নাম</label>
+    <input id="s-name" name="site-name" required maxlength="100">
+    <label for="s-cat">ধরন</label>
+    <select id="s-cat" name="category" required>
+      <option value="">বেছে নিন</option>
+      <option>সরকারি সেবা</option><option>শিক্ষা</option><option>খবর</option>
+      <option>স্বাস্থ্য</option><option>চাকরি</option><option>ব্যবসা</option><option>অন্য কিছু</option>
+    </select>
+    <label for="s-desc">সংক্ষিপ্ত পরিচিতি</label>
+    <textarea id="s-desc" name="description" required maxlength="300"></textarea>
+    <label for="s-mail">আপনার ইমেইল</label>
+    <input id="s-mail" name="email" type="email" required maxlength="150">
+    <label class="chk"><input type="checkbox" name="owner-confirmed" value="yes" required><span>আমি এই সাইটের মালিক বা প্রতিনিধি এবং উপরের নিয়মগুলো পড়েছি।</span></label>
+    <button type="submit">জমা দিন</button>
+    <p class="msg" role="status" aria-live="polite"></p>
+  </form>
+
+  <h2 id="report">একটি লিংকের সমস্যা জানান</h2>
+  <p class="small">ফিশিং, জুয়া, প্রাপ্তবয়স্ক কনটেন্ট বা ভুল তথ্য দেখলে এখানে জানান। আমরা দেখে সরিয়ে ফেলব।</p>
+  <form name="report-link" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+    <input type="hidden" name="form-name" value="report-link">
+    <p hidden><label>এটি খালি রাখুন <input name="bot-field"></label></p>
+    <label for="r-url">লিংক</label>
+    <input id="r-url" name="url" type="url" required placeholder="https://" maxlength="500">
+    <label for="r-why">কারণ</label>
+    <select id="r-why" name="reason" required>
+      <option value="">বেছে নিন</option>
+      <option>ফিশিং বা প্রতারণা</option><option>জুয়া</option><option>প্রাপ্তবয়স্ক কনটেন্ট</option>
+      <option>অবৈধ বা ক্ষতিকর</option><option>ভুল তথ্য</option><option>অন্য কিছু</option>
+    </select>
+    <label for="r-note">বিস্তারিত (ঐচ্ছিক)</label>
+    <textarea id="r-note" name="details" maxlength="500"></textarea>
+    <label for="r-mail">আপনার ইমেইল (ঐচ্ছিক)</label>
+    <input id="r-mail" name="email" type="email" maxlength="150">
+    <button type="submit">রিপোর্ট পাঠান</button>
+    <p class="msg" role="status" aria-live="polite"></p>
+  </form>
+</div>
+
+<script>
+document.querySelectorAll("form").forEach(function(f){
+ f.addEventListener("submit",function(e){e.preventDefault();
+  var b=f.querySelector("button"),m=f.querySelector(".msg");b.disabled=true;m.textContent="পাঠানো হচ্ছে...";
+  fetch("/",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:new URLSearchParams(new FormData(f)).toString()})
+   .then(function(r){if(!r.ok)throw 0;f.reset();m.textContent="ধন্যবাদ! আপনার বার্তা পেয়েছি। আমরা দেখে নেব।"})
+   .catch(function(){m.textContent="পাঠানো যায়নি। একটু পরে আবার চেষ্টা করুন।"})
+   .then(function(){b.disabled=false})})});
+var pre=new URLSearchParams(location.search).get("report");
+if(pre&&/^https?:\/\//.test(pre))document.getElementById("r-url").value=pre.slice(0,500);
+</script>
+</body>
+</html>
