@@ -107,7 +107,7 @@ function run(q,push){q=(q||"").trim();$("q").value=q;hideSug();
  loadIndex().then(function(data){
   if(id!==req)return;
   var hits=rank(data,toks);
-  st.textContent=hits.length?"":"কিছু পাওয়া যায়নি। অন্য শব্দ দিয়ে চেষ্টা করুন।";
+  st.textContent=hits.length||g.firstChild?"":"কিছু পাওয়া যায়নি। অন্যভাবে লিখে দেখুন, যেমন: passport, nid, jonmo nibondon।";
   hits.forEach(function(x){var r=el("div","r");r.appendChild(el("div","u",x.source+" · "+host(x.url)));
    var a=el("a",0,x.title);a.href=x.url;a.target="_blank";a.rel="noopener noreferrer";r.appendChild(a);
    r.appendChild(el("p",0,x.description));w.appendChild(r)})
