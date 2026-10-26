@@ -68,7 +68,7 @@ body.res .bar{margin-top:10px}
   <div id="guide"></div>
   <div id="web"></div>
 </main>
-<footer class="foot">বাংলাদেশে তৈরি · <a href="/submit.html">ওয়েবসাইট জমা দিন বা সমস্যা জানান</a></footer>
+<footer class="foot">বাংলাদেশে তৈরি · <a href="/submit.html">ওয়েবসাইট জমা দিন বা সমস্যা জানান</a><br>নিরবো শুধু মোট সার্চ ও ক্লিকের সংখ্যা গোনে, কারও পরিচয় নয়।</footer>
 
 <script src="search-core.js"></script>
 <script>
@@ -89,6 +89,7 @@ function rank(data,toks){if(!toks.length)return[];var re=toks.map(mk),qs=toks.ma
  return data.map(function(p){var t=(p.title||"").toLowerCase(),d=(p.description||"").toLowerCase(),g=(p.tags||[]).join(" "),n=0,m=0;
   re.forEach(function(r,i){var h=0;if(r.test(t))h+=3;if(r.test(d))h+=1;if(r.test(g))h+=2;if(!h&&okq(qs[i],toks[i])){var W=pw(p);if(ph(W.t,qs[i],toks[i]))h=2;else if(ph(W.d,qs[i],toks[i]))h=1}if(h){n+=h;m++}});
   return{p:p,n:m===toks.length?n+5:n,m:m}}).filter(function(x){return x.m*2>=toks.length&&x.n>0}).sort(function(a,b){return b.n-a.n}).map(function(x){return x.p}).filter(function(p,i,a){var k=function(z){return host(z.url)+"|"+(z.title||"").toLowerCase()};return a.findIndex(function(q){return k(q)===k(p)})===i}).slice(0,10)}
+function track(o){try{var b=JSON.stringify(o);if(!(navigator.sendBeacon&&navigator.sendBeacon("/api/event",new Blob([b],{type:"application/json"}))))fetch("/api/event",{method:"POST",body:b,keepalive:true})}catch(e){}}
 function hideSug(){$("sug").hidden=true}
 function sugg(v){var s=$("sug");s.innerHTML="";v=v.trim().toLowerCase();if(!v)return hideSug();
  var l=[],toks=tokens(v);
@@ -107,10 +108,10 @@ function run(q,push){q=(q||"").trim();$("q").value=q;hideSug();
  var id=++req;st.textContent="খুঁজছি...";
  loadIndex().then(function(data){
   if(id!==req)return;
-  var hits=rank(data,toks);
+  var hits=rank(data,toks);track({t:"search",n:hits.length,h:hits.map(function(x){return host(x.url)}).filter(function(h,i,a){return h&&a.indexOf(h)===i})});
   st.textContent=hits.length||g.firstChild?"":"কিছু পাওয়া যায়নি। অন্যভাবে লিখে দেখুন, যেমন: passport, nid, jonmo nibondon।";
   hits.forEach(function(x){var r=el("div","r");var u=el("div","u",x.source+" · "+host(x.url)+" · "),rp=el("a","rep","রিপোর্ট");rp.href="submit.html?report="+encodeURIComponent(x.url)+"#report";u.appendChild(rp);r.appendChild(u);
-   var a=el("a",0,x.title);a.href=x.url;a.target="_blank";a.rel="noopener noreferrer";r.appendChild(a);
+   var a=el("a",0,x.title);a.href=x.url;a.target="_blank";a.rel="noopener noreferrer";["click","auxclick"].forEach(function(ev){a.addEventListener(ev,function(){track({t:"click",h:[host(x.url)]})})});r.appendChild(a);
    r.appendChild(el("p",0,x.description));w.appendChild(r)})
  }).catch(function(){if(id===req)st.textContent="সার্চ ইনডেক্স লোড করা যায়নি। একটু পরে আবার চেষ্টা করুন।"})}
 $("f").addEventListener("submit",function(e){e.preventDefault();run($("q").value,true)});
