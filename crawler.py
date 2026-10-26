@@ -5,6 +5,7 @@ link and short description into data/index.json (Nirobo's own search index).
 Run it with:   scrapy runspider crawler.py
 """
 import datetime
+import json
 import os
 import re
 from urllib.parse import urlsplit
@@ -23,22 +24,33 @@ SITES = {
     "nidw.gov.bd": ("NID Wing", ["government", "nid", "bangladesh"], "https://nidw.gov.bd/"),
     "epassport.gov.bd": ("e-Passport", ["government", "passport", "bangladesh"], "https://www.epassport.gov.bd/"),
     "bdris.gov.bd": ("BDRIS", ["government", "birth-registration", "bangladesh"], "https://bdris.gov.bd/"),
-    "eporcha.gov.bd": ("e-Porcha", ["government", "land", "bangladesh"], "https://eporcha.gov.bd/"),
+    "eporcha.gov.bd": ("e-Porcha", ["government", "land", "bangladesh"], "https://www.eporcha.gov.bd/"),
     "ldtax.gov.bd": ("Land Development Tax", ["government", "land", "tax", "bangladesh"], "https://ldtax.gov.bd/"),
     "etaxnbr.gov.bd": ("NBR e-TIN", ["government", "tax", "bangladesh"], "https://etaxnbr.gov.bd/"),
     "bsp.brta.gov.bd": ("BRTA", ["government", "driving", "bangladesh"], "https://bsp.brta.gov.bd/"),
     # News (Bangladesh)
     "thedailystar.net": ("The Daily Star", ["news", "bangladesh"], "https://www.thedailystar.net/"),
     "prothomalo.com": ("Prothom Alo", ["news", "bangla", "bangladesh"], "https://www.prothomalo.com/"),
-    "dhakatribune.com": ("Dhaka Tribune", ["news", "bangladesh"], "https://www.dhakatribune.com/"),
     "bdnews24.com": ("bdnews24", ["news", "bangladesh"], "https://bdnews24.com/"),
-    # Education, health, jobs
+    # Education, health
     "ugc.gov.bd": ("UGC Bangladesh", ["education", "bangladesh"], "https://www.ugc.gov.bd/"),
     "educationboard.gov.bd": ("Education Boards", ["education", "results", "bangladesh"], "https://www.educationboard.gov.bd/"),
     "du.ac.bd": ("University of Dhaka", ["education", "bangladesh"], "https://www.du.ac.bd/"),
     "buet.ac.bd": ("BUET", ["education", "bangladesh"], "https://www.buet.ac.bd/"),
     "dghs.gov.bd": ("DGHS", ["health", "bangladesh"], "https://dghs.gov.bd/"),
-    "bdjobs.com": ("Bdjobs", ["jobs", "bangladesh"], "https://www.bdjobs.com/"),
+    "nu.ac.bd": ("National University", ["education", "bangladesh"], "https://www.nu.ac.bd/"),
+    "dshe.gov.bd": ("DSHE", ["education", "bangladesh"], "https://dshe.gov.bd/"),
+    "dpe.gov.bd": ("DPE", ["education", "bangladesh"], "https://dpe.gov.bd/"),
+    "bteb.gov.bd": ("BTEB", ["education", "bangladesh"], "https://bteb.gov.bd/"),
+    "teachers.gov.bd": ("Teachers Portal", ["education", "bangladesh"], "https://www.teachers.gov.bd/"),
+    "bb.org.bd": ("Bangladesh Bank", ["finance", "government", "bangladesh"], "https://www.bb.org.bd/"),
+    # More news
+    "tbsnews.net": ("The Business Standard", ["news", "business", "bangladesh"], "https://www.tbsnews.net/"),
+    "newagebd.net": ("New Age", ["news", "bangladesh"], "https://www.newagebd.net/"),
+    "jagonews24.com": ("Jagonews24", ["news", "bangla", "bangladesh"], "https://www.jagonews24.com/"),
+    "kalerkantho.com": ("Kaler Kantho", ["news", "bangla", "bangladesh"], "https://www.kalerkantho.com/"),
+    "samakal.com": ("Samakal", ["news", "bangla", "bangladesh"], "https://samakal.com/"),
+    "jugantor.com": ("Jugantor", ["news", "bangla", "bangladesh"], "https://www.jugantor.com/"),
     # International
     "who.int": ("World Health Organization", ["health", "international"], "https://www.who.int/"),
     "un.org": ("United Nations", ["international"], "https://www.un.org/"),
@@ -100,8 +112,6 @@ class NiroboCrawler(scrapy.Spider):
         "DEPTH_PRIORITY": 1,
         "SCHEDULER_DISK_QUEUE": "scrapy.squeues.PickleFifoDiskQueue",
         "SCHEDULER_MEMORY_QUEUE": "scrapy.squeues.FifoMemoryQueue",
-        # Save everything to data/index.json
-        "FEEDS": {"data/index.json": {"format": "json", "encoding": "utf8", "overwrite": True, "indent": 1}},
     }
 
     def __init__(self, *args, **kwargs):
@@ -110,6 +120,13 @@ class NiroboCrawler(scrapy.Spider):
         self.seen = set()
         self.desc_seen = {}
         self.fail = {}
+        self.items = []
+        self.old = []
+        try:  # the previous index, so one bad run does not wipe pages we already had
+            with open("data/index.json", encoding="utf-8") as f:
+                self.old = json.load(f)
+        except Exception:
+            pass
         self.info = {}
         self.links = LinkExtractor(allow_domains=allowed_domains_list(), deny=SKIP, unique=True)
 
@@ -175,7 +192,7 @@ class NiroboCrawler(scrapy.Spider):
         if len(title) > 3:
             name, tags, _ = SITES[domain]
             self.counts[domain] = self.counts.get(domain, 0) + 1
-            yield {
+            self.items.append({
                 "title": title,
                 "url": response.url,
                 "description": description,
@@ -183,7 +200,7 @@ class NiroboCrawler(scrapy.Spider):
                 "tags": tags,
                 "lang": "bn" if BANGLA.search(title + description) else "en",
                 "crawled": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d"),
-            }
+            })
 
         if self.counts.get(domain, 0) < MAX_PER_SITE:
             for link in self.links.extract_links(response)[:40]:
@@ -201,8 +218,27 @@ class NiroboCrawler(scrapy.Spider):
             lines.append(line)
             self.logger.info("REPORT %s", line)
         os.makedirs("data", exist_ok=True)
+        self.save_index()
         with open("data/report.txt", "w", encoding="utf-8") as f:
             f.write("\n".join(lines) + "\n")
+
+
+    def save_index(self):
+        """Write data/index.json. If a site gave far fewer pages than last time
+        (it was slow or blocking us today), keep its old pages too."""
+        merged = list(self.items)
+        have = {normalize(i["url"]) for i in self.items}
+        old_count = {}
+        for page in self.old:
+            d = site_for(urlsplit(page["url"]).netloc.lower())
+            old_count[d] = old_count.get(d, 0) + 1
+        for page in self.old:
+            d = site_for(urlsplit(page["url"]).netloc.lower())
+            if d and self.counts.get(d, 0) * 2 < old_count[d] and normalize(page["url"]) not in have:
+                merged.append(page)
+        with open("data/index.json", "w", encoding="utf-8") as f:
+            json.dump(merged, f, ensure_ascii=False, indent=1)
+        self.logger.info("REPORT saved %d pages (%d from earlier runs)", len(merged), len(merged) - len(self.items))
 
 
 def allowed_domains_list():
