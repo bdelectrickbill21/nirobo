@@ -1,0 +1,3 @@
+# Nirobo does not want search engine bots to visit this site.
+User-agent: *
+Disallow: /
