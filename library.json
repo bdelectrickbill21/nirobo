@@ -1,0 +1,146 @@
+[
+  {
+    "title": "জাতীয় পরিচয়পত্র (এনআইডি) সেবা",
+    "url": "https://nidw.gov.bd/",
+    "description": "নির্বাচন কমিশনের জাতীয় পরিচয়পত্র অনুবিভাগের অফিসিয়াল সাইট। এনআইডি সংশোধন ও অনলাইন সেবা। National ID (NID) services.",
+    "source": "NID Wing",
+    "type": "web",
+    "tags": ["government", "nid", "voter", "porichoypotro", "bangladesh"],
+    "lang": "bn"
+  },
+  {
+    "title": "ই-পাসপোর্ট অনলাইন আবেদন",
+    "url": "https://www.epassport.gov.bd/",
+    "description": "ই-পাসপোর্টের নতুন আবেদন, নবায়ন ও ফি। E-Passport online application and renewal.",
+    "source": "e-Passport",
+    "type": "web",
+    "tags": ["government", "passport", "pasport", "epassport", "bangladesh"],
+    "lang": "bn"
+  },
+  {
+    "title": "জন্ম ও মৃত্যু নিবন্ধন (BDRIS)",
+    "url": "https://bdris.gov.bd/",
+    "description": "জন্ম নিবন্ধন ও মৃত্যু নিবন্ধনের অনলাইন সেবা। Birth and death registration.",
+    "source": "BDRIS",
+    "type": "web",
+    "tags": ["government", "birth", "certificate", "jonmo", "nibondhon", "bangladesh"],
+    "lang": "bn"
+  },
+  {
+    "title": "ই-পর্চা: খতিয়ান ও পর্চা অনলাইনে",
+    "url": "https://eporcha.gov.bd/",
+    "description": "জমির খতিয়ান ও পর্চা অনলাইনে দেখা ও কপি নেওয়া। Land records online.",
+    "source": "e-Porcha",
+    "type": "web",
+    "tags": ["government", "land", "porcha", "khatian", "jomi", "bangladesh"],
+    "lang": "bn"
+  },
+  {
+    "title": "ভূমি উন্নয়ন কর (খাজনা) অনলাইনে",
+    "url": "https://ldtax.gov.bd/",
+    "description": "অনলাইনে জমির কর বা খাজনা দেওয়া ও দাখিলা নেওয়া। Land development tax.",
+    "source": "Land Development Tax",
+    "type": "web",
+    "tags": ["government", "land", "tax", "khajna", "dakhila", "bangladesh"],
+    "lang": "bn"
+  },
+  {
+    "title": "ই-টিআইএন ও আয়কর (এনবিআর)",
+    "url": "https://etaxnbr.gov.bd/",
+    "description": "টিআইএন নেওয়া এবং অনলাইনে আয়কর রিটার্ন জমা দেওয়া। e-TIN and e-Return.",
+    "source": "NBR e-TIN",
+    "type": "web",
+    "tags": ["government", "tin", "etin", "tax", "nbr", "bangladesh"],
+    "lang": "bn"
+  },
+  {
+    "title": "বিআরটিএ ড্রাইভিং লাইসেন্স সেবা",
+    "url": "https://bsp.brta.gov.bd/",
+    "description": "ড্রাইভিং লাইসেন্স, লার্নার ও যানবাহনের অনলাইন সেবা। BRTA driving license portal.",
+    "source": "BRTA",
+    "type": "web",
+    "tags": ["government", "driving", "license", "lisense", "brta", "bangladesh"],
+    "lang": "bn"
+  },
+  {
+    "title": "পুলিশ ক্লিয়ারেন্স সনদ",
+    "url": "https://pcc.police.gov.bd/",
+    "description": "বিদেশে যাওয়া বা চাকরির জন্য পুলিশ ক্লিয়ারেন্স সনদের আবেদন। Police clearance certificate.",
+    "source": "Bangladesh Police",
+    "type": "web",
+    "tags": ["government", "police", "clearance", "pcc", "bangladesh"],
+    "lang": "bn"
+  },
+  {
+    "title": "বাংলাদেশ জাতীয় তথ্য বাতায়ন",
+    "url": "https://bangladesh.gov.bd/",
+    "description": "বাংলাদেশ সরকারের জাতীয় ওয়েব পোর্টাল। National web portal of Bangladesh.",
+    "source": "National Portal",
+    "type": "web",
+    "tags": ["government", "portal", "bangladesh"],
+    "lang": "bn"
+  },
+  {
+    "title": "শিক্ষা বোর্ড",
+    "url": "https://www.educationboard.gov.bd/",
+    "description": "শিক্ষা বোর্ডের অফিসিয়াল সাইট। পরীক্ষা ও ফলাফলের তথ্য। Education boards of Bangladesh.",
+    "source": "Education Board",
+    "type": "web",
+    "tags": ["education", "board", "result", "ssc", "hsc", "bangladesh"],
+    "lang": "bn"
+  },
+  {
+    "title": "বাংলাদেশ প্রকৌশল বিশ্ববিদ্যালয় (বুয়েট)",
+    "url": "https://buet.ac.bd/",
+    "description": "বুয়েটের অফিসিয়াল সাইট। ভর্তি ও বিভাগের তথ্য। Bangladesh University of Engineering and Technology.",
+    "source": "BUET",
+    "type": "web",
+    "tags": ["university", "buet", "engineering", "admission", "bangladesh"],
+    "lang": "bn"
+  },
+  {
+    "title": "ঢাকা বিশ্ববিদ্যালয়",
+    "url": "https://www.du.ac.bd/",
+    "description": "ঢাকা বিশ্ববিদ্যালয়ের অফিসিয়াল সাইট। ভর্তি ও বিভাগের তথ্য। University of Dhaka.",
+    "source": "Dhaka University",
+    "type": "web",
+    "tags": ["university", "dhaka", "du", "admission", "bangladesh"],
+    "lang": "bn"
+  },
+  {
+    "title": "নিউ এজ (New Age)",
+    "url": "https://www.newagebd.net/",
+    "description": "বাংলাদেশের ইংরেজি দৈনিক পত্রিকা। Bangladesh English daily newspaper.",
+    "source": "New Age",
+    "type": "news",
+    "tags": ["news", "newspaper", "newage", "newagebd", "bangladesh"],
+    "lang": "en"
+  },
+  {
+    "title": "জাগোনিউজ২৪",
+    "url": "https://www.jagonews24.com/",
+    "description": "বাংলাদেশের অনলাইন সংবাদমাধ্যম। সর্বশেষ খবর। Bangladesh online news.",
+    "source": "Jagonews24",
+    "type": "news",
+    "tags": ["news", "khobor", "songbad", "jagonews", "bangladesh"],
+    "lang": "bn"
+  },
+  {
+    "title": "কালের কণ্ঠ",
+    "url": "https://www.kalerkantho.com/",
+    "description": "বাংলাদেশের দৈনিক পত্রিকা। সর্বশেষ খবর। Bangladesh daily newspaper.",
+    "source": "Kaler Kantho",
+    "type": "news",
+    "tags": ["news", "khobor", "songbad", "kalerkantho", "bangladesh"],
+    "lang": "bn"
+  },
+  {
+    "title": "সমকাল",
+    "url": "https://samakal.com/",
+    "description": "বাংলাদেশের দৈনিক পত্রিকা। সর্বশেষ খবর। Bangladesh daily newspaper.",
+    "source": "Samakal",
+    "type": "news",
+    "tags": ["news", "khobor", "songbad", "samakal", "bangladesh"],
+    "lang": "bn"
+  }
+]
