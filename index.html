@@ -90,7 +90,7 @@ function mk(k){var e=k.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),L="[\\p{L}\\p{M}\\p
  return new RegExp("(?<!"+L+")"+e+(/[\u0980-\u09FF]/.test(k)?"":"(?:e?s)?(?!"+L+")"),"u")}
 function rank(data,toks){if(!toks.length)return[];var re=toks.map(mk),qs=toks.map(skL);
  return data.map(function(p){var t=(p.title||"").toLowerCase(),d=(p.description||"").toLowerCase(),g=(p.tags||[]).join(" "),n=0,m=0;
-  re.forEach(function(r,i){var h=0;if(r.test(t))h+=3;if(r.test(d))h+=1;if(r.test(g))h+=2;if(!h&&okq(qs[i],toks[i])){var W=pw(p);if(ph(W.t,qs[i],toks[i]))h=2;else if(ph(W.d,qs[i],toks[i]))h=1}if(h){n+=h;m++}});
+  re.forEach(function(r,i){var h=0;if(r.test(t))h+=3;if(r.test(d))h+=1;if(r.test(g))h+=p.lib?5:2;if(!h&&okq(qs[i],toks[i])){var W=pw(p);if(ph(W.t,qs[i],toks[i]))h=2;else if(ph(W.d,qs[i],toks[i]))h=1}if(h){n+=h;m++}});
   return{p:p,n:(m===toks.length?n+5:n)+(p.lib&&m?4:0),m:m}}).filter(function(x){return x.m*2>=toks.length&&x.n>0}).sort(function(a,b){return b.n-a.n}).map(function(x){return x.p}).filter(function(p,i,a){var k=function(z){return host(z.url)+"|"+(z.title||"").toLowerCase()};return a.findIndex(function(q){return k(q)===k(p)})===i}).slice(0,10)}
 function track(o){try{var b=JSON.stringify(o);if(!(navigator.sendBeacon&&navigator.sendBeacon("/api/event",new Blob([b],{type:"application/json"}))))fetch("/api/event",{method:"POST",body:b,keepalive:true})}catch(e){}}
 function hideSug(){$("sug").hidden=true}

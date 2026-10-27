@@ -51,7 +51,7 @@ function tokens(q){return q.toLowerCase().replace(/[^\p{L}\p{M}\p{N}\s-]/gu," ")
 function score(s,toks){var n=0;toks.forEach(function(t){var hit=0;
  s.words.forEach(function(w){if(!w)return;
   if(w===t)hit=Math.max(hit,3);
-  else if(t.length>=3&&w.length>=3&&(w.indexOf(t)>-1||t.indexOf(w)>-1))hit=Math.max(hit,2);
+  else if(t.length>=3&&w.length>=3&&(w.indexOf(t)>-1||(t.indexOf(w)>-1&&(w.length>=4||/[\u0980-\u09FF]/.test(w)))))hit=Math.max(hit,2);
   else if(t.length>=5&&w.length>=5&&lev(w,t)<=1)hit=Math.max(hit,1)});if(hit<2){var q=skL(t);if(okq(q,t))s.sk.forEach(function(k,i){if(k===q&&(/[\u0980-\u09FF]/.test(s.words[i])||ed(s.words[i],t)<=3))hit=2})}n+=hit});return n}
 
 /* Banglish: compare words by how they sound (consonant skeleton), so
