@@ -81,14 +81,17 @@ function guide(s){var a=el("section","ans");a.appendChild(el("b","lb","নির
  var b=el("a","btn","অফিসিয়াল সাইটে যান");b.href=s.link;b.target="_blank";b.rel="noopener noreferrer";a.appendChild(b);
  a.appendChild(el("small",0,"ফি ও নিয়ম বদলাতে পারে। আবেদনের আগে অফিসিয়াল সাইটে মিলিয়ে নিন।"));return a}
 var INDEX=null;
-function loadIndex(){if(!INDEX)INDEX=fetch("/data/index.json").then(function(r){if(!r.ok)throw 0;return r.json()}).catch(function(e){INDEX=null;throw e});return INDEX}
+function loadIndex(){if(!INDEX)INDEX=Promise.all([
+ fetch("/data/index.json").then(function(r){if(!r.ok)throw 0;return r.json()}),
+ fetch("/data/library.json").then(function(r){return r.ok?r.json():[]}).catch(function(){return[]})
+]).then(function(x){var lib=Array.isArray(x[1])?x[1]:[],seen={};lib.forEach(function(p){p.lib=true;seen[p.url]=1});return lib.concat(x[0].filter(function(p){return!seen[p.url]}))}).catch(function(e){INDEX=null;throw e});return INDEX}
 function host(u){try{return new URL(u).hostname.replace(/^www\./,"")}catch(e){return ""}}
 function mk(k){var e=k.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),L="[\\p{L}\\p{M}\\p{N}]";
  return new RegExp("(?<!"+L+")"+e+(/[\u0980-\u09FF]/.test(k)?"":"(?:e?s)?(?!"+L+")"),"u")}
 function rank(data,toks){if(!toks.length)return[];var re=toks.map(mk),qs=toks.map(skL);
  return data.map(function(p){var t=(p.title||"").toLowerCase(),d=(p.description||"").toLowerCase(),g=(p.tags||[]).join(" "),n=0,m=0;
   re.forEach(function(r,i){var h=0;if(r.test(t))h+=3;if(r.test(d))h+=1;if(r.test(g))h+=2;if(!h&&okq(qs[i],toks[i])){var W=pw(p);if(ph(W.t,qs[i],toks[i]))h=2;else if(ph(W.d,qs[i],toks[i]))h=1}if(h){n+=h;m++}});
-  return{p:p,n:m===toks.length?n+5:n,m:m}}).filter(function(x){return x.m*2>=toks.length&&x.n>0}).sort(function(a,b){return b.n-a.n}).map(function(x){return x.p}).filter(function(p,i,a){var k=function(z){return host(z.url)+"|"+(z.title||"").toLowerCase()};return a.findIndex(function(q){return k(q)===k(p)})===i}).slice(0,10)}
+  return{p:p,n:(m===toks.length?n+5:n)+(p.lib&&m?4:0),m:m}}).filter(function(x){return x.m*2>=toks.length&&x.n>0}).sort(function(a,b){return b.n-a.n}).map(function(x){return x.p}).filter(function(p,i,a){var k=function(z){return host(z.url)+"|"+(z.title||"").toLowerCase()};return a.findIndex(function(q){return k(q)===k(p)})===i}).slice(0,10)}
 function track(o){try{var b=JSON.stringify(o);if(!(navigator.sendBeacon&&navigator.sendBeacon("/api/event",new Blob([b],{type:"application/json"}))))fetch("/api/event",{method:"POST",body:b,keepalive:true})}catch(e){}}
 function hideSug(){$("sug").hidden=true}
 function sugg(v){var s=$("sug");s.innerHTML="";v=v.trim().toLowerCase();if(!v)return hideSug();
