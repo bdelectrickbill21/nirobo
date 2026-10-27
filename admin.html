@@ -29,28 +29,28 @@ td.n,th.n{text-align:right}
 </head>
 <body>
 <div class="wrap">
-  <h1>নিরবো অ্যাডমিন</h1>
-  <form id="f"><input id="k" type="password" autocomplete="off" placeholder="অ্যাডমিন কী" aria-label="অ্যাডমিন কী"><button type="submit">দেখুন</button></form>
-  <p id="msg" role="status"></p>
-  <div id="out"></div>
+<h1>নিরবো অ্যাডমিন</h1>
+<form id="f"><input id="k" type="password" autocomplete="off" placeholder="অ্যাডমিন কী" aria-label="অ্যাডমিন কী"><button type="submit">দেখুন</button></form>
+<p id="msg" role="status"></p>
+<div id="out"></div>
 </div>
 <script>
 function el(t,x,c){var e=document.createElement(t);if(x!=null)e.textContent=x;if(c)e.className=c;return e}
 function table(heads,rows){var w=el("div",null,"box"),t=el("table"),h=el("tr");heads.forEach(function(x,i){h.appendChild(el("th",x,i?"n":""))});t.appendChild(h);
- rows.forEach(function(r){var tr=el("tr");r.forEach(function(x,i){tr.appendChild(el("td",x,i?"n":""))});t.appendChild(tr)});w.appendChild(t);return w}
-function top(days,field){var m={};days.forEach(function(d){Object.keys(d[field]||{}).forEach(function(h){m[h]=(m[h]||0)+d[field][h]})});
- return Object.keys(m).sort(function(a,b){return m[b]-m[a]}).slice(0,15).map(function(h){return[h,m[h]]})}
+rows.forEach(function(r){var tr=el("tr");r.forEach(function(x,i){tr.appendChild(el("td",x,i?"n":""))});t.appendChild(tr)});w.appendChild(t);return w}
+function topList(days,field){var m={};days.forEach(function(d){Object.keys(d[field]||{}).forEach(function(h){m[h]=(m[h]||0)+d[field][h]})});
+return Object.keys(m).sort(function(a,b){return m[b]-m[a]}).slice(0,15).map(function(h){return[h,m[h]]})}
 document.getElementById("f").addEventListener("submit",function(e){e.preventDefault();
- var msg=document.getElementById("msg"),out=document.getElementById("out");msg.textContent="লোড হচ্ছে...";out.innerHTML="";
- fetch("/api/stats",{headers:{"x-admin-key":document.getElementById("k").value}}).then(function(r){return r.json().then(function(b){return{ok:r.ok,b:b}})}).then(function(x){
-  if(!x.ok){msg.textContent=x.b.error||"সমস্যা হয়েছে";return}
-  msg.textContent="";var days=x.b.days,S=0,N=0,C=0;
-  days.forEach(function(d){S+=d.searches;N+=d.noresults;Object.keys(d.clicks).forEach(function(h){C+=d.clicks[h]})});
-  var big=el("div",null,"big");[["মোট সার্চ (১৪ দিন)",S],["কিছু না পাওয়া",N],["মোট ক্লিক",C]].forEach(function(p){var d=el("div",p[0]);d.insertBefore(el("b",p[1]),d.firstChild);big.appendChild(d)});out.appendChild(big);
-  out.appendChild(el("h2","দিনভিত্তিক"));out.appendChild(table(["তারিখ","সার্চ","কিছু না পাওয়া"],days.map(function(d){return[d.day,d.searches,d.noresults]})));
-  out.appendChild(el("h2","সবচেয়ে বেশি দেখানো সাইট"));out.appendChild(table(["সাইট","বার"],top(days,"impressions")));
-  out.appendChild(el("h2","সবচেয়ে বেশি ক্লিক"));out.appendChild(table(["সাইট","ক্লিক"],top(days,"clicks")));
- }).catch(function(){msg.textContent="সংযোগে সমস্যা। একটু পরে আবার চেষ্টা করুন।"})});
+var msg=document.getElementById("msg"),out=document.getElementById("out");msg.textContent="লোড হচ্ছে...";out.innerHTML="";
+fetch("/api/stats",{headers:{"x-admin-key":document.getElementById("k").value}}).then(function(r){return r.json().then(function(b){return{ok:r.ok,b:b}})}).then(function(x){
+if(!x.ok){msg.textContent=x.b.error||"সমস্যা হয়েছে";return}
+msg.textContent="";var days=x.b.days,S=0,N=0,C=0;
+days.forEach(function(d){S+=d.searches;N+=d.noresults;Object.keys(d.clicks).forEach(function(h){C+=d.clicks[h]})});
+var big=el("div",null,"big");[["মোট সার্চ (১৪ দিন)",S],["কিছু না পাওয়া",N],["মোট ক্লিক",C]].forEach(function(p){var d=el("div",p[0]);d.insertBefore(el("b",p[1]),d.firstChild);big.appendChild(d)});out.appendChild(big);
+out.appendChild(el("h2","দিনভিত্তিক"));out.appendChild(table(["তারিখ","সার্চ","কিছু না পাওয়া"],days.map(function(d){return[d.day,d.searches,d.noresults]})));
+out.appendChild(el("h2","সবচেয়ে বেশি দেখানো সাইট"));out.appendChild(table(["সাইট","বার"],topList(days,"impressions")));
+out.appendChild(el("h2","সবচেয়ে বেশি ক্লিক"));out.appendChild(table(["সাইট","ক্লিক"],topList(days,"clicks")));
+}).catch(function(){msg.textContent="সংযোগে সমস্যা। একটু পরে আবার চেষ্টা করুন।"})});
 </script>
 </body>
 </html>
