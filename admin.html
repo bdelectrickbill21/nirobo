@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>অ্যাডমিন - নিরবো</title>
+<title>Admin - Nirobo</title>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{--green:#0E3B2C;--red:#C8323C;--ink:#17211C;--muted:#5B6B62;--line:#CFD6D1}
@@ -25,32 +25,53 @@ td.n,th.n{text-align:right}
 .big{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}
 .big div{border:1px solid var(--line);border-left:5px solid var(--green);border-radius:4px;padding:8px 14px;min-width:130px}
 .big b{display:block;font-size:26px;color:var(--green)}
+.top{max-width:720px;margin:0 auto;padding:8px 18px 0;text-align:right;font-size:14px}
+.top button{font:inherit;font-size:14px;margin:0;border:0;background:none;color:var(--muted);padding:3px 10px;border-radius:12px;cursor:pointer;font-weight:400}
+.top button:hover{color:var(--green)}
+.top button[aria-pressed="true"]{color:var(--green);font-weight:500;background:#EEF3F0}
 </style>
 </head>
 <body>
+<nav class="top" id="langs" data-ia="langAria" aria-label="Language"><button type="button" data-ui="en">English</button><button type="button" data-ui="bl">Banglish</button><button type="button" data-ui="bn">বাংলা</button></nav>
 <div class="wrap">
-<h1>নিরবো অ্যাডমিন</h1>
-<form id="f"><input id="k" type="password" autocomplete="off" placeholder="অ্যাডমিন কী" aria-label="অ্যাডমিন কী"><button type="submit">দেখুন</button></form>
+<h1 data-i="a_h1"></h1>
+<form id="f"><input id="k" type="password" autocomplete="off" data-ip="a_key" data-ia="a_key" aria-label="Admin key" placeholder="Admin key"><button type="submit" data-i="a_view"></button></form>
 <p id="msg" role="status"></p>
 <div id="out"></div>
 </div>
+<script src="i18n.js"></script>
 <script>
+var UI="en";
+function T(k){var d=I18N[UI]||I18N.en;return d[k]!=null?d[k]:(I18N.en[k]!=null?I18N.en[k]:k)}
+function getUI(){try{var v=localStorage.getItem("nirobo-ui");if(v&&I18N[v])return v}catch(e){}return"en"}
+function applyStatic(titleKey){
+ document.documentElement.lang=UI==="bn"?"bn":UI==="bl"?"bn-Latn":"en";document.title=T(titleKey);
+ [].forEach.call(document.querySelectorAll("[data-i]"),function(e){e.textContent=T(e.getAttribute("data-i"))});
+ [].forEach.call(document.querySelectorAll("[data-ia]"),function(e){e.setAttribute("aria-label",T(e.getAttribute("data-ia")))});
+ [].forEach.call(document.querySelectorAll("[data-ip]"),function(e){e.placeholder=T(e.getAttribute("data-ip"))});
+ [].forEach.call(document.querySelectorAll("#langs button"),function(b){b.setAttribute("aria-pressed",b.getAttribute("data-ui")===UI?"true":"false")})}
+var DATA=null;
 function el(t,x,c){var e=document.createElement(t);if(x!=null)e.textContent=x;if(c)e.className=c;return e}
+function nf(n){return UI==="bn"?String(n).replace(/\d/g,function(d){return"০১২৩৪৫৬৭৮৯".charAt(d)}):String(n)}
 function table(heads,rows){var w=el("div",null,"box"),t=el("table"),h=el("tr");heads.forEach(function(x,i){h.appendChild(el("th",x,i?"n":""))});t.appendChild(h);
 rows.forEach(function(r){var tr=el("tr");r.forEach(function(x,i){tr.appendChild(el("td",x,i?"n":""))});t.appendChild(tr)});w.appendChild(t);return w}
 function topList(days,field){var m={};days.forEach(function(d){Object.keys(d[field]||{}).forEach(function(h){m[h]=(m[h]||0)+d[field][h]})});
-return Object.keys(m).sort(function(a,b){return m[b]-m[a]}).slice(0,15).map(function(h){return[h,m[h]]})}
-document.getElementById("f").addEventListener("submit",function(e){e.preventDefault();
-var msg=document.getElementById("msg"),out=document.getElementById("out");msg.textContent="লোড হচ্ছে...";out.innerHTML="";
-fetch("/api/stats",{headers:{"x-admin-key":document.getElementById("k").value}}).then(function(r){return r.json().then(function(b){return{ok:r.ok,b:b}})}).then(function(x){
-if(!x.ok){msg.textContent=x.b.error||"সমস্যা হয়েছে";return}
-msg.textContent="";var days=x.b.days,S=0,N=0,C=0;
+return Object.keys(m).sort(function(a,b){return m[b]-m[a]}).slice(0,15).map(function(h){return[h,nf(m[h])]})}
+function render(){var out=document.getElementById("out");out.innerHTML="";if(!DATA)return;
+var days=DATA.days,S=0,N=0,C=0;
 days.forEach(function(d){S+=d.searches;N+=d.noresults;Object.keys(d.clicks).forEach(function(h){C+=d.clicks[h]})});
-var big=el("div",null,"big");[["মোট সার্চ (১৪ দিন)",S],["কিছু না পাওয়া",N],["মোট ক্লিক",C]].forEach(function(p){var d=el("div",p[0]);d.insertBefore(el("b",p[1]),d.firstChild);big.appendChild(d)});out.appendChild(big);
-out.appendChild(el("h2","দিনভিত্তিক"));out.appendChild(table(["তারিখ","সার্চ","কিছু না পাওয়া"],days.map(function(d){return[d.day,d.searches,d.noresults]})));
-out.appendChild(el("h2","সবচেয়ে বেশি দেখানো সাইট"));out.appendChild(table(["সাইট","বার"],topList(days,"impressions")));
-out.appendChild(el("h2","সবচেয়ে বেশি ক্লিক"));out.appendChild(table(["সাইট","ক্লিক"],topList(days,"clicks")));
-}).catch(function(){msg.textContent="সংযোগে সমস্যা। একটু পরে আবার চেষ্টা করুন।"})});
+var big=el("div",null,"big");[[T("a_tot"),S],[T("a_none"),N],[T("a_clk"),C]].forEach(function(p){var d=el("div",p[0]);d.insertBefore(el("b",nf(p[1])),d.firstChild);big.appendChild(d)});out.appendChild(big);
+out.appendChild(el("h2",T("a_daily")));out.appendChild(table([T("a_date"),T("a_s"),T("a_none")],days.map(function(d){return[d.day,nf(d.searches),nf(d.noresults)]})));
+out.appendChild(el("h2",T("a_top")));out.appendChild(table([T("a_site"),T("a_times")],topList(days,"impressions")));
+out.appendChild(el("h2",T("a_topc")));out.appendChild(table([T("a_site"),T("a_c")],topList(days,"clicks")))}
+document.getElementById("f").addEventListener("submit",function(e){e.preventDefault();
+var msg=document.getElementById("msg");msg.textContent=T("a_load");DATA=null;render();
+fetch("/api/stats",{headers:{"x-admin-key":document.getElementById("k").value}}).then(function(r){return r.json().then(function(b){return{ok:r.ok,b:b}})}).then(function(x){
+if(!x.ok){msg.textContent=x.b.error||T("a_err");return}
+msg.textContent="";DATA=x.b;render()
+}).catch(function(){msg.textContent=T("a_conn")})});
+[].forEach.call(document.querySelectorAll("#langs button"),function(b){b.addEventListener("click",function(){var v=b.getAttribute("data-ui");if(v===UI)return;UI=v;try{localStorage.setItem("nirobo-ui",v)}catch(e){}applyStatic("a_title");render()})});
+UI=getUI();applyStatic("a_title");
 </script>
 </body>
 </html>

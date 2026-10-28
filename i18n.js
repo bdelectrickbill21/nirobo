@@ -122,3 +122,49 @@ var SVC_TR={
   steps:["pcc.police.gov.bd site-e abedon form puron korun.","Passport ba NID-r tottho din.","Online-e fee poriyodh korun.","Dorkar hole nirdharito office-e giye porichoy jachai korun.","Sonod download ba songroho korun."],
   docs:["Passport ba NID","Chhobi","Fee poriyodher roshid"]}}
 };
+
+/* Extra words for submit.html (s_) and admin.html (a_) */
+(function(){var X={
+en:{
+s_title:"Submit a website - Nirobo",s_h1:"Submit a website or report a problem",
+s_r1h:"What will be on Nirobo",s_r1a:"Sites that help people in Bangladesh: government services, education, news, health, jobs, business.",s_r1b:"Every request is checked by hand. Nothing is added before it is checked.",
+s_r2h:"What will not be on Nirobo",s_r2a:"Phishing or scam links.",s_r2b:"Gambling, adult content or illegal things.",s_r2c:"Annoying redirects, or sites full of only ads.",s_r2d:"Someone else's site without the owner's permission.",
+s_r3h:"Your information",s_r3p:"Your email is used only to contact you about your request. Nirobo does not track visitors.",
+s_h2:"Submit one website",s_url:"Website address",s_name:"Site name",s_cat:"Type",s_pick:"Choose",
+c_gov:"Government service",c_edu:"Education",c_news:"News",c_health:"Health",c_jobs:"Jobs",c_biz:"Business",c_other:"Something else",
+s_desc:"Short description",s_mail:"Your email",s_own:"I own this site or represent its owner, and I have read the rules above.",s_send:"Submit",
+s_h3:"Report a problem with a link",s_rp:"If you see phishing, gambling, adult content or wrong information, tell us here. We will check and remove it.",
+s_rurl:"Link",s_why:"Reason",w_phish:"Phishing or scam",w_gamb:"Gambling",w_adult:"Adult content",w_harm:"Illegal or harmful",w_wrong:"Wrong information",w_other:"Something else",
+s_note:"Details (optional)",s_rmail:"Your email (optional)",s_rsend:"Send report",
+s_sending:"Sending...",s_ok:"Thank you! We got your message. We will take a look.",s_fail:"Could not send. Try again in a moment.",
+a_title:"Admin - Nirobo",a_h1:"Nirobo admin",a_key:"Admin key",a_view:"View",a_load:"Loading...",a_err:"Something went wrong",a_conn:"Connection problem. Try again in a moment.",
+a_tot:"Total searches (14 days)",a_none:"Found nothing",a_clk:"Total clicks",a_daily:"By day",a_date:"Date",a_s:"Searches",a_top:"Most shown sites",a_site:"Site",a_times:"Times",a_topc:"Most clicked sites",a_c:"Clicks"},
+bl:{
+s_title:"Website joma din - Nirobo",s_h1:"Website joma din ba shomoshya janan",
+s_r1h:"Nirobo-te ki thakbe",s_r1a:"Bangladesher manusher kajey lage emon site: sorkari seba, shikkha, khobor, shasthyo, chakri, byabsha.",s_r1b:"Protiti abedon hate dekhe jachai kora hoy. Jachaiyer age kichhui jog hoy na.",
+s_r2h:"Ja thakbe na",s_r2a:"Phishing ba protarona-r link.",s_r2b:"Juya, praptoboyoshko content ba oboidho jinish.",s_r2c:"Biroktikor redirect ba shudhu bigyapone bhora site.",s_r2d:"Maliker onumoti chhara onyer site.",
+s_r3h:"Apnar tottho",s_r3p:"Email shudhu apnar abedoner bishoye jogajoger jonno babohar hobe. Nirobo visitor-der track kore na.",
+s_h2:"Ekti website joma din",s_url:"Website-er thikana",s_name:"Site-er naam",s_cat:"Dhoron",s_pick:"Bechhe nin",
+c_gov:"Sorkari seba",c_edu:"Shikkha",c_news:"Khobor",c_health:"Shasthyo",c_jobs:"Chakri",c_biz:"Byabsha",c_other:"Onno kichhu",
+s_desc:"Songkhipto porichiti",s_mail:"Apnar email",s_own:"Ami ei site-er malik ba protinidhi ebong upor-er niyomgulo porechhi.",s_send:"Joma din",
+s_h3:"Ekti link-er shomoshya janan",s_rp:"Phishing, juya, praptoboyoshko content ba bhul tottho dekhle ekhane janan. Amra dekhe shoriye felbo.",
+s_rurl:"Link",s_why:"Karon",w_phish:"Phishing ba protarona",w_gamb:"Juya",w_adult:"Praptoboyoshko content",w_harm:"Oboidho ba khotikor",w_wrong:"Bhul tottho",w_other:"Onno kichhu",
+s_note:"Bistarito (oichchhik)",s_rmail:"Apnar email (oichchhik)",s_rsend:"Report pathan",
+s_sending:"Pathano hochchhe...",s_ok:"Dhonyobad! Apnar barta peyechhi. Amra dekhe nebo.",s_fail:"Pathano jayni. Ektu pore abar chesta korun.",
+a_title:"Admin - Nirobo",a_h1:"Nirobo admin",a_key:"Admin key",a_view:"Dekhun",a_load:"Load hochchhe...",a_err:"Shomoshya hoyechhe",a_conn:"Songjoge shomoshya. Ektu pore abar chesta korun.",
+a_tot:"Mot search (14 din)",a_none:"Kichhu na pawa",a_clk:"Mot click",a_daily:"Dinobhittik",a_date:"Tarikh",a_s:"Search",a_top:"Shobcheye beshi dekhano site",a_site:"Site",a_times:"Bar",a_topc:"Shobcheye beshi click",a_c:"Click"},
+bn:{
+s_title:"ওয়েবসাইট জমা দিন - নিরবো",s_h1:"ওয়েবসাইট জমা দিন বা সমস্যা জানান",
+s_r1h:"নিরবোতে কী থাকবে",s_r1a:"বাংলাদেশের মানুষের কাজে লাগে এমন সাইট: সরকারি সেবা, শিক্ষা, খবর, স্বাস্থ্য, চাকরি, ব্যবসা।",s_r1b:"প্রতিটি আবেদন হাতে দেখে যাচাই করা হয়। যাচাইয়ের আগে কিছুই যোগ হয় না।",
+s_r2h:"যা থাকবে না",s_r2a:"ফিশিং বা প্রতারণার লিংক।",s_r2b:"জুয়া, প্রাপ্তবয়স্কদের কনটেন্ট বা অবৈধ জিনিস।",s_r2c:"বিরক্তিকর রিডাইরেক্ট বা শুধু বিজ্ঞাপনে ভরা সাইট।",s_r2d:"মালিকের অনুমতি ছাড়া অন্যের সাইট।",
+s_r3h:"আপনার তথ্য",s_r3p:"ইমেইল শুধু আপনার আবেদনের বিষয়ে যোগাযোগের জন্য ব্যবহার হবে। নিরবো ভিজিটরদের ট্র্যাক করে না।",
+s_h2:"একটি ওয়েবসাইট জমা দিন",s_url:"ওয়েবসাইটের ঠিকানা",s_name:"সাইটের নাম",s_cat:"ধরন",s_pick:"বেছে নিন",
+c_gov:"সরকারি সেবা",c_edu:"শিক্ষা",c_news:"খবর",c_health:"স্বাস্থ্য",c_jobs:"চাকরি",c_biz:"ব্যবসা",c_other:"অন্য কিছু",
+s_desc:"সংক্ষিপ্ত পরিচিতি",s_mail:"আপনার ইমেইল",s_own:"আমি এই সাইটের মালিক বা প্রতিনিধি এবং উপরের নিয়মগুলো পড়েছি।",s_send:"জমা দিন",
+s_h3:"একটি লিংকের সমস্যা জানান",s_rp:"ফিশিং, জুয়া, প্রাপ্তবয়স্ক কনটেন্ট বা ভুল তথ্য দেখলে এখানে জানান। আমরা দেখে সরিয়ে ফেলব।",
+s_rurl:"লিংক",s_why:"কারণ",w_phish:"ফিশিং বা প্রতারণা",w_gamb:"জুয়া",w_adult:"প্রাপ্তবয়স্ক কনটেন্ট",w_harm:"অবৈধ বা ক্ষতিকর",w_wrong:"ভুল তথ্য",w_other:"অন্য কিছু",
+s_note:"বিস্তারিত (ঐচ্ছিক)",s_rmail:"আপনার ইমেইল (ঐচ্ছিক)",s_rsend:"রিপোর্ট পাঠান",
+s_sending:"পাঠানো হচ্ছে...",s_ok:"ধন্যবাদ! আপনার বার্তা পেয়েছি। আমরা দেখে নেব।",s_fail:"পাঠানো যায়নি। একটু পরে আবার চেষ্টা করুন।",
+a_title:"অ্যাডমিন - নিরবো",a_h1:"নিরবো অ্যাডমিন",a_key:"অ্যাডমিন কী",a_view:"দেখুন",a_load:"লোড হচ্ছে...",a_err:"সমস্যা হয়েছে",a_conn:"সংযোগে সমস্যা। একটু পরে আবার চেষ্টা করুন।",
+a_tot:"মোট সার্চ (১৪ দিন)",a_none:"কিছু না পাওয়া",a_clk:"মোট ক্লিক",a_daily:"দিনভিত্তিক",a_date:"তারিখ",a_s:"সার্চ",a_top:"সবচেয়ে বেশি দেখানো সাইট",a_site:"সাইট",a_times:"বার",a_topc:"সবচেয়ে বেশি ক্লিক",a_c:"ক্লিক"}
+};for(var l in X)for(var k in X[l])I18N[l][k]=X[l][k]})();

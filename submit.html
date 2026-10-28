@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ওয়েবসাইট জমা দিন - নিরবো</title>
+<title>Submit a website - Nirobo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;700&display=swap" rel="stylesheet">
@@ -29,85 +29,100 @@ button{margin-top:18px;border:0;background:var(--green);color:#fff;font:inherit;
 button:disabled{opacity:.6}
 .msg{margin:12px 0 0;color:var(--green);font-weight:500}
 .small{color:var(--muted);font-size:15px}
+.top{max-width:720px;margin:0 auto;padding:8px 18px 0;text-align:right;font-size:14px}
+.top button{font:inherit;font-size:14px;margin:0;border:0;background:none;color:var(--muted);padding:3px 10px;border-radius:12px;cursor:pointer;font-weight:400}
+.top button:hover{color:var(--green)}
+.top button[aria-pressed="true"]{color:var(--green);font-weight:500;background:#EEF3F0}
 </style>
 </head>
 <body>
+<nav class="top" id="langs" data-ia="langAria" aria-label="Language"><button type="button" data-ui="en">English</button><button type="button" data-ui="bl">Banglish</button><button type="button" data-ui="bn">বাংলা</button></nav>
 <div class="wrap">
-  <a class="logo" href="/">nirob<i></i></a>
-  <h1>ওয়েবসাইট জমা দিন বা সমস্যা জানান</h1>
+  <a class="logo" href="/" aria-label="Nirobo" data-ia="home">nirob<i></i></a>
+  <h1 data-i="s_h1"></h1>
 
   <div class="rules">
-    <h3>নিরবোতে কী থাকবে</h3>
+    <h3 data-i="s_r1h"></h3>
     <ul>
-      <li>বাংলাদেশের মানুষের কাজে লাগে এমন সাইট: সরকারি সেবা, শিক্ষা, খবর, স্বাস্থ্য, চাকরি, ব্যবসা।</li>
-      <li>প্রতিটি আবেদন হাতে দেখে যাচাই করা হয়। যাচাইয়ের আগে কিছুই যোগ হয় না।</li>
+      <li data-i="s_r1a"></li>
+      <li data-i="s_r1b"></li>
     </ul>
-    <h3>যা থাকবে না</h3>
+    <h3 data-i="s_r2h"></h3>
     <ul>
-      <li>ফিশিং বা প্রতারণার লিংক।</li>
-      <li>জুয়া, প্রাপ্তবয়স্কদের কনটেন্ট বা অবৈধ জিনিস।</li>
-      <li>বিরক্তিকর রিডাইরেক্ট বা শুধু বিজ্ঞাপনে ভরা সাইট।</li>
-      <li>মালিকের অনুমতি ছাড়া অন্যের সাইট।</li>
+      <li data-i="s_r2a"></li>
+      <li data-i="s_r2b"></li>
+      <li data-i="s_r2c"></li>
+      <li data-i="s_r2d"></li>
     </ul>
-    <h3>আপনার তথ্য</h3>
-    <p style="margin:0">ইমেইল শুধু আপনার আবেদনের বিষয়ে যোগাযোগের জন্য ব্যবহার হবে। নিরবো ভিজিটরদের ট্র্যাক করে না।</p>
+    <h3 data-i="s_r3h"></h3>
+    <p style="margin:0" data-i="s_r3p"></p>
   </div>
 
-  <h2>একটি ওয়েবসাইট জমা দিন</h2>
+  <h2 data-i="s_h2"></h2>
   <form name="suggest-site" method="POST" data-netlify="true" netlify-honeypot="bot-field">
     <input type="hidden" name="form-name" value="suggest-site">
-    <p hidden><label>এটি খালি রাখুন <input name="bot-field"></label></p>
-    <label for="s-url">ওয়েবসাইটের ঠিকানা</label>
+    <p hidden><label>Leave this empty <input name="bot-field"></label></p>
+    <label for="s-url" data-i="s_url"></label>
     <input id="s-url" name="url" type="url" required placeholder="https://example.com.bd" maxlength="300">
-    <label for="s-name">সাইটের নাম</label>
+    <label for="s-name" data-i="s_name"></label>
     <input id="s-name" name="site-name" required maxlength="100">
-    <label for="s-cat">ধরন</label>
+    <label for="s-cat" data-i="s_cat"></label>
     <select id="s-cat" name="category" required>
-      <option value="">বেছে নিন</option>
-      <option>সরকারি সেবা</option><option>শিক্ষা</option><option>খবর</option>
-      <option>স্বাস্থ্য</option><option>চাকরি</option><option>ব্যবসা</option><option>অন্য কিছু</option>
+      <option value="" data-i="s_pick"></option>
+      <option value="Government service" data-i="c_gov"></option><option value="Education" data-i="c_edu"></option><option value="News" data-i="c_news"></option><option value="Health" data-i="c_health"></option><option value="Jobs" data-i="c_jobs"></option><option value="Business" data-i="c_biz"></option><option value="Other" data-i="c_other"></option>
     </select>
-    <label for="s-desc">সংক্ষিপ্ত পরিচিতি</label>
+    <label for="s-desc" data-i="s_desc"></label>
     <textarea id="s-desc" name="description" required maxlength="300"></textarea>
-    <label for="s-mail">আপনার ইমেইল</label>
+    <label for="s-mail" data-i="s_mail"></label>
     <input id="s-mail" name="email" type="email" required maxlength="150">
-    <label class="chk"><input type="checkbox" name="owner-confirmed" value="yes" required><span>আমি এই সাইটের মালিক বা প্রতিনিধি এবং উপরের নিয়মগুলো পড়েছি।</span></label>
-    <button type="submit">জমা দিন</button>
+    <label class="chk"><input type="checkbox" name="owner-confirmed" value="yes" required><span data-i="s_own"></span></label>
+    <button type="submit" data-i="s_send"></button>
     <p class="msg" role="status" aria-live="polite"></p>
   </form>
 
-  <h2 id="report">একটি লিংকের সমস্যা জানান</h2>
-  <p class="small">ফিশিং, জুয়া, প্রাপ্তবয়স্ক কনটেন্ট বা ভুল তথ্য দেখলে এখানে জানান। আমরা দেখে সরিয়ে ফেলব।</p>
+  <h2 id="report" data-i="s_h3"></h2>
+  <p class="small" data-i="s_rp"></p>
   <form name="report-link" method="POST" data-netlify="true" netlify-honeypot="bot-field">
     <input type="hidden" name="form-name" value="report-link">
-    <p hidden><label>এটি খালি রাখুন <input name="bot-field"></label></p>
-    <label for="r-url">লিংক</label>
+    <p hidden><label>Leave this empty <input name="bot-field"></label></p>
+    <label for="r-url" data-i="s_rurl"></label>
     <input id="r-url" name="url" type="url" required placeholder="https://" maxlength="500">
-    <label for="r-why">কারণ</label>
+    <label for="r-why" data-i="s_why"></label>
     <select id="r-why" name="reason" required>
-      <option value="">বেছে নিন</option>
-      <option>ফিশিং বা প্রতারণা</option><option>জুয়া</option><option>প্রাপ্তবয়স্ক কনটেন্ট</option>
-      <option>অবৈধ বা ক্ষতিকর</option><option>ভুল তথ্য</option><option>অন্য কিছু</option>
+      <option value="" data-i="s_pick"></option>
+      <option value="Phishing or scam" data-i="w_phish"></option><option value="Gambling" data-i="w_gamb"></option><option value="Adult content" data-i="w_adult"></option><option value="Illegal or harmful" data-i="w_harm"></option><option value="Wrong information" data-i="w_wrong"></option><option value="Other" data-i="w_other"></option>
     </select>
-    <label for="r-note">বিস্তারিত (ঐচ্ছিক)</label>
+    <label for="r-note" data-i="s_note"></label>
     <textarea id="r-note" name="details" maxlength="500"></textarea>
-    <label for="r-mail">আপনার ইমেইল (ঐচ্ছিক)</label>
+    <label for="r-mail" data-i="s_rmail"></label>
     <input id="r-mail" name="email" type="email" maxlength="150">
-    <button type="submit">রিপোর্ট পাঠান</button>
+    <button type="submit" data-i="s_rsend"></button>
     <p class="msg" role="status" aria-live="polite"></p>
   </form>
 </div>
 
+<script src="i18n.js"></script>
 <script>
+var UI="en";
+function T(k){var d=I18N[UI]||I18N.en;return d[k]!=null?d[k]:(I18N.en[k]!=null?I18N.en[k]:k)}
+function getUI(){try{var v=localStorage.getItem("nirobo-ui");if(v&&I18N[v])return v}catch(e){}return"en"}
+function applyStatic(titleKey){
+ document.documentElement.lang=UI==="bn"?"bn":UI==="bl"?"bn-Latn":"en";document.title=T(titleKey);
+ [].forEach.call(document.querySelectorAll("[data-i]"),function(e){e.textContent=T(e.getAttribute("data-i"))});
+ [].forEach.call(document.querySelectorAll("[data-ia]"),function(e){e.setAttribute("aria-label",T(e.getAttribute("data-ia")))});
+ [].forEach.call(document.querySelectorAll("[data-ip]"),function(e){e.placeholder=T(e.getAttribute("data-ip"))});
+ [].forEach.call(document.querySelectorAll("#langs button"),function(b){b.setAttribute("aria-pressed",b.getAttribute("data-ui")===UI?"true":"false")})}
 document.querySelectorAll("form").forEach(function(f){
  f.addEventListener("submit",function(e){e.preventDefault();
-  var b=f.querySelector("button"),m=f.querySelector(".msg");b.disabled=true;m.textContent="পাঠানো হচ্ছে...";
+  var b=f.querySelector("button"),m=f.querySelector(".msg");b.disabled=true;m.textContent=T("s_sending");
   fetch("/",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:new URLSearchParams(new FormData(f)).toString()})
-   .then(function(r){if(!r.ok)throw 0;f.reset();m.textContent="ধন্যবাদ! আপনার বার্তা পেয়েছি। আমরা দেখে নেব।"})
-   .catch(function(){m.textContent="পাঠানো যায়নি। একটু পরে আবার চেষ্টা করুন।"})
+   .then(function(r){if(!r.ok)throw 0;f.reset();m.textContent=T("s_ok")})
+   .catch(function(){m.textContent=T("s_fail")})
    .then(function(){b.disabled=false})})});
+[].forEach.call(document.querySelectorAll("#langs button"),function(b){b.addEventListener("click",function(){var v=b.getAttribute("data-ui");if(v===UI)return;UI=v;try{localStorage.setItem("nirobo-ui",v)}catch(e){}applyStatic("s_title")})});
 var pre=new URLSearchParams(location.search).get("report");
 if(pre&&/^https?:\/\//.test(pre))document.getElementById("r-url").value=pre.slice(0,500);
+UI=getUI();applyStatic("s_title");
 </script>
 </body>
 </html>
