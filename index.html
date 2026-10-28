@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>নিরবো - বাংলা সার্চ ইঞ্জিন</title>
-<meta name="description" content="নিরবো: বাংলা, Banglish ও English-এ খুঁজুন। সরকারি সেবার গাইডসহ ওয়েব সার্চ।">
+<title>Nirobo - Bangladeshi search engine</title>
+<meta name="description" content="Nirobo: search in Bangla, Banglish and English, with guides for government services.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;700&display=swap" rel="stylesheet">
@@ -69,29 +69,34 @@ body.res .tbar{display:block}
 .lnk{border:0;background:none;font:inherit;font-size:15px;color:var(--link);text-decoration:underline;cursor:pointer;padding:6px 8px 6px 0}
 #aGo,.more{font:inherit;font-weight:500;background:var(--green);color:#fff;border:0;border-radius:4px;padding:6px 18px;cursor:pointer;margin-top:10px}
 .more{display:block;margin:6px auto 0}
+.top{max-width:720px;margin:0 auto;padding:8px 18px 0;text-align:right;font-size:14px}
+.top button{font:inherit;border:0;background:none;color:var(--muted);padding:3px 10px;border-radius:12px;cursor:pointer}
+.top button:hover{color:var(--green)}
+.top button[aria-pressed="true"]{color:var(--green);font-weight:500;background:#EEF3F0}
 </style>
 </head>
 <body>
+<nav class="top" id="langs" data-ia="langAria" aria-label="Language"><button type="button" data-ui="en">English</button><button type="button" data-ui="bl">Banglish</button><button type="button" data-ui="bn">বাংলা</button></nav>
 <header class="hero">
-  <a class="logo" href="/" id="home" aria-label="নিরবো হোম">nirob<i></i></a>
-  <p class="tag">বাংলা, Banglish বা English, যেভাবে খুশি লিখে খুঁজুন।</p>
+  <a class="logo" href="/" id="home" data-ia="home" aria-label="Nirobo home">nirob<i></i></a>
+  <p class="tag" data-i="tag"></p>
   <form class="bar" id="f" role="search" autocomplete="off">
-    <input id="q" type="search" aria-label="খুঁজুন" placeholder="নিরবোতে খুঁজুন">
-    <button class="go" type="submit" aria-label="খুঁজুন"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg></button>
+    <input id="q" type="search" data-ia="sr" data-ip="ph" aria-label="Search" placeholder="Search Nirobo">
+    <button class="go" type="submit" data-ia="sr" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg></button>
     <ul class="sug" id="sug" hidden></ul>
   </form>
   <div class="tbar">
-    <ul class="tabs" id="tabs" role="tablist" aria-label="ফলাফলের ধরন"></ul>
+    <ul class="tabs" id="tabs" role="tablist" data-ia="tabsAria" aria-label="Result types"></ul>
     <div class="panel" id="morep" hidden></div>
     <div class="panel" id="toolp" hidden>
-      <label>সময় <select id="fTime"><option value="0">যেকোনো সময়</option><option value="1">গত ২৪ ঘণ্টা</option><option value="7">গত সপ্তাহ</option><option value="30">গত মাস</option><option value="365">গত বছর</option></select></label>
-      <label>ভাষা <select id="fLang"><option value="all">সব</option><option value="bn">বাংলা</option><option value="en">English</option></select></label>
-      <div><button type="button" class="lnk" id="advB" aria-expanded="false">অ্যাডভান্সড সার্চ</button><button type="button" class="lnk" id="clrB" hidden>ফিল্টার মুছুন</button></div>
+      <label><span data-i="tTime"></span> <select id="fTime"><option value="0" data-i="t0"></option><option value="1" data-i="t1"></option><option value="7" data-i="t7"></option><option value="30" data-i="t30"></option><option value="365" data-i="t365"></option></select></label>
+      <label><span data-i="tLang"></span> <select id="fLang"><option value="all" data-i="l_all"></option><option value="bn" data-i="l_bn"></option><option value="en" data-i="l_en"></option></select></label>
+      <div><button type="button" class="lnk" id="advB" aria-expanded="false" data-i="adv"></button><button type="button" class="lnk" id="clrB" hidden data-i="clr"></button></div>
       <div class="adv" id="adv" hidden>
-        <label>ঠিক এই শব্দগুলো<input id="aPh" autocomplete="off"></label>
-        <label>এই শব্দ বাদ দিয়ে<input id="aEx" autocomplete="off"></label>
-        <label>শুধু এই সাইটে<input id="aSite" placeholder="du.ac.bd" autocomplete="off"></label>
-        <button type="button" id="aGo">খুঁজুন</button>
+        <label><span data-i="aPh"></span><input id="aPh" autocomplete="off"></label>
+        <label><span data-i="aEx"></span><input id="aEx" autocomplete="off"></label>
+        <label><span data-i="aSite"></span><input id="aSite" placeholder="du.ac.bd" autocomplete="off"></label>
+        <button type="button" id="aGo" data-i="go"></button>
       </div>
     </div>
   </div>
@@ -103,36 +108,51 @@ body.res .tbar{display:block}
   <div id="guide"></div>
   <div id="web"></div>
 </main>
-<footer class="foot">বাংলাদেশে তৈরি · <a href="/submit.html">ওয়েবসাইট জমা দিন বা সমস্যা জানান</a><br>নিরবো শুধু মোট সার্চ ও ক্লিকের সংখ্যা গোনে, কারও পরিচয় নয়।</footer>
+<footer class="foot"><span data-i="made"></span> · <a href="/submit.html" data-i="submit"></a><br><span data-i="priv"></span></footer>
 
 <script src="search-core.js"></script>
+<script src="i18n.js"></script>
 <script>
 var $=function(i){return document.getElementById(i)},req=0;
 function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
 function plain(h){return new DOMParser().parseFromString(h||"","text/html").body.textContent}
-function list(t,a,items){a.appendChild(el("h3",0,t));var l=el(t==="ধাপ"?"ol":"ul");items.forEach(function(x){l.appendChild(el("li",0,x))});a.appendChild(l)}
-function guide(s){var a=el("section","ans");a.appendChild(el("b","lb","নিরবো গাইড"));a.appendChild(el("h2",0,s.t));
- list("ধাপ",a,s.steps);list("যে কাগজ লাগতে পারে",a,s.docs);
- var b=el("a","btn","অফিসিয়াল সাইটে যান");b.href=s.link;b.target="_blank";b.rel="noopener noreferrer";a.appendChild(b);
- a.appendChild(el("small",0,"ফি ও নিয়ম বদলাতে পারে। আবেদনের আগে অফিসিয়াল সাইটে মিলিয়ে নিন।"));return a}
+var UI="en";
+function T(k){var d=I18N[UI]||I18N.en;return d[k]!=null?d[k]:(I18N.en[k]!=null?I18N.en[k]:k)}
+function F(k,o){return T(k).replace(/\{(\w+)\}/g,function(m,a){return o[a]!=null?o[a]:m})}
+function nf(n){return UI==="bn"?bd(n):String(n)}
+function getUI(){try{var v=localStorage.getItem("nirobo-ui");if(v&&I18N[v])return v}catch(e){}return"en"}
+function applyStatic(){
+ document.documentElement.lang=UI==="bn"?"bn":UI==="bl"?"bn-Latn":"en";
+ [].forEach.call(document.querySelectorAll("[data-i]"),function(e){e.textContent=T(e.getAttribute("data-i"))});
+ [].forEach.call(document.querySelectorAll("[data-ip]"),function(e){e.placeholder=T(e.getAttribute("data-ip"))});
+ [].forEach.call(document.querySelectorAll("[data-ia]"),function(e){e.setAttribute("aria-label",T(e.getAttribute("data-ia")))});
+ [].forEach.call(document.querySelectorAll("#langs button"),function(b){b.setAttribute("aria-pressed",b.getAttribute("data-ui")===UI?"true":"false")});
+ drawTabs()}
+function setUI(v){if(!I18N[v]||v===UI)return;UI=v;try{localStorage.setItem("nirobo-ui",v)}catch(e){}applyStatic();var q=$("q").value.trim();if(q)run(q,false);else document.title=T("title")}
+function svc(s){var x=SVC_TR[s.link];return(UI!=="bn"&&x&&x[UI])?x[UI]:s}
+function list(h,a,items,ord){a.appendChild(el("h3",0,h));var l=el(ord?"ol":"ul");items.forEach(function(x){l.appendChild(el("li",0,x))});a.appendChild(l)}
+function guide(s){var x=svc(s),a=el("section","ans");a.appendChild(el("b","lb",T("gLabel")));a.appendChild(el("h2",0,x.t));
+ list(T("gSteps"),a,x.steps,1);list(T("gDocs"),a,x.docs,0);
+ var b=el("a","btn",T("gBtn"));b.href=s.link;b.target="_blank";b.rel="noopener noreferrer";a.appendChild(b);
+ a.appendChild(el("small",0,T("gNote")));return a}
 var INDEX=null,LASTQ="";
-var TABS=[{k:"all",n:"সব"},{k:"news",n:"খবর",g:["news"]},{k:"gov",n:"সরকারি",g:["government"]},{k:"edu",n:"শিক্ষা",g:["education","university"]},{k:"health",n:"স্বাস্থ্য",g:["health"],m:1},{k:"fin",n:"অর্থ ও ব্যাংক",g:["finance"],m:1}],TAB="all",LANG="all",TIME=0;
+var TABS=[{k:"all"},{k:"news",g:["news"]},{k:"gov",g:["government"]},{k:"edu",g:["education","university"]},{k:"health",g:["health"],m:1},{k:"fin",g:["finance"],m:1}],TAB="all",LANG="all",TIME=0;
 function inTab(p,k){var t=TABS.filter(function(x){return x.k===k})[0];return!t||!t.g||(p.tags||[]).some(function(g){return t.g.indexOf(g)>-1})}
 function readState(){var u=new URLSearchParams(location.search),t=u.get("tab"),l=u.get("lang"),d=parseInt(u.get("time"),10);
  TAB=TABS.some(function(x){return x.k===t})?t:"all";LANG=(l==="bn"||l==="en")?l:"all";TIME=[1,7,30,365].indexOf(d)>-1?d:0}
 function stateQS(){return(TAB!=="all"?"&tab="+TAB:"")+(LANG!=="all"?"&lang="+LANG:"")+(TIME?"&time="+TIME:"")}
 function filtersOn(){return LANG!=="all"||TIME>0}
 function setTab(k){$("morep").hidden=true;if(TAB!==k){TAB=k;run($("q").value,true)}}
-function tabBtn(t){var li=el("li"),b=el("button",0,t.n);b.type="button";b.setAttribute("role","tab");b.setAttribute("aria-selected",t.k===TAB?"true":"false");b.addEventListener("click",function(){setTab(t.k)});li.appendChild(b);return li}
+function tabBtn(t){var li=el("li"),b=el("button",0,T("tab_"+t.k));b.type="button";b.setAttribute("role","tab");b.setAttribute("aria-selected",t.k===TAB?"true":"false");b.addEventListener("click",function(){setTab(t.k)});li.appendChild(b);return li}
 function popBtn(label,panel,other,sel,act){var li=el("li"),b=el("button",0,label+" ▾");b.type="button";b.setAttribute("aria-haspopup","true");b.setAttribute("aria-expanded",$(panel).hidden?"false":"true");
  if(sel){b.setAttribute("role","tab");b.setAttribute("aria-selected",sel==="1"?"true":"false")}if(act)b.className="act";
  b.addEventListener("click",function(){var p=$(panel);p.hidden=!p.hidden;$(other).hidden=true;b.setAttribute("aria-expanded",p.hidden?"false":"true")});li.appendChild(b);return li}
 function drawTabs(){var u=$("tabs");u.innerHTML="";
  TABS.forEach(function(t){if(!t.m)u.appendChild(tabBtn(t))});
  var cur=TABS.filter(function(t){return t.m&&t.k===TAB})[0];
- u.appendChild(popBtn(cur?cur.n:"আরও","morep","toolp",cur?"1":"0",0));
- u.appendChild(popBtn("টুলস"+(filtersOn()?" •":""),"toolp","morep",0,filtersOn()));
- var p=$("morep");p.innerHTML="";TABS.forEach(function(t){if(!t.m)return;var b=el("button","opt",t.n);b.type="button";b.addEventListener("click",function(){setTab(t.k)});p.appendChild(b)});
+ u.appendChild(popBtn(cur?T("tab_"+cur.k):T("more"),"morep","toolp",cur?"1":"0",0));
+ u.appendChild(popBtn(T("tools")+(filtersOn()?" •":""),"toolp","morep",0,filtersOn()));
+ var p=$("morep");p.innerHTML="";TABS.forEach(function(t){if(!t.m)return;var b=el("button","opt",T("tab_"+t.k));b.type="button";b.addEventListener("click",function(){setTab(t.k)});p.appendChild(b)});
  $("fTime").value=String(TIME);$("fLang").value=LANG;$("clrB").hidden=!filtersOn()}
 function parseQ(q){var o={ph:[],ex:[],site:""},t=(q||"").replace(/[\u201C\u201D\u201E\u00AB\u00BB]/g,'"');
  t=t.replace(/"([^"]*)"/g,function(m,a){a=a.trim().toLowerCase();if(a)o.ph.push(a);return" "});
@@ -165,47 +185,48 @@ function hideSug(){$("sug").hidden=true}
 function sugg(v){var s=$("sug");s.innerHTML="";v=v.trim().toLowerCase();if(!v)return hideSug();
  var l=[],toks=tokens(v);
  CHIPS.forEach(function(c){if(c.indexOf(v)===0&&c!==v)l.push(c)});
- SERVICES.forEach(function(x){if(l.length<6&&toks.length&&score(x,toks)>=2)l.push(x.t)});
+ SERVICES.forEach(function(x){if(l.length<6&&toks.length&&score(x,toks)>=2)l.push(svc(x).t)});
  if(!l.length)return hideSug();
  l.forEach(function(t){var li=el("li"),b=el("button",0,t);b.type="button";b.addEventListener("mousedown",function(e){e.preventDefault();run(t,true)});li.appendChild(b);s.appendChild(li)});s.hidden=false}
-function row(x){var r=el("div","r");var u=el("div","u",x.source+" · "+host(x.url)+" · "),rp=el("a","rep","রিপোর্ট");rp.href="submit.html?report="+encodeURIComponent(x.url)+"#report";u.appendChild(rp);r.appendChild(u);
+function row(x){var r=el("div","r");var u=el("div","u",x.source+" · "+host(x.url)+" · "),rp=el("a","rep",T("report"));rp.href="submit.html?report="+encodeURIComponent(x.url)+"#report";u.appendChild(rp);r.appendChild(u);
  var a=el("a",0,x.title);a.href=x.url;a.target="_blank";a.rel="noopener noreferrer";["click","auxclick"].forEach(function(ev){a.addEventListener(ev,function(){track({t:"click",h:[host(x.url)]})})});r.appendChild(a);
  r.appendChild(el("p",0,x.description));return r}
 function run(q,push){q=(q||"").trim();$("q").value=q;hideSug();$("morep").hidden=true;
  var g=$("guide"),w=$("web"),st=$("status");g.innerHTML="";w.innerHTML="";st.textContent="";
- if(!q){TAB="all";LANG="all";TIME=0;drawTabs();document.body.className="";document.title="নিরবো - বাংলা সার্চ ইঞ্জিন";if(push)history.pushState(0,"","/");return}
- document.body.className="res";document.title=q+" - নিরবো";
+ if(!q){TAB="all";LANG="all";TIME=0;drawTabs();document.body.className="";document.title=T("title");if(push)history.pushState(0,"","/");return}
+ document.body.className="res";document.title=q+" - "+(UI==="bn"?"নিরবো":"Nirobo");
  drawTabs();
  if(push)history.pushState(0,"","?q="+encodeURIComponent(q)+stateQS());
  var o=parseQ(q),toks=tokens(o.text),best=null,bn=0,t0=performance.now(),plain=!o.ph.length&&!o.ex.length&&!o.site;
  SERVICES.forEach(function(s){var n=score(s,toks);if(n>bn){bn=n;best=s}});
  if(best&&bn>=2&&plain&&!filtersOn()&&(TAB==="all"||TAB==="gov"))g.appendChild(guide(best));
  var cutoff=TIME?new Date(Date.now()-TIME*864e5).toISOString().slice(0,10):"";
- var id=++req;st.textContent="খুঁজছি...";
+ var id=++req;st.textContent=T("searching");
  loadIndex().then(function(data){
   if(id!==req)return;
   var pool=data.filter(function(p){return pass(p,o,cutoff)}),all=toks.length?rank(pool,toks):((o.site||o.ph.length)?pool:[]),hits=all.slice(0,10);
   if(q!==LASTQ){LASTQ=q;track({t:"search",n:all.length,h:hits.map(function(x){return host(x.url)}).filter(function(h,i,a){return h&&a.indexOf(h)===i})})}
-  var sec=(performance.now()-t0)/1000,tm=sec<0.01?"০.০১ সেকেন্ডের কম":bd(sec.toFixed(2))+" সেকেন্ড";
-  if(all.length)st.textContent=(all.length>10?"মোট ":"")+bd(all.length)+"টি ফলাফল ("+tm+")";
-  else st.textContent=g.firstChild?"":(TAB!=="all"||filtersOn()||!plain?"এই ট্যাব বা ফিল্টারে কিছু পাওয়া যায়নি। \"সব\" ট্যাব বা টুলস দেখুন।":"কিছু পাওয়া যায়নি। অন্যভাবে লিখে দেখুন, যেমন: passport, nid, jonmo nibondon।");
-  var shown=0,mb=el("button","more","আরও ফলাফল দেখান");mb.type="button";w.appendChild(mb);
+  var sec=(performance.now()-t0)/1000,tm=sec<0.01?T("tmLess"):F("tm",{s:nf(sec.toFixed(2))});
+  if(all.length)st.textContent=all.length===1?F("cnt1",{t:tm}):F(all.length>10?"cntBig":"cnt",{n:nf(all.length),t:tm});
+  else st.textContent=g.firstChild?"":(TAB!=="all"||filtersOn()||!plain?T("noneTab"):T("none"));
+  var shown=0,mb=el("button","more",T("showMore"));mb.type="button";w.appendChild(mb);
   function add(){all.slice(shown,shown+10).forEach(function(x){w.insertBefore(row(x),mb)});shown=Math.min(all.length,shown+10);mb.hidden=shown>=all.length}
   mb.addEventListener("click",add);add()
- }).catch(function(){if(id===req)st.textContent="সার্চ ইনডেক্স লোড করা যায়নি। একটু পরে আবার চেষ্টা করুন।"})}
+ }).catch(function(){if(id===req)st.textContent=T("loadErr")})}
 $("f").addEventListener("submit",function(e){e.preventDefault();run($("q").value,true)});
 $("q").addEventListener("input",function(){sugg(this.value)});
 $("q").addEventListener("blur",function(){setTimeout(hideSug,120)});
 $("home").addEventListener("click",function(e){e.preventDefault();run("",true)});
 window.addEventListener("popstate",function(){readState();run(new URLSearchParams(location.search).get("q"),false)});
 CHIPS.forEach(function(c){var li=el("li"),b=el("button",0,c);b.type="button";b.addEventListener("click",function(){run(c,true)});li.appendChild(b);$("chips").appendChild(li)});
-readState();drawTabs();
+[].forEach.call(document.querySelectorAll("#langs button"),function(b){b.addEventListener("click",function(){setUI(b.getAttribute("data-ui"))})});
 $("fTime").addEventListener("change",function(){TIME=parseInt(this.value,10)||0;run($("q").value,true)});
 $("fLang").addEventListener("change",function(){LANG=this.value;run($("q").value,true)});
 $("clrB").addEventListener("click",function(){LANG="all";TIME=0;run($("q").value,true)});
 $("advB").addEventListener("click",function(){var a=$("adv");a.hidden=!a.hidden;this.setAttribute("aria-expanded",a.hidden?"false":"true")});
 $("aGo").addEventListener("click",function(){var o=parseQ($("q").value),ph=$("aPh").value.replace(/"/g,"").trim(),ex=$("aEx").value.trim().split(/\s+/).filter(Boolean),site=$("aSite").value.trim(),p=[o.plain];
  if(ph)p.push('"'+ph+'"');ex.forEach(function(w){p.push("-"+w.replace(/^-+/,""))});if(site)p.push("site:"+site);run(p.join(" ").trim(),true)});
+UI=getUI();readState();applyStatic();
 run(new URLSearchParams(location.search).get("q"),false);
 </script>
 </body>
