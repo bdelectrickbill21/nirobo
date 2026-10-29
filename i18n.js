@@ -203,3 +203,10 @@ qa_warn:"Number o niyom bodlate pare. Kaj na korle official utsho-e miliye nin."
 bn:{qa_label:"দ্রুত উত্তর",qa_more:"আরও দেখুন",qa_less:"কম দেখুন",qa_src:"সূত্র",qa_checked:"যাচাইয়ের তারিখ",qa_rel:"সম্পর্কিত প্রশ্ন",
 qa_warn:"নম্বর ও নিয়ম বদলাতে পারে। কাজ না করলে অফিসিয়াল সূত্রে মিলিয়ে নিন।"}
 };for(var l in X)for(var k in X[l])I18N[l][k]=X[l][k]})();
+
+/* Extra words for question suggestions (qa_sug, qa_pop) */
+(function(){var X={
+en:{qa_sug:"Questions you may be looking for",qa_pop:"Popular questions"},
+bl:{qa_sug:"Apni hoyto eigulo jante chan",qa_pop:"Janopriyo proshno"},
+bn:{qa_sug:"আপনি হয়তো এগুলো জানতে চান",qa_pop:"জনপ্রিয় প্রশ্ন"}
+};for(var l in X)for(var k in X[l])I18N[l][k]=X[l][k]})();
