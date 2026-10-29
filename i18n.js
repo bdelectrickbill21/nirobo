@@ -168,3 +168,38 @@ s_sending:"পাঠানো হচ্ছে...",s_ok:"ধন্যবাদ! �
 a_title:"অ্যাডমিন - নিরবো",a_h1:"নিরবো অ্যাডমিন",a_key:"অ্যাডমিন কী",a_view:"দেখুন",a_load:"লোড হচ্ছে...",a_err:"সমস্যা হয়েছে",a_conn:"সংযোগে সমস্যা। একটু পরে আবার চেষ্টা করুন।",
 a_tot:"মোট সার্চ (১৪ দিন)",a_none:"কিছু না পাওয়া",a_clk:"মোট ক্লিক",a_daily:"দিনভিত্তিক",a_date:"তারিখ",a_s:"সার্চ",a_top:"সবচেয়ে বেশি দেখানো সাইট",a_site:"সাইট",a_times:"বার",a_topc:"সবচেয়ে বেশি ক্লিক",a_c:"ক্লিক"}
 };for(var l in X)for(var k in X[l])I18N[l][k]=X[l][k]})();
+
+/* Extra words for Nirobo Study (st_) */
+(function(){var X={
+en:{st_label:"Nirobo Study",st_calc:"Calculator",st_deg:"Angles are in degrees.",st_pctl:"Percentage",st_big:"This can't be calculated.",
+st_lin:"Linear equation",st_quad:"Quadratic equation",st_std:"Standard form",st_coef:"Coefficients",st_disc:"Discriminant",
+st_two:"D is positive, so there are two real roots.",st_one:"D is zero, so there is one repeated root.",st_none:"D is negative, so there are no real roots. The complex roots are:",
+st_roots:"Roots",st_sol:"Solution",st_same:"This is true for every value.",st_nosol:"There is no solution.",
+st_unsup:"Nirobo can solve equations up to the 2nd power, like x² + 3x + 2 = 0.",
+st_note:"Note",st_ex:"Example",st_check:"Check with your textbook before using it in an exam.",
+st_tip1:"Tip: type an equation like x^2-5x+6=0 and Nirobo solves it step by step.",st_tip2:"Tip: type 20% of 500 and Nirobo calculates it."},
+bl:{st_label:"Nirobo Study",st_calc:"Calculator",st_deg:"Kon degree-te dhora hoyechhe.",st_pctl:"Shotangsho",st_big:"Eta hisab kora jay na.",
+st_lin:"Ekghat somikoron",st_quad:"Dwighat somikoron",st_std:"Standard rup",st_coef:"Shohok",st_disc:"Nirupok",
+st_two:"D dhonatmok, tai duti bastob mul.",st_one:"D shunno, tai ekti punoraboritto mul.",st_none:"D roonatmok, tai kono bastob mul nei. Jotil mul:",
+st_roots:"Mul",st_sol:"Shomadhan",st_same:"Eti shob manei shotti.",st_nosol:"Kono shomadhan nei.",
+st_unsup:"Nirobo 2 ghat porjonto somikoron shomadhan korte pare, jemon x² + 3x + 2 = 0.",
+st_note:"Mone rakhun",st_ex:"Udahoron",st_check:"Porikkhay babohar-er age pathyoboi-er shathe miliye nin.",
+st_tip1:"Tip: x^2-5x+6=0 er moto somikoron likhun, Nirobo dhape dhape shomadhan korbe.",st_tip2:"Tip: 20% of 500 likhun, Nirobo hisab kore dibe."},
+bn:{st_label:"নিরবো স্টাডি",st_calc:"ক্যালকুলেটর",st_deg:"কোণ ডিগ্রিতে ধরা হয়েছে।",st_pctl:"শতাংশ",st_big:"এটি হিসাব করা যায় না।",
+st_lin:"একঘাত সমীকরণ",st_quad:"দ্বিঘাত সমীকরণ",st_std:"আদর্শ রূপ",st_coef:"সহগ",st_disc:"নিরূপক",
+st_two:"D ধনাত্মক, তাই দুটি বাস্তব মূল।",st_one:"D শূন্য, তাই একটি পুনরাবৃত্ত মূল।",st_none:"D ঋণাত্মক, তাই কোনো বাস্তব মূল নেই। জটিল মূল:",
+st_roots:"মূল",st_sol:"সমাধান",st_same:"এটি সব মানের জন্যই সত্য।",st_nosol:"কোনো সমাধান নেই।",
+st_unsup:"নিরবো ২ ঘাত পর্যন্ত সমীকরণ সমাধান করতে পারে, যেমন x² + 3x + 2 = 0।",
+st_note:"মনে রাখুন",st_ex:"উদাহরণ",st_check:"পরীক্ষায় ব্যবহারের আগে পাঠ্যবইয়ের সঙ্গে মিলিয়ে নিন।",
+st_tip1:"টিপ: x^2-5x+6=0 এর মতো সমীকরণ লিখুন, নিরবো ধাপে ধাপে সমাধান করবে।",st_tip2:"টিপ: 20% of 500 লিখুন, নিরবো হিসাব করে দেবে।"}
+};for(var l in X)for(var k in X[l])I18N[l][k]=X[l][k]})();
+
+/* Extra words for Quick answers (qa_) */
+(function(){var X={
+en:{qa_label:"Quick answer",qa_more:"Show more",qa_less:"Show less",qa_src:"Source",qa_checked:"Checked on",qa_rel:"Related questions",
+qa_warn:"Numbers and rules can change. If something doesn't work, check the official source."},
+bl:{qa_label:"Quick answer",qa_more:"Aro dekhun",qa_less:"Kom dekhun",qa_src:"Utsho",qa_checked:"Jachai-er tarikh",qa_rel:"Shomporkito proshno",
+qa_warn:"Number o niyom bodlate pare. Kaj na korle official utsho-e miliye nin."},
+bn:{qa_label:"দ্রুত উত্তর",qa_more:"আরও দেখুন",qa_less:"কম দেখুন",qa_src:"সূত্র",qa_checked:"যাচাইয়ের তারিখ",qa_rel:"সম্পর্কিত প্রশ্ন",
+qa_warn:"নম্বর ও নিয়ম বদলাতে পারে। কাজ না করলে অফিসিয়াল সূত্রে মিলিয়ে নিন।"}
+};for(var l in X)for(var k in X[l])I18N[l][k]=X[l][k]})();

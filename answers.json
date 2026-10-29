@@ -1,0 +1,327 @@
+[
+ {
+  "id": "gp-emergency-balance",
+  "kw": "gp grameenphone grameen emergency balance loan minute internet code check limit dial take get neoa nebo jorury joruri jaruri ussd জিপি গ্রামীণফোন গ্রামীণ ইমার্জেন্সি ইমারজেন্সি জরুরি ব্যালেন্স লোন মিনিট কোড চেক নেওয়া নেব লিমিট",
+  "need": [
+   [
+    "gp",
+    "grameenphone",
+    "grameen",
+    "জিপি",
+    "গ্রামীণফোন",
+    "গ্রামীণ"
+   ],
+   [
+    "emergency",
+    "emergancy",
+    "emargency",
+    "ইমার্জেন্সি",
+    "ইমারজেন্সি",
+    "জরুরি",
+    "jorury",
+    "joruri",
+    "jaruri"
+   ]
+  ],
+  "q": {
+   "en": "How do I take or check emergency balance on Grameenphone?",
+   "bl": "Grameenphone-e emergency balance kivabe nebo ebong check korbo?",
+   "bn": "গ্রামীণফোনে ইমার্জেন্সি ব্যালেন্স কীভাবে নেবেন ও চেক করবেন?"
+  },
+  "a": {
+   "en": "To take Grameenphone emergency balance (or a minute loan), dial [[*121*1#]]. To see how much you have taken, dial [[*121*1*2#]].",
+   "bl": "Grameenphone-e emergency balance ba minute loan nite dial korun [[*121*1#]]. Koto neya ache dekhte dial korun [[*121*1*2#]].",
+   "bn": "গ্রামীণফোনে ইমার্জেন্সি ব্যালেন্স বা মিনিট লোন নিতে ডায়াল করুন [[*121*1#]]। কত নেওয়া আছে দেখতে ডায়াল করুন [[*121*1*2#]]।"
+  },
+  "items": {
+   "en": [
+    "Take emergency balance or minute loan: [[*121*1#]]",
+    "Check your emergency balance amount: [[*121*1*2#]]",
+    "Check your emergency balance limit: [[*121*1*5#]]"
+   ],
+   "bl": [
+    "Emergency balance ba minute loan neya: [[*121*1#]]",
+    "Emergency balance-er poriman dekha: [[*121*1*2#]]",
+    "Emergency balance-er limit dekha: [[*121*1*5#]]"
+   ],
+   "bn": [
+    "ইমার্জেন্সি ব্যালেন্স বা মিনিট লোন নেওয়া: [[*121*1#]]",
+    "ইমার্জেন্সি ব্যালেন্সের পরিমাণ দেখা: [[*121*1*2#]]",
+    "ইমার্জেন্সি ব্যালেন্সের সীমা (লিমিট) দেখা: [[*121*1*5#]]"
+   ]
+  },
+  "more": {
+   "en": [
+    "You can also dial [[*1010#]] or [[*9#]]. Use [[*9#]] if your limit is between 45 Tk and 200 Tk.",
+    "You can take up to 200 Tk. Your SIM must be active for at least 30 days.",
+    "Emergency balance or minute loan: possible when your main balance is below 30 Tk. Emergency internet: when your balance is below 5 Tk and your internet is below 10 MB.",
+    "For 11 Tk to 200 Tk, a service fee of 2 Tk plus VAT, SD and SC is charged when you recharge.",
+    "Grameenphone hotline: [[121]]"
+   ],
+   "bl": [
+    "Aro [[*1010#]] ba [[*9#]] dial kore neya jay. Limit 45 theke 200 taka hole [[*9#]] babohar korun.",
+    "Shorbocho 200 taka porjonto neya jay. SIM komporkhe 30 din active thakte hobe.",
+    "Main balance 30 takar kom hole emergency balance ba minute loan neya jay. Emergency internet neya jay balance 5 takar kom ebong internet 10 MB-r kom thakle.",
+    "11 theke 200 takar jonno recharge-er somoy 2 taka service fee ebong VAT, SD, SC kata hoy.",
+    "Grameenphone hotline: [[121]]"
+   ],
+   "bn": [
+    "এছাড়া [[*1010#]] অথবা [[*9#]] ডায়াল করেও নেওয়া যায়। লিমিট ৪৫ থেকে ২০০ টাকার মধ্যে হলে [[*9#]] ব্যবহার করুন।",
+    "সর্বোচ্চ ২০০ টাকা পর্যন্ত নেওয়া যায়। সিম কমপক্ষে ৩০ দিন সক্রিয় থাকতে হবে।",
+    "মূল ব্যালেন্স ৩০ টাকার কম হলে ইমার্জেন্সি ব্যালেন্স বা মিনিট লোন নেওয়া যায়। ইমার্জেন্সি ইন্টারনেট নেওয়া যায় ব্যালেন্স ৫ টাকার কম এবং ইন্টারনেট ১০ এমবির কম থাকলে।",
+    "১১ থেকে ২০০ টাকার জন্য রিচার্জের সময় ২ টাকা সার্ভিস ফি এবং ভ্যাট, এসডি, এসসি কাটা হয়।",
+    "গ্রামীণফোন হটলাইন: [[121]]"
+   ]
+  },
+  "src": {
+   "name": "grameenphone.com (official)",
+   "url": "https://www.grameenphone.com/personal/plans-offers/offers/emergency-balance"
+  },
+  "checked": "2026-10-28",
+  "related": []
+ },
+ {
+  "id": "bd-emergency-999",
+  "kw": "emergency number 999 police fire ambulance  bangladesh joruri jaruri sheba shewa number জরুরি নম্বর পুলিশ ফায়ার অ্যাম্বুলেন্স সেবা",
+  "an": [
+   "999"
+  ],
+  "q": {
+   "en": "What is the emergency number in Bangladesh?",
+   "bl": "Bangladeshe joruri sheba-r number koto?",
+   "bn": "বাংলাদেশে জরুরি সেবার নম্বর কত?"
+  },
+  "a": {
+   "en": "In an emergency, call [[999]]. It is the national emergency service for police, fire service and ambulance.",
+   "bl": "Joruri obosthay dial korun [[999]]. Eta police, fire service o ambulance-er jonno jatiyo joruri sheba number.",
+   "bn": "জরুরি অবস্থায় ডায়াল করুন [[999]]। এটি পুলিশ, ফায়ার সার্ভিস ও অ্যাম্বুলেন্সের জন্য জাতীয় জরুরি সেবা নম্বর।"
+  },
+  "items": {
+   "en": [
+    "Emergency (police, fire service, ambulance): [[999]]",
+    "Health advice: [[16263]]",
+    "Violence against women and children: [[109]]"
+   ],
+   "bl": [
+    "Joruri sheba (police, fire service, ambulance): [[999]]",
+    "Shasthyo poramorsho: [[16263]]",
+    "Nari o shishu nirjatan: [[109]]"
+   ],
+   "bn": [
+    "জরুরি সেবা (পুলিশ, ফায়ার সার্ভিস, অ্যাম্বুলেন্স): [[999]]",
+    "স্বাস্থ্য পরামর্শ: [[16263]]",
+    "নারী ও শিশু নির্যাতন: [[109]]"
+   ]
+  },
+  "more": {
+   "en": [
+    "For government information and services, call [[333]]."
+   ],
+   "bl": [
+    "Sorkari tottho o sheba-r jonno dial korun [[333]]."
+   ],
+   "bn": [
+    "সরকারি তথ্য ও সেবার জন্য ডায়াল করুন [[333]]।"
+   ]
+  },
+  "src": {
+   "name": "Bangladesh Navy: National Help Line Numbers (government list)",
+   "url": "https://navy.mil.bd/Miscellaneous/National%20Help%20Line%20Number.html"
+  },
+  "checked": "2026-10-28",
+  "related": [
+   "bd-helplines",
+   "bd-health-16263",
+   "bd-women-children-109"
+  ]
+ },
+ {
+  "id": "bd-women-children-109",
+  "kw": "109 women children woman child violence abuse helpline hotline nari shishu nirjatan অত্যাচার নারী শিশু নির্যাতন হেল্পলাইন",
+  "an": [
+   "109"
+  ],
+  "q": {
+   "en": "Who can I call for violence against women and children?",
+   "bl": "Nari o shishu nirjatoner khetre kake phone korbo?",
+   "bn": "নারী ও শিশু নির্যাতনের ক্ষেত্রে কাকে ফোন করব?"
+  },
+  "a": {
+   "en": "Call [[109]]. It is the government helpline for women and children facing violence or abuse.",
+   "bl": "Dial korun [[109]]. Nari o shishu nirjatan ba hoyoranir shikar hole eta sorkari helpline.",
+   "bn": "ডায়াল করুন [[109]]। নারী ও শিশু নির্যাতনের শিকার হলে এটি সরকারি হেল্পলাইন।"
+  },
+  "items": {
+   "en": [
+    "Helpline for women and children: [[109]]"
+   ],
+   "bl": [
+    "Nari o shishu-der helpline: [[109]]"
+   ],
+   "bn": [
+    "নারী ও শিশুদের হেল্পলাইন: [[109]]"
+   ]
+  },
+  "more": {
+   "en": [
+    "If someone is in immediate danger, call [[999]] first."
+   ],
+   "bl": [
+    "Keu tatkkhonik biponne thakle prothome [[999]]-e phone korun."
+   ],
+   "bn": [
+    "কেউ তাৎক্ষণিক বিপদে থাকলে প্রথমে [[999]]-এ ফোন করুন।"
+   ]
+  },
+  "src": {
+   "name": "Bangladesh Navy: National Help Line Numbers (government list)",
+   "url": "https://navy.mil.bd/Miscellaneous/National%20Help%20Line%20Number.html"
+  },
+  "checked": "2026-10-28",
+  "related": [
+   "bd-emergency-999",
+   "bd-helplines"
+  ]
+ },
+ {
+  "id": "bd-govt-333",
+  "kw": "333 government information services helpline national sorkari tottho sheba সরকারি তথ্য সেবা হেল্পলাইন",
+  "an": [
+   "333"
+  ],
+  "q": {
+   "en": "What is the 333 helpline?",
+   "bl": "333 helpline ki?",
+   "bn": "৩৩৩ হেল্পলাইন কী?"
+  },
+  "a": {
+   "en": "[[333]] is the national helpline for government information and services.",
+   "bl": "[[333]] holo sorkari tottho o sheba-r jonno jatiyo helpline.",
+   "bn": "[[333]] হলো সরকারি তথ্য ও সেবার জন্য জাতীয় হেল্পলাইন।"
+  },
+  "items": {
+   "en": [
+    "Government information and services: [[333]]"
+   ],
+   "bl": [
+    "Sorkari tottho o sheba: [[333]]"
+   ],
+   "bn": [
+    "সরকারি তথ্য ও সেবা: [[333]]"
+   ]
+  },
+  "more": {
+   "en": [
+    "For an emergency, call [[999]]."
+   ],
+   "bl": [
+    "Joruri obosthay [[999]]-e phone korun."
+   ],
+   "bn": [
+    "জরুরি অবস্থায় [[999]]-এ ফোন করুন।"
+   ]
+  },
+  "src": {
+   "name": "Bangladesh Navy: National Help Line Numbers (government list)",
+   "url": "https://navy.mil.bd/Miscellaneous/National%20Help%20Line%20Number.html"
+  },
+  "checked": "2026-10-28",
+  "related": [
+   "bd-helplines",
+   "bd-emergency-999"
+  ]
+ },
+ {
+  "id": "bd-health-16263",
+  "kw": "16263 health helpline doctor advice shastho shasthyo batayon call center centre dghs স্বাস্থ্য বাতায়ন হেল্পলাইন ডাক্তার number bangladesh বাংলাদেশ",
+  "an": [
+   "16263"
+  ],
+  "q": {
+   "en": "What is the health helpline number in Bangladesh?",
+   "bl": "Bangladesher shasthyo helpline number koto?",
+   "bn": "বাংলাদেশের স্বাস্থ্য হেল্পলাইন নম্বর কত?"
+  },
+  "a": {
+   "en": "Call [[16263]] (Shastho Batayon). It is the health call centre of the Directorate General of Health Services, for health advice.",
+   "bl": "Dial korun [[16263]] (Shastho Batayon). Eta shasthyo odhidoptorer health call centre, shasthyo poramorsher jonno.",
+   "bn": "ডায়াল করুন [[16263]] (স্বাস্থ্য বাতায়ন)। এটি স্বাস্থ্য অধিদপ্তরের হেলথ কল সেন্টার, স্বাস্থ্য পরামর্শের জন্য।"
+  },
+  "items": {
+   "en": [
+    "Health advice (Shastho Batayon): [[16263]]"
+   ],
+   "bl": [
+    "Shasthyo poramorsho (Shastho Batayon): [[16263]]"
+   ],
+   "bn": [
+    "স্বাস্থ্য পরামর্শ (স্বাস্থ্য বাতায়ন): [[16263]]"
+   ]
+  },
+  "more": {
+   "en": [
+    "If it is an emergency or the line is busy, call [[999]] or go to the nearest hospital."
+   ],
+   "bl": [
+    "Joruri hole ba line byasto thakle [[999]]-e phone korun ba kachher hashpatale jan."
+   ],
+   "bn": [
+    "জরুরি হলে বা লাইন ব্যস্ত থাকলে [[999]]-এ ফোন করুন অথবা কাছের হাসপাতালে যান।"
+   ]
+  },
+  "src": {
+   "name": "Bangladesh Navy: National Help Line Numbers (government list)",
+   "url": "https://navy.mil.bd/Miscellaneous/National%20Help%20Line%20Number.html"
+  },
+  "checked": "2026-10-28",
+  "related": [
+   "bd-emergency-999",
+   "bd-helplines"
+  ]
+ },
+ {
+  "id": "bd-helplines",
+  "kw": "helpline helplines numbers hotline hotlines list national bangladesh important হেল্পলাইন নম্বর হটলাইন তালিকা number",
+  "q": {
+   "en": "Bangladesh helpline numbers",
+   "bl": "Bangladesher helpline number-er talika",
+   "bn": "বাংলাদেশের হেল্পলাইন নম্বরের তালিকা"
+  },
+  "a": {
+   "en": "These are the main national helpline numbers in Bangladesh.",
+   "bl": "Bangladesher prodhan jatiyo helpline number-gulo ei:",
+   "bn": "বাংলাদেশের প্রধান জাতীয় হেল্পলাইন নম্বরগুলো এই:"
+  },
+  "items": {
+   "en": [
+    "Emergency (police, fire service, ambulance): [[999]]",
+    "Violence against women and children: [[109]]",
+    "Government information and services: [[333]]",
+    "Health advice: [[16263]]"
+   ],
+   "bl": [
+    "Joruri sheba (police, fire service, ambulance): [[999]]",
+    "Nari o shishu nirjatan: [[109]]",
+    "Sorkari tottho o sheba: [[333]]",
+    "Shasthyo poramorsho: [[16263]]"
+   ],
+   "bn": [
+    "জরুরি সেবা (পুলিশ, ফায়ার সার্ভিস, অ্যাম্বুলেন্স): [[999]]",
+    "নারী ও শিশু নির্যাতন: [[109]]",
+    "সরকারি তথ্য ও সেবা: [[333]]",
+    "স্বাস্থ্য পরামর্শ: [[16263]]"
+   ]
+  },
+  "src": {
+   "name": "Bangladesh Navy: National Help Line Numbers (government list)",
+   "url": "https://navy.mil.bd/Miscellaneous/National%20Help%20Line%20Number.html"
+  },
+  "checked": "2026-10-28",
+  "related": [
+   "bd-emergency-999",
+   "bd-women-children-109",
+   "bd-govt-333",
+   "bd-health-16263"
+  ]
+ }
+]
