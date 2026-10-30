@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>NewsHub - Nirobo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--green:#0E3B2C;--red:#C8323C;--ink:#17211C;--muted:#5B6B62;--line:#CFD6D1;--link:#1B4F9C}
+*{box-sizing:border-box}
+body{margin:0;border-top:5px solid var(--green);background:#fff;color:var(--ink);font-family:"Hind Siliguri","Noto Sans Bengali","Nirmala UI",system-ui,sans-serif;font-size:18px;line-height:1.6}
+.top{max-width:720px;margin:0 auto;padding:8px 18px 0;text-align:right;font-size:14px}
+.top a{color:var(--green);text-decoration:none;padding:3px 10px;border-radius:12px}
+.top button{font:inherit;font-size:14px;border:0;background:none;color:var(--muted);padding:3px 10px;border-radius:12px;cursor:pointer}
+.top button[aria-pressed="true"]{color:var(--green);font-weight:500;background:#EEF3F0}
+.wrap{max-width:720px;margin:0 auto;padding:6px 18px 40px}
+.logo{display:inline-block;font-size:30px;font-weight:700;line-height:1;color:var(--green);text-decoration:none}
+.logo i{display:inline-block;width:.56em;height:.56em;border-radius:50%;background:var(--red);margin-left:.04em}
+h1{font-size:30px;margin:14px 0 2px;color:var(--green)}
+.sub{margin:0;color:var(--muted)}
+.ctl{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 4px;align-items:center}
+.ctl button,.ctl select{font:inherit;font-size:15px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:20px;padding:4px 14px;cursor:pointer}
+.ctl button[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:#fff}
+.ctl .sep{width:1px;height:22px;background:var(--line);margin:0 4px}
+button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+#meta{color:var(--muted);font-size:15px;margin:10px 0 2px}
+#warn{color:var(--red);font-size:15px;margin:4px 0}
+.s{padding:14px 0;border-bottom:1px solid var(--line)}
+.s .u{font-size:14px;color:#0B5D3B}
+.s a.t{display:block;font-size:20px;line-height:1.35;color:var(--link);text-decoration:none}
+.s a.t:hover{text-decoration:underline}
+.s p{margin:2px 0 0;font-size:16px;color:#3F4D45}
+.s .al{font-size:14px;color:var(--muted);margin-top:2px}
+.more{display:block;margin:16px auto 0;font:inherit;font-weight:500;background:var(--green);color:#fff;border:0;border-radius:4px;padding:8px 22px;cursor:pointer}
+.more[hidden]{display:none}
+details{margin-top:28px;border:1px solid var(--line);border-left:5px solid var(--green);border-radius:6px;padding:10px 16px;background:#F6FAF7}
+summary{cursor:pointer;font-weight:500;color:var(--green)}
+details ul{margin:8px 0 6px;padding-left:22px}
+details p{margin:8px 0 0;font-size:16px;color:#3F4D45}
+.foot{text-align:center;color:var(--muted);font-size:14px;padding:26px 18px}
+.foot a{color:inherit}
+</style>
+</head>
+<body>
+<nav class="top" id="langs" data-ia="langAria" aria-label="Language"><a href="/" data-i="nh_search">Search</a><button type="button" data-ui="en">English</button><button type="button" data-ui="bl">Banglish</button><button type="button" data-ui="bn">বাংলা</button></nav>
+<div class="wrap">
+  <a class="logo" href="/" aria-label="Nirobo" data-ia="home">nirob<i></i></a>
+  <h1 data-i="nh_h1">NewsHub</h1>
+  <p class="sub" data-i="nh_sub"></p>
+  <div class="ctl" id="ctl">
+    <button type="button" data-w="1" data-i="nh_w1"></button><button type="button" data-w="6" data-i="nh_w6"></button><button type="button" data-w="24" data-i="nh_w24"></button>
+    <span class="sep"></span>
+    <button type="button" data-sort="top" data-i="nh_top"></button><button type="button" data-sort="latest" data-i="nh_latest"></button>
+    <span class="sep"></span>
+    <select id="ln" aria-label="Language"><option value="all" data-i="nh_lall"></option><option value="bn" data-i="l_bn"></option><option value="en" data-i="l_en"></option></select>
+  </div>
+  <p id="meta" aria-live="polite"></p>
+  <p id="warn"></p>
+  <div id="list"></div>
+  <button type="button" class="more" id="more" hidden data-i="nh_more"></button>
+  <details>
+    <summary data-i="nh_how"></summary>
+    <ul><li data-i="nh_r1"></li><li data-i="nh_r2"></li><li data-i="nh_r3"></li><li data-i="nh_r4"></li><li data-i="nh_r5"></li></ul>
+    <p data-i="nh_pub"></p>
+  </details>
+</div>
+<footer class="foot"><span data-i="made"></span> · <a href="/submit.html" data-i="submit"></a><br><span data-i="priv"></span></footer>
+
+<script src="i18n.js"></script>
+<script>
+var NEWS_URL=window.NIROBO_NEWS_URL||"https://raw.githubusercontent.com/bdelectrickbill21/nirobo/newsdata/news.json";
+var $=function(i){return document.getElementById(i)},UI="en",WIN=24,SORT="top",LN="all",DATA=null,SHOWN=40;
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function T(k){var d=I18N[UI]||I18N.en;return d[k]!=null?d[k]:(I18N.en[k]!=null?I18N.en[k]:k)}
+function F(k,o){return T(k).replace(/\{(\w+)\}/g,function(m,a){return o[a]!=null?o[a]:m})}
+function nf(n){return UI==="bn"?String(n).replace(/\d/g,function(d){return"০১২৩৪৫৬৭৮৯".charAt(d)}):String(n)}
+function getUI(){try{var v=localStorage.getItem("nirobo-ui");if(v&&I18N[v])return v}catch(e){}return"en"}
+function ago(ms){var m=Math.floor(ms/6e4);if(m<2)return T("nh_now");if(m<60)return F("nh_m",{n:nf(m)});var h=Math.floor(m/60);return h===1?T("nh_h1h"):F("nh_h",{n:nf(h)})}
+
+/* ---- the ranking rule (explained on the page) ---- */
+function ageH(p,now){return Math.max(0,(now-Date.parse(p))/36e5)}
+function baseScore(s,now){
+  var fresh=Math.pow(0.5,ageH(s.p,now)/6);                       // freshness halves every 6 hours
+  var cover=Math.min(1.8,1+0.35*Math.log(Math.max(1,s.n||1)));   // reported by several different sites
+  var trust=s.w||0.9;                                            // official / major / other source
+  var q=1;if((s.t||"").length<15)q*=0.7;if(/!!|\?\?/.test(s.t||"")||((s.t||"").length>12&&s.t===s.t.toUpperCase()&&/[A-Z]/.test(s.t)))q*=0.8;if(!s.d)q*=0.9;   // quality checks
+  return fresh*cover*trust*q}
+function rankNews(items,now,winH,ln,sort){
+  var pool=items.filter(function(s){var a=ageH(s.p,now);return a<=winH&&(ln==="all"||s.l===ln)});
+  if(sort==="latest")return pool.sort(function(a,b){return Date.parse(b.p)-Date.parse(a.p)});
+  var list=pool.map(function(s){return{s:s,sc:baseScore(s,now)}}),out=[],cnt={};
+  while(list.length){var bi=0,bv=-1;                              // one site cannot fill the list: each extra story from the same site counts 15% less
+   list.forEach(function(x,i){var v=x.sc*Math.pow(0.85,cnt[x.s.h]||0);if(v>bv){bv=v;bi=i}});
+   var x=list.splice(bi,1)[0];cnt[x.s.h]=(cnt[x.s.h]||0)+1;out.push(x.s)}
+  return out}
+
+function host(u){try{return new URL(u).hostname.replace(/^www\./,"")}catch(e){return""}}
+function track(h){try{var b=JSON.stringify({t:"click",h:[h]});if(!(navigator.sendBeacon&&navigator.sendBeacon("/api/event",new Blob([b],{type:"application/json"}))))fetch("/api/event",{method:"POST",body:b,keepalive:true})}catch(e){}}
+function render(){
+  var list=$("list"),meta=$("meta"),warn=$("warn");list.innerHTML="";warn.textContent="";
+  [].forEach.call(document.querySelectorAll("#ctl [data-w]"),function(b){b.setAttribute("aria-pressed",String(+b.getAttribute("data-w")===WIN))});
+  [].forEach.call(document.querySelectorAll("#ctl [data-sort]"),function(b){b.setAttribute("aria-pressed",String(b.getAttribute("data-sort")===SORT))});
+  if(!DATA){return}
+  var now=Date.now(),rows=rankNews(DATA.items||[],now,WIN,LN,SORT);
+  var upd=Date.parse(DATA.updated);meta.textContent=(rows.length?F("nh_count",{n:nf(rows.length)})+" · ":"")+(upd?F("nh_updated",{t:ago(now-upd)}):"");
+  if(upd&&now-upd>3*36e5)warn.textContent=T("nh_stale");
+  if(!rows.length){list.appendChild(el("p","sub",T("nh_none")));$("more").hidden=true;return}
+  rows.slice(0,SHOWN).forEach(function(s){var d=el("div","s");
+   d.appendChild(el("div","u",s.s+" · "+ago(now-Date.parse(s.p))));
+   var a=el("a","t",s.t);a.href=s.u;a.target="_blank";a.rel="noopener noreferrer";["click","auxclick"].forEach(function(ev){a.addEventListener(ev,function(){track(host(s.u))})});d.appendChild(a);
+   if(s.d)d.appendChild(el("p",0,s.d));
+   if(s.a&&s.a.length)d.appendChild(el("div","al",F("nh_also",{s:s.a.join(", ")})));
+   list.appendChild(d)});
+  $("more").hidden=rows.length<=SHOWN}
+function applyStatic(){
+  document.documentElement.lang=UI==="bn"?"bn":UI==="bl"?"bn-Latn":"en";document.title=T("nh_title");
+  [].forEach.call(document.querySelectorAll("[data-i]"),function(e){e.textContent=T(e.getAttribute("data-i"))});
+  [].forEach.call(document.querySelectorAll("[data-ia]"),function(e){e.setAttribute("aria-label",T(e.getAttribute("data-ia")))});
+  [].forEach.call(document.querySelectorAll("#langs button"),function(b){b.setAttribute("aria-pressed",b.getAttribute("data-ui")===UI?"true":"false")});
+  render()}
+[].forEach.call(document.querySelectorAll("#langs button"),function(b){b.addEventListener("click",function(){var v=b.getAttribute("data-ui");if(v===UI)return;UI=v;try{localStorage.setItem("nirobo-ui",v)}catch(e){}applyStatic()})});
+[].forEach.call(document.querySelectorAll("#ctl [data-w]"),function(b){b.addEventListener("click",function(){WIN=+b.getAttribute("data-w");SHOWN=40;render()})});
+[].forEach.call(document.querySelectorAll("#ctl [data-sort]"),function(b){b.addEventListener("click",function(){SORT=b.getAttribute("data-sort");SHOWN=40;render()})});
+$("ln").addEventListener("change",function(){LN=this.value;SHOWN=40;render()});
+$("more").addEventListener("click",function(){SHOWN+=40;render()});
+UI=getUI();applyStatic();
+fetch(NEWS_URL,{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){if(!d||!Array.isArray(d.items))throw 0;DATA=d;render()}).catch(function(){$("meta").textContent=T("nh_err")});
+setInterval(render,6e4);
+</script>
+</body>
+</html>

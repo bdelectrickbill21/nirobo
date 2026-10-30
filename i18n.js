@@ -210,3 +210,31 @@ en:{qa_sug:"Questions you may be looking for",qa_pop:"Popular questions"},
 bl:{qa_sug:"Apni hoyto eigulo jante chan",qa_pop:"Janopriyo proshno"},
 bn:{qa_sug:"আপনি হয়তো এগুলো জানতে চান",qa_pop:"জনপ্রিয় প্রশ্ন"}
 };for(var l in X)for(var k in X[l])I18N[l][k]=X[l][k]})();
+
+/* Extra words for NewsHub (nh_) and Related searches (qa_also) */
+(function(){var X={
+en:{nh_link:"NewsHub",nh_title:"NewsHub - Nirobo",nh_h1:"NewsHub",nh_sub:"Fresh news from Bangladeshi sites, published in the last 24 hours.",nh_search:"Search",
+nh_top:"Top stories",nh_latest:"Latest",nh_w1:"Last hour",nh_w6:"Last 6 hours",nh_w24:"Last 24 hours",nh_lall:"All languages",
+nh_updated:"Updated {t}",nh_also:"Also reported by {s}",nh_none:"No stories in this time window yet.",nh_err:"Couldn't load the news list. Try again in a moment.",
+nh_stale:"The list has not been updated for a while, so stories may be older than they look.",nh_now:"Just now",nh_m:"{n} min ago",nh_h1h:"1 hour ago",nh_h:"{n} hours ago",nh_count:"{n} stories",nh_more:"Show more stories",
+nh_how:"How NewsHub ranks stories",nh_r1:"Newer stories rank higher. A story's freshness halves every 6 hours.",nh_r2:"Stories reported by several different sites rank higher.",
+nh_r3:"Official and well-known sources get a little more trust than unknown ones.",nh_r4:"No site can pay for a better position, and one site cannot fill the whole list.",nh_r5:"Titles that look like clickbait, or stories with no summary, rank lower.",
+nh_pub:"For website owners: publish a working RSS feed or news sitemap, write a clear title and summary, and use the correct publishing time.",
+qa_also:"Related searches"},
+bl:{nh_link:"NewsHub",nh_title:"NewsHub - Nirobo",nh_h1:"NewsHub",nh_sub:"Bangladesher site theke tatka khobor, gato 24 ghontar moddhe prokashito.",nh_search:"Khujun",
+nh_top:"Shera khobor",nh_latest:"Shorboshesh",nh_w1:"Gato 1 ghonta",nh_w6:"Gato 6 ghonta",nh_w24:"Gato 24 ghonta",nh_lall:"Shob bhasha",
+nh_updated:"Update: {t}",nh_also:"Aro janiyechhe: {s}",nh_none:"Ei somoyer moddhe ekhono kono khobor nei.",nh_err:"Khoborer talika load kora jayni. Ektu pore abar chesta korun.",
+nh_stale:"Talika onekkhon update hoyni, tai khobor dekhar cheye purono hote pare.",nh_now:"Ekhoni",nh_m:"{n} minute age",nh_h1h:"1 ghonta age",nh_h:"{n} ghonta age",nh_count:"{n}-ti khobor",nh_more:"Aro khobor dekhun",
+nh_how:"NewsHub kibhabe khobor shajay",nh_r1:"Notun khobor ageh thake. Protiti khoborer tatkkhonikota proti 6 ghontay ordhek hoye jay.",nh_r2:"Onek alada site-e prokashito khobor ageh thake.",
+nh_r3:"Official o porichito utsho ojana utsho-r cheye ektu beshi bishsho pay.",nh_r4:"Taka diye kono site bhalo jayga kinte pare na, ar ekti site-i shob talika bhore dite pare na.",nh_r5:"Clickbait-er moto shironam ba shaar-songkhepohin khobor niche thake.",
+nh_pub:"Website-er malikder jonno: kaj kora RSS feed ba news sitemap din, shoshpoishto shironam o shaar likhun, ar thik prokasher shomoy din.",
+qa_also:"Shomporkito search"},
+bn:{nh_link:"NewsHub",nh_title:"নিউজহাব - নিরবো",nh_h1:"NewsHub",nh_sub:"বাংলাদেশের সাইট থেকে টাটকা খবর, গত ২৪ ঘণ্টার মধ্যে প্রকাশিত।",nh_search:"খুঁজুন",
+nh_top:"সেরা খবর",nh_latest:"সর্বশেষ",nh_w1:"গত ১ ঘণ্টা",nh_w6:"গত ৬ ঘণ্টা",nh_w24:"গত ২৪ ঘণ্টা",nh_lall:"সব ভাষা",
+nh_updated:"হালনাগাদ: {t}",nh_also:"আরও জানিয়েছে: {s}",nh_none:"এই সময়ের মধ্যে এখনো কোনো খবর নেই।",nh_err:"খবরের তালিকা লোড করা যায়নি। একটু পরে আবার চেষ্টা করুন।",
+nh_stale:"তালিকা অনেকক্ষণ হালনাগাদ হয়নি, তাই খবর দেখার চেয়ে পুরোনো হতে পারে।",nh_now:"এইমাত্র",nh_m:"{n} মিনিট আগে",nh_h1h:"১ ঘণ্টা আগে",nh_h:"{n} ঘণ্টা আগে",nh_count:"{n}টি খবর",nh_more:"আরও খবর দেখুন",
+nh_how:"নিউজহাব কীভাবে খবর সাজায়",nh_r1:"নতুন খবর আগে থাকে। প্রতিটি খবরের তাজাভাব প্রতি ৬ ঘণ্টায় অর্ধেক হয়ে যায়।",nh_r2:"অনেক আলাদা সাইটে প্রকাশিত খবর আগে থাকে।",
+nh_r3:"অফিসিয়াল ও পরিচিত সূত্র অজানা সূত্রের চেয়ে একটু বেশি বিশ্বাস পায়।",nh_r4:"টাকা দিয়ে কোনো সাইট ভালো জায়গা কিনতে পারে না, আর একটি সাইটই পুরো তালিকা ভরে দিতে পারে না।",nh_r5:"ক্লিকবেইটের মতো শিরোনাম বা সারসংক্ষেপহীন খবর নিচে থাকে।",
+nh_pub:"ওয়েবসাইটের মালিকদের জন্য: কাজ করা RSS ফিড বা নিউজ সাইটম্যাপ দিন, স্পষ্ট শিরোনাম ও সারসংক্ষেপ লিখুন, আর ঠিক প্রকাশের সময় দিন।",
+qa_also:"সম্পর্কিত সার্চ"}
+};for(var l in X)for(var k in X[l])I18N[l][k]=X[l][k]})();
