@@ -96,6 +96,11 @@ body.res .tbar{display:block}
 .sugs .qa-acc{margin-top:0}
 .homeq{max-width:720px;margin:26px auto 0;text-align:left}
 body.res .homeq{display:none}
+.also{margin:26px 0 0}
+.also h3{font-size:16px;margin:0 0 8px;color:var(--green)}
+.also .al{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.also button{font:inherit;font-size:15px;border:1px solid var(--line);background:#fff;border-radius:20px;padding:3px 14px;cursor:pointer;color:var(--ink)}
+.also button:hover{border-color:var(--green);color:var(--green)}
 .top{max-width:720px;margin:0 auto;padding:8px 18px 0;text-align:right;font-size:14px}
 .top a.nhl{color:var(--green);font-weight:500;text-decoration:none;padding:3px 10px;border-radius:12px;margin-right:6px}
 .top a.nhl:hover{background:#EEF3F0}
@@ -137,6 +142,7 @@ body.res .homeq{display:none}
   <p id="status" aria-live="polite"></p>
   <div id="guide"></div>
   <div id="web"></div>
+  <div class="also" id="also"></div>
 </main>
 <footer class="foot"><span data-i="made"></span> · <a href="/submit.html" data-i="submit"></a><br><span data-i="priv"></span></footer>
 
@@ -169,8 +175,8 @@ function guide(s){var x=svc(s),a=el("section","ans");a.appendChild(el("b","lb",T
  a.appendChild(el("small",0,T("gNote")));return a}
 var MON={en:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],bn:["জানুয়ারি","ফেব্রুয়ারি","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগস্ট","সেপ্টেম্বর","অক্টোবর","নভেম্বর","ডিসেম্বর"]};
 function fdate(iso){var m=/^(\d{4})-(\d\d)-(\d\d)$/.exec(iso||"");if(!m)return iso||"";var d=parseInt(m[3],10),mo=parseInt(m[2],10)-1,s=d+" "+(MON[UI]||MON.en)[mo]+" "+m[1];return UI==="bn"?bd(s):s}
-var ANSWERS=null;
-function loadAnswers(){if(!ANSWERS)ANSWERS=fetch("/data/answers.json").then(function(r){return r.ok?r.json():[]}).catch(function(){return[]}).then(function(a){return Array.isArray(a)?a:[]});return ANSWERS}
+var ANSWERS=null,ANSW=[];
+function loadAnswers(){if(!ANSWERS)ANSWERS=fetch("/data/answers.json").then(function(r){return r.ok?r.json():[]}).catch(function(){return[]}).then(function(a){a=Array.isArray(a)?a:[];ANSW=a;return a});return ANSWERS}
 function loc(o){return o?(o[UI]||o.en||[]):[]}
 function rich(t){var f=document.createDocumentFragment();String(t).split(/(\[\[.+?\]\])/).forEach(function(p){var m=/^\[\[(.+?)\]\]$/.exec(p);if(m)f.appendChild(el("code",0,m[1]));else if(p)f.appendChild(document.createTextNode(p))});return f}
 function qaBody(c){var d=el("div","qa-body");var p=el("p","qa-a");p.appendChild(rich(loc(c.a)));d.appendChild(p);
@@ -273,13 +279,28 @@ function sugg(v){var s=$("sug");s.innerHTML="";v=v.trim().toLowerCase();if(!v)re
  var l=[],toks=tokens(v);
  CHIPS.forEach(function(c){if(c.indexOf(v)===0&&c!==v)l.push(c)});
  SERVICES.forEach(function(x){if(l.length<6&&toks.length&&score(x,toks)>=2)l.push(svc(x).t)});
+ var pre=[],mid=[];
+ if(v.length>=2)ANSW.forEach(function(c){(c.rs||[]).forEach(function(p){var lp=p.toLowerCase();if(lp===v||l.indexOf(p)>-1||pre.indexOf(p)>-1||mid.indexOf(p)>-1)return;
+  if(lp.indexOf(v)===0)pre.push(p);else if(lp.split(" ").some(function(w){return w.indexOf(v)===0}))mid.push(p)})});
+ pre.concat(mid).forEach(function(p){if(l.length<8)l.push(p)});
  if(!l.length)return hideSug();
  l.forEach(function(t){var li=el("li"),b=el("button",0,t);b.type="button";b.addEventListener("mousedown",function(e){e.preventDefault();run(t,true)});li.appendChild(b);s.appendChild(li)});s.hidden=false}
+function alsoList(q,toks,qc,sg,ans,best){
+ var out=[],low=q.trim().toLowerCase();
+ function add(p){if(p&&p.toLowerCase()!==low&&out.indexOf(p)<0)out.push(p)}
+ var cards=[];if(qc){(qc.related||[]).forEach(function(id){var c=ans.filter(function(x){return x.id===id})[0];if(c)cards.push(c)})}
+ sg.forEach(function(c){cards.push(c)});
+ cards.forEach(function(c){(c.rs||[]).slice(0,2).forEach(add)});
+ if(best){SERVICES.map(function(x){return{x:x,n:score(x,toks)}}).filter(function(z){return z.x!==best}).sort(function(a,b){return b.n-a.n}).slice(0,4).forEach(function(z){add(svc(z.x).t)})}
+ CHIPS.forEach(add);
+ return out.slice(0,6)}
+function drawAlso(list){var a=$("also");a.innerHTML="";if(!list.length)return;a.appendChild(el("h3",0,T("qa_also")));var u=el("ul","al");
+ list.forEach(function(p){var li=el("li"),b=el("button",0,p);b.type="button";b.addEventListener("click",function(){run(p,true)});li.appendChild(b);u.appendChild(li)});a.appendChild(u)}
 function row(x){var r=el("div","r");var u=el("div","u",x.source+" · "+host(x.url)+" · "),rp=el("a","rep",T("report"));rp.href="submit.html?report="+encodeURIComponent(x.url)+"#report";u.appendChild(rp);r.appendChild(u);
  var a=el("a",0,x.title);a.href=x.url;a.target="_blank";a.rel="noopener noreferrer";["click","auxclick"].forEach(function(ev){a.addEventListener(ev,function(){track({t:"click",h:[host(x.url)]})})});r.appendChild(a);
  r.appendChild(el("p",0,x.description));return r}
 function run(q,push){q=(q||"").trim();$("q").value=q;hideSug();$("morep").hidden=true;
- var g=$("guide"),w=$("web"),st=$("status");g.innerHTML="";w.innerHTML="";st.textContent="";
+ var g=$("guide"),w=$("web"),st=$("status");g.innerHTML="";w.innerHTML="";$("also").innerHTML="";st.textContent="";
  if(!q){TAB="all";LANG="all";TIME=0;drawTabs();document.body.className="";document.title=T("title");if(push)history.pushState(0,"","/");return}
  document.body.className="res";document.title=q+" - "+(UI==="bn"?"নিরবো":"Nirobo");
  drawTabs();
@@ -301,6 +322,7 @@ function run(q,push){q=(q||"").trim();$("q").value=q;hideSug();$("morep").hidden
   var sec=(performance.now()-t0)/1000,tm=sec<0.01?T("tmLess"):F("tm",{s:nf(sec.toFixed(2))});
   if(all.length)st.textContent=all.length===1?F("cnt1",{t:tm}):F(all.length>10?"cntBig":"cnt",{n:nf(all.length),t:tm});
   else st.textContent=g.firstChild?"":(TAB!=="all"||filtersOn()||!plain?T("noneTab"):T("none"));
+  if(TAB==="all"&&!filtersOn()&&plain)drawAlso(alsoList(q,toks,qc,sg,ans,best&&bn>=2?best:null));
   var shown=0,mb=el("button","more",T("showMore"));mb.type="button";w.appendChild(mb);
   function add(){all.slice(shown,shown+10).forEach(function(x){w.insertBefore(row(x),mb)});shown=Math.min(all.length,shown+10);mb.hidden=shown>=all.length}
   mb.addEventListener("click",add);add()

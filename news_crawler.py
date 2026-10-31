@@ -135,6 +135,13 @@ class MetaFinder(HTMLParser):
             self._in_title = False
 
 
+def alt_base(url):
+    """The same site written with or without www (some sites only answer on one of them)."""
+    p = urllib.parse.urlsplit(url)
+    host = p.netloc[4:] if p.netloc.startswith("www.") else "www." + p.netloc
+    return urllib.parse.urlunsplit((p.scheme, host, p.path or "/", "", ""))
+
+
 def article_like(url):
     """True for links that look like a story, not the homepage or a section page."""
     segs = [x for x in urllib.parse.urlsplit(url).path.split("/") if x]
@@ -259,6 +266,17 @@ def crawl_site(src):
                         note = "homepage answered %d" % status
                 except Exception as e:
                     note = "homepage: " + type(e).__name__
+                if note and not feeds:                    # try the other spelling of the address (with / without www)
+                    other = alt_base(base)
+                    try:
+                        status, page = fetch(other)
+                        if status == 200:
+                            base, rb, note = other, Robots(other), ""
+                            lf = LinkFinder()
+                            lf.feed(page.decode("utf-8", "replace"))
+                            feeds += [urllib.parse.urljoin(base, h) for h in lf.feeds]
+                    except Exception:
+                        pass
             feeds += [urllib.parse.urljoin(base, p) for p in COMMON_FEEDS]
         seen, got, used = set(), [], []
         for fu in feeds:
@@ -282,7 +300,9 @@ def crawl_site(src):
                 note = "%s is not a valid feed" % fu
             except Exception as e:
                 note = "%s: %s" % (fu, type(e).__name__)
-        if not got:                                       # no feed: try the site's news sitemap
+        limit_new0, limit_old0 = now_utc() + datetime.timedelta(minutes=10), now_utc() - datetime.timedelta(hours=MAX_AGE_H)
+        fresh_in_feed = [i for i in got if i["pub"] and limit_old0 <= i["pub"] <= limit_new0]
+        if not fresh_in_feed:                             # no feed, or a feed with only old stories: try the site's news sitemap
             for sm in (rb.sitemaps or [urllib.parse.urljoin(base, "/news-sitemap.xml")])[:4]:
                 if not rb.can(sm):
                     continue
@@ -291,6 +311,7 @@ def crawl_site(src):
                     if status != 200:
                         continue
                     kind, vals = parse_sitemap(data, tz)
+                    new = []
                     if kind == "index":
                         epoch = datetime.datetime(2000, 1, 1, tzinfo=datetime.timezone.utc)
                         pick = [v[0] for v in sorted(vals, key=lambda v: (bool(re.search("news", v[0], re.I)), v[1] or epoch), reverse=True)]
@@ -298,11 +319,12 @@ def crawl_site(src):
                             if rb.can(child):
                                 st2, d2 = fetch(child)
                                 if st2 == 200:
-                                    got += parse_sitemap(d2, tz)[1]
+                                    new += parse_sitemap(d2, tz)[1]
                     else:
-                        got += vals
-                    if got:
-                        got = fill_titles(got, rb)
+                        new += vals
+                    new = fill_titles(new, rb)
+                    if any(i["pub"] and limit_old0 <= i["pub"] <= limit_new0 for i in new):
+                        got += new
                         used.append(sm)
                         break
                 except Exception as e:
