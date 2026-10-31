@@ -19,6 +19,7 @@ Settings (optional environment variables):
 import datetime
 import gzip
 import html
+import http.cookiejar
 import json
 import os
 import re
@@ -51,6 +52,9 @@ STOP = set("""the and for with from that this are was has have will after over i
  এর ও এবং থেকে জন্য করে হয় হবে না কী কি এই সেই একটি এক আর তার তাদের নিয়ে পর ক্ষেত্রে করেছেন বলেছেন করা করতে হয়েছে হচ্ছে""".split())
 
 
+_OPENER = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()))
+
+
 def now_utc():
     return datetime.datetime.now(datetime.timezone.utc)
 
@@ -60,7 +64,7 @@ def fetch(url, timeout=15, maxbytes=4_000_000):
     """Returns (status, bytes). Raises on network errors."""
     req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "*/*", "Accept-Encoding": "gzip"})
     try:
-        with urllib.request.urlopen(req, timeout=timeout) as r:
+        with _OPENER.open(req, timeout=timeout) as r:
             data = r.read(maxbytes + 1)
             if r.headers.get("Content-Encoding", "").lower() == "gzip" or data[:2] == b"\x1f\x8b":
                 data = gzip.decompress(data)
@@ -105,6 +109,57 @@ class LinkFinder(HTMLParser):
         a = {k.lower(): (v or "") for k, v in attrs}
         if "alternate" in a.get("rel", "").lower() and re.search(r"(rss|atom)\+xml", a.get("type", ""), re.I) and a.get("href"):
             self.feeds.append(a["href"])
+
+
+class MetaFinder(HTMLParser):
+    """Reads og:title, og:description and <title> from the top of an article page."""
+    def __init__(self):
+        super().__init__()
+        self.og = {}
+        self.title = ""
+        self._in_title = False
+
+    def handle_starttag(self, tag, attrs):
+        a = {k.lower(): (v or "") for k, v in attrs}
+        if tag == "meta" and a.get("property", "").lower() in ("og:title", "og:description") and a.get("content"):
+            self.og.setdefault(a["property"].lower(), a["content"])
+        elif tag == "title":
+            self._in_title = True
+
+    def handle_data(self, data):
+        if self._in_title:
+            self.title += data
+
+    def handle_endtag(self, tag):
+        if tag == "title":
+            self._in_title = False
+
+
+def article_like(url):
+    """True for links that look like a story, not the homepage or a section page."""
+    segs = [x for x in urllib.parse.urlsplit(url).path.split("/") if x]
+    return len(segs) >= 2 or (len(segs) == 1 and len(segs[0]) >= 25)
+
+
+def fill_titles(items, rb, limit=12):
+    """Sitemaps often have no titles: read the title of the newest few story pages (politely)."""
+    todo = [i for i in items if not i["title"] and i["pub"] and article_like(i["url"])]
+    todo.sort(key=lambda i: i["pub"], reverse=True)
+    for it in todo[:limit]:
+        if not rb.can(it["url"]):
+            continue
+        try:
+            status, data = fetch(it["url"], timeout=12, maxbytes=400_000)
+            time.sleep(0.4)
+            if status != 200:
+                continue
+            mf = MetaFinder()
+            mf.feed(data.decode("utf-8", "replace"))
+            it["title"] = clean(mf.og.get("og:title") or mf.title, 160)
+            it["desc"] = clean(mf.og.get("og:description", ""))
+        except Exception:
+            continue
+    return [i for i in items if i["title"] or not i["pub"]]
 
 
 # ------------------------------------------------------------------ parsing
@@ -169,7 +224,7 @@ def parse_sitemap(data, tz="+06:00"):
     """Returns ('index', [urls]) or ('urls', [items])."""
     root = ET.fromstring(data)
     if root.tag.endswith("sitemapindex"):
-        return "index", [(s.findtext("{*}loc") or "").strip() for s in root.findall("{*}sitemap")]
+        return "index", [((s.findtext("{*}loc") or "").strip(), parse_date(s.findtext("{*}lastmod") or "", tz)) for s in root.findall("{*}sitemap")]
     items = []
     for u in root.findall("{*}url"):
         news = u.find("{*}news")
@@ -237,7 +292,8 @@ def crawl_site(src):
                         continue
                     kind, vals = parse_sitemap(data, tz)
                     if kind == "index":
-                        pick = [v for v in vals if re.search("news", v, re.I)] or vals[-2:]
+                        epoch = datetime.datetime(2000, 1, 1, tzinfo=datetime.timezone.utc)
+                        pick = [v[0] for v in sorted(vals, key=lambda v: (bool(re.search("news", v[0], re.I)), v[1] or epoch), reverse=True)]
                         for child in pick[:2]:
                             if rb.can(child):
                                 st2, d2 = fetch(child)
@@ -246,16 +302,28 @@ def crawl_site(src):
                     else:
                         got += vals
                     if got:
+                        got = fill_titles(got, rb)
                         used.append(sm)
                         break
                 except Exception as e:
                     note = "%s: %s" % (sm, type(e).__name__)
         items = []
+        drop = {"no date": 0, "too old": 0, "no title": 0, "future": 0}
         limit_new, limit_old = now_utc() + datetime.timedelta(minutes=10), now_utc() - datetime.timedelta(hours=MAX_AGE_H)
         for it in got:
-            if not it["url"].startswith(("http://", "https://")) or len(it["title"]) < 8 or not it["pub"]:
+            if not it["url"].startswith(("http://", "https://")):
                 continue
-            if it["pub"] > limit_new or it["pub"] < limit_old:
+            if len(it["title"]) < 8:
+                drop["no title"] += 1
+                continue
+            if not it["pub"]:
+                drop["no date"] += 1
+                continue
+            if it["pub"] > limit_new:
+                drop["future"] += 1
+                continue
+            if it["pub"] < limit_old:
+                drop["too old"] += 1
                 continue
             if BAD_WORDS.search(it["title"] + " " + it["desc"]):
                 continue
@@ -263,7 +331,8 @@ def crawl_site(src):
         items.sort(key=lambda i: i["pub"], reverse=True)
         items = items[:PER_SITE]
         if used:
-            note = "%d fresh stories via %s" % (len(items), used[0] + (" (+1 more feed)" if len(used) > 1 else ""))
+            why = ", ".join("%d %s" % (v, k) for k, v in drop.items() if v)
+            note = "%d fresh stories via %s" % (len(items), used[0] + (" (+1 more feed)" if len(used) > 1 else "")) + (" [dropped: %s]" % why if why else "")
         elif not note:
             note = "no feed or news sitemap found"
         return items, note

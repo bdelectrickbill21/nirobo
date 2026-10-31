@@ -97,13 +97,15 @@ body.res .tbar{display:block}
 .homeq{max-width:720px;margin:26px auto 0;text-align:left}
 body.res .homeq{display:none}
 .top{max-width:720px;margin:0 auto;padding:8px 18px 0;text-align:right;font-size:14px}
+.top a.nhl{color:var(--green);font-weight:500;text-decoration:none;padding:3px 10px;border-radius:12px;margin-right:6px}
+.top a.nhl:hover{background:#EEF3F0}
 .top button{font:inherit;border:0;background:none;color:var(--muted);padding:3px 10px;border-radius:12px;cursor:pointer}
 .top button:hover{color:var(--green)}
 .top button[aria-pressed="true"]{color:var(--green);font-weight:500;background:#EEF3F0}
 </style>
 </head>
 <body>
-<nav class="top" id="langs" data-ia="langAria" aria-label="Language"><button type="button" data-ui="en">English</button><button type="button" data-ui="bl">Banglish</button><button type="button" data-ui="bn">বাংলা</button></nav>
+<nav class="top" id="langs" data-ia="langAria" aria-label="Language"><a class="nhl" href="/news.html" data-i="nh_link">NewsHub</a><button type="button" data-ui="en">English</button><button type="button" data-ui="bl">Banglish</button><button type="button" data-ui="bn">বাংলা</button></nav>
 <header class="hero">
   <a class="logo" href="/" id="home" data-ia="home" aria-label="Nirobo home">nirob<i></i></a>
   <p class="tag" data-i="tag"></p>
