@@ -2,7 +2,7 @@ name: NewsHub update
 
 on:
   schedule:
-    - cron: "*/30 * * * *"   # every 30 minutes
+    - cron: "*/15 * * * *"   # every 15 minutes (GitHub timers can run late)
   workflow_dispatch:          # lets you press "Run workflow" by hand
 
 permissions:
@@ -28,11 +28,13 @@ jobs:
         run: |
           mkdir -p /tmp/prev
           curl -fsSL "https://raw.githubusercontent.com/${{ github.repository }}/newsdata/news.json" -o /tmp/prev/news.json || true
+          curl -fsSL "https://raw.githubusercontent.com/${{ github.repository }}/newsdata/icons.json" -o /tmp/prev/icons.json || true
 
       - name: Collect fresh news
         env:
           NIROBO_NEWS_OUT: /tmp/out
           NIROBO_NEWS_PREV: /tmp/prev/news.json
+          NIROBO_ICONS_PREV: /tmp/prev/icons.json
         run: python news_crawler.py
 
       # The list goes to its own branch called "newsdata". Netlify ignores that branch,
@@ -43,7 +45,7 @@ jobs:
           git config user.email "nirobo-bot@users.noreply.github.com"
           git checkout --orphan newsdata-tmp
           git rm -rf . > /dev/null 2>&1 || true
-          cp /tmp/out/news.json /tmp/out/news_report.txt .
-          git add news.json news_report.txt
+          cp /tmp/out/news.json /tmp/out/icons.json /tmp/out/news_report.txt .
+          git add news.json icons.json news_report.txt
           git commit -m "NewsHub update $(date -u +%Y-%m-%dT%H:%MZ)"
           git push --force origin HEAD:newsdata
