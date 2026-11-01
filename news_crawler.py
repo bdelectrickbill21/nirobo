@@ -16,6 +16,7 @@ Settings (optional environment variables):
   NIROBO_NEWS_PREV     path to the previous news.json (keeps stories of a site that failed this time)
   NIROBO_NEWS_MAX_AGE  hours to keep a story      (default 48)
 """
+import base64
 import datetime
 import gzip
 import html
@@ -40,6 +41,7 @@ MAX_AGE_H = float(os.environ.get("NIROBO_NEWS_MAX_AGE", "48"))
 SOURCES = os.environ.get("NIROBO_NEWS_SOURCES", "data/news_sources.json")
 OUT = os.environ.get("NIROBO_NEWS_OUT", "out")
 PREV = os.environ.get("NIROBO_NEWS_PREV", "")
+PREV_ICONS = os.environ.get("NIROBO_ICONS_PREV", "")
 PER_SITE = 60          # newest stories kept per site
 MAX_ITEMS = 500        # stories written to news.json
 TRUST = {"official": 1.15, "major": 1.0, "other": 0.9, "community": 0.7}
@@ -98,15 +100,18 @@ class Robots:
 
 
 class LinkFinder(HTMLParser):
-    """Finds <link rel="alternate" type="application/rss+xml" href="..."> in a page."""
+    """Finds <link rel="alternate" type="application/rss+xml" href="..."> and the site's icon in a page."""
     def __init__(self):
         super().__init__()
         self.feeds = []
+        self.icons = []
 
     def handle_starttag(self, tag, attrs):
         if tag != "link":
             return
         a = {k.lower(): (v or "") for k, v in attrs}
+        if re.search(r"\bicon\b", a.get("rel", ""), re.I) and "apple" not in a.get("rel", "").lower() and a.get("href"):
+            self.icons.append(a["href"])
         if "alternate" in a.get("rel", "").lower() and re.search(r"(rss|atom)\+xml", a.get("type", ""), re.I) and a.get("href"):
             self.feeds.append(a["href"])
 
@@ -121,7 +126,7 @@ class MetaFinder(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         a = {k.lower(): (v or "") for k, v in attrs}
-        if tag == "meta" and a.get("property", "").lower() in ("og:title", "og:description") and a.get("content"):
+        if tag == "meta" and a.get("property", "").lower() in ("og:title", "og:description", "og:image") and a.get("content"):
             self.og.setdefault(a["property"].lower(), a["content"])
         elif tag == "title":
             self._in_title = True
@@ -133,6 +138,42 @@ class MetaFinder(HTMLParser):
     def handle_endtag(self, tag):
         if tag == "title":
             self._in_title = False
+
+
+def sniff_image(data):
+    if data[:8] == b"\x89PNG\r\n\x1a\n": return "image/png"
+    if data[:4] == b"\x00\x00\x01\x00": return "image/x-icon"
+    if data[:3] == b"GIF": return "image/gif"
+    if data[:3] == b"\xff\xd8\xff": return "image/jpeg"
+    if data[:4] == b"RIFF" and data[8:12] == b"WEBP": return "image/webp"
+    head = data[:300].lstrip().lower()
+    if head.startswith((b"<svg", b"<?xml")) and b"<svg" in data[:1000].lower(): return "image/svg+xml"
+    return ""
+
+
+def get_icon(base, rb, page=None):
+    """The site's small logo as a data: link (kept under 12 KB), or "" if none can be used."""
+    cands = []
+    if page:
+        lf = LinkFinder()
+        try:
+            lf.feed(page.decode("utf-8", "replace"))
+        except Exception:
+            pass
+        cands += [urllib.parse.urljoin(base, h) for h in lf.icons]
+    cands.append(urllib.parse.urljoin(base, "/favicon.ico"))
+    for url in cands[:3]:
+        try:
+            if not rb.can(url):
+                continue
+            status, data = fetch(url, timeout=10, maxbytes=40_000)
+            time.sleep(0.3)
+            mime = sniff_image(data) if status == 200 else ""
+            if mime and len(data) <= 12_000:
+                return "data:%s;base64,%s" % (mime, base64.b64encode(data).decode())
+        except Exception:
+            continue
+    return ""
 
 
 def alt_base(url):
@@ -164,6 +205,7 @@ def fill_titles(items, rb, limit=12):
             mf.feed(data.decode("utf-8", "replace"))
             it["title"] = clean(mf.og.get("og:title") or mf.title, 160)
             it["desc"] = clean(mf.og.get("og:description", ""))
+            it["img"] = it.get("img") or good_image(mf.og.get("og:image", ""), it["url"])
         except Exception:
             continue
     return [i for i in items if i["title"] or not i["pub"]]
@@ -198,6 +240,37 @@ def parse_date(s, tz="+06:00"):
     return d.astimezone(datetime.timezone.utc)
 
 
+def good_image(url, base=""):
+    """Only normal web links to a picture. Returns "" otherwise."""
+    url = html.unescape((url or "").strip())
+    if not url or url.startswith("data:"):
+        return ""
+    url = urllib.parse.urljoin(base, url)
+    if not url.startswith(("http://", "https://")) or len(url) > 500:
+        return ""
+    if re.search(r"(1x1|pixel|spacer|blank|logo)\.(gif|png)", url, re.I):
+        return ""
+    return url
+
+
+def find_image(it, raw_desc, link):
+    for e in it.iter():
+        if not isinstance(e.tag, str):
+            continue
+        local = e.tag.rsplit("}", 1)[-1]
+        typ, url = (e.get("type") or "").lower(), e.get("url") or ""
+        if local in ("content", "thumbnail") and url and (local == "thumbnail" or e.get("medium") == "image" or typ.startswith("image") or not typ):
+            img = good_image(url, link)
+            if img and (local == "thumbnail" or re.search(r"\.(jpe?g|png|webp|gif|avif)(\?|$)", img, re.I) or typ.startswith("image") or e.get("medium") == "image"):
+                return img
+        if local == "enclosure" and url and typ.startswith("image"):
+            return good_image(url, link)
+        if local == "link" and e.get("rel") == "enclosure" and (e.get("type") or "").startswith("image") and e.get("href"):
+            return good_image(e.get("href"), link)
+    m = re.search(r"<img[^>]+src=[\"']([^\"']+)[\"']", raw_desc or "", re.I)
+    return good_image(m.group(1), link) if m else ""
+
+
 def text_of(el, *names):
     for n in names:
         found = el.find("{*}" + n)
@@ -222,7 +295,9 @@ def parse_feed(data, tz="+06:00"):
             if g is not None and (g.text or "").startswith("http"):
                 link = g.text.strip()
         desc = text_of(it, "description", "summary", "encoded", "content")
+        raw_html = desc + " " + text_of(it, "encoded")
         items.append({"title": clean(text_of(it, "title"), 160), "url": link.strip(), "desc": clean(desc),
+                      "img": find_image(it, raw_html, link.strip()),
                       "pub": parse_date(text_of(it, "pubDate", "published", "updated", "date"), tz)})
     return items
 
@@ -240,17 +315,23 @@ def parse_sitemap(data, tz="+06:00"):
             title = (news.findtext("{*}title") or "").strip()
             pub = (news.findtext("{*}publication_date") or "").strip()
         pub = pub or (u.findtext("{*}lastmod") or "").strip()
-        items.append({"title": clean(title, 160), "url": (u.findtext("{*}loc") or "").strip(), "desc": "", "pub": parse_date(pub, tz)})
+        loc = (u.findtext("{*}loc") or "").strip()
+        img = ""
+        im = u.find("{*}image")
+        if im is not None:
+            img = good_image(im.findtext("{*}loc") or "", loc)
+        items.append({"title": clean(title, 160), "url": loc, "desc": "", "img": img, "pub": parse_date(pub, tz)})
     return "urls", items
 
 
 # ------------------------------------------------------------------ one site
-def crawl_site(src):
-    """Returns (items, note). Never raises."""
+def crawl_site(src, need_icon=False):
+    """Returns (items, note, icon). Never raises."""
     base = src["url"]
     name = src["name"]
     tz = src.get("tz", "+06:00")
     note = ""
+    page_bytes = None
     try:
         rb = Robots(base)
         feeds = list(src.get("feeds", []))
@@ -259,6 +340,7 @@ def crawl_site(src):
                 try:
                     status, page = fetch(base)
                     if status == 200:
+                        page_bytes = page
                         lf = LinkFinder()
                         lf.feed(page.decode("utf-8", "replace"))
                         feeds += [urllib.parse.urljoin(base, h) for h in lf.feeds]
@@ -271,6 +353,7 @@ def crawl_site(src):
                     try:
                         status, page = fetch(other)
                         if status == 200:
+                            page_bytes = page
                             base, rb, note = other, Robots(other), ""
                             lf = LinkFinder()
                             lf.feed(page.decode("utf-8", "replace"))
@@ -357,9 +440,18 @@ def crawl_site(src):
             note = "%d fresh stories via %s" % (len(items), used[0] + (" (+1 more feed)" if len(used) > 1 else "")) + (" [dropped: %s]" % why if why else "")
         elif not note:
             note = "no feed or news sitemap found"
-        return items, note
+        icon = ""
+        if need_icon and items:
+            if page_bytes is None and rb.can(base):
+                try:
+                    st, pg = fetch(base)
+                    page_bytes = pg if st == 200 else None
+                except Exception:
+                    pass
+            icon = get_icon(base, rb, page_bytes)
+        return items, note, icon
     except Exception as e:
-        return [], "error: %s" % type(e).__name__
+        return [], "error: %s" % type(e).__name__, ""
 
 
 # ------------------------------------------------------------------ grouping and output
@@ -421,16 +513,25 @@ def group_stories(stories):
     return list(groups.values())
 
 
-def build(sources, prev_items):
+def host_of(url):
+    h = urllib.parse.urlsplit(url).netloc.lower()
+    return h[4:] if h.startswith("www.") else h
+
+
+def build(sources, prev_items, prev_icons=None):
+    prev_icons = prev_icons or {}
     results = {}
     with ThreadPoolExecutor(max_workers=6) as ex:
-        futures = {s["name"]: ex.submit(crawl_site, s) for s in sources}
+        futures = {s["name"]: ex.submit(crawl_site, s, host_of(s["url"]) not in prev_icons) for s in sources}
         for name, f in futures.items():
             results[name] = f.result()
     stories, report, seen = [], [], set()
     by_name = {s["name"]: s for s in sources}
-    for name, (items, note) in results.items():
+    icons = dict(prev_icons)
+    for name, (items, note, icon) in results.items():
         src = by_name[name]
+        if icon:
+            icons[host_of(src["url"])] = icon
         trust = TRUST.get(src.get("tier", "other"), 0.9)
         host = urllib.parse.urlsplit(src["url"]).netloc.lower()
         host = host[4:] if host.startswith("www.") else host
@@ -448,7 +549,7 @@ def build(sources, prev_items):
             if key in seen:
                 continue
             seen.add(key)
-            stories.append({"t": it["title"], "u": strip_tracking(it["url"]), "d": it["desc"], "s": name, "h": host,
+            stories.append({"t": it["title"], "u": strip_tracking(it["url"]), "d": it["desc"], "i": it.get("img", ""), "s": name, "h": host,
                             "p": it["pub"].strftime("%Y-%m-%dT%H:%M:%SZ"), "w": trust,
                             "l": "bn" if re.search("[\u0980-\u09FF]", it["title"]) else "en", "g": src.get("tag", "")})
         report.append("%s: %s" % (name, note))
@@ -461,6 +562,8 @@ def build(sources, prev_items):
         members.sort(key=lambda m: (-m["w"], m["p"]))
         head = dict(members[0])
         head.pop("kept", None)
+        if not head.get("i"):                       # the headline has no picture: borrow one from the same story elsewhere
+            head["i"] = next((m["i"] for m in members if m.get("i")), "")
         sites = []
         for m in members:
             if m["s"] not in sites:
@@ -469,7 +572,7 @@ def build(sources, prev_items):
         head["a"] = [s for s in sites if s != head["s"]][:5]
         out.append(head)
     out.sort(key=lambda s: s["p"], reverse=True)
-    return out[:MAX_ITEMS], report
+    return out[:MAX_ITEMS], report, icons
 
 
 def main():
@@ -482,11 +585,20 @@ def main():
                 prev = json.load(f).get("items", [])
         except Exception:
             pass
-    items, report = build(sources, prev)
+    prev_icons = {}
+    if PREV_ICONS and os.path.exists(PREV_ICONS):
+        try:
+            with open(PREV_ICONS, encoding="utf-8") as f:
+                prev_icons = json.load(f)
+        except Exception:
+            pass
+    items, report, icons = build(sources, prev, prev_icons)
     os.makedirs(OUT, exist_ok=True)
     stamp = now_utc().strftime("%Y-%m-%dT%H:%M:%SZ")
     with open(os.path.join(OUT, "news.json"), "w", encoding="utf-8") as f:
         json.dump({"v": 1, "updated": stamp, "items": items}, f, ensure_ascii=False, separators=(",", ":"))
+    with open(os.path.join(OUT, "icons.json"), "w", encoding="utf-8") as f:
+        json.dump(icons, f, ensure_ascii=False, separators=(",", ":"))
     with open(os.path.join(OUT, "news_report.txt"), "w", encoding="utf-8") as f:
         f.write("Updated %s UTC, %d stories\n" % (stamp, len(items)) + "\n".join(report) + "\n")
     print("\n".join(report))

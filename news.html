@@ -29,7 +29,12 @@ button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid var(
 #meta{color:var(--muted);font-size:15px;margin:10px 0 2px}
 #warn{color:var(--red);font-size:15px;margin:4px 0}
 .s{padding:14px 0;border-bottom:1px solid var(--line)}
-.s .u{font-size:14px;color:#0B5D3B}
+.s .im{display:block;margin:0 0 8px;aspect-ratio:16/9;background:#e3e8e5;overflow:hidden;border-radius:6px}
+.s .im img{width:100%;height:100%;object-fit:cover;display:block}
+.s .by{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:14px;color:var(--muted)}
+.s .by b{color:#0B5D3B;font-weight:500}
+.lg{width:22px;height:22px;border-radius:50%;object-fit:contain;flex:none;background:#fff}
+.lg.av{display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px}
 .s a.t{display:block;font-size:20px;line-height:1.35;color:var(--link);text-decoration:none}
 .s a.t:hover{text-decoration:underline}
 .s p{margin:2px 0 0;font-size:16px;color:#3F4D45}
@@ -43,6 +48,8 @@ details p{margin:8px 0 0;font-size:16px;color:#3F4D45}
 .foot{text-align:center;color:var(--muted);font-size:14px;padding:26px 18px}
 .foot a{color:inherit}
 </style>
+<link rel="stylesheet" href="retro.css">
+<script src="retro.js"></script>
 </head>
 <body>
 <nav class="top" id="langs" data-ia="langAria" aria-label="Language"><a href="/" data-i="nh_search">Search</a><button type="button" data-ui="en">English</button><button type="button" data-ui="bl">Banglish</button><button type="button" data-ui="bn">বাংলা</button></nav>
@@ -50,10 +57,13 @@ details p{margin:8px 0 0;font-size:16px;color:#3F4D45}
   <a class="logo" href="/" aria-label="Nirobo" data-ia="home">nirob<i></i></a>
   <h1 data-i="nh_h1">NewsHub</h1>
   <p class="sub" data-i="nh_sub"></p>
+  <div class="ticker" id="ticker" aria-hidden="true"><div class="tk" id="tk"></div></div>
   <div class="ctl" id="ctl">
     <button type="button" data-w="1" data-i="nh_w1"></button><button type="button" data-w="6" data-i="nh_w6"></button><button type="button" data-w="24" data-i="nh_w24"></button>
     <span class="sep"></span>
     <button type="button" data-sort="top" data-i="nh_top"></button><button type="button" data-sort="latest" data-i="nh_latest"></button>
+    <span class="sep"></span>
+    <button type="button" id="pics"></button>
     <span class="sep"></span>
     <select id="ln" aria-label="Language"><option value="all" data-i="nh_lall"></option><option value="bn" data-i="l_bn"></option><option value="en" data-i="l_en"></option></select>
   </div>
@@ -72,6 +82,8 @@ details p{margin:8px 0 0;font-size:16px;color:#3F4D45}
 <script src="i18n.js"></script>
 <script>
 var NEWS_URL=window.NIROBO_NEWS_URL||"https://raw.githubusercontent.com/bdelectrickbill21/nirobo/newsdata/news.json";
+var ICONS_URL=NEWS_URL.replace(/news\.json$/,"icons.json"),ICONS={},PICS=true;
+try{PICS=localStorage.getItem("nirobo-pics")!=="off"}catch(e){}
 var $=function(i){return document.getElementById(i)},UI="en",WIN=24,SORT="top",LN="all",DATA=null,SHOWN=40;
 function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
 function T(k){var d=I18N[UI]||I18N.en;return d[k]!=null?d[k]:(I18N.en[k]!=null?I18N.en[k]:k)}
@@ -99,8 +111,12 @@ function rankNews(items,now,winH,ln,sort){
 
 function host(u){try{return new URL(u).hostname.replace(/^www\./,"")}catch(e){return""}}
 function track(h){try{var b=JSON.stringify({t:"click",h:[h]});if(!(navigator.sendBeacon&&navigator.sendBeacon("/api/event",new Blob([b],{type:"application/json"}))))fetch("/api/event",{method:"POST",body:b,keepalive:true})}catch(e){}}
+var COLORS=["#0E3B2C","#1B4F9C","#8B2E2E","#6B4E00","#4B2E83","#006D77","#9A3B0A"];
+function avatar(name,h){var sp=el("span","lg av",Array.from(name||"?")[0]);var n=0;for(var i=0;i<h.length;i++)n=(n*31+h.charCodeAt(i))%1000;sp.style.background=COLORS[n%COLORS.length];sp.setAttribute("aria-hidden","true");return sp}
+function logo(s){var ic=ICONS[s.h];if(ic&&/^data:image\//.test(ic)){var im=new Image();im.className="lg";im.alt="";im.src=ic;im.onerror=function(){im.replaceWith(avatar(s.s,s.h))};return im}return avatar(s.s,s.h)}
 function render(){
   var list=$("list"),meta=$("meta"),warn=$("warn");list.innerHTML="";warn.textContent="";
+  $("pics").textContent=T(PICS?"nh_pic_on":"nh_pic_off");$("pics").setAttribute("aria-pressed",String(PICS));
   [].forEach.call(document.querySelectorAll("#ctl [data-w]"),function(b){b.setAttribute("aria-pressed",String(+b.getAttribute("data-w")===WIN))});
   [].forEach.call(document.querySelectorAll("#ctl [data-sort]"),function(b){b.setAttribute("aria-pressed",String(b.getAttribute("data-sort")===SORT))});
   if(!DATA){return}
@@ -108,10 +124,14 @@ function render(){
   var upd=Date.parse(DATA.updated);meta.textContent=(rows.length?F("nh_count",{n:nf(rows.length)})+" · ":"")+(upd?F("nh_updated",{t:ago(now-upd)}):"");
   if(upd&&now-upd>3*36e5)warn.textContent=T("nh_stale");
   if(!rows.length){list.appendChild(el("p","sub",T("nh_none")));$("more").hidden=true;return}
+  $("tk").textContent=rows.slice(0,6).map(function(s){return s.t}).join("   ★   ");
   rows.slice(0,SHOWN).forEach(function(s){var d=el("div","s");
-   d.appendChild(el("div","u",s.s+" · "+ago(now-Date.parse(s.p))));
-   var a=el("a","t",s.t);a.href=s.u;a.target="_blank";a.rel="noopener noreferrer";["click","auxclick"].forEach(function(ev){a.addEventListener(ev,function(){track(host(s.u))})});d.appendChild(a);
+   function open(x){["click","auxclick"].forEach(function(ev){x.addEventListener(ev,function(){track(host(s.u))})})}
+   if(PICS&&s.i&&/^https?:\/\//.test(s.i)){var ia=el("a","im");ia.href=s.u;ia.target="_blank";ia.rel="noopener noreferrer";ia.tabIndex=-1;ia.setAttribute("aria-hidden","true");open(ia);
+    var g=new Image();g.alt="";g.loading="lazy";g.decoding="async";g.referrerPolicy="no-referrer";g.onerror=function(){ia.remove()};g.src=s.i;ia.appendChild(g);d.appendChild(ia)}
+   var a=el("a","t",s.t);a.href=s.u;a.target="_blank";a.rel="noopener noreferrer";open(a);d.appendChild(a);
    if(s.d)d.appendChild(el("p",0,s.d));
+   var by=el("div","by");by.appendChild(logo(s));by.appendChild(el("b",0,s.s));by.appendChild(el("span",0,"· "+ago(now-Date.parse(s.p))));d.appendChild(by);
    if(s.a&&s.a.length)d.appendChild(el("div","al",F("nh_also",{s:s.a.join(", ")})));
    list.appendChild(d)});
   $("more").hidden=rows.length<=SHOWN}
@@ -126,8 +146,10 @@ function applyStatic(){
 [].forEach.call(document.querySelectorAll("#ctl [data-sort]"),function(b){b.addEventListener("click",function(){SORT=b.getAttribute("data-sort");SHOWN=40;render()})});
 $("ln").addEventListener("change",function(){LN=this.value;SHOWN=40;render()});
 $("more").addEventListener("click",function(){SHOWN+=40;render()});
+$("pics").addEventListener("click",function(){PICS=!PICS;try{localStorage.setItem("nirobo-pics",PICS?"on":"off")}catch(e){}render()});
 UI=getUI();applyStatic();
 fetch(NEWS_URL,{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){if(!d||!Array.isArray(d.items))throw 0;DATA=d;render()}).catch(function(){$("meta").textContent=T("nh_err")});
+fetch(ICONS_URL).then(function(r){return r.ok?r.json():{}}).then(function(d){if(d&&typeof d==="object"){ICONS=d;render()}}).catch(function(){});
 setInterval(render,6e4);
 </script>
 </body>

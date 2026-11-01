@@ -1,0 +1,109 @@
+/* Nirobo retro look: a Windows 98 / 1998 web feel. Switch it off with the "Simple look" link at the top.
+   Everything here only applies when <html class="retro">. Animations stop if the phone asks for less motion. */
+.marq,.sticker,.badges,.ticker{display:none}
+@keyframes blink{50%{opacity:0}}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+@keyframes popin{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes pulse{50%{transform:scale(.72)}}
+@keyframes wiggle{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(-1deg)}}
+
+html.retro{background:#008080}
+html.retro body{margin:6px auto;max-width:780px;min-height:calc(100vh - 12px);background:#c0c0c0;color:#000;border:2px solid;border-color:#fff #404040 #404040 #fff;
+ box-shadow:inset -1px -1px #808080,inset 1px 1px #dfdfdf,4px 4px 0 rgba(0,0,0,.4);
+ font-family:Tahoma,Verdana,"Hind Siliguri","Noto Sans Bengali","Nirmala UI",system-ui,sans-serif;font-size:16px;line-height:1.5;animation:popin .4s steps(6) both}
+/* the title bar */
+html.retro body::before{content:"Nirobo - Bangla Search Engine";display:block;margin:2px;padding:3px 80px 3px 8px;color:#fff;font:bold 14px/1.4 Tahoma,Verdana,"Hind Siliguri",sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+ background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='70' height='18'><g fill='%23c0c0c0' stroke='%23fff' stroke-width='1'><rect x='1' y='1' width='20' height='15'/><rect x='24' y='1' width='20' height='15'/><rect x='48' y='1' width='20' height='15'/></g><path d='M6 12h9M30 5h8v7h-8z M54 5l8 7M62 5l-8 7' stroke='%23000' fill='none'/></svg>") no-repeat right 4px center,linear-gradient(90deg,#000080,#1084d0)}
+html.retro body[data-win]::before{content:attr(data-win)}
+/* the menu bar (NewsHub, languages, look) */
+html.retro .top{max-width:none;margin:0 2px;padding:2px 4px;text-align:left;display:flex;flex-wrap:wrap;gap:0;align-items:center;font-size:15px;border-bottom:1px solid #808080;box-shadow:0 1px #fff}
+html.retro .top a,html.retro .top button{font:inherit;font-size:15px;color:#000;background:none;border:0;border-radius:0;padding:2px 9px;text-decoration:none;cursor:pointer}
+html.retro .top a:hover,html.retro .top button:hover{background:#000080;color:#fff}
+html.retro .top button[aria-pressed="true"],html.retro .top a#thm[aria-pressed="true"]{background:none;font-weight:bold}
+html.retro .top button[aria-pressed="true"]{background:#000080;color:#fff}
+html.retro .top a.nhl{margin-right:0}
+html.retro .top a.nhl::after{content:"NEW!";color:#e00000;font:bold 10px Tahoma,Verdana,sans-serif;margin-left:4px;vertical-align:super;animation:blink 1.4s steps(2,start) infinite}
+html.retro .top a#thm{margin-left:auto}
+/* scrolling ticker (welcome line, or the top headlines on NewsHub) */
+html.retro .marq,html.retro .ticker{display:block;overflow:hidden;white-space:nowrap;margin:8px 6px;background:#000;color:#00ff66;font:bold 14px/1.6 "Courier New",Courier,monospace;border:2px solid;border-color:#808080 #fff #fff #808080}
+html.retro .marq span,html.retro .ticker .tk{display:inline-block;padding-left:100%;animation:tick 38s linear infinite}
+html.retro .ticker .tk{animation-duration:55s;color:#ffd700}
+html.retro .marq:hover span,html.retro .ticker:hover .tk{animation-play-state:paused}
+/* home */
+html.retro .hero{padding:16px 12px 4px}
+html.retro body.res .hero{padding:8px 12px 0}
+html.retro .logo{font-family:"Times New Roman",Times,"Noto Serif",serif;color:#000080;text-shadow:3px 3px 0 #808080;letter-spacing:0}
+html.retro .logo i{background:#e00000;animation:pulse 1.6s ease-in-out infinite;box-shadow:inset -3px -3px 0 rgba(0,0,0,.3)}
+html.retro .tag{color:#000}
+html.retro body.res .logo,html.retro .wrap .logo{text-shadow:1px 1px 0 #808080}
+html.retro .sticker{display:inline-block;margin:10px 4px 0;padding:3px 12px;background:#ffec8b;border:1px solid #b89b00;color:#000;font:bold 13px "Comic Sans MS","Comic Neue",cursive,Tahoma,sans-serif;box-shadow:2px 2px 0 rgba(0,0,0,.35);transform:rotate(-3deg);animation:wiggle 3.5s ease-in-out infinite}
+html.retro body.res .sticker{display:none}
+html.retro .bar input{border:2px solid;border-color:#808080 #fff #fff #808080;box-shadow:inset 1px 1px #404040;border-radius:0;background:#fff;color:#000;padding:10px 52px 10px 10px;font-size:16px}
+html.retro .bar input:focus{outline:2px dotted #000;outline-offset:2px;box-shadow:inset 1px 1px #404040}
+html.retro .bar button.go{border-radius:0;background:#c0c0c0;border:2px solid;border-color:#fff #404040 #404040 #fff;width:40px;height:34px;top:4px;right:4px}
+html.retro .bar button.go:active{border-color:#404040 #fff #fff #404040}
+html.retro .bar svg{stroke:#000}
+html.retro .sug{background:#fff;border:2px solid;border-color:#808080 #fff #fff #808080;border-radius:0}
+html.retro .sug button{color:#000;font-size:16px}
+html.retro .sug button:hover{background:#000080;color:#fff}
+html.retro .chips button,html.retro .ctl button,html.retro .also button,html.retro .more,html.retro .qa-btn,html.retro #aGo{border-radius:0;background:#c0c0c0;color:#000;border:2px solid;border-color:#fff #404040 #404040 #fff;box-shadow:inset -1px -1px #808080;min-height:32px}
+html.retro .chips button:active,html.retro .ctl button:active,html.retro .also button:active,html.retro .more:active,html.retro .qa-btn:active{border-color:#404040 #fff #fff #404040;box-shadow:none}
+html.retro .more,html.retro #aGo{font-weight:bold;padding:4px 18px}
+html.retro .ctl button[aria-pressed="true"]{background:#000080;color:#fff;border-color:#404040 #fff #fff #404040;box-shadow:none}
+html.retro .ctl select,html.retro .panel select,html.retro .panel input{border-radius:0;border:2px solid;border-color:#808080 #fff #fff #808080;background:#fff;color:#000}
+html.retro .ctl .sep{background:#808080;width:2px;box-shadow:1px 0 #fff}
+html.retro .homeq,html.retro .also{margin-left:8px;margin-right:8px}
+/* tabs */
+html.retro .tbar{margin:6px 6px 0}
+html.retro .tabs{border-bottom:2px solid #fff;gap:2px}
+html.retro .tabs button{border:2px solid;border-bottom:0;border-color:#fff #404040 #404040 #fff;border-radius:0;background:#c0c0c0;color:#000;margin-bottom:0;padding:4px 12px}
+html.retro .tabs button[aria-selected="true"]{background:#dfdfdf;font-weight:bold;margin-bottom:-2px;padding-bottom:6px;border-bottom:0}
+html.retro .tabs button.act{color:#000080}
+html.retro .panel{border-radius:0;background:#dfdfdf;border:2px solid;border-color:#fff #404040 #404040 #fff;color:#000}
+html.retro .panel .opt:hover{background:#000080;color:#fff}
+html.retro .lnk{color:#0000ee}
+/* results */
+html.retro .main{padding:0 8px 16px}
+html.retro #status,html.retro .foot{color:#000}
+html.retro #web,html.retro #list{background:#fff;border:2px solid;border-color:#808080 #fff #fff #808080;padding:2px 12px;margin-top:8px}
+html.retro #web:empty{display:none}
+html.retro .r{margin:12px 0}
+html.retro .r a,html.retro .s a.t{color:#0000ee}
+html.retro .r a:visited,html.retro .s a.t:visited{color:#551a8b}
+html.retro .r .u,html.retro .s .by b{color:#006400}
+html.retro .r p,html.retro .s p{color:#000}
+html.retro .s{border-bottom:1px dotted #808080}
+html.retro .s .im{border-radius:0;border:2px solid;border-color:#808080 #fff #fff #808080}
+html.retro .lg{border-radius:0;box-shadow:0 0 0 1px #808080}
+/* answer boxes look like old tooltips */
+html.retro .ans{background:#ffffe1;border:2px solid;border-color:#fff #404040 #404040 #fff;border-left-width:2px;border-radius:0;box-shadow:3px 3px 0 rgba(0,0,0,.3);color:#000}
+html.retro .ans .lb{border-radius:0;background:#000080}
+html.retro .ans h2,html.retro .ans h3,html.retro .qa-acc h3,html.retro .also h3,html.retro .homeq h3{color:#000080}
+html.retro .ans a.btn{border-radius:0;background:#c0c0c0;color:#000;border:2px solid;border-color:#fff #404040 #404040 #fff}
+html.retro .ans small,html.retro .qa .qa-src,html.retro .ans .wh{color:#202020}
+html.retro .qa code,html.retro .sugs code,html.retro .homeq code,html.retro .fm{border-radius:0;border:1px solid #808080;background:#fff;color:#000}
+html.retro .sugs,html.retro details{background:#fff;border:2px solid;border-color:#808080 #fff #fff #808080;border-radius:0;color:#000}
+html.retro .qa-q{border-bottom:1px dotted #808080}
+html.retro .qa-qb{color:#0000ee}
+html.retro .ans,html.retro .sugs,html.retro .s,html.retro .homeq{animation:popin .35s steps(5) both}
+/* footer + 88x31 style buttons */
+html.retro .foot{border-top:2px groove #fff;margin:10px 6px 0;padding:14px 8px}
+html.retro .foot a{color:#0000ee}
+html.retro .badges{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:0 0 12px}
+html.retro .badges span{display:flex;align-items:center;justify-content:center;width:88px;height:31px;color:#fff;font:bold 11px/1.1 Tahoma,Verdana,sans-serif;text-align:center;border:2px solid;border-color:#fff #404040 #404040 #fff;text-shadow:1px 1px 0 #000}
+html.retro .badges span:nth-child(1){background:#006400}
+html.retro .badges span:nth-child(2){background:#800000}
+html.retro .badges span:nth-child(3){background:#000080}
+/* other pages (submit, admin) */
+html.retro .wrap{padding:6px 12px 24px}
+html.retro .rules{background:#ffffe1;border:2px solid;border-color:#fff #404040 #404040 #fff;border-radius:0}
+html.retro h1,html.retro h2{font-family:"Times New Roman",Times,"Noto Serif","Hind Siliguri",serif;color:#000080}
+html.retro form input,html.retro form select,html.retro form textarea{border-radius:0;border:2px solid;border-color:#808080 #fff #fff #808080;background:#fff;color:#000}
+html.retro form button,html.retro #f button{border-radius:0;background:#c0c0c0;color:#000;border:2px solid;border-color:#fff #404040 #404040 #fff;font-weight:bold}
+html.retro table{background:#fff}
+html.retro th,html.retro td{border-bottom:1px solid #c0c0c0}
+html.retro .big div{background:#fff;border-radius:0;border:2px solid;border-color:#808080 #fff #fff #808080}
+/* less motion: nothing moves */
+@media (prefers-reduced-motion:reduce){
+ html.retro *,html.retro *::before,html.retro *::after{animation:none!important;transition:none!important}
+ html.retro .marq,html.retro .ticker{display:none}}

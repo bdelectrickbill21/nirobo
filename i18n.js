@@ -238,3 +238,13 @@ nh_r3:"অফিসিয়াল ও পরিচিত সূত্র অজ
 nh_pub:"ওয়েবসাইটের মালিকদের জন্য: কাজ করা RSS ফিড বা নিউজ সাইটম্যাপ দিন, স্পষ্ট শিরোনাম ও সারসংক্ষেপ লিখুন, আর ঠিক প্রকাশের সময় দিন।",
 qa_also:"সম্পর্কিত সার্চ"}
 };for(var l in X)for(var k in X[l])I18N[l][k]=X[l][k]})();
+
+/* Extra words: NewsHub pictures (nh_pic_*) and the retro look (rt_*) */
+(function(){var X={
+en:{nh_pic_on:"Pictures: On",nh_pic_off:"Pictures: Off",rt_retro:"Retro look",rt_plain:"Simple look",
+rt_marq:"Welcome to Nirobo, Bangladesh's own search engine!  No tracking.  Free.  Bangla, Banglish and English.",rt_sticker:"Hand-made in Bangladesh"},
+bl:{nh_pic_on:"Chhobi: On",nh_pic_off:"Chhobi: Off",rt_retro:"Retro look",rt_plain:"Shada look",
+rt_marq:"Nirobo-te shagotom, Bangladesher nijoshyo search engine!  Tracking nei.  Free.  Bangla, Banglish o English.",rt_sticker:"Bangladeshe hate-gora"},
+bn:{nh_pic_on:"ছবি: চালু",nh_pic_off:"ছবি: বন্ধ",rt_retro:"রেট্রো লুক",rt_plain:"সাদামাটা লুক",
+rt_marq:"নিরবোতে স্বাগতম, বাংলাদেশের নিজস্ব সার্চ ইঞ্জিন!  ট্র্যাকিং নেই।  বিনামূল্যে।  বাংলা, ব্যাংলিশ ও ইংরেজি।",rt_sticker:"বাংলাদেশে হাতে গড়া"}
+};for(var l in X)for(var k in X[l])I18N[l][k]=X[l][k]})();
