@@ -10,10 +10,10 @@ thedailystar.net: 25 pages
 prothomalo.com: 25 pages
 bdnews24.com: 25 pages
 ugc.gov.bd: 1 pages
-educationboard.gov.bd: 0 pages   <-- start page problem: DownloadTimeoutError
+educationboard.gov.bd: 0 pages   <-- start page problem: DownloadConnectionRefusedError
 du.ac.bd: 25 pages
 buet.ac.bd: 0 pages   <-- start page problem: DownloadFailedError
-dghs.gov.bd: 24 pages
+dghs.gov.bd: 25 pages
 nu.ac.bd: 25 pages
 dshe.gov.bd: 25 pages
 dpe.gov.bd: 25 pages
