@@ -1,0 +1,19 @@
+name: Common Crawl probe
+
+on:
+  workflow_dispatch:   # start it by hand with the "Run workflow" button
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Ask Common Crawl how many Bangladeshi pages it has
+        run: python cc_probe.py
