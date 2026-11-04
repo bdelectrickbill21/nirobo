@@ -1,0 +1,48 @@
+name: Collect pages from Common Crawl
+
+on:
+  workflow_dispatch:   # start it by hand with the "Run workflow" button
+
+permissions:
+  contents: write
+
+concurrency:
+  group: collect
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Pages collected in earlier runs, so we add new ones and never repeat.
+      - name: Get the pages collected so far
+        run: |
+          mkdir -p /tmp/prev
+          curl -fsSL "https://raw.githubusercontent.com/${{ github.repository }}/indexdata/pages_cc.jsonl" -o /tmp/prev/pages_cc.jsonl || true
+
+      - name: Collect pages
+        env:
+          CC_OUT: /tmp/out
+          CC_PREV: /tmp/prev/pages_cc.jsonl
+          CC_RUN_MAX: "6000"
+          CC_WORKERS: "6"
+        run: python cc_collect.py
+
+      # Saved on its own branch called "indexdata". Netlify ignores that branch, so this costs no Netlify publish.
+      - name: Save to the indexdata branch
+        run: |
+          git config user.name "nirobo-bot"
+          git config user.email "nirobo-bot@users.noreply.github.com"
+          git checkout --orphan indexdata-tmp
+          git rm -rf . > /dev/null 2>&1 || true
+          cp /tmp/out/pages_cc.jsonl /tmp/out/cc_report.txt .
+          git add pages_cc.jsonl cc_report.txt
+          git commit -m "Collected pages $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push --force origin HEAD:indexdata
