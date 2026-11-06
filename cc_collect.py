@@ -32,7 +32,8 @@ DATA = os.environ.get("CC_DATA", "https://data.commoncrawl.org/")
 PREV = os.environ.get("CC_PREV", "")
 OUT = os.environ.get("CC_OUT", "out")
 RUN_MAX = int(os.environ.get("CC_RUN_MAX", "2500"))      # new pages added in ONE run
-WORKERS = int(os.environ.get("CC_WORKERS", "6"))
+WORKERS = int(os.environ.get("CC_WORKERS", "3"))
+BACKOFF = float(os.environ.get("CC_BACKOFF", "1"))      # 0 in tests
 PAUSE = float(os.environ.get("CC_PAUSE", "1.5"))
 PLAN = json.loads(os.environ["CC_PLAN"]) if os.environ.get("CC_PLAN") else [
     {"pat": "bn.wikipedia.org/*", "cap": 1500, "per_host": 1500, "tag": "wikipedia", "name": "Bangla Wikipedia"},
@@ -49,22 +50,29 @@ BAD_WORDS = re.compile("|".join(map(re.escape, ["casino", "sportsbook", "betting
 BANGLA = re.compile("[\u0980-\u09FF]")
 
 
-def get(url, headers=None, timeout=90, retries=3):
+def get(url, headers=None, timeout=90, retries=6, wait=2):
+    """Download with patient retries: the free services say "slow down" (503) or time out (504) now and then."""
     code = None
     for attempt in range(retries):
         req = urllib.request.Request(url, headers=dict({"User-Agent": UA}, **(headers or {})))
+        pause = min(60, wait * (2 ** attempt)) * BACKOFF
         try:
             with urllib.request.urlopen(req, timeout=timeout) as r:
                 return r.status, r.read()
         except urllib.error.HTTPError as e:
             code = e.code
-            if e.code in (500, 502, 503, 504) and attempt < retries - 1:
-                time.sleep(3 * (attempt + 1))
+            if e.code in (429, 500, 502, 503, 504) and attempt < retries - 1:
+                try:
+                    pause = max(pause, min(60, float(e.headers.get("Retry-After", 0))) * BACKOFF)
+                except (TypeError, ValueError):
+                    pass
+                time.sleep(pause)
                 continue
             return e.code, b""
         except Exception as e:
             code = type(e).__name__
-            time.sleep(2)
+            if attempt < retries - 1:
+                time.sleep(pause)
     return code, b""
 
 
@@ -151,19 +159,20 @@ def wanted(url, pat):
 
 def candidates(api, plan, have, per_host_have):
     """Pick pages to read for one website group."""
-    code, body = get(api + "?" + urllib.parse.urlencode({"url": plan["pat"], "output": "json", "showNumPages": "true"}))
+    code, body = get(api + "?" + urllib.parse.urlencode({"url": plan["pat"], "output": "json", "showNumPages": "true"}), retries=7, wait=5)
     try:
         pages = int(json.loads(body)["pages"])
     except Exception:
         return [], "could not count pages (answered %s)" % code
     order = list(range(pages)); random.Random(plan["pat"]).shuffle(order)
-    out, seen, hosts = [], set(), {}
+    out, seen, hosts, ok_pages = [], set(), {}, 0
     for pg in order:
         time.sleep(PAUSE)
         q = urllib.parse.urlencode({"url": plan["pat"], "output": "json", "page": pg, "fl": "url,status,mime,languages,filename,offset,length"})
-        code, body = get(api + "?" + q, timeout=180)
+        code, body = get(api + "?" + q, timeout=180, retries=7, wait=5)
         if code != 200:
             continue
+        ok_pages += 1
         for line in body.decode("utf-8", "replace").splitlines():
             try:
                 r = json.loads(line)
@@ -180,13 +189,14 @@ def candidates(api, plan, have, per_host_have):
         if len(out) >= plan["cap"] * 2:
             break
     random.Random(1).shuffle(out)
-    return out, "%d candidates from %d answer pages" % (len(out), pages)
+    return out, "%d candidates; answer pages read %d of %d tried" % (len(out), ok_pages, min(pages, len(order)) if len(out) < plan["cap"] * 2 else ok_pages)
 
 
 def read_page(r, plan, today, crawl_id):
     try:
         off, ln = int(r["offset"]), int(r["length"])
-        code, raw = get(DATA + r["filename"], headers={"Range": "bytes=%d-%d" % (off, off + ln - 1)}, retries=2)
+        code, raw = get(DATA + r["filename"], headers={"Range": "bytes=%d-%d" % (off, off + ln - 1)}, retries=6, wait=2)
+        time.sleep(0.15)
         if code not in (200, 206) or not raw:
             return None, "download %s" % code
         status, hd, body = read_record(raw)
@@ -205,6 +215,28 @@ def read_page(r, plan, today, crawl_id):
             "tags": [plan["tag"], "bangladesh"],
             "lang": "bn" if (BANGLA.search(title + desc) or "ben" in r.get("languages", "")) else "en",
             "crawled": today, "cc": crawl_id}, "ok"
+
+
+SEPS = (" | ", " \u2013 ", " \u2014 ", " - ", " :: ")
+
+
+def strip_suffixes(pages):
+    """If the same ending (like "| Prothom Alo") closes 3 or more titles of one site, remove it from all of them."""
+    cnt = {}
+    for p in pages:
+        for sep in SEPS:
+            if sep in p["title"]:
+                tail = p["title"].rsplit(sep, 1)[1].strip()
+                if 2 <= len(tail) <= 40:
+                    k = (host_of(p["url"]), sep, tail)
+                    cnt[k] = cnt.get(k, 0) + 1
+    for p in pages:
+        for sep in SEPS:
+            if sep in p["title"]:
+                head, tail = p["title"].rsplit(sep, 1)
+                if cnt.get((host_of(p["url"]), sep, tail.strip()), 0) >= 3 and head.strip():
+                    p["title"] = head.strip()
+                    break
 
 
 def main():
@@ -244,6 +276,7 @@ def main():
         report.append("- %s: added %d (%s; %.0f s)%s" % (plan["pat"], added, note, time.time() - t0, (" | skipped: " + ", ".join("%d %s" % (v, k) for k, v in fails.items())) if fails else ""))
         for s in sample:
             report.append("    e.g. " + s)
+    strip_suffixes(old + new)
     os.makedirs(OUT, exist_ok=True)
     with open(os.path.join(OUT, "pages_cc.jsonl"), "w", encoding="utf-8") as f:
         for p in old + new:
