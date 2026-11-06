@@ -1,0 +1,19 @@
+Common Crawl collector, crawl CC-MAIN-2026-43
+Earlier pages kept: 1883
+- bn.wikipedia.org/*: added 805 (805 candidates; answer pages read 2 of 2 tried; 121 s)
+    e.g. রাজশাহী ক্যান্টনমেন্ট বোর্ড স্কুল এন্ড কলেজ
+    e.g. সুরিনামে হিন্দুধর্ম
+- *.edu.bd: added 1200 (3161 candidates; answer pages read 2 of 2 tried; 316 s) | skipped: 54 no useful title, 27 banned words, 154 download 403
+    e.g. Chattogram International Medical College and Hospital
+    e.g. Room Nineteen: A Room of Susan's Own
+- *.ac.bd: added 875 (889 candidates; answer pages read 1 of 3 tried; 127 s) | skipped: 14 no useful title
+    e.g. Socioeconomic Condition of Street Beggars: A Study on Chattogram City | Rajshahi University Journal of Social Science and Business Studies
+    e.g. EFAST 2026 | International Conference on Emerging Frontiers in Advanced Sciences and Technologies
+- *.org.bd: full (nothing to add)
+- prothomalo.com/*: added 112 (112 candidates; answer pages read 2 of 2 tried; 16 s)
+    e.g. পুনরুজ্জীবিত হলে কখন থেকে ত্রয়োদশ সংশোধনী কার্যকর হবে: প্রধান বিচারপতি | প্রথম আলো
+    e.g. জামায়াত আমিরের জনসভা ঘিরে এআই ছবি প্রচার | প্রথম আলো
+- *.mil.bd: added 17 (17 candidates; answer pages read 1 of 1 tried; 2 s)
+    e.g. Bangladesh Navy
+    e.g. Photo Gallery - HALL BOOKING
+TOTAL pages now: 4892 (new this run: 3009)
