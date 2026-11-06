@@ -32,7 +32,7 @@ jobs:
           CC_OUT: /tmp/out
           CC_PREV: /tmp/prev/pages_cc.jsonl
           CC_RUN_MAX: "6000"
-          CC_WORKERS: "6"
+          CC_WORKERS: "3"
         run: python cc_collect.py
 
       # Saved on its own branch called "indexdata". Netlify ignores that branch, so this costs no Netlify publish.
